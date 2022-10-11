@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PowerEngland
   m_EditorClassIdentifier: 
   name: England
+  art: {fileID: 0}
   order: 2
   initialVP: 9
   powerType1: 0

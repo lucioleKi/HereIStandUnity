@@ -9,6 +9,7 @@ public class CardObject : ScriptableObject
     public new string name;
     public string description;
     public CardType cardType;
+    public Sprite art;
     public bool canRandomDraw;
     public int CP;
     public bool canActionPhase;

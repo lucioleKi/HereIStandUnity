@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: c5a090bbbd6b0534cb95c8bd8a07671f, type: 3}
   m_Name: RulerEngland
-  m_EditorClassIdentifier: Assembly-CSharp::Ruler
+  m_EditorClassIdentifier: 
   name: Henry VIII
   adminRating: 1
   cardBonus: 1

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class Ruler : ScriptableObject
+public class RulerObject : ScriptableObject
 {
     public new string name;
     public int adminRating;
     public int cardBonus;
-   
+
 }
