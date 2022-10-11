@@ -10,3 +10,7 @@ Please support the Fog of Love designers and buy the actual board game. I own a 
 10/9/2022
 
 Added main menu.
+
+10/11/2022
+
+Added ImportSpace
