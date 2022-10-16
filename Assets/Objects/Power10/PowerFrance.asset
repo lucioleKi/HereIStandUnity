@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: PowerFrance
   m_EditorClassIdentifier: 
   name: France
+  art: {fileID: 0}
   order: 3
   initialVP: 12
   powerType1: 0
-  ruler: {fileID: 0}
+  ruler: {fileID: 11400000, guid: 783e1b09540626a4eae716811a58f796, type: 2}

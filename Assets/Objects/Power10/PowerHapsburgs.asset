@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: PowerHapsburgs
   m_EditorClassIdentifier: 
   name: Hapsburgs
+  art: {fileID: 0}
   order: 1
   initialVP: 9
   powerType1: 0
-  ruler: {fileID: 0}
+  ruler: {fileID: 11400000, guid: 769c095e6495aba4b878b150ca587c1e, type: 2}

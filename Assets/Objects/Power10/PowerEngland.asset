@@ -17,4 +17,4 @@ MonoBehaviour:
   order: 2
   initialVP: 9
   powerType1: 0
-  ruler: {fileID: 0}
+  ruler: {fileID: 11400000, guid: 8e2dc26881aa3e34999688625246b2e9, type: 2}

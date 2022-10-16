@@ -1,0 +1,21 @@
+0,Move formation in clear,1,1,1,1,1,1
+0,Move formation over pass,2,2,2,2,2,2
+0,Naval move,1,1,1,1,1,0
+1,Buy mercenary,0,1,1,1,1,1
+1,Raise cavalry,1,0,0,0,0,0
+1,Raise regular troop,2,2,2,2,2,2
+1,Build naval squadron,2,2,2,2,2,0
+1,Build corsair,1,0,0,0,0,0
+2,Assault,1,1,1,1,1,1
+2,Control unfortified space,1,1,1,1,1,1
+2,Fight foreign war,1,0,1,0,0,0
+2,Initiate piracy in a sea,1,0,0,0,0,0
+3,Explore,0,2,2,2,0,0
+3,Colonize,0,2,3,3,0,0
+3,Conquer,0,4,4,4,0,0
+4,Translate scripture,0,0,0,0,0,1
+4,Build Saint Peter's,0,0,0,0,1,0
+4,Publish treatise,0,0,3,0,0,2
+4,Burn books,0,0,0,0,2,0
+4,Call theological debate,0,0,0,0,3,3
+4,Found Jesuit university,0,0,0,0,3,0

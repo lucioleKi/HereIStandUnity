@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: PowerProtestant
   m_EditorClassIdentifier: 
   name: Protestant
+  art: {fileID: 0}
   order: 5
   initialVP: 0
   powerType1: 0
-  ruler: {fileID: 0}
+  ruler: {fileID: 11400000, guid: 8e0697d615fd43c40b29211b0cfa2b6a, type: 2}

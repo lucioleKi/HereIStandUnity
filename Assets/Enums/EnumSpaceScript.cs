@@ -10,6 +10,6 @@ public class EnumSpaceScript : MonoBehaviour
     public enum Religion { Catholic, Protestant, Other};
     public enum Language { English, French, German, Italian, Spanish, Other};
     public enum CardType { Home, Mandatory, Response, Combat, Event, Diplomacy};
-
+    public enum ActionType { Move, Build, Fight, NewWorld, Religion};
 
 }

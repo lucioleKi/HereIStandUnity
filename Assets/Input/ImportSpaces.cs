@@ -88,5 +88,58 @@ public class ImportSpaces : MonoBehaviour
         return spaces;
     }
 
+    List<CardObject> importCards()
+    {
+        List<CardObject> cards = new List<CardObject>();
+        using (var reader = new StreamReader("cards.csv"))
+        {
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+                CardObject temp = new CardObject();
+                temp.name = values[3];
+                temp.id = int.Parse(values[0]);
+                //sprite?
+                temp.CP = int.Parse(values[5]);
+                temp.cardType = (CardType)int.Parse(values[4]);
+                if (temp.cardType == 0)
+                {
+                    temp.canRandomDraw = false;
+                }
+                else
+                {
+                    temp.canRandomDraw = true;
+                }
+                switch (values[6])
+                {
+                    case "No":
+                        temp.remove = 0;
+                        break;
+                    case "Yes":
+                        temp.remove = 1;
+                        break;
+                    case "Leader":
+                        temp.remove = 2;
+                        break;
+                    case "Special":
+                        temp.remove = 3;
+                        break;
+                }
+                temp.turn = int.Parse(values[7]);
+                if (values[10] != null && values[10] != "")
+                {
+                    temp.options = 2;
+                }
+                else
+                {
+                    temp.options = 1;
+                }
+                temp.matching = values[2];
 
+                cards.Add(temp);
+            }
+        }
+        return cards;
+    }
 }

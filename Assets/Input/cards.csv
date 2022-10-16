@@ -1,0 +1,135 @@
+1,CARD_JANISSARIES,Janissaries,Janissaries,0,5,No,1,1517,Boost to a fight (field or naval),Boosted recruits,MEDIUM,Combat Cards,Group 3: Combat Cards
+2,CARD_HOLY_ROMAN_EMPEROR,HolyRomanEmperor,Holy Roman Emperor,0,5,No,1,1517,Move & spend 5 CP's,,EASY,,"Group 1: Easy, just a boosted action"
+3,CARD_SIX_WIVES_OF_HENRY_VIII,SixWives,Six Wives of Henry VIII,0,5,No,1,1517,Declare War & spend 5 CP's,Special action: advance marital status,MEDIUM,New action,Group 8 - Other new simple actions
+4,CARD_PATRON_OF_THE_ARTS,PatronArts,Patron of the Arts,0,5,No,1,1517,Special action: Roll for Chateaux table,,MEDIUM,New action,Group 8 - Other new simple actions
+5,CARD_PAPAL_BULL,PapalBull,Papal Bull,0,4,No,1,1517,Special action: Excomunicate a reformer + debate,Special action: Excommunicate rules + unrests,MEDIUM,New action,Group 8 - Other new simple actions
+6,CARD_LEIPZIG_DEBATE,LeipzigDebate,Leipzig Debate,0,3,No,1,1517,Boosted Debate,,EASY,,"Group 1: Easy, just a boosted action"
+7,CARD_HERE_I_STAND,HereIStand,Here I Stand,0,5,No,1,1517,Special action: Retrieve a card for playing it or holding it,Response to a debate in German + draw a card,HARD,New action + response,GROUP 11 - RESPONSE CARDS
+8,CARD_LUTHER_95_THESES,LutherTheses,Luther's 95 Theses,1,0,Yes,1,1517,Boosted conversions,,EASY,,"Group 1: Easy, just a boosted action"
+9,CARD_BARBARY_PIRATES,BarbaryPirates,Barbary Pirates,1,2,Yes,1,1517,"Algiers enter with units. Algiers, Oran and Tripoli are now Ottoman home spaces (resolve with invisible token???)",,HARD,Change home spaces,GROUP 9 - New complicated actions
+10,CARD_CLEMENT_VII,ClementVII,Clement VII,1,2,Leader,1,1517,Substitute Leader,,MEDIUM,Substitute Leader,Group 2: Leader Substitution
+11,CARD_DEFENDER_OF_THE_FAITH,DefenderFaith,Defender of the Faith,1,2,Yes,1,1517,Boosted conversions,,EASY,,"Group 1: Easy, just a boosted action"
+12,CARD_MASTER_OF_ITALY,MasterItaly,Master of Italy,1,2,No,1,1517,Check status and give award(s),,MEDIUM,New action,Group 8 - Other new simple actions
+13,CARD_SCHMALKALDIC_LEAGUE,SchmalkaldicLeague,Schmalkaldic League,1,2,Special,1,1517,The most important card to track. After activting it changes some rules,,EXTREME,Lots of changes in rules,GROUP 10 - EXTREME CARDS
+14,CARD_PAUL_III,PaulIII,Paul III,1,2,Leader,3,1517,Substitute Leader,,MEDIUM,Substitute Leader,Group 2: Leader Substitution
+15,CARD_SOCIETY_OF_JESUS,SocietyJesus,Society of Jesus,1,2,Yes,5,1517,"Change rules, allowing universities + boosted university",,HARD,Complicated new action,GROUP 9 - New complicated actions
+16,CARD_CALVIN,Calvin,Calvin,1,2,Leader,6,1517,Substitute Leader,,MEDIUM,Substitute Leader,Group 2: Leader Substitution
+17,CARD_COUNCIL_OF_TRENT,CouncilTrent,Council of Trent,1,2,Yes,6,1517,Special event,,MEDIUM,New action,Group 8 - Other new simple actions
+18,CARD_DRAGUT,Dragut,Dragut,1,2,Yes,6,1517,"Substitute Leader (Naval Leader, not power leader)",,MEDIUM,Substitute Leader,Group 2: Leader Substitution
+19,CARD_EDWARD_VI,EdwardVI,Edward VI,1,2,Leader,0,1517,Substitute Leader,,MEDIUM,Substitute Leader,Group 2: Leader Substitution
+20,CARD_HENRY_II,HenryII,Henry II,1,2,Leader,6,1517,Substitute Leader,,MEDIUM,Substitute Leader,Group 2: Leader Substitution
+21,CARD_MARY_I,MaryI,Mary I,1,2,Leader,0,1517,Substitute Leader (but it implies to complicate rules a lot),,EXTREME,Substitute Leader + complicate everything,GROUP 10 - EXTREME CARDS
+22,CARD_JULIUS_III,JuliusIII,Julius III,1,2,Leader,7,1517,Substitute Leader,,MEDIUM,Substitute Leader,Group 2: Leader Substitution
+23,CARD_ELIZABETH_I,ElizabethI,Elizabeth I,1,2,Leader,0,1517,Substitute Leader,,MEDIUM,Substitute Leader,Group 2: Leader Substitution
+24,CARD_ARQUEBUSIERS,Arquebusiers,Arquebusiers,3,1,No,1,1517,Boost to a fight (field or naval),,MEDIUM,Combat Cards,Group 3: Combat Cards
+25,CARD_FIELD_ARTILLERY,FieldArtillery,Field Artillery,3,1,No,1,1517,Boost to a fight (field),,MEDIUM,Combat Cards,Group 3: Combat Cards
+26,CARD_MERCENARIES_BRIBED,MercenariesBribed,Mercenaries Bribed,3,3,No,1,1517,Boost to a fight (field),,MEDIUM,Combat Cards,Group 3: Combat Cards
+27,CARD_MERCENARIES_GROW_RESTLESS,MercenariesGrowRestless,Mercenaries Grow Restless,3,2,No,1,1517,Boost to a fight (assault defending),,MEDIUM,Combat Cards,Group 3: Combat Cards
+28,CARD_SIEGE_MINING,SiegeMining,Siege Mining,3,1,No,1,1517,Boost to a fight (assault attacking),,MEDIUM,Combat Cards,Group 3: Combat Cards
+29,CARD_SURPRISE_ATTACK,SurpriseAttack,Surprise Attack,3,2,No,1,1517,Boost to a fight (field),,MEDIUM,Combat Cards,Group 3: Combat Cards
+30,CARD_TERCIOS,Tercios,Tercios,3,2,No,1,1517,Boost to a fight (field),Boost to a fight (field),MEDIUM,Combat Cards,Group 3: Combat Cards
+31,CARD_FOUL_WEATHER,FoulWeather,Foul Weather,2,2,No,1,1517,"Response to move, assault, piracy, naval move or naval transport (before rolling)",,HARD,Response Card,GROUP 11 - RESPONSE CARDS
+32,CARD_GOUT,Gout,Gout,2,2,No,1,1517,Response to move or assault including a leader (before rolling),,HARD,Response Card,GROUP 11 - RESPONSE CARDS
+33,CARD_LANDSKNECHTS,Landsknechts,Landsknechts,2,1,No,1,1517,"Response to any action (own or opponent), before or after rolling",,HARD,Response Card,GROUP 11 - RESPONSE CARDS
+34,CARD_PROFESSIONAL_ROWERS,ProfessionalRowers,Professional Rowers,2,2,No,1,1517,Response to intercept or avoid roll (after rolling),Response to a naval combat (after rolling),HARD,Response Card,GROUP 11 - RESPONSE CARDS
+35,CARD_SIEGE_ARTILLERY,SiegeArtillery,Siege Artillery,2,1,No,1,1517,Response to assault (after rolling),,HARD,Response Card,GROUP 11 - RESPONSE CARDS
+36,CARD_SWISS_MERCENARIES,SwissMercenaries,Swiss Mercenaries,2,1,No,1,1517,"Response to any action (own or opponent), before or after rolling",,HARD,Response Card,GROUP 11 - RESPONSE CARDS
+37,CARD_THE_WARTBURG,Wartburg,The Wartburg,2,2,No,1,1517,Response to almost any event (opponent),,HARD,Response Card,GROUP 11 - RESPONSE CARDS
+38,CARD_HALLEY_COMET,HalleyComet,Halley's Comet,2,2,Yes,3,1517,Response.. to play at any time,,HARD,Response Card,GROUP 11 - RESPONSE CARDS
+39,CARD_AUGSBURG_CONFESSION,AugsburgConfession,Augsburg Confession,4,4,Yes,3,1517,Modifiers for other actions in the rest of the turn,,MEDIUM,Change dices for the turn,Group 8 - Other new simple actions
+40,CARD_MACHIAVELLI_THE_PRINCE,Machiavelli,Machiavelli: The Prince,4,3,No,3,1517,War + 2 CP,,EASY,,"Group 1: Easy, just a boosted action"
+41,CARD_MARBURG_COLLOQUY,MarburgColloquy,Marburg Colloquy,4,5,Yes,3,1517,Boosted conversions,,EASY,,"Group 1: Easy, just a boosted action"
+42,CARD_ROXELANA,Roxelana,Roxelana,4,4,No,3,1517,4 CP + boosted assault,2 CP + move Suleiman to Istanbul,EASY,,"Group 1: Easy, just a boosted action"
+43,CARD_ZWINGLI_DONS_ARMOR,ZwingliDonsArmor,Zwingli Dons Armor,4,3,Yes,3,1517,"New action: Zwingli kamikaze, withing 3 spaces",,MEDIUM,New action,Group 8 - Other new simple actions
+44,CARD_AFFAIR_OF_THE_PLACARDS,AffairPlacards,Affair of the Placards,4,2,Yes,4,1517,Boosted conversions,,EASY,,"Group 1: Easy, just a boosted action"
+45,CARD_CALVIN_EXPELLED,CalvinExpelled,Calvin Expelled,4,1,Yes,4,1517,New action: Calvin punished for 1 turn,,MEDIUM,New action (similar to excomunion),Group 8 - Other new simple actions
+46,CARD_CALVIN_INSTITUTES,CalvinInstitutes,Calvin's Institutes,4,5,Yes,4,1517,Boosted conversions,,EASY,,"Group 1: Easy, just a boosted action"
+47,CARD_COPERNICUS,Copernicus,Copernicus,4,6,Yes,5,1517,New action: Count markers and give VP's,,MEDIUM,New action (similar to Master of Italy),Group 8 - Other new simple actions
+48,CARD_GALLEONS,Galleons,Galleons,4,2,No,4,1517,Marker for future impact in New World,,MEDIUM,Change dice results in NW until token removed,GROUP 7 - Future impact in New World
+49,CARD_HUGUENOT_RAIDERS,HuguenotRaiders,Huguenot Raiders,4,2,No,4,1517,Marker for future impact in New World,,MEDIUM,Change dice results in NW until token removed,GROUP 7 - Future impact in New World
+50,CARD_MERCATORMAP,MercatorMap,Mercator's Map,4,2,No,4,1517,Boosted Explotation,,EASY,,"Group 1: Easy, just a boosted action"
+51,CARD_MICHAEL_SERVETUS,MichaelServetus,Michael Servetus,4,4,Yes,4,1517,1 VP and discard a prot card at random,,MEDIUM,New action,Group 6 - Cards draw / discard
+52,CARD_MICHELANGELO,Michelangelo,Michelangelo,4,4,Yes,4,1517,Boosted St Peter's,,EASY,,"Group 1: Easy, just a boosted action"
+53,CARD_PLANTATIONS,Plantations,Plantations,4,2,No,4,1517,Marker for future impact in New World,,MEDIUM,Change dice results in NW for the rest of the game,GROUP 7 - Future impact in New World
+54,CARD_POTOSI_SILVER_MINES,PotosiSilverMines,Potosi Silver Mines,4,3,Yes,4,1517,Boosted Colony,,EASY,,"Group 1: Easy, just a boosted action"
+55,CARD_JESUIT_EDUCATION,JesuitEducation,Jesuit Education,4,3,No,5,1517,Boosted found universities,,EASY,,"Group 1: Easy, just a boosted action"
+56,CARD_PAPAL_INQUISITION,PapalInquisition,Papal Inquisition,4,5,No,5,1517,Convert + view cards + draw random card or retrieve from discard or boosted debate,,HARD,New complicated action,GROUP 9 - New complicated actions
+57,CARD_PHILIP_OF_HESSE_BIGAMY,PhilipHesseBigamy,Philip of Hesse's Bigamy,4,2,Yes,5,1517,Remove a leader or discard a Prot card (but protestant decides),,MEDIUM,New action,Group 6 - Cards draw / discard
+58,CARD_SPANISH_INQUISITION,SpanishInquisition,Spanish Inquisition,4,5,No,5,1517,Convert + view cards + discard random card + draw a card + debate,,HARD,New complicated action,GROUP 9 - New complicated actions
+59,CARD_LADY_JANE_GREY,LadyJaneGrey,Lady Jane Grey,4,3,Yes,6,1517,Complicated condition + draw card from England + choose 1 + give the other to Pap or Pro,,HARD,New complicated action,GROUP 9 - New complicated actions
+60,CARD_MAURICE_OF_SAXONY,MauriceSaxony,Maurice of Saxony,4,4,No,6,1517,Change side of a leader and his stack (with a condition),,HARD,New complicated action,GROUP 9 - New complicated actions
+61,CARD_MARY_DEFIES_COUNCIL,MaryDefiesCouncil,Mary Defies Council,4,1,No,7,1517,Boosted conversions,,EASY,,"Group 1: Easy, just a boosted action"
+62,CARD_BOOK_OF_COMMON_PRAYER,BookCommonPrayer,Book of Common Prayer,4,2,No,0,1517,Boosted conversions + roll a die to unrest,,MEDIUM,New action,GROUP 5 - Unrest creator
+63,CARD_DISSOLUTION_OF_THE_MONASTERIES,DissolutionMonasteries,Dissolution of the Monasteries,4,4,Yes,0,1517,England draws 2 cards + boosted conversion,,MEDIUM,New action,Group 6 - Cards draw / discard
+64,CARD_PILGRIMAGE_OF_GRACE,PilgrimageGrace,Pilgrimage of Grace,4,3,Yes,0,1517,Unrest,,MEDIUM,New action,GROUP 5 - Unrest creator
+65,CARD_A_MIGHTY_FORTRESS,MightyFortress,A Mighty Fortress,4,4,No,1,1517,Boosted conversions,,EASY,,"Group 1: Easy, just a boosted action"
+66,CARD_AKINJI_RAIDERS,AkinjiRaiders,Akinji Raiders,4,3,No,1,1517,Draw a card from other power,,MEDIUM,New action,Group 6 - Cards draw / discard
+67,CARD_ANABAPTISTS,Anabptists,Anabaptists,4,3,No,1,1517,Boosted conversions,,EASY,,"Group 1: Easy, just a boosted action"
+68,CARD_ANDREA_DORIA,AndreaDoria,Andrea Doria,4,5,No,1,1517,Deactivate Genoa and activate it,Antipiracy action,HARD,New complicated action,GROUP 9 - New complicated actions
+69,CARD_AULD_ALLIANCE,AuldAlliance,Auld Alliance,4,3,No,1,1517,Activate OR deactivate Scotland,complicated condition + build Regulars,HARD,New complicated action,GROUP 9 - New complicated actions
+70,CARD_CHARLES_BOURBON,CharlesBourbon,Charles Bourbon,4,4,No,1,1517,Add leader with merc/cav with complicated condition,,HARD,New complicated action,GROUP 9 - New complicated actions
+71,CARD_CITY_STATE_REBELS,CityStateRebels,City State Rebels,4,4,No,1,1517,Complicated condition + roll to liberate the city,,HARD,New complicated action,GROUP 9 - New complicated actions
+72,CARD_CLOTH_PRICES_FLUCTUATE,ClothPricesFluctuate,Cloth Prices Fluctuate,4,3,No,1,1517,Complicated condition + draw cards + get mercenaries/cav,Discard a random card + unrests,HARD,New complicated action,GROUP 9 - New complicated actions
+73,CARD_DIPLOMATIC_MARRIAGE,DiplomaticMarriage,Diplomatic Marriage,4,5,No,1,1517,Activate OR deactivate any minor power,Play when suing for peace for restoring spaces and leaders,HARD,New complicated action,GROUP 9 - New complicated actions
+74,CARD_DIPLOMATIC_OVERTURE,DiplomaticOverture,Diplomatic Overture,4,5,No,1,1517,Draw 2 cards and give 1 with complicated conditions,,HARD,New complicated action,GROUP 9 - New complicated actions
+75,CARD_ERASMUS,Erasmus,Erasmus,4,3,No,1,1517,Boosted conversions (different according to the turn),,EASY,,"Group 1: Easy, just a boosted action"
+76,CARD_FOREIGN_RECRUITS,ForeignRecruits,Foreign Recruits,4,4,No,1,1517,Boosted recruits,,EASY,,"Group 1: Easy, just a boosted action"
+77,CARD_FOUNTAIN_OF_YOUTH,FountainYouth,Fountain of Youth,4,2,No,1,1517,"Cancel a exploration, try to kill a explorer (complicated combo with Cabot)",,HARD,New complicated action,GROUP 9 - New complicated actions
+78,CARD_FREDERICK_THE_WISE,FrederickWise,Frederick the Wise,4,3,Yes,1,1517,"Convert with complicated calculation and a decision, and option to recover a card",,HARD,New complicated action,GROUP 9 - New complicated actions
+79,CARD_FUGGERS,Fuggers,Fuggers,4,3,No,1,1517,"Draw 2 cards, and have -1 card next turn",,MEDIUM,New action,Group 6 - Cards draw / discard
+80,CARD_GABELLE_REVOLT,GabelleRevolt,Gabelle Revolt,4,1,No,1,1517,Unrest,,MEDIUM,New action,GROUP 5 - Unrest creator
+81,CARD_INDULGENCE_VENDOR,IndulgenceVendor,Indulgence Vendor,4,3,No,1,1517,"Draw card from protestant, boosted St Peter's and discard the card",,MEDIUM,New action,Group 6 - Cards draw / discard
+82,CARD_JANISSARIES_REBEL,JanissariesRebel,Janissaries Rebel,4,2,No,1,1517,Unrest,,MEDIUM,New action,GROUP 5 - Unrest creator
+83,CARD_JOHN_ZAPOLYA,JohnZapolya,John Zapolya,4,3,Yes,1,1517,check condition + give regulars,,MEDIUM,New action,Group 8 - Other new simple actions
+84,CARD_JULIA_GONZAGA,JuliaGonzaga,Julia Gonzaga,4,1,Yes,1,1517,complicated condition + future impact in piracy,,HARD,New complicated action,GROUP 9 - New complicated actions
+85,CARD_KATHERINA_BORA,KatherinaBora,Katherina Bora,4,3,Yes,1,1517,Boosted conversions,,EASY,,"Group 1: Easy, just a boosted action"
+86,CARD_KNIGHTS_OF_ST_JOHN,KnightsStJohn,Knights of St. John,4,2,No,1,1517,complicated condition + discard 1 card from Ottoman and boost St Peter's,complicated condition + Haps switch control of a port to independent and add fortress and unit,HARD,New complicated action,GROUP 9 - New complicated actions
+87,CARD_MERCENARIES_DEMAND_PAY,MercenariesDemandPay,Mercenaries Demand Pay,4,2,No,1,1517,"target a power, might discard and might lose mercenaries acording to decision",,HARD,New complicated action,GROUP 9 - New complicated actions
+88,CARD_PEASANTS_WAR,PesantsWar,Peasants' War,4,3,Yes,1,1517,Unrest,,MEDIUM,New action,GROUP 5 - Unrest creator
+89,CARD_PIRATE_HAVEN,PirateHaven,Pirate Haven,4,3,No,1,1517,Convert Oran or Tripoli in a pirate haven,,HARD,New complicated action,GROUP 9 - New complicated actions
+90,CARD_PRINTING_PRESS,PrintingPress,Printing Press,4,5,No,1,1517,Boost to future conversions + Boosted conversions,,HARD,New complicated action,GROUP 9 - New complicated actions
+91,CARD_RANSOM,Ransom,Ransom,4,3,No,1,1517,Liberate any leader in prison,,MEDIUM,New action,Group 8 - Other new simple actions
+92,CARD_REVOLT_IN_EGYPT,RevoltEgypt,Revolt in Egypt,4,3,No,1,1517,Foreign War,,MEDIUM,New action,GROUP 4 - Foreign Wars
+93,CARD_REVOLT_IN_IRELAND,RevoltIreland,Revolt in Ireland,4,3,No,1,1517,Foreign War,,MEDIUM,New action,GROUP 4 - Foreign Wars
+94,CARD_REVOLT_OF_THE_COMMUNEROS,RevoltCommuneros,Revolt of the Communeros,4,2,No,1,1517,Unrest,,MEDIUM,New action,GROUP 5 - Unrest creator
+95,CARD_SACK_OF_ROME,SackRome,Sack of Rome,4,5,Special,1,1517,Complicated condition + battle + reduction in St Peter's + draw cards + etc,,HARD,New complicated action,GROUP 9 - New complicated actions
+96,CARD_SALE_OF_MOLUCCAS,SaleMoluccas,Sale of Moluccas,4,3,Yes,1,1517,"if circunnavigation done, draw 2 cards",,MEDIUM,New action,Group 6 - Cards draw / discard
+97,CARD_SCOTS_RAID,ScotsRaid,Scots Raid,1,2,No,3,1517,A condition + a total mess,,HARD,New complicated action,GROUP 9 - New complicated actions
+98,CARD_SEARCH_FOR_CIBOLA,SearchCibola,Search for Cibola,4,2,No,1,1517,"Cancel a exploration or conquest, and avoid future in this turn",,HARD,New complicated action,GROUP 9 - New complicated actions
+99,CARD_SEBASTIAN_CABOT,SebastianCabot,Sebastian Cabot,4,1,Special,1,1517,Boosted exploration,,HARD,Complicated iteration with other cards / actions,GROUP 9 - New complicated actions
+100,CARD_SHIPBUILDING,Shipbuilding,Shipbuilding,4,2,No,1,1517,Boosted build ships (alert: also for minors),,EASY,,"Group 1: Easy, just a boosted action"
+101,CARD_SMALLPOX,Smallpox,Smallpox,4,4,No,1,1517,Boosted conquest,,EASY,,"Group 1: Easy, just a boosted action"
+102,CARD_SPRING_PREPARATIONS,SpringPreparations,Spring Preparations,4,3,No,1,1517,Boosted Spring Deployment,,HARD,Mess the rules of Spring Deployment a lot,GROUP 9 - New complicated actions
+103,CARD_THREAT_TO_POWER,ThreatPower,Threat to Power,4,3,No,1,1517,Attempt to assassinate,,MEDIUM,New action,Group 8 - Other new simple actions
+104,CARD_TRACE_ITALIENNE,TraceItalienne,Trace Italienne,4,3,No,1,1517,Build a fortress (check conditions),,MEDIUM,New action,Group 8 - Other new simple actions
+105,CARD_TREACHERY,Treachery,Treachery!,4,5,No,1,1517,Boosted assault,,EASY,,"Group 1: Easy, just a boosted action"
+106,CARD_UNPAID_MERCENARIES,UnpaidMercenaries,Unpaid Mercenaries,4,3,No,1,1517,Remove a stack of mercenaries,,MEDIUM,New action,Group 8 - Other new simple actions
+107,CARD_UNSANITARY_CAMP,UnsanitaryCamp,Unsanitary Camp,4,2,No,1,1517,Remove one third of a stack,,MEDIUM,New action,Group 8 - Other new simple actions
+108,CARD_VENETIAN_ALLIANCE,VenetianAlliance,Venetian Alliance,4,4,No,1,1517,Activate or Deactivate Venice,"In other conditions, improve Venetian units",HARD,New complicated action,GROUP 9 - New complicated actions
+109,CARD_VENETIAN_INFORMANT,VenetianInformant,Venetian Informant,4,1,No,1,1517,"Only in Spring Deployment, review the hand",,HARD,New complicated action,GROUP 9 - New complicated actions
+110,CARD_WAR_IN_PERSIA,WarPersia,War in Persia,4,4,No,1,1517,Foreign War,,MEDIUM,New action,GROUP 4 - Foreign Wars
+111,CARD_COLONIAL_GOVERNOR_NATIVE_UPRISING,ColonialGovernor,Colonial Governor/Native Uprising,4,2,No,1,1517,Marker for future impact in New World,,MEDIUM,Change dice results in NW until removed,GROUP 7 - Future impact in New World
+112,CARD_THOMAS_MORE,ThomasMore,Thomas More,4,3,No,1,1517,No debates in the turn. England draws 1 card and discard other,Boosted debate,HARD,New complicated action,GROUP 9 - New complicated actions
+113,CARD_IMPERIAL_CORONATION,ImperialCoronation,Imperial Coronation,1,2,Special,3,1517,"Simple condition, draw cards",,MEDIUM,New action,Group 6 - Cards draw / discard
+114,CARD_LA_FORET_EMBASSY_IN_ISTANBUL,ForetEmbassy,La Forêt's Embassy in Istanbul,1,2,Special,3,1517,"Simple condition, draw cards",,MEDIUM,New action,Group 6 - Cards draw / discard
+115,CARD_THOMAS_CROMWELL,ThomasCromwell,Thomas Cromwell,2,3,Special,4,1517,Response to a very specific play of Papal Bull,Retrieve a specific card and give it to England OR boosted conversions and change cost of conversions in the turn,EXTREME,Response card + 2 other options (one of them implies change for all the turn),GROUP 11 - RESPONSE CARDS
+116,CARD_ROUGH_WOOING,RoughWooing,Rough Wooing,4,3,No,5,1517,"Complicated condition, roll dice, add modifiers and then a chance to deactivate and activate Scotland",,HARD,New complicated action,GROUP 9 - New complicated actions
+201,CARD_DIP_ANDREA_DORIA,DipAndreaDoria,Andrea Doria,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+202,CARD_DIP_FRENCH_CONSTABLE_INVADES,DipFrenchConstable,French Constable Invades,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+203,CARD_DIP_CORSAIR_RAID,DipCorsairRaid,Corsair Raid,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+204,CARD_DIP_DIPLOMATIC_MARRIAGE,DipDiplomaticMarriage,Diplomatic Marriage,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+205,CARD_DIP_DIPLOMATIC_PRESSURE,DipDiplomaticPressure,Diplomatic Pressure,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+206,CARD_DIP_DIPLOMATIC_FRENCH_INVASION,DipFrenchInvasion,French Invasion,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+207,CARD_DIP_HENRY_PETITIONS_FOR_DIVORCE,DipHenryPetitions,Henry Petitions for Divorce,5,0,Yes,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+208,CARD_DIP_KNIGHTS_OF_ST_JOHN,DipKnightsStJohn,Knights of St. John,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+209,CARD_DIP_PLAGUE,DipPlague,Plague,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+210,CARD_DIP_SHIPBUILDING,DipShipbuilding,Shipbuilding,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+211,CARD_DIP_SPANISH_INVASION,DipSpanishInvasion,Spanish Invasion,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+212,CARD_DIP_VENETIAN_ALLIANCE,DipVenetianAlliance,Venetian Alliance,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
+213,CARD_DIP_AUSTRIAN_INVASION,DipAustrianInvasion,Austrian Invasion,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
+214,CARD_DIP_IMPERIAL_INVASION,DipImperialInvasion,Imperial Invasion,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
+215,CARD_DIP_MACHIAVELLI,DipMachiavelli,Machiavelli,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
+216,CARD_DIP_OTTOMAN_INVASION,DipOttomanInvasion,Ottoman Invasion,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
+217,CARD_DIP_SECRET_PROTESTANT_CIRCLE,DipSecretProtestant,Secret Protestant Circle,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
+218,CARD_DIP_SIEGE_OF_VIENNA,DipSiegeVienna,Siege of Vienna,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
+219,CARD_DIP_SPANISH_INQUISITION,DipSpanishInquisition,Spanish Inquisition,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,

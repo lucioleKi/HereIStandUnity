@@ -6,6 +6,7 @@ using static EnumSpaceScript;
 [CreateAssetMenu]
 public class CardObject : ScriptableObject
 {
+    public int id;
     public new string name;
     public string description;
     public CardType cardType;
@@ -14,7 +15,27 @@ public class CardObject : ScriptableObject
     public int CP;
     public bool canActionPhase;
     public int specialPhase;
-    int turn;
-    int turnSpecial;
-    public bool remove;
+    public int turn;//0 = variable
+    public int turnSpecial;
+    public int remove;//0= no, 1 = yes, 2 = leader, 3 = special
+    public int options;//number of options
+    public string matching;
+
+    public override bool Equals(System.Object obj)
+    {
+        var other = obj as CardObject;
+        if (this.id == other.id || this.name.Equals(other.name) || this.matching.Equals(other.matching))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 }

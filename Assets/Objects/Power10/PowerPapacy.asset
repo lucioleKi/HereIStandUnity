@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: PowerPapacy
   m_EditorClassIdentifier: 
   name: Papacy
+  art: {fileID: 0}
   order: 4
   initialVP: 19
   powerType1: 0
-  ruler: {fileID: 0}
+  ruler: {fileID: 11400000, guid: 24503978ad66bd14f8306a5f6d240e65, type: 2}
