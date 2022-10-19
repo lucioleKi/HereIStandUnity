@@ -14,3 +14,7 @@ Added main menu.
 10/11/2022
 
 Added ImportSpace
+
+10/19/2022
+
+Added GM and Deck manager. Added power cards and UI. Need to debug IO.

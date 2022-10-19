@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: RulerFrance
   m_EditorClassIdentifier: Assembly-CSharp::Ruler
   name: Francis I
+  action: {fileID: 21300000, guid: 48909b69d0374d246af03f0d855a643e, type: 3}
   adminRating: 1
   cardBonus: 1

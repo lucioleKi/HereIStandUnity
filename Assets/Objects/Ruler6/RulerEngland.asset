@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: RulerEngland
   m_EditorClassIdentifier: 
   name: Henry VIII
+  action: {fileID: 21300000, guid: ba52e67e25ed42f4780d8c72fb7a0d9d, type: 3}
   adminRating: 1
   cardBonus: 1

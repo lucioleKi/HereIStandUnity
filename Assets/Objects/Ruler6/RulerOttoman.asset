@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: RulerOttoman
   m_EditorClassIdentifier: Assembly-CSharp::Ruler
   name: Suleiman
+  action: {fileID: 21300000, guid: c598c2692dc40604ba29e970005432a1, type: 3}
   adminRating: 2
   cardBonus: 0

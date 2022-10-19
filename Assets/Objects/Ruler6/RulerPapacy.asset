@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: RulerPapacy
   m_EditorClassIdentifier: Assembly-CSharp::Ruler
   name: Leo X
+  action: {fileID: 21300000, guid: 8b4541248d947e748a23e4eda025e999, type: 3}
   adminRating: 0
   cardBonus: 0

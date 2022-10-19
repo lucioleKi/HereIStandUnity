@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: RulerProtestant
   m_EditorClassIdentifier: Assembly-CSharp::Ruler
   name: Martin Luther
+  action: {fileID: 21300000, guid: fe12c627568509441805492a386e9cf5, type: 3}
   adminRating: 2
   cardBonus: 0
