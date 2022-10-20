@@ -15,8 +15,8 @@ public class SpaceObject
     public PowerType2 homePower;
     public Language language;
     public string matching;
-    public List<SpaceObject> adjacent;
-    public List<SpaceObject> pass;
+    public List<string> adjacent;
+    public List<string> pass;
     
     public SpaceObject space;
 

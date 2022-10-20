@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using static EnumSpaceScript;
 
@@ -10,6 +11,14 @@ public class DeckScript : MonoBehaviour
     public static DeckScript instance;
     public List<SpaceObject> spaces;
     public List<CardObject> cards;
+    public List<CardObject> activeCards;
+    public List<CardObject> discardCards;
+    public List<CardObject> hand0;
+    public List<CardObject> hand1;
+    public List<CardObject> hand2;
+    public List<CardObject> hand3;
+    public List<CardObject> hand4;
+    public List<CardObject> hand5;
     public string[] actionName;
     public int[,] action2d;
 
@@ -46,8 +55,8 @@ public class DeckScript : MonoBehaviour
     List<SpaceObject> importSpaces()
     {
         List<SpaceObject> spaces = new List<SpaceObject>();
-        string[,] adjacentArray = new string[133, 6];
-        string[,] passArray = new string[133, 2];
+        string[,] adjacentArray = new string[134, 6];
+        string[,] passArray = new string[134, 2];
         int row = 0;
         using (var reader = new StreamReader("Assets/Input/spaces.csv"))
         {
@@ -68,6 +77,8 @@ public class DeckScript : MonoBehaviour
                 {
                     if (values[j] != null && values[j] != "")
                     {
+                        //UnityEngine.Debug.Log(row);
+                        //UnityEngine.Debug.Log(values[j]);
                         adjacentArray[row, j - 7] = values[j];
                     }
                     else
@@ -89,15 +100,20 @@ public class DeckScript : MonoBehaviour
                 spaces.Add(temp);
                 row++;
             }
-            for (int i = 1; i <= spaces.Count; i++)
+            /*foreach(string item in adjacentArray)
             {
-                List<SpaceObject> tempAdjacent = new List<SpaceObject>();
-                List<SpaceObject> tempPass = new List<SpaceObject>();
+                UnityEngine.Debug.Log(item);
+            }*/
+            for (int i = 0; i < spaces.Count; i++)
+            {
+                List<string> tempAdjacent = new List<string>();
+                List<string> tempPass = new List<string>();
                 for (int j = 0; j < 6; j++)
                 {
                     if (adjacentArray[i, j] != "")
                     {
-                        tempAdjacent.Add(spaces.Find(k => k.Equals(adjacentArray[i, j])));
+                        //UnityEngine.Debug.Log(adjacentArray[i, j]);
+                        tempAdjacent.Add(adjacentArray[i, j]);
                     }
                     else
                     {
@@ -109,7 +125,7 @@ public class DeckScript : MonoBehaviour
                 {
                     if (passArray[i, j] != "")
                     {
-                        tempPass.Add(spaces.Find(k => k.Equals(passArray[i, j])));
+                        tempPass.Add(passArray[i, j]);
                     }
                     else
                     {
@@ -125,6 +141,8 @@ public class DeckScript : MonoBehaviour
 
     List<CardObject> importCards()
     {
+        activeCards = new List<CardObject>();
+        discardCards = new List<CardObject>();
         List<CardObject> cards = new List<CardObject>();
         using (var reader = new StreamReader("Assets/Input/cards.csv"))
         {
@@ -214,5 +232,27 @@ public class DeckScript : MonoBehaviour
 
         }
         return action;
+    }
+
+    void addActive(int turn)
+    {
+        foreach(var card in cards)
+        {
+            if(card.turn == turn)
+            {
+                activeCards.Add(card);
+            }
+        }
+    }
+
+    void Shuffle()
+    {
+        for(int i=0; i<cards.Count; i++)
+        {
+            CardObject temp = cards[i];
+            int randomIndex = UnityEngine.Random.Range(i, cards.Count);
+            cards[i] = cards[randomIndex];
+            cards[randomIndex] = temp;
+        }
     }
 }
