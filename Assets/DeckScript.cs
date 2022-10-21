@@ -13,6 +13,8 @@ public class DeckScript : MonoBehaviour
     public List<CardObject> cards;
     public List<CardObject> activeCards;
     public List<CardObject> discardCards;
+    public List<DebaterObject> debaters;
+    public List<DebaterObject> activeDebaters;
     public List<CardObject> hand0;
     public List<CardObject> hand1;
     public List<CardObject> hand2;
@@ -41,6 +43,8 @@ public class DeckScript : MonoBehaviour
         instance.cards = importCards();
         instance.actionName = getAction1d();
         instance.action2d = getAction2d();
+        instance.debaters = importDebaters();
+        addActive(1);
 
     }
 
@@ -238,21 +242,55 @@ public class DeckScript : MonoBehaviour
     {
         foreach(var card in cards)
         {
-            if(card.turn == turn)
+            if(card.turn <= turn&&card.turn!=0)
             {
                 activeCards.Add(card);
+            }
+        }
+        foreach(var debater in debaters)
+        {
+            if (debater.turn <= turn && debater.turn != 0)
+            {
+                activeDebaters.Add(debater);
             }
         }
     }
 
     void Shuffle()
     {
-        for(int i=0; i<cards.Count; i++)
+        for(int i=0; i<activeCards.Count; i++)
         {
-            CardObject temp = cards[i];
-            int randomIndex = UnityEngine.Random.Range(i, cards.Count);
-            cards[i] = cards[randomIndex];
-            cards[randomIndex] = temp;
+            CardObject temp = activeCards[i];
+            int randomIndex = UnityEngine.Random.Range(i, activeCards.Count);
+            activeCards[i] = activeCards[randomIndex];
+            activeCards[randomIndex] = temp;
         }
+    }
+
+    List<DebaterObject> importDebaters()
+    {
+        int id = 0;
+        List<DebaterObject> debaters = new List<DebaterObject>();
+        activeDebaters = new List<DebaterObject>();
+        using (var reader = new StreamReader("Assets/Input/debaters.csv"))
+        {
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+                DebaterObject temp = new DebaterObject();
+                temp.name = values[0];
+                temp.id = id;
+                temp.value = int.Parse(values[1]);
+                temp.type = int.Parse(values[2]);
+                temp.turn = int.Parse(values[3]);
+                
+                temp.language = (Language)int.Parse(values[4]);
+                
+
+                debaters.Add(temp);
+            }
+        }
+        return debaters;
     }
 }

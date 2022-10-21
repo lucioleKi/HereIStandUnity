@@ -28,8 +28,19 @@ public class VPScript : MonoBehaviour
         position();
     }
 
+    //offset VP markers according to current VP count
     void position()
     {
-
+        RectTransform pos = gameObject.GetComponent<RectTransform>();
+        if (displayVP < 10)
+        {
+            pos.anchoredPosition = new Vector2(-221 + displayVP * 17.7f, -220);
+        }
+        else
+        {
+            pos.anchoredPosition = new Vector2(-398 + (displayVP-10) * 17.7f, -237);
+        }
     }
+
+   
 }

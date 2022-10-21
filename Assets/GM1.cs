@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Diagnostics;
 using System.Runtime.Versioning;
 using UnityEngine;
@@ -47,6 +48,14 @@ public class GM1 : MonoBehaviour
 
     void Update()
     {
+        
+    }
 
+    void checkWin()
+    {
+        if (VPs.Contains(25))
+        {
+            //win!
+        }
     }
 }
