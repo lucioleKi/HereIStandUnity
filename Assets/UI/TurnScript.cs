@@ -21,9 +21,9 @@ public class TurnScript : MonoBehaviour
         if (displayTurn != GM1.turn)
         {
             displayTurn = GM1.turn;
-
+            turnPosition();
         }
-        turnPosition();
+        
     }
 
 
@@ -31,7 +31,7 @@ public class TurnScript : MonoBehaviour
     {
         RectTransform pos = gameObject.GetComponent<RectTransform>();
         
-        pos.anchoredPosition = new Vector2(43 + (displayTurn-1) * 20.675f, -229);
+        pos.anchoredPosition = new Vector2(195 + (displayTurn-1) * 40.375f, -485);
         
     }
 }

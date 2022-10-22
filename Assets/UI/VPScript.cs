@@ -12,7 +12,7 @@ public class VPScript : MonoBehaviour
     void Start()
     {
         int index = gameObject.name[2]-'0';
-        displayVP = GM1.powerObjects[index].initialVP;
+        displayVP = GM1.VPs[index];
         position();
     }
 
@@ -34,11 +34,11 @@ public class VPScript : MonoBehaviour
         RectTransform pos = gameObject.GetComponent<RectTransform>();
         if (displayVP < 10)
         {
-            pos.anchoredPosition = new Vector2(-221 + displayVP * 17.7f, -220);
+            pos.anchoredPosition = new Vector2(-322 + displayVP * 34.56f, -467);
         }
         else
         {
-            pos.anchoredPosition = new Vector2(-398 + (displayVP-10) * 17.7f, -237);
+            pos.anchoredPosition = new Vector2(-665 + (displayVP-10) * 34.56f, -502);
         }
     }
 

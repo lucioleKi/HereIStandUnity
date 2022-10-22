@@ -20,4 +20,9 @@ Added ImportSpace
 Added GM and Deck manager. Added power cards and UI. Need to debug IO.
 
 10/21/2022
+
 Added debaters, UI for VP and turn, logic for GM and Deck. Changed image format. 
+
+10/22/2022
+
+Made UI scalable. Added leaders and reformers. Started Scenario object.

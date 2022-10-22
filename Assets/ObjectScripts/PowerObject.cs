@@ -9,7 +9,6 @@ public class PowerObject : ScriptableObject
     public new string name;
     public Sprite art;
     public int order;
-    public int initialVP;
     public PowerType1 powerType1;
     public RulerObject ruler;
     

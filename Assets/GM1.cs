@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
-using System.Runtime.Versioning;
 using UnityEngine;
 using static EnumSpaceScript;
 
@@ -25,9 +24,11 @@ public class GM1 : MonoBehaviour
     }
     void Awake()
     {
+        Screen.SetResolution(1920, 1080, true);
         instance = this;
-        turn = 1;
-        phase = 1;
+        ScenarioObject scenario = Resources.Load("Objects/Scenario3/1517") as ScenarioObject;
+        turn = scenario.turnStart;
+        phase = scenario.phaseStart;
         powerObjects = new PowerObject[10];
         powerObjects[0] = Resources.Load("Objects/Power10/PowerOttoman") as PowerObject;
         powerObjects[1] = Resources.Load("Objects/Power10/PowerHapsburgs") as PowerObject;
@@ -42,7 +43,7 @@ public class GM1 : MonoBehaviour
         VPs = new int[6];
         for(int i = 0; i < 6; i++)
         {
-            VPs[i] = powerObjects[i].initialVP;
+            VPs[i] = scenario.VPs[i];
         }
     }
 

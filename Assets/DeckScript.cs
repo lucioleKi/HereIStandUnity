@@ -15,6 +15,9 @@ public class DeckScript : MonoBehaviour
     public List<CardObject> discardCards;
     public List<DebaterObject> debaters;
     public List<DebaterObject> activeDebaters;
+    public List<LeaderObject> leaders;
+    public List<LeaderObject> activeLeaders;
+    public List<ReformerObject> reformers;
     public List<CardObject> hand0;
     public List<CardObject> hand1;
     public List<CardObject> hand2;
@@ -44,6 +47,8 @@ public class DeckScript : MonoBehaviour
         instance.actionName = getAction1d();
         instance.action2d = getAction2d();
         instance.debaters = importDebaters();
+        instance.leaders = importLeaders();
+        instance.reformers = importReformers();
         addActive(1);
 
     }
@@ -254,6 +259,13 @@ public class DeckScript : MonoBehaviour
                 activeDebaters.Add(debater);
             }
         }
+        foreach(var leader in leaders)
+        {
+            if(leader.turn <= turn && leader.turn != 0)
+            {
+                activeLeaders.Add(leader);
+            }
+        }
     }
 
     void Shuffle()
@@ -292,5 +304,41 @@ public class DeckScript : MonoBehaviour
             }
         }
         return debaters;
+    }
+
+    List<LeaderObject> importLeaders()
+    {
+        List<LeaderObject> leaders = new List<LeaderObject>();
+        activeLeaders = new List<LeaderObject>();
+        using (var reader = new StreamReader("Assets/Input/leaders.csv"))
+        {
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+                LeaderObject temp = new LeaderObject();
+                temp.id = int.Parse(values[0]);
+                temp.name = values[1];
+                temp.battle = int.Parse(values[2]);
+                temp.command = int.Parse(values[3]);
+                temp.type = int.Parse(values[4]);
+
+                temp.matching = values[5];
+                temp.turn = int.Parse(values[6]);
+
+                leaders.Add(temp);
+            }
+        }
+        return leaders;
+    }
+
+    List<ReformerObject> importReformers()
+    {
+        List<ReformerObject> reformers = new List<ReformerObject>();
+        reformers.Add(Resources.Load("Objects/Reformer4/Luther") as ReformerObject);
+        reformers.Add(Resources.Load("Objects/Reformer4/Zwingli") as ReformerObject);
+        reformers.Add(Resources.Load("Objects/Reformer4/Calvin") as ReformerObject);
+        reformers.Add(Resources.Load("Objects/Reformer4/Cranmer") as ReformerObject);
+        return reformers;
     }
 }

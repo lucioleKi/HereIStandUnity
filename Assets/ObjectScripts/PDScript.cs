@@ -43,7 +43,7 @@ public class PDScript : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            player = (player-1)%6;
+            player = (player - 1) % 6;
             if (player == -1)
             {
                 player = 5;
@@ -53,10 +53,10 @@ public class PDScript : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
-            player = (player+1)%6;
+            player = (player + 1) % 6;
             thisImage = gameObject.GetComponent<Image>();
             thisImage.sprite = Resources.Load<Sprite>("Sprites/power" + player.ToString());
         }
-        
+
     }
 }
