@@ -19,3 +19,8 @@ MonoBehaviour:
   VPs: 0800000009000000090000000c0000001300000000000000
   protestantSpaces: 0
   englishSpaces: 0
+  cities:
+  - {fileID: 11400000, guid: 67b7fd992f1643b4c8ea86e72cd46797, type: 2}
+  - {fileID: 11400000, guid: 2c697cca642f49b4db401cc389844c4e, type: 2}
+  - {fileID: 11400000, guid: 59adfe729f9ff0e4d949c5aad9d4b6c8, type: 2}
+  - {fileID: 11400000, guid: c5b86df698dfcdd4aa9a9ca394ddc060, type: 2}

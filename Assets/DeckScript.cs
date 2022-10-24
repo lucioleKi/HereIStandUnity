@@ -8,7 +8,7 @@ using static EnumSpaceScript;
 
 public class DeckScript : MonoBehaviour
 {
-    public static DeckScript instance;
+    public static DeckScript instanceDeck;
     public List<SpaceObject> spaces;
     public List<CardObject> cards;
     public List<CardObject> activeCards;
@@ -27,28 +27,28 @@ public class DeckScript : MonoBehaviour
     public string[] actionName;
     public int[,] action2d;
 
-    public static DeckScript Instance
+    public static DeckScript InstanceDeck
     {
         get
         {
-            if (instance == null)
+            if (instanceDeck == null)
             {
                 UnityEngine.Debug.Log("Deck not initiated.");
             }
-            return instance;
+            return instanceDeck;
         }
     }
     // Start is called before the first frame update
     void Awake()
     {
-        instance = this;
-        instance.spaces = importSpaces();
-        instance.cards = importCards();
-        instance.actionName = getAction1d();
-        instance.action2d = getAction2d();
-        instance.debaters = importDebaters();
-        instance.leaders = importLeaders();
-        instance.reformers = importReformers();
+        instanceDeck = this;
+        instanceDeck.spaces = importSpaces();
+        instanceDeck.cards = importCards();
+        instanceDeck.actionName = getAction1d();
+        instanceDeck.action2d = getAction2d();
+        instanceDeck.debaters = importDebaters();
+        instanceDeck.leaders = importLeaders();
+        instanceDeck.reformers = importReformers();
         addActive(1);
 
     }

@@ -26,3 +26,7 @@ Added debaters, UI for VP and turn, logic for GM and Deck. Changed image format.
 10/22/2022
 
 Made UI scalable. Added leaders and reformers. Started Scenario object.
+
+10/24/2022
+
+Added UI for HomeSpace, NewWorld and controlMarker. Started CitySetup and SpaceGM object.

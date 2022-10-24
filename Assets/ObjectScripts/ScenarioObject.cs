@@ -14,4 +14,5 @@ public class ScenarioObject : ScriptableObject
     public int protestantSpaces;
     public int englishSpaces;
     //todo diplomacy status
+    public CitySetup[] cities;
 }
