@@ -12,7 +12,7 @@ public class PDScript : MonoBehaviour
     void Start()
     {
 
-       player = 0;
+       player = GM1.player;
        thisImage = gameObject.GetComponent<Image>();
        thisImage.sprite = Resources.Load<Sprite>("Sprites/power"+player.ToString());
         
@@ -41,22 +41,13 @@ public class PDScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (GM1.player != player)
         {
-            player = (player - 1) % 6;
-            if (player == -1)
-            {
-                player = 5;
-            }
+            player = GM1.player;
             thisImage = gameObject.GetComponent<Image>();
             thisImage.sprite = Resources.Load<Sprite>("Sprites/power" + player.ToString());
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            player = (player + 1) % 6;
-            thisImage = gameObject.GetComponent<Image>();
-            thisImage.sprite = Resources.Load<Sprite>("Sprites/power" + player.ToString());
-        }
+        
 
     }
 }

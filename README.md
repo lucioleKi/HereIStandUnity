@@ -30,3 +30,7 @@ Made UI scalable. Added leaders and reformers. Started Scenario object.
 10/24/2022
 
 Added UI for HomeSpace, NewWorld and controlMarker. Started CitySetup and SpaceGM object.
+
+10/26/2022
+
+Added GM2 for observer pattern. Started mandatory event logic.

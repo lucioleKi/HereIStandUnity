@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using static GM2;
 
 public class Home25Script : MonoBehaviour
 {
@@ -11,22 +13,30 @@ public class Home25Script : MonoBehaviour
     {
         place2 = GM1.englishSpaces;
         place5 = GM1.protestantSpaces;
-        HomePosition();
+        HomePosition(0, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (place2 != GM1.englishSpaces|| place5 != GM1.protestantSpaces)
-        {
-            place2 = GM1.englishSpaces;
-            place5 = GM1.protestantSpaces;
-            HomePosition();
-        }
+        
     }
 
-    void HomePosition()
+    void OnEnable()
     {
+        GM2.onMoveHome25 += HomePosition;
+    }
+
+    void OnDisable()
+    {
+        GM2.onMoveHome25 -= HomePosition;
+    }
+    
+
+    void HomePosition(int change1, int change2)
+    {
+        place2 = place2+change1;
+        place5 = place5+change2;
         RectTransform pos = gameObject.GetComponent<RectTransform>();
         if (gameObject.name == "EnglishHome")
         {

@@ -18,6 +18,7 @@ public class DeckScript : MonoBehaviour
     public List<LeaderObject> leaders;
     public List<LeaderObject> activeLeaders;
     public List<ReformerObject> reformers;
+    public List<ReformerObject> activeReformers;
     public List<CardObject> hand0;
     public List<CardObject> hand1;
     public List<CardObject> hand2;
@@ -49,6 +50,7 @@ public class DeckScript : MonoBehaviour
         instanceDeck.debaters = importDebaters();
         instanceDeck.leaders = importLeaders();
         instanceDeck.reformers = importReformers();
+        
         addActive(1);
 
     }
@@ -335,7 +337,8 @@ public class DeckScript : MonoBehaviour
     List<ReformerObject> importReformers()
     {
         List<ReformerObject> reformers = new List<ReformerObject>();
-        reformers.Add(Resources.Load("Objects/Reformer4/Luther") as ReformerObject);
+        List<ReformerObject> activeReformers = new List<ReformerObject>();
+        reformers.Add(Resources.Load("Objects/Reformer4/Luther1") as ReformerObject);
         reformers.Add(Resources.Load("Objects/Reformer4/Zwingli") as ReformerObject);
         reformers.Add(Resources.Load("Objects/Reformer4/Calvin") as ReformerObject);
         reformers.Add(Resources.Load("Objects/Reformer4/Cranmer") as ReformerObject);

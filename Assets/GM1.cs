@@ -9,10 +9,13 @@ using static DeckScript;
 public class GM1 : MonoBehaviour
 {
     public static GM1 instance;
+    public static int player;
+    public static int CurrentCard;
     public static int turn;
     public static int phase;
     public static int protestantSpaces;
     public static int englishSpaces;
+    public static Religion[] religiousInfluence;
     public static PowerObject[] powerObjects;
     public static int[] VPs;
     public static List<SpaceGM> spacesGM;

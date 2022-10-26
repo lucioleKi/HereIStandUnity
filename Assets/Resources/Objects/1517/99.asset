@@ -18,6 +18,6 @@ MonoBehaviour:
   cavalry: 0
   squadron: 0
   controlPower: 0
-  controlMarker: 2
+  controlMarker: 3
   leader1: 0
   leader2: 0
