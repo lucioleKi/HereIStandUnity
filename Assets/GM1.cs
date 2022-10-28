@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using UnityEngine;
+using System;
 using static EnumSpaceScript;
 using static DeckScript;
 
@@ -19,6 +20,7 @@ public class GM1 : MonoBehaviour
     public static PowerObject[] powerObjects;
     public static int[] VPs;
     public static List<SpaceGM> spacesGM;
+    public static int[] regulars;
     
     public static GM1 Instance { 
         get { 
@@ -56,11 +58,14 @@ public class GM1 : MonoBehaviour
             VPs[i] = scenario.VPs[i];
         }
         spacesGM = new List<SpaceGM>();
+        regulars = new int[instanceDeck.spaces.Count() + 6];
+        Array.Clear(regulars, 0, instanceDeck.spaces.Count() + 6);
         for (int i = 1; i <= instanceDeck.spaces.Count(); i++) {
             CitySetup temp = Resources.Load("Objects/1517/" + i.ToString()) as CitySetup;
-            if (temp != null) {
+            if (temp != null&&i>6) {
                 SpaceGM temp1 = new SpaceGM(temp);
                 spacesGM.Add(temp1);
+                regulars[i - 1] = temp.regular;
             }
             else
             {
@@ -71,6 +76,12 @@ public class GM1 : MonoBehaviour
                 spacesGM.Add(temp1);
             }
         }
+        regulars[0] = 2;
+        regulars[1] = 1;
+        regulars[2] = 1;
+        regulars[3] = 1;
+        regulars[4] = 1;
+        regulars[5] = 2;
 
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 using System;
 using static EnumSpaceScript;
 using static DeckScript;
+using static GM1;
 
 public class GM2 : MonoBehaviour
 {
@@ -25,10 +26,13 @@ public class GM2 : MonoBehaviour
     public SimpleHandler on8;
     public delegate void Int2Handler(int index1, int index2);
     public static Int2Handler onMoveHome25;
+    //(card index = id - 1, power)
+    public static Int2Handler onChangeReg;
     public delegate void Int3Handler(int index1, int index2, int index3);
     public static Int3Handler onAddSpace;
-    public static Int1Handler onRemoveSpace;
+    
     public delegate void Int1Handler(int index);
+    public static Int1Handler onRemoveSpace;
     public static Int1Handler onAddReformer;
     public delegate void CardHandler(int index);
     public static CardHandler onMandatory;
@@ -54,6 +58,7 @@ public class GM2 : MonoBehaviour
         switch (index)
         {
             case 8:
+                
                 instanceDeck.activeReformers.Add(instanceDeck.reformers.ElementAt(0));
                 GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Reformer4/Luther"), new Vector3(instanceDeck.spaces.ElementAt(0).posX + 965, instanceDeck.spaces.ElementAt(0).posY + 545, 0), Quaternion.identity);
                 tempObject.transform.SetParent(GameObject.Find("Reformers").transform);

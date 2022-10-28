@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using TMPro;
 using static EnumSpaceScript;
 using static DeckScript;
 using static GM1;
+using static GM2;
 using System.ComponentModel;
 
 public class Flyweight : MonoBehaviour
@@ -33,7 +34,6 @@ public class Flyweight : MonoBehaviour
         {
             updateList(i, (int)instanceDeck.spaces.ElementAt(i).homePower);
             initXY(i);
-
         }
 
 
@@ -47,15 +47,18 @@ public class Flyweight : MonoBehaviour
 
     void OnEnable()
     {
-        GM2.onAddSpace += addSpace;
-        GM2.onRemoveSpace += removeSpace;
+        GM2.onAddSpace += addControlMarker;
+        GM2.onRemoveSpace += removeControlMarker;
+        
         
     }
 
     void OnDisable()
     {
-        GM2.onAddSpace -= addSpace;
-        GM2.onRemoveSpace -= removeSpace;
+        GM2.onAddSpace -= addControlMarker;
+        GM2.onRemoveSpace -= removeControlMarker;
+        
+        
     }
 
     void updateList(int i, int power)
@@ -88,25 +91,28 @@ public class Flyweight : MonoBehaviour
         //List<Vector3> positions = new List<Vector3>();
 
 
-        CitySetup temp = Resources.Load("Objects/1517/" + i.ToString()) as CitySetup;
-        if (temp != null)
+        CitySetup temp = Resources.Load("Objects/1517/" + (i+1).ToString()) as CitySetup;
+        if (temp != null&&temp.regular!=0)
         {
             //UnityEngine.Debug.Log(instanceDeck.spaces.ElementAt(i - 1).name);
-            if (temp.controlPower == 5||temp.controlMarker==0)
+            
+            if (temp.controlPower == 5 || temp.controlMarker == 0)
             {
                 return;
             }
-            string tempName = (temp.controlPower * 4 + temp.controlMarker-1).ToString() + "_" + temp.controlPower.ToString();
-            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/ControlMarker21/" + tempName), new Vector3(instanceDeck.spaces.ElementAt(i-1).posX+960, instanceDeck.spaces.ElementAt(i-1).posY+540, 0), Quaternion.identity);
+            string tempName = (temp.controlPower * 4 + temp.controlMarker - 1).ToString() + "_" + temp.controlPower.ToString();
+            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/ControlMarker21/" + tempName), new Vector3(instanceDeck.spaces.ElementAt(i).posX+960, instanceDeck.spaces.ElementAt(i).posY+540, 0), Quaternion.identity);
             tempObject.transform.SetParent(GameObject.Find("SpacesDisplay").transform);
-            tempObject.name = instanceDeck.spaces.ElementAt(i - 1).name;
+            tempObject.name = instanceDeck.spaces.ElementAt(i - 1).name+"L";
             tempObject.SetActive(true);
         }
         
 
     }
 
-    void addSpace(int index, int power, int marker)
+    
+
+    void addControlMarker(int index, int power, int marker)
     {
 
         if (power == 5 || marker == 0)
@@ -121,7 +127,7 @@ public class Flyweight : MonoBehaviour
         updateList(index, power);
     }
 
-    void removeSpace(int index)
+    void removeControlMarker(int index)
     {
 
         if (gameObject.transform.Find(instanceDeck.spaces.ElementAt(index).name) != null)
@@ -140,5 +146,8 @@ public class Flyweight : MonoBehaviour
         
     }
 
+    
+    
 
+    
 }
