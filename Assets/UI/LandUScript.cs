@@ -128,13 +128,57 @@ public class LandUScript : MonoBehaviour
 
     void changeReg(int index, int power)
     {
-        
+
         //if reg marker and # already exist
+        if (index > 133)
+        {
+            switch (index)
+            {
+                case 134:
+                    GameObject tempObject1 = GameObject.Find("135");
+                    Destroy(tempObject1.gameObject);
+                    GameObject number1 = GameObject.Find("135_0");
+                    Destroy(number1.gameObject);
+                    return;
+                case 135:
+                    GameObject tempObject2 = GameObject.Find("136");
+                    Destroy(tempObject2.gameObject);
+                    GameObject number2 = GameObject.Find("136_0");
+                    Destroy(number2.gameObject);
+                    return;
+                case 136:
+                    GameObject tempObject3 = GameObject.Find("137");
+                    Destroy(tempObject3.gameObject);
+                    GameObject number3 = GameObject.Find("137_0");
+                    Destroy(number3.gameObject);
+                    return;
+                case 137:
+                    GameObject tempObject4 = GameObject.Find("138");
+                    Destroy(tempObject4.gameObject);
+                    GameObject number4 = GameObject.Find("138_0");
+                    Destroy(number4.gameObject);
+                    return;
+                case 138:
+                    GameObject tempObject5 = GameObject.Find("139");
+                    Destroy(tempObject5.gameObject);
+                    GameObject number5 = GameObject.Find("139_0");
+                    Destroy(number5.gameObject);
+                    return;
+                case 139:
+                    GameObject tempObject6 = GameObject.Find("140");
+                    Destroy(tempObject6.gameObject);
+                    GameObject number6 = GameObject.Find("140_0");
+                    Destroy(number6.gameObject);
+                    return;
+
+            }
+        }
+
         if (gameObject.transform.Find(instanceDeck.spaces.ElementAt(index).name + "_0") != null)
         {
             //destroy if changed to 0
             //UnityEngine.Debug.Log(regulars[index]);
-            if (regulars[index] == 0)
+            if (regulars[index] == 0&&index<134)
             {
                 GameObject tempObject = GameObject.Find(instanceDeck.spaces.ElementAt(index).name + "_0");
                 Destroy(tempObject.gameObject);

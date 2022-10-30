@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static EnumSpaceScript;
+using static GM2;
 
 public class VPScript : MonoBehaviour
 {
@@ -16,8 +17,22 @@ public class VPScript : MonoBehaviour
         position();
     }
 
+    void OnEnable()
+    {
+        onVP += changeVP;
+    }
+
+    void OnDisable()
+    {
+        onVP -= changeVP;
+    }
+
     // Update is called once per frame
     void Update()
+    {
+    }
+
+    void changeVP()
     {
         int index = gameObject.name[2] - '0';
         if (displayVP != GM1.VPs[index])

@@ -66,8 +66,6 @@ public class DeckScript : MonoBehaviour
     List<SpaceObject> importSpaces()
     {
         List<SpaceObject> spaces = new List<SpaceObject>();
-        string[,] adjacentArray = new string[134, 6];
-        string[,] passArray = new string[134, 2];
         int row = 0;
         using (var reader = new StreamReader("Assets/Input/spaces.csv"))
         {
@@ -84,67 +82,31 @@ public class DeckScript : MonoBehaviour
                 temp.homePower = (PowerType2)int.Parse(values[5]);
                 temp.language = (Language)int.Parse(values[6]);
                 temp.matching = values[16];
+                temp.adjacent = new List<int>();
+                temp.pass = new List<int>();
                 for (int j = 7; j <= 12; j++)
                 {
                     if (values[j] != null && values[j] != "")
                     {
                         //UnityEngine.Debug.Log(row);
                         //UnityEngine.Debug.Log(values[j]);
-                        adjacentArray[row, j - 7] = values[j];
+                        temp.adjacent.Add(int.Parse(values[j]));
                     }
-                    else
-                    {
-                        adjacentArray[row, j - 7] = "";
-                    }
+                    
                 }
                 for (int j = 13; j <= 14; j++)
                 {
                     if (values[j] != null && values[j] != "")
                     {
-                        passArray[row, j - 13] = values[j];
+                        temp.pass.Add(int.Parse(values[j]));
                     }
-                    else
-                    {
-                        passArray[row, j - 13] = "";
-                    }
+                    
                 }
+                
                 spaces.Add(temp);
                 row++;
             }
-            /*foreach(string item in adjacentArray)
-            {
-                UnityEngine.Debug.Log(item);
-            }*/
-            for (int i = 0; i < spaces.Count; i++)
-            {
-                List<string> tempAdjacent = new List<string>();
-                List<string> tempPass = new List<string>();
-                for (int j = 0; j < 6; j++)
-                {
-                    if (adjacentArray[i, j] != "")
-                    {
-                        //UnityEngine.Debug.Log(adjacentArray[i, j]);
-                        tempAdjacent.Add(adjacentArray[i, j]);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                spaces.ElementAt(i).adjacent = tempAdjacent;
-                for (int j = 0; j < 2; j++)
-                {
-                    if (passArray[i, j] != "")
-                    {
-                        tempPass.Add(passArray[i, j]);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                spaces.ElementAt(i).pass = tempPass;
-            }
+            
 
         }
         return spaces;

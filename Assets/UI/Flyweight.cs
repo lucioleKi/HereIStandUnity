@@ -103,7 +103,7 @@ public class Flyweight : MonoBehaviour
             string tempName = (temp.controlPower * 4 + temp.controlMarker - 1).ToString() + "_" + temp.controlPower.ToString();
             GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/ControlMarker21/" + tempName), new Vector3(instanceDeck.spaces.ElementAt(i).posX+960, instanceDeck.spaces.ElementAt(i).posY+540, 0), Quaternion.identity);
             tempObject.transform.SetParent(GameObject.Find("SpacesDisplay").transform);
-            tempObject.name = instanceDeck.spaces.ElementAt(i - 1).name+"L";
+            tempObject.name = instanceDeck.spaces.ElementAt(i - 1).name;
             tempObject.SetActive(true);
         }
         

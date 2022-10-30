@@ -34,7 +34,7 @@ public class StartButton : MonoBehaviour
     {
         //UnityEngine.Debug.Log("You have clicked the button!");
         GM2.onMandatory(index);
-
+        
     }
 
     // Update is called once per frame
