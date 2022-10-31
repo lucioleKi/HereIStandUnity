@@ -7,6 +7,7 @@ using System;
 using static EnumSpaceScript;
 using static DeckScript;
 
+
 public class GM1 : MonoBehaviour
 {
     public static GM1 instance;
@@ -61,7 +62,7 @@ public class GM1 : MonoBehaviour
         spacesGM = new List<SpaceGM>();
         regulars = new int[instanceDeck.spaces.Count() + 6];
         religiousInfluence = new Religion[instanceDeck.spaces.Count()];
-        regularsPower = new int[instanceDeck.spaces.Count];
+        regularsPower = new int[instanceDeck.spaces.Count()];
         Array.Clear(regulars, 0, instanceDeck.spaces.Count() + 6);
         Array.Clear(religiousInfluence, 0, instanceDeck.spaces.Count());
 

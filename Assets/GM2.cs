@@ -46,6 +46,8 @@ public class GM2 : MonoBehaviour
 
     public static int highlightSelected = -1;
     public static bool phaseEnd = false;
+
+    //
     void OnEnable()
     {
         onMandatory += mandatory;
@@ -65,6 +67,8 @@ public class GM2 : MonoBehaviour
             onMoveHome25?.Invoke(1, 2);
 }
     */
+
+    //todo: make this generic
     IEnumerator waitHighlight()
     {
         
@@ -248,7 +252,7 @@ public class GM2 : MonoBehaviour
 
     List<int> highlightReformation()
     {
-        //make port
+        //todo: make port
         List<int> highlightReformations = new List<int>();
         for(int i = 0; i < instanceDeck.spaces.Count(); i++)
         {
