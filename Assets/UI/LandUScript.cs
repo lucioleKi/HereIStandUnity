@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using static EnumSpaceScript;
 using static DeckScript;
@@ -14,7 +15,7 @@ public class LandUScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < instanceDeck.spaces.Count(); i++)
+        for (int i = 0; i < spaces.Count(); i++)
         {
             
             initUnits(i);
@@ -47,7 +48,7 @@ public class LandUScript : MonoBehaviour
         if (temp != null && temp.regular != 0)
         {
 
-            //UnityEngine.Debug.Log(instanceDeck.spaces.ElementAt(i).name);
+            //UnityEngine.Debug.Log(spaces.ElementAt(i).name);
             int number = temp.regular;
             if (i < 6)
             {
@@ -115,14 +116,86 @@ public class LandUScript : MonoBehaviour
             }
 
             string tempName = temp.controlPower.ToString();
-            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/LandU11/" + tempName), new Vector3(instanceDeck.spaces.ElementAt(i).posX + 970, instanceDeck.spaces.ElementAt(i).posY + 547, 0), Quaternion.identity);
+            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/LandU11/" + tempName), new Vector3(spaces.ElementAt(i).posX + 970, spaces.ElementAt(i).posY + 547, 0), Quaternion.identity);
             tempObject.transform.SetParent(GameObject.Find("LandUDisplay").transform);
-            tempObject.name = instanceDeck.spaces.ElementAt(i).name + "_0";
+            tempObject.name = spaces.ElementAt(i).name + "_0";
             tempObject.SetActive(true);
-            GameObject number0 = Instantiate((GameObject)Resources.Load("Objects/Number"), new Vector3(instanceDeck.spaces.ElementAt(i).posX + 970 + 22, instanceDeck.spaces.ElementAt(i).posY + 547 - 4, 0), Quaternion.identity);
+            GameObject number0 = Instantiate((GameObject)Resources.Load("Objects/Number"), new Vector3(spaces.ElementAt(i).posX + 970 + 22, spaces.ElementAt(i).posY + 547 - 4, 0), Quaternion.identity);
             number0.transform.SetParent(GameObject.Find("LandUDisplay").transform);
             number0.GetComponent<TextMeshProUGUI>().text = number.ToString();
             number0.name = (i + 1).ToString() + "_0";
+
+            //leader init
+            if (temp.leader1 != 0)
+            {
+                GameObject newObject = new GameObject("leader_" + temp.leader1.ToString(), typeof(RectTransform), typeof(Image));
+                if (temp.id == 22)//vienna
+                {
+                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945+103, spaces.ElementAt(i).posY + 543+63, 0);
+                }else if (temp.id == 28)//london
+                {
+                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945-217, spaces.ElementAt(i).posY + 543+70, 0);
+                }
+                else if(temp.id == 42)//paris
+                {
+                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945+39, spaces.ElementAt(i).posY + 543+249, 0);
+                }
+                else
+                {
+                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945, spaces.ElementAt(i).posY + 543, 0);
+                }
+                
+                newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + temp.leader1.ToString());
+                newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
+                newObject.transform.SetParent(GameObject.Find("LeaderDisplay").transform);
+            }
+            if(temp.leader2 != 0)
+            {
+                GameObject newObject = new GameObject("leader_" + temp.leader2.ToString(), typeof(RectTransform), typeof(Image));
+                if (temp.id == 28)//london
+                {
+                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945 - 217, spaces.ElementAt(i).posY + 510 + 70, 0);
+                }
+                else if (temp.id == 42)//paris
+                {
+                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945 + 39, spaces.ElementAt(i).posY + 510 + 249, 0);
+                }
+                else
+                {
+                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945, spaces.ElementAt(i).posY + 510, 0);
+                }
+                
+                newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + temp.leader2.ToString());
+                newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
+                newObject.transform.SetParent(GameObject.Find("LeaderDisplay").transform);
+            }
+
+            //naval init
+            if (temp.squadron != 0)
+            {
+                int number2 = temp.squadron;
+                GameObject newObject = new GameObject("squadron_" + temp.controlPower.ToString(), typeof(RectTransform), typeof(Image));
+                GameObject number1 = Instantiate((GameObject)Resources.Load("Objects/Number"), new Vector3(spaces.ElementAt(i).posX + 970f + 14, spaces.ElementAt(i).posY + 532f - 9f, 0), Quaternion.identity);
+
+                if (temp.id == 28)//london
+                {
+                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 955 - 217, spaces.ElementAt(i).posY + 528 + 70, 0);
+                    number1.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 955 - 225+37, spaces.ElementAt(i).posY + 523 + 70, 0);
+                }
+
+                else
+                {
+                    
+                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 955f, spaces.ElementAt(i).posY + 528f, 0);
+                }
+                newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NavalUnits/" + temp.controlPower.ToString());
+                newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(47.5f, 25f);
+                newObject.transform.SetParent(GameObject.Find("NavalDisplay").transform);
+                number1.transform.SetParent(GameObject.Find("NavalDisplay").transform);
+                number1.GetComponent<TextMeshProUGUI>().text = number2.ToString();
+                number1.name = (i + 1).ToString() + "_1";
+            }
+            
         }
     }
 
@@ -174,13 +247,13 @@ public class LandUScript : MonoBehaviour
             }
         }
 
-        if (gameObject.transform.Find(instanceDeck.spaces.ElementAt(index).name + "_0") != null)
+        if (gameObject.transform.Find(spaces.ElementAt(index).name + "_0") != null)
         {
             //destroy if changed to 0
             //UnityEngine.Debug.Log(regulars[index]);
             if (regulars[index] == 0&&index<134)
             {
-                GameObject tempObject = GameObject.Find(instanceDeck.spaces.ElementAt(index).name + "_0");
+                GameObject tempObject = GameObject.Find(spaces.ElementAt(index).name + "_0");
                 Destroy(tempObject.gameObject);
                 GameObject number = GameObject.Find((index + 1).ToString() + "_0");
                 Destroy(number.gameObject);
@@ -198,11 +271,11 @@ public class LandUScript : MonoBehaviour
         {
             
             string tempName = power.ToString();
-            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/LandU11/" + tempName), new Vector3(instanceDeck.spaces.ElementAt(index).posX + 970, instanceDeck.spaces.ElementAt(index).posY + 547, 0), Quaternion.identity);
+            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/LandU11/" + tempName), new Vector3(spaces.ElementAt(index).posX + 970, spaces.ElementAt(index).posY + 547, 0), Quaternion.identity);
             tempObject.transform.SetParent(GameObject.Find("LandUDisplay").transform);
-            tempObject.name = instanceDeck.spaces.ElementAt(index).name + "_0";
+            tempObject.name = spaces.ElementAt(index).name + "_0";
             tempObject.SetActive(true);
-            GameObject number0 = Instantiate((GameObject)Resources.Load("Objects/Number"), new Vector3(instanceDeck.spaces.ElementAt(index).posX + 970 + 22, instanceDeck.spaces.ElementAt(index).posY + 547 - 4, 0), Quaternion.identity);
+            GameObject number0 = Instantiate((GameObject)Resources.Load("Objects/Number"), new Vector3(spaces.ElementAt(index).posX + 970 + 22, spaces.ElementAt(index).posY + 547 - 4, 0), Quaternion.identity);
             number0.transform.SetParent(GameObject.Find("LandUDisplay").transform);
             number0.GetComponent<TextMeshProUGUI>().text = regulars[index].ToString();
             number0.name = (index + 1).ToString() + "_0";

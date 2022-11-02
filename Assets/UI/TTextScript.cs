@@ -5,35 +5,36 @@ using TMPro;
 
 public class TTextScript : MonoBehaviour
 {
-    int turn;
-    int phase;
+    
     // Start is called before the first frame update
     void Start()
     {
-        turn = GM1.turn;
-        phase = GM1.phase;
+        
         changeText();
+    }
+
+    void OnEnable()
+    {
+        GM2.onChangePhase += changeText;
+    }
+
+    void OnDisable()
+    {
+        GM2.onChangePhase -= changeText;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (turn != GM1.turn)
-        {
-            turn = GM1.turn;
-        }
-        if (phase != GM1.phase)
-        {
-            phase = GM1.turn;
-        }
+        
     }
 
     void changeText()
     {
-        string temp = "Turn " + turn.ToString() + ": ";
+        string temp = "Turn " + GM1.turn.ToString() + ": ";
         TextMeshProUGUI mtext = gameObject.GetComponent<TextMeshProUGUI>();
         
-        switch (phase)
+        switch (GM1.phase)
         {
             case 1:
                 temp = temp + "Luther\'s 95 Theses ";

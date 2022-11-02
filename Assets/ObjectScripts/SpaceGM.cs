@@ -23,6 +23,7 @@ public class SpaceGM
         this.cavalry = 0;
         this.squadron = 0;
         this.controlMarker = 0;
+        this.controlPower = 0;
         this.leader1 = 0;
         this.leader2 = 0;
     }
@@ -35,6 +36,7 @@ public class SpaceGM
         this.cavalry = city.cavalry;
         this.squadron = city.squadron;
         this.controlMarker = city.controlMarker;
+        this.controlPower = city.controlPower;
         this.leader1 = city.leader1;
         this.leader2 = city.leader2;
 

@@ -8,7 +8,7 @@ using static EnumSpaceScript;
 using static DeckScript;
 using static GM1;
 
-public class StartButton : MonoBehaviour
+public class NextButton : MonoBehaviour
 {
     public Button btn;
     public int cardIndex;
@@ -17,23 +17,31 @@ public class StartButton : MonoBehaviour
     {
         btn = gameObject.GetComponent<Button>();
         cardIndex = 8;
-        btn.onClick.AddListener(()=>buttonCallBack(cardIndex));
+        btn.interactable = true;
+        btn.onClick.AddListener(()=>buttonCallBack());
+        
     }
 
     void OnEnable()
     {
-        GM2.onAddReformer += buttonCallBack;
+        //GM2.onAddReformer += buttonCallBack;
     }
 
     void OnDisable()
     {
-        GM2.onAddReformer -= buttonCallBack;
+        //GM2.onAddReformer -= buttonCallBack;
     }
 
-    void buttonCallBack(int index)
+    void buttonCallBack()
     {
         //UnityEngine.Debug.Log("You have clicked the button!");
-        GM2.onMandatory(index);
+        if (phase == 1)
+        {
+            phase++;
+            GM2.onChangePhase();
+            GM2.onPhase2();
+        }
+        
         
     }
 

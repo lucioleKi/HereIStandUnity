@@ -22,11 +22,17 @@ public class GM2 : MonoBehaviour
         }
     }
 
+    public static string chosenCard = "";
+
     public delegate void SimpleHandler();
     public static SimpleHandler on8;
     public static SimpleHandler onVP;
     public static SimpleHandler onPhase2;
     public static SimpleHandler onHighlightSelected;
+    public static SimpleHandler onChangeDip;
+    public static SimpleHandler onChangePhase;
+    public static SimpleHandler onChosenCard;
+    public static SimpleHandler onPlayerChange;
     public delegate void Int2Handler(int index1, int index2);
     public static Int2Handler onMoveHome25;
     //(card index = id - 1, power)
@@ -46,6 +52,7 @@ public class GM2 : MonoBehaviour
 
     public static int highlightSelected = -1;
     public static bool phaseEnd = false;
+
 
     //
     void OnEnable()
@@ -84,10 +91,12 @@ public class GM2 : MonoBehaviour
                 //UnityEngine.Debug.Log("here");
                 yield return null;
             }
-
+            
             UnityEngine.Debug.Log("end");
             //onRemoveHighlight(converted);
         }
+        chosenCard = "";
+        onChosenCard();
     }
     
 
@@ -97,8 +106,8 @@ public class GM2 : MonoBehaviour
         {
             case 8:
                 
-                instanceDeck.activeReformers.Add(instanceDeck.reformers.ElementAt(0));
-                GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Reformer4/Luther"), new Vector3(instanceDeck.spaces.ElementAt(0).posX + 965, instanceDeck.spaces.ElementAt(0).posY + 545, 0), Quaternion.identity);
+                activeReformers.Add(reformers.ElementAt(0));
+                GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Reformer4/Luther"), new Vector3(spaces.ElementAt(0).posX + 965, spaces.ElementAt(0).posY + 545, 0), Quaternion.identity);
                 tempObject.transform.SetParent(GameObject.Find("Reformers").transform);
                 tempObject.name = "Luther";
                 tempObject.SetActive(true);
@@ -109,8 +118,8 @@ public class GM2 : MonoBehaviour
                 regulars[0] = 2;
                 onChangeReg(0, 5);
                 StartCoroutine(waitHighlight());
-                
-
+                cards.RemoveAt(7);
+                hand5.RemoveAt(0);
                 
                 break;
         }
@@ -125,21 +134,21 @@ public class GM2 : MonoBehaviour
         UnityEngine.Debug.Log(highlightSelected);
         int target = highlightSelected;
 
-        SpaceObject targetSpace = instanceDeck.spaces.ElementAt(target);
+        SpaceObject targetSpace = spaces.ElementAt(target);
         //2. add up reformer dice
         int reformerDice = 1;
         int papalDice = 1;
         //+2 if reformer in target space, +1 if reformer adjacent
-        for (int i = 0; i < instanceDeck.activeReformers.Count(); i++)
+        for (int i = 0; i < activeReformers.Count(); i++)
         {
-            if (instanceDeck.activeReformers.ElementAt(i).space == target)
+            if (activeReformers.ElementAt(i).space == target)
             {
                 reformerDice = reformerDice + 2;
             }
             else
             {
                 
-                SpaceObject tempSpace = instanceDeck.spaces.ElementAt(instanceDeck.activeReformers.ElementAt(i).space);
+                SpaceObject tempSpace = spaces.ElementAt(activeReformers.ElementAt(i).space);
                 for(int j= 0; j < tempSpace.adjacent.Count(); j++)
                 {
                     if (tempSpace.adjacent.ElementAt(j) == targetSpace.id)
@@ -151,11 +160,11 @@ public class GM2 : MonoBehaviour
         }
         
         //+1 for every adjacent under protestant/catholic religious influence 
-        for(int i = 0; i < instanceDeck.spaces.ElementAt(target).adjacent.Count; i++)
+        for(int i = 0; i < spaces.ElementAt(target).adjacent.Count; i++)
         {
-            if (religiousInfluence[instanceDeck.spaces.ElementAt(target).adjacent.ElementAt(i)] == (Religion)1) {
+            if (religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)] == (Religion)1) {
                 reformerDice++;
-            }else if(religiousInfluence[instanceDeck.spaces.ElementAt(target).adjacent.ElementAt(i)] == (Religion)0)
+            }else if(religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)] == (Religion)0)
             {
                 papalDice++;
             }
@@ -254,16 +263,16 @@ public class GM2 : MonoBehaviour
     {
         //todo: make port
         List<int> highlightReformations = new List<int>();
-        for(int i = 0; i < instanceDeck.spaces.Count(); i++)
+        for(int i = 0; i < spaces.Count(); i++)
         {
             if ((int)religiousInfluence[i] == 1)
             {
                 continue;
             }
-            for(int j = 0; j<instanceDeck.spaces.ElementAt(i).adjacent.Count(); j++)
+            for(int j = 0; j<spaces.ElementAt(i).adjacent.Count(); j++)
             {
                 
-                if (religiousInfluence[instanceDeck.spaces.ElementAt(i).adjacent.ElementAt(j)-1] == (Religion)1)
+                if (religiousInfluence[spaces.ElementAt(i).adjacent.ElementAt(j)-1] == (Religion)1)
                 {
                     
                     highlightReformations.Add(i);
@@ -272,9 +281,9 @@ public class GM2 : MonoBehaviour
             }
             if (!highlightReformations.Contains(i))
             {
-                for (int j = 0; i < instanceDeck.spaces.ElementAt(i).pass.Count(); j++)
+                for (int j = 0; i < spaces.ElementAt(i).pass.Count(); j++)
                 {
-                    if (religiousInfluence[instanceDeck.spaces.ElementAt(i).pass.ElementAt(j)] == (Religion)1)
+                    if (religiousInfluence[spaces.ElementAt(i).pass.ElementAt(j)] == (Religion)1)
                     {
                         highlightReformations.Add(i);
                         break;
@@ -283,9 +292,9 @@ public class GM2 : MonoBehaviour
             }
             if (!highlightReformations.Contains(i))
             {
-                for (int j = 0; j < instanceDeck.activeReformers.Count(); j++)
+                for (int j = 0; j < activeReformers.Count(); j++)
                 {
-                    if (instanceDeck.activeReformers.ElementAt(j).space == i)
+                    if (activeReformers.ElementAt(j).space == i)
                     {
                         highlightReformations.Add(i);
                         break;
@@ -300,7 +309,91 @@ public class GM2 : MonoBehaviour
 
     void phase2()
     {
+        instanceDeck.addActive(turn);
+        activeCards.AddRange(discardCards);
+        discardCards.Clear();
+        instanceDeck.Shuffle();
+        for(int i = 0; i < 6; i++)
+        {
+            List<CardObject> tempHand = new List<CardObject>();
+            int temp = drawNumber(i);
+            switch (i)
+            {
+                case 0:
+                    hand0.Add(cards.ElementAt(0));
+                    hand0.AddRange(activeCards.GetRange(0, temp));
+                    
+                    break;
+                case 1:
+                    hand1.Add(cards.ElementAt(1));
+                    hand1.AddRange(activeCards.GetRange(0, temp));
+                    break;
+                case 2:
+                    hand2.Add(cards.ElementAt(2));
+                    hand2.AddRange(activeCards.GetRange(0, temp));
+                    break;
+                case 3:
+                    hand3.Add(cards.ElementAt(3));
+                    hand3.AddRange(activeCards.GetRange(0, temp));
+                    break;
+                case 4:
+                    hand4.Add(cards.ElementAt(4));
+                    hand4.AddRange(activeCards.GetRange(0, temp));
+                    break;
+                case 5:
+                    hand5.Add(cards.ElementAt(6));
+                    hand5.AddRange(activeCards.GetRange(0, temp));
+                    break;
+            }
+            activeCards.RemoveRange(0, temp);
+        }
+    }
 
+    int drawNumber(int playerIndex)
+    {
+        int count = powerObjects[playerIndex].ruler.cardBonus;
+
+        if (playerIndex == 5)
+        {
+            
+            for(int i=0; i<6; i++)
+            {
+                if (religiousInfluence[i] == (Religion)1)
+                {
+                    count++;
+                }
+            }
+            //UnityEngine.Debug.Log(count);
+            if (count > 3)
+            {
+                return 5;
+            }
+            else
+            {
+                return 4;
+            }
+        }
+        else
+        {
+            for(int i=0; i < spacesGM.Count(); i++)
+            {
+                if(spacesGM.ElementAt(i).controlPower==playerIndex&& spacesGM.ElementAt(i).controlMarker == 3)
+                {
+                    
+                    count++;
+                }
+            }
+            //UnityEngine.Debug.Log(count);
+            if (count > 1)
+            {
+                return count;
+            }
+            else
+            {
+                return 1;
+            }
+            
+        }
     }
 
     void Awake()

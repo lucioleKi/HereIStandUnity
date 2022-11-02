@@ -17,26 +17,44 @@ public class StartButton : MonoBehaviour
     {
         btn = gameObject.GetComponent<Button>();
         cardIndex = 8;
-        btn.onClick.AddListener(()=>nextPhase(cardIndex));
+        btn.interactable = false;
+        btn.onClick.AddListener(()=> buttonCallBack(cardIndex));
     }
 
     void OnEnable()
     {
-        GM2.onAddReformer += nextPhase;
+        GM2.onAddReformer += buttonCallBack;
+        GM2.onChosenCard += makeInteractable;
     }
 
     void OnDisable()
     {
-        GM2.onAddReformer -= nextPhase;
+        GM2.onAddReformer -= buttonCallBack;
+        GM2.onChosenCard -= makeInteractable;
     }
 
-    void nextPhase(int index)
+    void buttonCallBack(int index)
     {
         //UnityEngine.Debug.Log("You have clicked the button!");
-        //next phase ui toggle layers: regular(LandUDisplay), SCM(SpaceDisplay), squadrons(N/A), reformer, leader(N/A, 2 maybe?)
-
+        
+            GM2.onMandatory(index);
+        
+        
 
     }
+
+    void makeInteractable()
+    {
+    if (GM2.chosenCard == "")
+    {
+        btn.interactable = false;
+    }
+    else
+    {
+        btn.interactable = true;
+    }
+    }
+
 
     // Update is called once per frame
     void Update()

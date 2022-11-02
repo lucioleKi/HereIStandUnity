@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static EnumSpaceScript;
 using static GM2;
+using static GM1;
 
 public class VPScript : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class VPScript : MonoBehaviour
     void Start()
     {
         int index = gameObject.name[2]-'0';
-        displayVP = GM1.VPs[index];
+        displayVP = VPs[index];
         position();
     }
 
@@ -35,9 +36,9 @@ public class VPScript : MonoBehaviour
     void changeVP()
     {
         int index = gameObject.name[2] - '0';
-        if (displayVP != GM1.VPs[index])
+        if (displayVP != VPs[index])
         {
-            displayVP = GM1.VPs[index];
+            displayVP = VPs[index];
 
         }
         position();

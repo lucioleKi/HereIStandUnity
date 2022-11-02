@@ -38,7 +38,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
     {
         for(int i = 0; i < highlightSpaces.Count; i++)
         {
-            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/circle"), new Vector3(instanceDeck.spaces.ElementAt(highlightSpaces.ElementAt(i)).posX + 960, instanceDeck.spaces.ElementAt(highlightSpaces.ElementAt(i)).posY + 540, 0), Quaternion.identity);
+            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/circle"), new Vector3(spaces.ElementAt(highlightSpaces.ElementAt(i)).posX + 960, spaces.ElementAt(highlightSpaces.ElementAt(i)).posY + 540, 0), Quaternion.identity);
             tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
             tempObject.name = "highlight_"+ highlightSpaces.ElementAt(i).ToString();
         }

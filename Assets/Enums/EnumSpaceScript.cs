@@ -11,5 +11,5 @@ public class EnumSpaceScript : MonoBehaviour
     public enum Language { English, French, German, Italian, Spanish, Other};
     public enum CardType { Home, Mandatory, Response, Combat, Event, Diplomacy};
     public enum ActionType { Move, Build, Fight, NewWorld, Religion};
-
+    public enum DiplomacyType { None, War, Allied};
 }

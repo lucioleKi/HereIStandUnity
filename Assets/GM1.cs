@@ -23,6 +23,7 @@ public class GM1 : MonoBehaviour
     public static List<SpaceGM> spacesGM;
     public static int[] regulars;
     public static int[] regularsPower;
+    public static int[,] diplomacyState;
     
     public static GM1 Instance { 
         get { 
@@ -30,14 +31,19 @@ public class GM1 : MonoBehaviour
             {
                 UnityEngine.Debug.Log("GM not initiated.");
             }
+            
             return instance; 
         }
     }
     void Awake()
     {
-        Screen.SetResolution(1920, 1080, true);
+        
+        
         instance = this;
         
+        Screen.SetResolution(1920, 1080, true);
+        
+        player = 5;
         ScenarioObject scenario = Resources.Load("Objects/Scenario3/1517") as ScenarioObject;
         turn = scenario.turnStart;
         phase = scenario.phaseStart;
@@ -59,14 +65,19 @@ public class GM1 : MonoBehaviour
         {
             VPs[i] = scenario.VPs[i];
         }
+        diplomacyState = new int[6, 10];
+        Array.Clear(diplomacyState, 0, diplomacyState.Length);
+        diplomacyState[1, 3] = 1;
+        diplomacyState[3, 4] = 1;
+        diplomacyState[0, 7] = 1;
         spacesGM = new List<SpaceGM>();
-        regulars = new int[instanceDeck.spaces.Count() + 6];
-        religiousInfluence = new Religion[instanceDeck.spaces.Count()];
-        regularsPower = new int[instanceDeck.spaces.Count()];
-        Array.Clear(regulars, 0, instanceDeck.spaces.Count() + 6);
-        Array.Clear(religiousInfluence, 0, instanceDeck.spaces.Count());
+        regulars = new int[DeckScript.spaces.Count() + 6];
+        religiousInfluence = new Religion[spaces.Count()];
+        regularsPower = new int[spaces.Count()];
+        Array.Clear(regulars, 0, spaces.Count() + 6);
+        Array.Clear(religiousInfluence, 0, spaces.Count());
 
-        for (int i = 1; i <= instanceDeck.spaces.Count(); i++) {
+        for (int i = 1; i <= spaces.Count(); i++) {
             CitySetup temp = Resources.Load("Objects/1517/" + i.ToString()) as CitySetup;
             if (temp != null&&i>6) {
                 SpaceGM temp1 = new SpaceGM(temp);
@@ -77,10 +88,10 @@ public class GM1 : MonoBehaviour
             else
             {
                 SpaceGM temp1 = new SpaceGM();
-                temp1.name = instanceDeck.spaces.ElementAt(i - 1).name;
+                temp1.name = spaces.ElementAt(i - 1).name;
                 temp1.id = i;
-                temp1.controlPower = (int)instanceDeck.spaces.ElementAt(i - 1).homePower;
-                regularsPower[i - 1] = (int)instanceDeck.spaces.ElementAt(i - 1).homePower;
+                temp1.controlPower = (int)spaces.ElementAt(i - 1).homePower;
+                regularsPower[i - 1] = (int)spaces.ElementAt(i - 1).homePower;
                 spacesGM.Add(temp1);
             }
         }
@@ -90,6 +101,7 @@ public class GM1 : MonoBehaviour
         regulars[137] = 1;
         regulars[138] = 1;
         regulars[139] = 2;
+        
 
     }
 

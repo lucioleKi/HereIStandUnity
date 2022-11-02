@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using static EnumSpaceScript;
@@ -9,24 +10,24 @@ using static EnumSpaceScript;
 public class DeckScript : MonoBehaviour
 {
     public static DeckScript instanceDeck;
-    public List<SpaceObject> spaces;
-    public List<CardObject> cards;
-    public List<CardObject> activeCards;
-    public List<CardObject> discardCards;
-    public List<DebaterObject> debaters;
-    public List<DebaterObject> activeDebaters;
-    public List<LeaderObject> leaders;
-    public List<LeaderObject> activeLeaders;
-    public List<ReformerObject> reformers;
-    public List<ReformerObject> activeReformers;
-    public List<CardObject> hand0;
-    public List<CardObject> hand1;
-    public List<CardObject> hand2;
-    public List<CardObject> hand3;
-    public List<CardObject> hand4;
-    public List<CardObject> hand5;
-    public string[] actionName;
-    public int[,] action2d;
+    public static List<SpaceObject> spaces;
+    public static List<CardObject> cards;
+    public static List<CardObject> activeCards;
+    public static List<CardObject> discardCards;
+    public static List<DebaterObject> debaters;
+    public static List<DebaterObject> activeDebaters;
+    public static List<LeaderObject> leaders;
+    public static List<LeaderObject> activeLeaders;
+    public static List<ReformerObject> reformers;
+    public static List<ReformerObject> activeReformers;
+    public static List<CardObject> hand0;
+    public static List<CardObject> hand1;
+    public static List<CardObject> hand2;
+    public static List<CardObject> hand3;
+    public static List<CardObject> hand4; 
+    public static List<CardObject> hand5;
+    public static string[] actionName;
+    public static int[,] action2d;
 
     public static DeckScript InstanceDeck
     {
@@ -43,16 +44,22 @@ public class DeckScript : MonoBehaviour
     void Awake()
     {
         instanceDeck = this;
-        instanceDeck.spaces = importSpaces();
-        instanceDeck.cards = importCards();
-        instanceDeck.actionName = getAction1d();
-        instanceDeck.action2d = getAction2d();
-        instanceDeck.debaters = importDebaters();
-        instanceDeck.leaders = importLeaders();
-        instanceDeck.reformers = importReformers();
-        
-        addActive(1);
+        importSpaces();
+        importCards();
+        actionName = getAction1d();
+        action2d = getAction2d();
+        importDebaters();
+        importLeaders();
+        importReformers();
+        hand0 = new List<CardObject>();
+        hand1 = new List<CardObject>();
+        hand2 = new List<CardObject>();
+        hand3 = new List<CardObject>();
+        hand4 = new List<CardObject>();
+        hand5 = new List<CardObject>();
 
+        //luther's 95 theses
+        hand5.Add(cards.ElementAt(7));
     }
 
     // Update is called once per frame
@@ -63,9 +70,9 @@ public class DeckScript : MonoBehaviour
 
 
     // read spaces.csv and produce space objects
-    List<SpaceObject> importSpaces()
+    void importSpaces()
     {
-        List<SpaceObject> spaces = new List<SpaceObject>();
+        spaces = new List<SpaceObject>();
         int row = 0;
         using (var reader = new StreamReader("Assets/Input/spaces.csv"))
         {
@@ -109,14 +116,13 @@ public class DeckScript : MonoBehaviour
             
 
         }
-        return spaces;
     }
 
-    List<CardObject> importCards()
+    void importCards()
     {
         activeCards = new List<CardObject>();
         discardCards = new List<CardObject>();
-        List<CardObject> cards = new List<CardObject>();
+        cards = new List<CardObject>();
         using (var reader = new StreamReader("Assets/Input/cards.csv"))
         {
             while (!reader.EndOfStream)
@@ -166,7 +172,6 @@ public class DeckScript : MonoBehaviour
                 cards.Add(temp);
             }
         }
-        return cards;
     }
 
     string[] getAction1d()
@@ -207,11 +212,11 @@ public class DeckScript : MonoBehaviour
         return action;
     }
 
-    void addActive(int turn)
+    public void addActive(int turn)
     {
         foreach(var card in cards)
         {
-            if(card.turn <= turn&&card.turn!=0)
+            if(card.turn <= turn&&card.turn!=0&&card.id>7)
             {
                 activeCards.Add(card);
             }
@@ -232,7 +237,7 @@ public class DeckScript : MonoBehaviour
         }
     }
 
-    void Shuffle()
+    public void Shuffle()
     {
         for(int i=0; i<activeCards.Count; i++)
         {
@@ -243,10 +248,10 @@ public class DeckScript : MonoBehaviour
         }
     }
 
-    List<DebaterObject> importDebaters()
+    void importDebaters()
     {
         int id = 0;
-        List<DebaterObject> debaters = new List<DebaterObject>();
+        debaters = new List<DebaterObject>();
         activeDebaters = new List<DebaterObject>();
         using (var reader = new StreamReader("Assets/Input/debaters.csv"))
         {
@@ -267,12 +272,11 @@ public class DeckScript : MonoBehaviour
                 debaters.Add(temp);
             }
         }
-        return debaters;
     }
 
-    List<LeaderObject> importLeaders()
+    void importLeaders()
     {
-        List<LeaderObject> leaders = new List<LeaderObject>();
+        leaders = new List<LeaderObject>();
         activeLeaders = new List<LeaderObject>();
         using (var reader = new StreamReader("Assets/Input/leaders.csv"))
         {
@@ -293,17 +297,15 @@ public class DeckScript : MonoBehaviour
                 leaders.Add(temp);
             }
         }
-        return leaders;
     }
 
-    List<ReformerObject> importReformers()
+    void importReformers()
     {
-        List<ReformerObject> reformers = new List<ReformerObject>();
-        List<ReformerObject> activeReformers = new List<ReformerObject>();
+        reformers = new List<ReformerObject>();
+        activeReformers = new List<ReformerObject>();
         reformers.Add(Resources.Load("Objects/Reformer4/Luther1") as ReformerObject);
         reformers.Add(Resources.Load("Objects/Reformer4/Zwingli") as ReformerObject);
         reformers.Add(Resources.Load("Objects/Reformer4/Calvin") as ReformerObject);
         reformers.Add(Resources.Load("Objects/Reformer4/Cranmer") as ReformerObject);
-        return reformers;
     }
 }

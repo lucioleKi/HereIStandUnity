@@ -28,12 +28,12 @@ public class CurrentScript : MonoBehaviour, IPointerClickHandler
             {
                 GM1.player = 5;
             }
-            
+            GM2.onPlayerChange();
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
             GM1.player = (GM1.player + 1) % 6;
-            
+            GM2.onPlayerChange();
         }
     }
 }

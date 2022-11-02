@@ -38,3 +38,7 @@ Added GM2 for observer pattern. Started mandatory event logic.
 10/30/2022
 
 Finished turn 1 phase 1, logic for reformation attempt, basic highlight UI.
+
+11/2/2022
+
+Player hands display in another screen. Diplomacy markers, leaders and naval units UI. Improved selecting and playing card logic and UI.
