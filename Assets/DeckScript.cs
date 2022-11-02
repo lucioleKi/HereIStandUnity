@@ -29,6 +29,10 @@ public class DeckScript : MonoBehaviour
     public static string[] actionName;
     public static int[,] action2d;
 
+
+    public static int[] regulars;
+    public static int[] regularsPower;
+    public static List<SpaceGM> spacesGM;
     public static DeckScript InstanceDeck
     {
         get
@@ -58,6 +62,37 @@ public class DeckScript : MonoBehaviour
         hand4 = new List<CardObject>();
         hand5 = new List<CardObject>();
 
+        regulars = new int[134 + 6];
+        regularsPower = new int[134];
+        Array.Clear(regulars, 0, 134 + 6);
+
+        spacesGM = new List<SpaceGM>();
+        for (int i = 1; i <= 134; i++)
+        {
+            CitySetup temp = Resources.Load("Objects/1517/" + i.ToString()) as CitySetup;
+            if (temp != null && i > 6)
+            {
+                SpaceGM temp1 = new SpaceGM(temp);
+                spacesGM.Add(temp1);
+                regulars[i - 1] = temp.regular;
+                regularsPower[i - 1] = temp.controlPower;
+            }
+            else
+            {
+                SpaceGM temp1 = new SpaceGM();
+                temp1.name = spaces.ElementAt(i - 1).name;
+                temp1.id = i;
+                temp1.controlPower = (int)spaces.ElementAt(i - 1).homePower;
+                regularsPower[i - 1] = (int)spaces.ElementAt(i - 1).homePower;
+                spacesGM.Add(temp1);
+            }
+        }
+        regulars[134] = 2;
+        regulars[135] = 1;
+        regulars[136] = 1;
+        regulars[137] = 1;
+        regulars[138] = 1;
+        regulars[139] = 2;
         //luther's 95 theses
         hand5.Add(cards.ElementAt(7));
     }

@@ -20,9 +20,8 @@ public class GM1 : MonoBehaviour
     public static Religion[] religiousInfluence;
     public static PowerObject[] powerObjects;
     public static int[] VPs;
-    public static List<SpaceGM> spacesGM;
-    public static int[] regulars;
-    public static int[] regularsPower;
+
+
     public static int[,] diplomacyState;
     
     public static GM1 Instance { 
@@ -70,37 +69,14 @@ public class GM1 : MonoBehaviour
         diplomacyState[1, 3] = 1;
         diplomacyState[3, 4] = 1;
         diplomacyState[0, 7] = 1;
-        spacesGM = new List<SpaceGM>();
-        regulars = new int[DeckScript.spaces.Count() + 6];
-        religiousInfluence = new Religion[spaces.Count()];
-        regularsPower = new int[spaces.Count()];
-        Array.Clear(regulars, 0, spaces.Count() + 6);
-        Array.Clear(religiousInfluence, 0, spaces.Count());
+        
+        
+        religiousInfluence = new Religion[134];
+        
+        Array.Clear(religiousInfluence, 0, 134);
 
-        for (int i = 1; i <= spaces.Count(); i++) {
-            CitySetup temp = Resources.Load("Objects/1517/" + i.ToString()) as CitySetup;
-            if (temp != null&&i>6) {
-                SpaceGM temp1 = new SpaceGM(temp);
-                spacesGM.Add(temp1);
-                regulars[i - 1] = temp.regular;
-                regularsPower[i - 1] = temp.controlPower;
-            }
-            else
-            {
-                SpaceGM temp1 = new SpaceGM();
-                temp1.name = spaces.ElementAt(i - 1).name;
-                temp1.id = i;
-                temp1.controlPower = (int)spaces.ElementAt(i - 1).homePower;
-                regularsPower[i - 1] = (int)spaces.ElementAt(i - 1).homePower;
-                spacesGM.Add(temp1);
-            }
-        }
-        regulars[134] = 2;
-        regulars[135] = 1;
-        regulars[136] = 1;
-        regulars[137] = 1;
-        regulars[138] = 1;
-        regulars[139] = 2;
+        
+        
         
 
     }
