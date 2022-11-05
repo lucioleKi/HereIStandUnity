@@ -28,11 +28,13 @@ public class GM2 : MonoBehaviour
     public static SimpleHandler on8;
     public static SimpleHandler onVP;
     public static SimpleHandler onPhase2;
+    public static SimpleHandler onPhase3;
     public static SimpleHandler onHighlightSelected;
     public static SimpleHandler onChangeDip;
     public static SimpleHandler onChangePhase;
     public static SimpleHandler onChosenCard;
     public static SimpleHandler onPlayerChange;
+    
     public delegate void Int2Handler(int index1, int index2);
     public static Int2Handler onMoveHome25;
     //(card index = id - 1, power)
@@ -43,6 +45,7 @@ public class GM2 : MonoBehaviour
     public delegate void Int1Handler(int index);
     public static Int1Handler onRemoveSpace;
     public static Int1Handler onAddReformer;
+    public static Int1Handler onConfirmDipForm;
     public delegate void CardHandler(int index);
     public static CardHandler onMandatory;
 
@@ -59,13 +62,15 @@ public class GM2 : MonoBehaviour
     {
         onMandatory += mandatory;
         onPhase2 += phase2;
-        
+        onPhase3 += phase3;
     }
+
 
     void OnDisable()
     {
         onMandatory -= mandatory;
         onPhase2 -= phase2;
+        onPhase3 -= phase3;
     }
 
     /*if (onMoveHome25 != null)
@@ -394,6 +399,36 @@ public class GM2 : MonoBehaviour
             }
             
         }
+    }
+
+    IEnumerator waitDipForm()
+    {
+        
+        DipForm tempForm = ScriptableObject.CreateInstance<DipForm>();
+        //tempForm.init();
+        
+        
+        for (int i = 0; i < 5; i++)
+        {
+            UnityEngine.Debug.Log("wait"+i.ToString());
+
+            
+            while (!tempForm.completed[i])
+            {
+                //UnityEngine.Debug.Log("here");
+                yield return null;
+            }
+
+            UnityEngine.Debug.Log("endwait");
+            //onRemoveHighlight(converted);
+        }
+        
+    }
+
+    void phase3()
+    {
+       
+        StartCoroutine(waitDipForm());
     }
 
     void Awake()

@@ -8,6 +8,7 @@ using static EnumSpaceScript;
 using static DeckScript;
 using static GM1;
 
+
 public class NextButton : MonoBehaviour
 {
     public Button btn;
@@ -40,6 +41,11 @@ public class NextButton : MonoBehaviour
             phase++;
             GM2.onChangePhase();
             GM2.onPhase2();
+        }else if (phase == 2)
+        {
+            phase++;
+            GM2.onChangePhase();
+            GM2.onPhase3();
         }
         
         

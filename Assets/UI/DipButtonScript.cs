@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -8,7 +7,8 @@ using static DeckScript;
 using static GM1;
 using UnityEngine.SceneManagement;
 
-public class MyCardsScript : MonoBehaviour
+
+public class DipButtonScript : MonoBehaviour
 {
     public Button btn;
     public int playerIndex;
@@ -17,37 +17,40 @@ public class MyCardsScript : MonoBehaviour
     {
         btn = gameObject.GetComponent<Button>();
         playerIndex = GM1.player;
-        btn.onClick.AddListener(() => toCanvasCards());
+        btn.interactable = false;
+        btn.onClick.AddListener(() => toCanvasDip());
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
     void OnEnable()
     {
-        //GM2.onAddReformer += nextPhase;
+        GM2.onPhase3 += active3;
     }
 
     void OnDisable()
     {
-        //GM2.onAddReformer -= nextPhase;
+        GM2.onPhase3 -= active3;
     }
 
-    void toCanvasCards()
+    void active3()
+    {
+        btn.interactable = true;
+    }
+
+    void toCanvasDip()
     {
         playerIndex = GM1.player;
         //SceneManager.LoadScene("ScenePlayer");
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().alpha = 0;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().blocksRaycasts = false;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().interactable = false;
-        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().blocksRaycasts = true;
-        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().interactable = true;
+        GameObject.Find("CanvasDiplomacy").GetComponent<CanvasGroup>().alpha = 1;
+        GameObject.Find("CanvasDiplomacy").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("CanvasDiplomacy").GetComponent<CanvasGroup>().interactable = true;
         //GM2.onPlayerChange();
-    }
-
-    
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

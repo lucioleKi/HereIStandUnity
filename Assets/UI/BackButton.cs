@@ -22,13 +22,23 @@ public class BackButton : MonoBehaviour
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().alpha = 1;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().blocksRaycasts = true;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().interactable = true;
-        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().alpha = 0;
-        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().blocksRaycasts = false;
-        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().interactable = false;
-        foreach (Transform child in GameObject.Find("CardContainer").transform)
+        if (transform.parent.name == "CanvasCards")
         {
-            GameObject.Destroy(child.gameObject);
+            GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().alpha = 0;
+            GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().blocksRaycasts = false;
+            GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().interactable = false;
+            foreach (Transform child in GameObject.Find("CardContainer").transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
         }
+        else if (transform.parent.name == "CanvasDiplomacy")
+        {
+            GameObject.Find("CanvasDiplomacy").GetComponent<CanvasGroup>().alpha = 0;
+            GameObject.Find("CanvasDiplomacy").GetComponent<CanvasGroup>().blocksRaycasts = false;
+            GameObject.Find("CanvasDiplomacy").GetComponent<CanvasGroup>().interactable = false;
+        }
+
     }
 
     // Update is called once per frame
