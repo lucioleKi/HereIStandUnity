@@ -148,6 +148,7 @@ public class LandUScript : MonoBehaviour
                 newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + temp.leader1.ToString());
                 newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
                 newObject.transform.SetParent(GameObject.Find("LeaderDisplay").transform);
+                newObject.AddComponent<LeaderClick>();
             }
             if(temp.leader2 != 0)
             {
@@ -168,6 +169,7 @@ public class LandUScript : MonoBehaviour
                 newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + temp.leader2.ToString());
                 newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
                 newObject.transform.SetParent(GameObject.Find("LeaderDisplay").transform);
+                newObject.AddComponent<LeaderClick>();
             }
 
             //naval init
@@ -267,7 +269,7 @@ public class LandUScript : MonoBehaviour
 
         }
         //make new marker and #
-        else
+        else if (regulars[index]!=0)
         {
             
             string tempName = power.ToString();

@@ -28,7 +28,14 @@ public class DipConfirmScript : MonoBehaviour
     void buttonCallBack()
     {
         playerIndex = player;
-        GM2.onConfirmDipForm(playerIndex);
+        if (gameObject.name == "Confirm")
+        {
+            GM2.onConfirmDipForm(playerIndex);
+        }else if (gameObject.name == "Confirm_peace")
+        {
+
+        }
+        
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().alpha = 1;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().blocksRaycasts = true;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().interactable = true;

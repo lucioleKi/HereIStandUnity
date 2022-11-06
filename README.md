@@ -44,4 +44,9 @@ Finished turn 1 phase 1, logic for reformation attempt, basic highlight UI.
 Player hands display in another screen. Diplomacy markers, leaders and naval units UI. Improved selecting and playing card logic and UI.
 
 11/4/2022
+
 UI and backend object for negotiation segment, need to check restrictions. 
+
+11/6/2022
+
+Finished negotiation segment, tentative peace segment. Finished spring deployment phase.

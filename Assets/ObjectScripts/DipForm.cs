@@ -5,15 +5,16 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.SceneManagement;
 using static GM2;
+using static GM1;
 using TMPro;
 
 public class DipForm : ScriptableObject
 {
     public bool[] completed = new bool[6];
-    public int[,] dipStatus = new int[6,6];
-    public int[,] loanSquadron = new int[6,6];
-    public int[,] randomDraw = new int[6,6];
-    public int[,] giveMerc = new int[6,6];
+    public int[,] dipStatus = new int[6, 6];
+    public int[,] loanSquadron = new int[6, 6];
+    public int[,] randomDraw = new int[6, 6];
+    public int[,] giveMerc = new int[6, 6];
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +23,7 @@ public class DipForm : ScriptableObject
         Array.Clear(loanSquadron, 0, 36);
         Array.Clear(randomDraw, 0, 36);
         Array.Clear(giveMerc, 0, 36);
-        
+
     }
 
     void OnEnable()
@@ -43,10 +44,10 @@ public class DipForm : ScriptableObject
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    
+
 
     public void confirmDip(int playerIndex)
     {
@@ -67,7 +68,8 @@ public class DipForm : ScriptableObject
                 dipStatus[playerIndex, 0] = 1;
                 GameObject.Find("EndWar_0").GetComponent<Toggle>().isOn = false;
             }
-            else if (GameObject.Find("EndWar_1").GetComponent<Toggle>().isOn) {
+            else if (GameObject.Find("EndWar_1").GetComponent<Toggle>().isOn)
+            {
                 dipStatus[playerIndex, 1] = 1;
                 GameObject.Find("EndWar_1").GetComponent<Toggle>().isOn = false;
             }
@@ -130,12 +132,12 @@ public class DipForm : ScriptableObject
 
         }
 
-        for(int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++)
         {
-            
+
             UnityEngine.Debug.Log(GameObject.Find("NumberSquadron_" + i.ToString()).GetComponent<TMP_InputField>().text);
-            
-            if(!string.IsNullOrEmpty(GameObject.Find("NumberSquadron_" + i.ToString()).GetComponent<TMP_InputField>().text))
+
+            if (!string.IsNullOrEmpty(GameObject.Find("NumberSquadron_" + i.ToString()).GetComponent<TMP_InputField>().text))
             {
                 loanSquadron[playerIndex, i] = int.Parse(GameObject.Find("NumberSquadron_" + i.ToString()).GetComponent<TMP_InputField>().text);
                 GameObject.Find("NumberSquadron_" + i.ToString()).GetComponent<TMP_InputField>().text = "";
@@ -145,8 +147,8 @@ public class DipForm : ScriptableObject
                 randomDraw[playerIndex, i] = int.Parse(GameObject.Find("RandomDraw_" + i.ToString()).GetComponent<TMP_InputField>().text);
                 GameObject.Find("RandomDraw_" + i.ToString()).GetComponent<TMP_InputField>().text = "";
             }
-                
-            if(randomDraw[playerIndex, i] < 0 || randomDraw[playerIndex, i] > 2)
+
+            if (randomDraw[playerIndex, i] < 0 || randomDraw[playerIndex, i] > 2)
             {
                 randomDraw[playerIndex, i] = 0;
             }
@@ -157,13 +159,91 @@ public class DipForm : ScriptableObject
                     giveMerc[playerIndex, i] = int.Parse(GameObject.Find("GiveMerc_" + i.ToString()).GetComponent<TMP_InputField>().text);
                     GameObject.Find("GiveMerc_" + i.ToString()).GetComponent<TMP_InputField>().text = "";
                 }
-                    
+
                 if (giveMerc[playerIndex, i] < 0 || giveMerc[playerIndex, i] > 4)
                 {
                     giveMerc[playerIndex, i] = 0;
                 }
             }
-            
+
+        }
+    }
+
+    public void verifyDip()
+    {
+        if (turn == 1)
+        {
+            verifyTurn1();
+        }
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 6; j++)
+            {
+                if (i != j && dipStatus[i, j] != dipStatus[j, i])
+                {
+                    dipStatus[i, j] = 0;
+                    dipStatus[j, i] = 0;
+                    UnityEngine.Debug.Log(i.ToString() + " and " + j.ToString() + " did not reach an agreement");
+
+                }
+                if (i < j && diplomacyState[i, j] == 1 && dipStatus[i, j] == 2)
+                {
+                    dipStatus[i, j] = 0;
+                    dipStatus[j, i] = 0;
+                    UnityEngine.Debug.Log(i.ToString() + " and " + j.ToString() + " are still at war");
+                }
+                
+                if (i != j && randomDraw[i, j] != 0 && randomDraw[j, i] != 0)
+                {
+                    randomDraw[i, j] = 0;
+                    randomDraw[j, i] = 0;
+                    UnityEngine.Debug.Log(i.ToString() + " and " + j.ToString() + " cannot trade draws to each other.");
+                }
+                if (i != j && giveMerc[i, j] != 0 && giveMerc[j, i] != 0)
+                {
+                    giveMerc[i, j] = 0;
+                    giveMerc[j, i] = 0;
+                    UnityEngine.Debug.Log(i.ToString() + " and " + j.ToString() + " cannot give merc to each other.");
+                }
+            }
+        }
+        if (dipStatus[0, 4] == 2 || dipStatus[4, 0] == 2)
+        {
+            dipStatus[0, 4] = 0;
+            dipStatus[4, 0] = 0;
+        }
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 6; j++)
+            {
+                if (i != j && dipStatus[i, j]==2 && loanSquadron[i, j] != 0 && loanSquadron[j, i] != 0)
+                {
+                    loanSquadron[i, j] = 0;
+                    loanSquadron[j, i] = 0;
+                    UnityEngine.Debug.Log(i.ToString() + " and " + j.ToString() + " cannot loan squadrons to each other.");
+                }
+            }
+        }
+    }
+
+    public void verifyTurn1()
+    {
+        for(int i=0; i < 6; i++)
+        {
+            for(int j = 0; j < 6; j++)
+            {
+                if (i != 2 && j != 2)
+                {
+                    dipStatus[i, j] = 0;
+                    dipStatus[j, i] = 0;
+                    loanSquadron[i, j] = 0;
+                    loanSquadron[j, i] = 0;
+                    randomDraw[i, j] = 0;
+                    randomDraw[j, i] = 0;
+                    giveMerc[i, j] = 0;
+                    giveMerc[j, i] = 0;
+                }
+            }
         }
     }
 

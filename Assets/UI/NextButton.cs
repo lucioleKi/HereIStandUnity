@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using static EnumSpaceScript;
 using static DeckScript;
 using static GM1;
-
+using System.Threading;
 
 public class NextButton : MonoBehaviour
 {
@@ -46,6 +46,16 @@ public class NextButton : MonoBehaviour
             phase++;
             GM2.onChangePhase();
             GM2.onPhase3();
+        }else if (phase == 3)
+        {
+            phase++;
+            GM2.onChangePhase();
+            //GM2.onPhase4();
+        }else if (phase == 4)
+        {
+            phase++;
+            GM2.onChangePhase();
+            GM2.onPhase5();
         }
         
         

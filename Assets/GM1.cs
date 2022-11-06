@@ -20,8 +20,6 @@ public class GM1 : MonoBehaviour
     public static Religion[] religiousInfluence;
     public static PowerObject[] powerObjects;
     public static int[] VPs;
-
-
     public static int[,] diplomacyState;
     
     public static GM1 Instance { 
@@ -80,6 +78,8 @@ public class GM1 : MonoBehaviour
         
 
     }
+
+    
 
     void Update()
     {
