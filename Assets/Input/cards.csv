@@ -114,22 +114,3 @@
 114,CARD_LA_FORET_EMBASSY_IN_ISTANBUL,ForetEmbassy,La Forêt's Embassy in Istanbul,1,2,Special,3,1517,"Simple condition, draw cards",,MEDIUM,New action,Group 6 - Cards draw / discard
 115,CARD_THOMAS_CROMWELL,ThomasCromwell,Thomas Cromwell,2,3,Special,4,1517,Response to a very specific play of Papal Bull,Retrieve a specific card and give it to England OR boosted conversions and change cost of conversions in the turn,EXTREME,Response card + 2 other options (one of them implies change for all the turn),GROUP 11 - RESPONSE CARDS
 116,CARD_ROUGH_WOOING,RoughWooing,Rough Wooing,4,3,No,5,1517,"Complicated condition, roll dice, add modifiers and then a chance to deactivate and activate Scotland",,HARD,New complicated action,GROUP 9 - New complicated actions
-201,CARD_DIP_ANDREA_DORIA,DipAndreaDoria,Andrea Doria,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-202,CARD_DIP_FRENCH_CONSTABLE_INVADES,DipFrenchConstable,French Constable Invades,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-203,CARD_DIP_CORSAIR_RAID,DipCorsairRaid,Corsair Raid,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-204,CARD_DIP_DIPLOMATIC_MARRIAGE,DipDiplomaticMarriage,Diplomatic Marriage,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-205,CARD_DIP_DIPLOMATIC_PRESSURE,DipDiplomaticPressure,Diplomatic Pressure,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-206,CARD_DIP_DIPLOMATIC_FRENCH_INVASION,DipFrenchInvasion,French Invasion,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-207,CARD_DIP_HENRY_PETITIONS_FOR_DIVORCE,DipHenryPetitions,Henry Petitions for Divorce,5,0,Yes,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-208,CARD_DIP_KNIGHTS_OF_ST_JOHN,DipKnightsStJohn,Knights of St. John,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-209,CARD_DIP_PLAGUE,DipPlague,Plague,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-210,CARD_DIP_SHIPBUILDING,DipShipbuilding,Shipbuilding,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-211,CARD_DIP_SPANISH_INVASION,DipSpanishInvasion,Spanish Invasion,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-212,CARD_DIP_VENETIAN_ALLIANCE,DipVenetianAlliance,Venetian Alliance,5,0,No,1,2-player variant,N/A,,N/A (not developing this variant yet),,
-213,CARD_DIP_AUSTRIAN_INVASION,DipAustrianInvasion,Austrian Invasion,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
-214,CARD_DIP_IMPERIAL_INVASION,DipImperialInvasion,Imperial Invasion,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
-215,CARD_DIP_MACHIAVELLI,DipMachiavelli,Machiavelli,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
-216,CARD_DIP_OTTOMAN_INVASION,DipOttomanInvasion,Ottoman Invasion,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
-217,CARD_DIP_SECRET_PROTESTANT_CIRCLE,DipSecretProtestant,Secret Protestant Circle,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
-218,CARD_DIP_SIEGE_OF_VIENNA,DipSiegeVienna,Siege of Vienna,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,
-219,CARD_DIP_SPANISH_INQUISITION,DipSpanishInquisition,Spanish Inquisition,5,0,No,0,2-player variant,N/A,,N/A (not developing this variant yet),,

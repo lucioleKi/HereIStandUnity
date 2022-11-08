@@ -50,8 +50,8 @@ public class GM2 : MonoBehaviour
     public static Int1Handler onRemoveSpace;
     public static Int1Handler onAddReformer;
     public static Int1Handler onConfirmDipForm;
-    public delegate void CardHandler(int index);
-    public static CardHandler onMandatory;
+    public static Int1Handler onCPChange;
+    public static Int1Handler onMandatory;
 
     public delegate void List1Handler(List<int> index);
     public static List1Handler onHighlight;
@@ -60,6 +60,7 @@ public class GM2 : MonoBehaviour
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
     public static bool phaseEnd = false;
+    public static int currentCP = 0;
 
 
     //
@@ -132,6 +133,7 @@ public class GM2 : MonoBehaviour
                 regulars[0] = 2;
                 onChangeReg(0, 5);
                 StartCoroutine(waitHighlight());
+                //remove Luther's 95 theses from backend decks
                 cards.RemoveAt(7);
                 hand5.RemoveAt(0);
 
@@ -647,6 +649,8 @@ public class GM2 : MonoBehaviour
         
         
     }
+
+    
 
     void Awake()
     {

@@ -33,6 +33,9 @@ public class MyCardsScript : MonoBehaviour
     void toCanvasCards()
     {
         playerIndex = GM1.player;
+        GM2.onPlayerChange();
+        GameObject.Find("Confirm").GetComponent<Button>().interactable = false;
+        GameObject.Find("CPButton").GetComponent<Button>().interactable = false;
         //SceneManager.LoadScene("ScenePlayer");
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().alpha = 0;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -40,7 +43,7 @@ public class MyCardsScript : MonoBehaviour
         GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().alpha = 1;
         GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().blocksRaycasts = true;
         GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().interactable = true;
-        //GM2.onPlayerChange();
+        //
     }
 
     

@@ -50,3 +50,7 @@ UI and backend object for negotiation segment, need to check restrictions.
 11/6/2022
 
 Finished negotiation segment, tentative peace segment. Finished spring deployment phase.
+
+11/8/2022
+
+Power cards setup. Finished playing a card for CP.

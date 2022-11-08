@@ -11,5 +11,5 @@ public class PowerObject : ScriptableObject
     public int order;
     public PowerType1 powerType1;
     public RulerObject ruler;
-    
+    public StatusObject status;
 }

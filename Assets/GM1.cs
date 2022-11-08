@@ -21,7 +21,13 @@ public class GM1 : MonoBehaviour
     public static PowerObject[] powerObjects;
     public static int[] VPs;
     public static int[,] diplomacyState;
-    
+    public static Status0 status0;
+    public static Status1 status1;
+    public static Status2 status2;
+    public static Status3 status3;
+    public static Status4 status4;
+    public static Status5 status5;
+
     public static GM1 Instance { 
         get { 
             if(instance == null)
@@ -37,7 +43,13 @@ public class GM1 : MonoBehaviour
         
         
         instance = this;
-        
+        status0 = Resources.Load("Objects/Status6/s0") as Status0;
+        status1 = Resources.Load("Objects/Status6/s1") as Status1;
+        status2 = Resources.Load("Objects/Status6/s2") as Status2;
+        status3 = Resources.Load("Objects/Status6/s3") as Status3;
+        status4 = Resources.Load("Objects/Status6/s4") as Status4;
+        status5 = Resources.Load("Objects/Status6/s5") as Status5;
+
         Screen.SetResolution(1920, 1080, true);
         
         player = 5;

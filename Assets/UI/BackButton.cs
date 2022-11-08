@@ -31,6 +31,7 @@ public class BackButton : MonoBehaviour
             {
                 GameObject.Destroy(child.gameObject);
             }
+            
         }
         else if (transform.parent.name == "CanvasDiplomacy")
         {

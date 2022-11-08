@@ -32,6 +32,8 @@ public class ConfirmScript : MonoBehaviour
 
     void buttonCallBack()
     {
+        CPButtonScript.cardSelected = "";
+        btn.interactable = false;
         //SceneManager.LoadScene("SceneMap");
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().alpha = 1;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().blocksRaycasts = true;

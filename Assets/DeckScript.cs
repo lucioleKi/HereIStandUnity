@@ -11,6 +11,7 @@ public class DeckScript : MonoBehaviour
 {
     public static DeckScript instanceDeck;
     public static List<SpaceObject> spaces;
+    public static List<CardObject> cardsLib;
     public static List<CardObject> cards;
     public static List<CardObject> activeCards;
     public static List<CardObject> discardCards;
@@ -207,6 +208,7 @@ public class DeckScript : MonoBehaviour
                 cards.Add(temp);
             }
         }
+        cardsLib = cards;
     }
 
     string[] getAction1d()

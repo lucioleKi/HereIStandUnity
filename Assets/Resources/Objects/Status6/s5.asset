@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2faeadac28d2a54a806ed1dcea746e5, type: 3}
+  m_Name: s5
+  m_EditorClassIdentifier: 
+  playerIndex: 5
+  posX: 4902000049020000
+  posY: 4efeffff26feffff
+  offsetX:
+  - 28
+  - 28
+  offsetY:
+  - 0
+  - -28
+  NewTestamentIndex0: 0
+  NewTestamentIndex1: 0
+  NewTestamentIndex2: 0
+  FullIndex0: 0
+  FullIndex1: 0
+  FullIndex2: 0
+  NewTestamentTrack: 00000000010000000200000003000000040000000500000006000000
+  FullTrack: 0000000001000000020000000300000004000000050000000600000007000000080000000900000007000000
