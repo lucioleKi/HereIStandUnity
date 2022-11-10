@@ -8,7 +8,6 @@ using static EnumSpaceScript;
 using static DeckScript;
 using static GM1;
 using static GM2;
-using System.ComponentModel;
 
 public class LandUScript : MonoBehaviour
 {
@@ -117,86 +116,15 @@ public class LandUScript : MonoBehaviour
 
             string tempName = temp.controlPower.ToString();
             GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/LandU11/" + tempName), new Vector3(spaces.ElementAt(i).posX + 970, spaces.ElementAt(i).posY + 547, 0), Quaternion.identity);
-            tempObject.transform.SetParent(GameObject.Find("LandUDisplay").transform);
+            tempObject.transform.SetParent(gameObject.transform);
             tempObject.name = spaces.ElementAt(i).name + "_0";
             tempObject.SetActive(true);
             GameObject number0 = Instantiate((GameObject)Resources.Load("Objects/Number"), new Vector3(spaces.ElementAt(i).posX + 970 + 22, spaces.ElementAt(i).posY + 547 - 4, 0), Quaternion.identity);
-            number0.transform.SetParent(GameObject.Find("LandUDisplay").transform);
+            number0.transform.SetParent(gameObject.transform);
             number0.GetComponent<TextMeshProUGUI>().text = number.ToString();
             number0.name = (i + 1).ToString() + "_0";
 
-            //leader init
-            if (temp.leader1 != 0)
-            {
-                GameObject newObject = new GameObject("leader_" + temp.leader1.ToString(), typeof(RectTransform), typeof(Image));
-                if (temp.id == 22)//vienna
-                {
-                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945+103, spaces.ElementAt(i).posY + 543+63, 0);
-                }else if (temp.id == 28)//london
-                {
-                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945-217, spaces.ElementAt(i).posY + 543+70, 0);
-                }
-                else if(temp.id == 42)//paris
-                {
-                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945+39, spaces.ElementAt(i).posY + 543+249, 0);
-                }
-                else
-                {
-                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945, spaces.ElementAt(i).posY + 543, 0);
-                }
-                
-                newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + temp.leader1.ToString());
-                newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
-                newObject.transform.SetParent(GameObject.Find("LeaderDisplay").transform);
-                newObject.AddComponent<LeaderClick>();
-            }
-            if(temp.leader2 != 0)
-            {
-                GameObject newObject = new GameObject("leader_" + temp.leader2.ToString(), typeof(RectTransform), typeof(Image));
-                if (temp.id == 28)//london
-                {
-                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945 - 217, spaces.ElementAt(i).posY + 510 + 70, 0);
-                }
-                else if (temp.id == 42)//paris
-                {
-                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945 + 39, spaces.ElementAt(i).posY + 510 + 249, 0);
-                }
-                else
-                {
-                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 945, spaces.ElementAt(i).posY + 510, 0);
-                }
-                
-                newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + temp.leader2.ToString());
-                newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
-                newObject.transform.SetParent(GameObject.Find("LeaderDisplay").transform);
-                newObject.AddComponent<LeaderClick>();
-            }
-
-            //naval init
-            if (temp.squadron != 0)
-            {
-                int number2 = temp.squadron;
-                GameObject newObject = new GameObject("squadron_" + temp.controlPower.ToString(), typeof(RectTransform), typeof(Image));
-                GameObject number1 = Instantiate((GameObject)Resources.Load("Objects/Number"), new Vector3(spaces.ElementAt(i).posX + 970f + 14, spaces.ElementAt(i).posY + 532f - 9f, 0), Quaternion.identity);
-
-                if (temp.id == 28)//london
-                {
-                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 955 - 217, spaces.ElementAt(i).posY + 528 + 70, 0);
-                    number1.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 955 - 225+37, spaces.ElementAt(i).posY + 523 + 70, 0);
-                }
-
-                else
-                {
-                    
-                    newObject.GetComponent<RectTransform>().localPosition = new Vector3(spaces.ElementAt(i).posX + 955f, spaces.ElementAt(i).posY + 528f, 0);
-                }
-                newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NavalUnits/" + temp.controlPower.ToString());
-                newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(47.5f, 25f);
-                newObject.transform.SetParent(GameObject.Find("NavalDisplay").transform);
-                number1.transform.SetParent(GameObject.Find("NavalDisplay").transform);
-                number1.GetComponent<TextMeshProUGUI>().text = number2.ToString();
-                number1.name = (i + 1).ToString() + "_1";
-            }
+            
             
         }
     }
@@ -283,4 +211,6 @@ public class LandUScript : MonoBehaviour
             number0.name = (index + 1).ToString() + "_0";
         }
     }
+
+    
 }

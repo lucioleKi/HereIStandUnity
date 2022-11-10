@@ -54,3 +54,7 @@ Finished negotiation segment, tentative peace segment. Finished spring deploymen
 11/8/2022
 
 Power cards setup. Finished playing a card for CP.
+
+11/10/2022
+
+Improved UI for what the player needs to do next. More logic on buttons. Need to debug leader movement.

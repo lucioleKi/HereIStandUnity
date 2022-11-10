@@ -27,8 +27,8 @@ public class DipConfirmScript : MonoBehaviour
 
     void buttonCallBack()
     {
-        playerIndex = player;
-        if (gameObject.name == "Confirm")
+        playerIndex = GM1.player;
+        if (gameObject.name == "Confirm_dip")
         {
             GM2.onConfirmDipForm(playerIndex);
         }else if (gameObject.name == "Confirm_peace")

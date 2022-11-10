@@ -12,6 +12,7 @@ public class SpaceGM
     public int regular;
     public int cavalry;
     public int squadron;
+    public int corsair;
     public int controlPower;
     public int controlMarker;//0 = empty, 1 = HCM, 2 = hcm, 3 = SCM, 4 = merc
     public int leader1;
@@ -22,6 +23,7 @@ public class SpaceGM
         this.regular = 0;
         this.cavalry = 0;
         this.squadron = 0;
+        this.corsair = 0;
         this.controlMarker = 0;
         this.controlPower = 0;
         this.leader1 = 0;
@@ -35,6 +37,7 @@ public class SpaceGM
         this.regular = city.regular;
         this.cavalry = city.cavalry;
         this.squadron = city.squadron;
+        this.corsair = 0;
         this.controlMarker = city.controlMarker;
         this.controlPower = city.controlPower;
         this.leader1 = city.leader1;
@@ -58,5 +61,29 @@ public class SpaceGM
     public override int GetHashCode()
     {
         return base.GetHashCode();
+    }
+
+    public void removeLeader(int leaderIndex)
+    {
+        if(leaderIndex == leader1&& leader2!=0)
+        {
+            leader1 = leader2;
+            leader2 = 0;
+        }else if (leaderIndex == leader2)
+        { 
+            leader2 = 0;
+        }
+    }
+
+    public void addLeader(int leaderIndex)
+    {
+        if (leader1 != 0)
+        {
+            leader2 = leaderIndex;
+        }
+        else if (leader2 != 0)
+        {
+            leader1 = leaderIndex;
+        }
     }
 }

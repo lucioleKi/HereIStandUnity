@@ -16,38 +16,51 @@ public class PDScript : MonoBehaviour
        thisImage = gameObject.GetComponent<Image>();
        thisImage.sprite = Resources.Load<Sprite>("Sprites/power"+player.ToString());
         
-        ///     //Set this in the Inspector
-        ///     public Sprite m_Sprite;
-        ///
-        ///     void Start()
-        ///     {
-        ///         //Fetch the Image from the GameObject
-        ///         
-        ///     }
-        ///
-        ///     void Update()
-        ///     {
-        ///         //Press space to change the Sprite of the Image
-        ///         if (Input.GetKey(KeyCode.Space))
-        ///         {
-        ///             m_Image.sprite = m_Sprite;
-        ///         }
-        ///     }
-        /// }
+        
     }
 
+    void OnEnable()
+    {
+        
+        GM2.onPlayerChange += changeDisplayPlayer;
+    }
+
+    void OnDisable()
+    {
+       
+        GM2.onPlayerChange -= changeDisplayPlayer;
+    }
 
 
     // Update is called once per frame
     void Update()
     {
-        if (GM1.player != player)
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            player = GM1.player;
-            thisImage = gameObject.GetComponent<Image>();
-            thisImage.sprite = Resources.Load<Sprite>("Sprites/power" + player.ToString());
+            GM1.player = (GM1.player - 1) % 6;
+
+            if (GM1.player == -1)
+            {
+                GM1.player = 5;
+            }
+            GM2.onPlayerChange();
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            GM1.player = (GM1.player + 1) % 6;
+            GM2.onPlayerChange();
         }
         
+            
+            
+        
+        
 
+    }
+
+    void changeDisplayPlayer()
+    {
+        thisImage = gameObject.GetComponent<Image>();
+        thisImage.sprite = Resources.Load<Sprite>("Sprites/power" + GM1.player.ToString());
     }
 }

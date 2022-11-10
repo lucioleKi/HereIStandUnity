@@ -36,9 +36,10 @@ public class StartButton : MonoBehaviour
     void buttonCallBack(int index)
     {
         //UnityEngine.Debug.Log("You have clicked the button!");
-        
-            GM2.onMandatory(index);
-        
+        string tempName = GameObject.Find("CardDisplay").GetComponent<Image>().sprite.name;
+        cardIndex = int.Parse(tempName.Substring(4));
+            GM2.onMandatory(cardIndex);
+        btn.interactable = false;
         
 
     }

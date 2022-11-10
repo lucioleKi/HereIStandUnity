@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Threading;
 
 public class CPTextScript : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class CPTextScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        TextMeshProUGUI mtext = gameObject.GetComponent<TextMeshProUGUI>();
+        mtext.text = "";
     }
 
     void OnEnable()
@@ -35,8 +37,13 @@ public class CPTextScript : MonoBehaviour
 
     void showCP(int value)
     {
-        string temp = "Current CP : " + value.ToString();
-        TextMeshProUGUI mtext = gameObject.GetComponent<TextMeshProUGUI>();
-        mtext.text = temp;
+        if (GM1.phase == 6)
+        {
+            
+            string temp = "CP : " + value.ToString();
+            TextMeshProUGUI mtext = gameObject.GetComponent<TextMeshProUGUI>();
+            mtext.text = temp;
+        }
+
     }
 }

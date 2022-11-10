@@ -77,6 +77,7 @@ public class DeckScript : MonoBehaviour
                 spacesGM.Add(temp1);
                 regulars[i - 1] = temp.regular;
                 regularsPower[i - 1] = temp.controlPower;
+                
             }
             else
             {
@@ -332,6 +333,7 @@ public class DeckScript : MonoBehaviour
                 temp.turn = int.Parse(values[6]);
 
                 leaders.Add(temp);
+                UnityEngine.Debug.Log(temp.command.ToString());
             }
         }
     }
