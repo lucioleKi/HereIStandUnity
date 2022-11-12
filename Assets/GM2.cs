@@ -40,16 +40,17 @@ public class GM2 : MonoBehaviour
     public static SimpleHandler onChangePhase;
     public static SimpleHandler onChosenCard;
     public static SimpleHandler onPlayerChange;
+    public static SimpleHandler onMoveHome25;
 
     public delegate void Int2Handler(int index1, int index2);
-    public static Int2Handler onMoveHome25;
+    
     //(card index = id - 1, power)
     public static Int2Handler onChangeReg;
     public static Int2Handler onChangeSquadron;
     public static Int2Handler onChangeLeader;
     public delegate void Int3Handler(int index1, int index2, int index3);
     public static Int3Handler onAddSpace;
-
+    public static Int3Handler onFlipSpace;
 
     public delegate void Int1Handler(int index);
     public static Int1Handler onRemoveSpace;
@@ -57,7 +58,7 @@ public class GM2 : MonoBehaviour
     public static Int1Handler onConfirmDipForm;
     public static Int1Handler onCPChange;
     public static Int1Handler onMandatory;
-
+    public static Int1Handler onChangeCorsair;
     public delegate void List1Handler(List<int> index);
     public static List1Handler onHighlight;
     public static List1Handler onRemoveHighlight;
@@ -66,7 +67,7 @@ public class GM2 : MonoBehaviour
     public static int leaderSelected = -1;
     public static bool phaseEnd = false;
     public static int currentCP = 0;
-
+    public static int[] secretCP = new int[6];
 
     //
     void OnEnable()
@@ -74,6 +75,7 @@ public class GM2 : MonoBehaviour
         onMandatory += mandatory;
         onPhase2 += phase2;
         onPhase3 += phase3;
+        onPhase4 += phase4;
         onPhase5 += phase5;
         onPhase6 += phase6;
     }
@@ -84,6 +86,7 @@ public class GM2 : MonoBehaviour
         onMandatory -= mandatory;
         onPhase2 -= phase2;
         onPhase3 -= phase3;
+        onPhase4 -= phase4;
         onPhase5 -= phase5;
         onPhase6 -= phase6;
     }
@@ -95,7 +98,7 @@ public class GM2 : MonoBehaviour
 }
     */
 
-    //todo: make this generic
+    
     IEnumerator HIS008()
     {
         activeReformers.Add(reformers.ElementAt(0));
@@ -103,12 +106,8 @@ public class GM2 : MonoBehaviour
         tempObject.transform.SetParent(GameObject.Find("Reformers").transform);
         tempObject.name = "Luther";
         tempObject.SetActive(true);
-        religiousInfluence[0] = (Religion)1;
-        onMoveHome25(0, 1);
-        regulars[134] = 0;
-        onChangeReg(134, 5);
-        regulars[0] = 2;
-        onChangeReg(0, 5);
+        highlightSelected = 0;
+        changeReligion();
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.pauseColor();
         currentTextObject.post("Pick 5 highlighted target spaces");
@@ -144,7 +143,6 @@ public class GM2 : MonoBehaviour
 
     void mandatory(int index)
     {
-
         switch (index)
         {
             case 8:
@@ -159,6 +157,7 @@ public class GM2 : MonoBehaviour
             default:
                 break;
         }
+        //player gets 2 CP after the event
     }
 
     void reformAttempt()
@@ -237,14 +236,13 @@ public class GM2 : MonoBehaviour
             reformerDice++;
         }
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        UnityEngine.Debug.Log(currentTextObject == null);
         
         
         //4. roll dice
         int dice1 = 0;
         for (int i = 0; i < reformerDice; i++)
         {
-            int randomIndex = UnityEngine.Random.Range(1, 6);
+            int randomIndex = UnityEngine.Random.Range(1, 7);
 
             if (dice1 < randomIndex)
             {
@@ -252,9 +250,9 @@ public class GM2 : MonoBehaviour
             }
             if (dice1 == 6)
             {
-                UnityEngine.Debug.Log("6!");
-                religiousInfluence[target] = (Religion)1;
-                currentTextObject.post("Reformer dices: " + reformerDice.ToString() +"Highest: 6. \nAutomatic success.");
+                //UnityEngine.Debug.Log("6!");
+                changeReligion();
+                currentTextObject.post("Reformer dices: " + reformerDice.ToString() +". Highest: 6. \nAutomatic success.");
                 //send signal to various parties
                 return;
             }
@@ -269,7 +267,7 @@ public class GM2 : MonoBehaviour
         int dice2 = 0;
         for (int i = 0; i < papalDice; i++)
         {
-            int randomIndex = UnityEngine.Random.Range(1, 6);
+            int randomIndex = UnityEngine.Random.Range(1, 7);
 
             if (dice2 < randomIndex)
             {
@@ -281,20 +279,11 @@ public class GM2 : MonoBehaviour
         if (dice1 >= dice2)
         {
             UnityEngine.Debug.Log("win");
-            religiousInfluence[target] = (Religion)1;
-            onMoveHome25(0, 1);
-            if ((int)targetSpace.spaceType == 4)
-            {
-                regulars[134 + target] = 0;
-                onChangeReg(134 + target, 5);
-                regulars[target] = 1;
-                onChangeReg(target, 5);
-
-
-            }
+            changeReligion();
             currentTextObject.post("Reformer dices: " + reformerDice.ToString() + ". Highest: " + dice1.ToString() + ".\nPapal dices: " + papalDice.ToString() + ". Highest: " +dice2.ToString()+"\nSuccessful reformation attempt.");
 
             //send signal to various parties
+            
             return;
         }
         else
@@ -384,6 +373,7 @@ public class GM2 : MonoBehaviour
                     break;
                 case 4:
                     hand4.Add(cards.ElementAt(4));
+                    hand4.Add(cards.ElementAt(5));
                     hand4.AddRange(activeCards.GetRange(0, temp));
                     break;
                 case 5:
@@ -516,6 +506,169 @@ public class GM2 : MonoBehaviour
         }
     }
 
+    void phase4()
+    {
+        StartCoroutine(DietofWorms());
+    }
+
+    IEnumerator DietofWorms()
+    {
+        player = 1;
+        onPlayerChange();
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.post("Select commitment card if you are involved");
+        Array.Clear(secretCP, 0, 6);
+        while (secretCP[1] == 0 || secretCP[4] == 0 || secretCP[5]==0)
+        {
+            yield return null;
+        }
+        int result = evaluateDiet();
+        if (result > 10)
+        {
+            //only player 5
+            for(int i = 0; i < result-10; i++)
+            {
+                highlightSelected = -1;
+                List<int> canConvert = dietSpaces(true);
+                UnityEngine.Debug.Log("can convert" + canConvert.Count().ToString());
+                onHighlight(canConvert);
+
+                onHighlightSelected += changeReligion;
+                while (highlightSelected == -1)
+                {
+                    
+                    yield return null;
+                }
+            }
+            
+        }
+        else if (result > 0)
+        {
+            //only player 4
+            for(int i= 0; i < result; i++)
+            {
+                highlightSelected = -1;
+                List<int> canConvert = dietSpaces(false);
+                onHighlight(canConvert);
+
+                onHighlightSelected += changeReligion;
+                while (highlightSelected == -1)
+                {
+                    
+                    yield return null;
+                }
+            }
+            
+        }
+
+    }
+
+    int evaluateDiet()
+    {
+
+        int hit1 = 0;
+        int hit2 = 0;
+        for (int i = 0; i < secretCP[5]+4; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(1, 6);
+
+            if (randomIndex>4)
+            {
+                hit1++;
+            }
+        }
+        for (int i = 0; i < secretCP[1] + secretCP[4]; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(1, 6);
+
+            if (randomIndex > 4)
+            {
+                hit2++;
+            }
+        }
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        if (hit1 > hit2)
+        {
+            currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + ". Catholic hit: " + hit2.ToString() + "\nProtestant victory. Flip " + (hit1 - hit2).ToString() + " space(s).");
+            return 10+hit1- hit2;
+        }else if (hit1 < hit2)
+        {
+            currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + "Catholic hit: " + hit2.ToString() + "\nCatholic victory. Flip "+(hit2-hit1).ToString()+" space(s).");
+            return hit2 - hit1;
+        }
+        else
+        {
+            currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + "Catholic hit: " + hit2.ToString()+"\nThe Diet is inconclusive.");
+            return 0;
+        }
+        
+    }
+
+    List<int> dietSpaces(bool isProtestant)
+    {
+        List<int> highlightSpaces = new List<int>();
+        for(int i = 0; i < DeckScript.spaces.Count(); i++)
+        {
+            
+            if ((int)religiousInfluence[i] == 1 && isProtestant || (int)religiousInfluence[i]==0&&!isProtestant)
+            {
+                continue;
+            }
+            for (int j = 0; j < spaces.ElementAt(i).adjacent.Count(); j++)
+            {
+
+                if (religiousInfluence[spaces.ElementAt(i).adjacent.ElementAt(j) - 1] == (Religion)0 && !isProtestant && DeckScript.spaces.ElementAt(i).language == (Language)2 || religiousInfluence[spaces.ElementAt(i).adjacent.ElementAt(j) - 1] == (Religion)1 && isProtestant&& DeckScript.spaces.ElementAt(i).language == (Language)2)
+                {
+
+                    highlightSpaces.Add(i);
+                    break;
+                }
+            }
+        }
+        return highlightSpaces;
+    }
+
+    void changeReligion()
+    {
+        onHighlightSelected -= changeReligion;
+        if ((int)DeckScript.spaces.ElementAt(highlightSelected).spaceType == 4)
+        {
+            regulars[134 + highlightSelected] = 0;
+            onChangeReg(134 + highlightSelected, 5);
+            if (highlightSelected == 0 || highlightSelected == 5)
+            {
+                regulars[highlightSelected] = 2;
+            }
+            else
+            {
+                regulars[highlightSelected] = 1;
+            }
+            
+            onChangeReg(highlightSelected, 5);
+
+
+        }
+        if ((int)religiousInfluence[highlightSelected] == 1)
+        {
+            religiousInfluence[highlightSelected] = (Religion)0;
+            DeckScript.spacesGM.ElementAt(highlightSelected).flipControl();
+            GM1.protestantSpaces--;
+            onMoveHome25();
+            
+            
+            onFlipSpace(highlightSelected, DeckScript.spacesGM.ElementAt(highlightSelected).controlPower, DeckScript.spacesGM.ElementAt(highlightSelected).controlMarker);
+        }
+        else
+        {
+            religiousInfluence[highlightSelected] = (Religion)1;
+            DeckScript.spacesGM.ElementAt(highlightSelected).flipControl();
+            GM1.protestantSpaces++;
+            onMoveHome25();
+            onFlipSpace(highlightSelected, DeckScript.spacesGM.ElementAt(highlightSelected).controlPower, DeckScript.spacesGM.ElementAt(highlightSelected).controlMarker);
+        }
+        
+    }
+
     IEnumerator waitDeployment()
     {
         player = 0;
@@ -535,7 +688,7 @@ public class GM2 : MonoBehaviour
             leaderSelected = -1;
             onHighlight(trace);
             onHighlightSelected += springDeploy;
-            while (player != i || leaderSelected == -1 || highlightSelected == -1)
+            while (player != i || highlightSelected == -1)
             {
                 yield return null;
             }
@@ -618,6 +771,7 @@ public class GM2 : MonoBehaviour
 
     void springDeploy()
     {
+        GM2.onHighlightSelected -= springDeploy;
         int capital = 0;
         switch (player)
         {
@@ -646,9 +800,8 @@ public class GM2 : MonoBehaviour
         }
         if (leaderSelected != spacesGM.ElementAt(capital - 1).leader1 && leaderSelected != spacesGM.ElementAt(capital - 1).leader2)
         {
-            UnityEngine.Debug.Log("no valid leader" +leaderSelected.ToString()+" at "+ spacesGM.ElementAt(capital - 1).name);
             leaderSelected = 0;
-            return;
+            
         }
         else
         {
@@ -659,10 +812,8 @@ public class GM2 : MonoBehaviour
             {
                 spacesGM.ElementAt(capital - 1).removeLeader(leaderSelected);
                 spacesGM.ElementAt(highlightSelected).addLeader(leaderSelected);
-                UnityEngine.Debug.Log(highlightSelected.ToString() + ", " + leaderSelected.ToString());
                 onChangeLeader(highlightSelected, leaderSelected);
                 command = int.Parse(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text);
-                UnityEngine.Debug.Log("command: " + leaders.ElementAt(leaderSelected-1).command.ToString());
                 if (command > leaders.ElementAt(leaderSelected-1).command)
                 {
                     command = leaders.ElementAt(leaderSelected-1).command;
@@ -758,12 +909,11 @@ public class GM2 : MonoBehaviour
         regularsPower[111] = 0;
         spacesGM.ElementAt(111).controlMarker = 3;
         spacesGM.ElementAt(111).controlPower = 0;
-
         spacesGM.ElementAt(111).regular = 2;
         spacesGM.ElementAt(111).corsair = 2;
         spacesGM.ElementAt(111).leader1 = 17;
         onChangeReg(111, 0);
-        onChangeSquadron(111, 0);
+        onChangeCorsair(111);
         onChangeLeader(111, 17);
     }
 

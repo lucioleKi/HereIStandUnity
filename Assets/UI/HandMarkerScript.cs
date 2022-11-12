@@ -11,7 +11,6 @@ public class HandMarkerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GM1.player;
         showHandMarker();
     }
 
@@ -63,6 +62,5 @@ public class HandMarkerScript : MonoBehaviour
                 status5.setUp();
                 break;
         }
-
     }
 }

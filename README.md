@@ -58,3 +58,7 @@ Power cards setup. Finished playing a card for CP.
 11/10/2022
 
 Improved UI for what the player needs to do next. More logic on buttons. Need to debug leader movement.
+
+11/12/2022
+
+Finished turn 1 phase 4. Generic method for flipping a space marker. Need to improve VP calculation and redesign status object. 

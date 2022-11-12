@@ -11,9 +11,7 @@ public class Home25Script : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        place2 = GM1.englishSpaces;
-        place5 = GM1.protestantSpaces;
-        HomePosition(0, 0);
+        HomePosition();
     }
 
     // Update is called once per frame
@@ -33,10 +31,10 @@ public class Home25Script : MonoBehaviour
     }
     
 
-    void HomePosition(int change1, int change2)
+    void HomePosition()
     {
-        place2 = place2+change1;
-        place5 = place5+change2;
+        place2 = GM1.englishSpaces;
+        place5 = GM1.protestantSpaces;
         RectTransform pos = gameObject.GetComponent<RectTransform>();
         if (gameObject.name == "EnglishHome")
         {
@@ -78,4 +76,6 @@ public class Home25Script : MonoBehaviour
         }
         
     }
+
+
 }

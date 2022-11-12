@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 using static EnumSpaceScript;
 using static DeckScript;
 using static GM1;
+using System.CodeDom;
+using System.Threading;
 
 public class NextButton : MonoBehaviour
 {
@@ -40,29 +42,62 @@ public class NextButton : MonoBehaviour
             phase++;
             GM2.onChangePhase();
             GM2.onPhase2();
-        }else if (phase == 2)
+        }
+        else if (phase == 2)
         {
             phase++;
             GM2.onChangePhase();
             GM2.onPhase3();
-        }else if (phase == 3)
+        }
+        else if (phase == 3 && turn == 1)
         {
             phase++;
             GM2.onChangePhase();
-            //GM2.onPhase4();
-        }else if (phase == 4)
+            GM2.onPhase4();
+        }
+        else if (phase == 3) {
+            phase = phase + 2;
+            GM2.onChangePhase();
+            GM2.onPhase5();
+        }
+        else if (phase == 4)
         {
+            CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+            currentTextObject.reset();
             phase++;
             GM2.onChangePhase();
             GM2.onPhase5();
-        }else if (phase == 5)
+        }
+        else if (phase == 5)
         {
             phase++;
             GM2.onChangePhase();
             GM2.onPhase6();
         }
-        
-        
+        /*else if (phase == 6)
+        {
+            phase++;
+            GM2.onChangePhase();
+        }else if (phase == 7)
+        {
+            phase++;
+            GM2.onChangePhase();
+        }
+        else if (phase == 8)
+        {
+            phase++;
+            GM2.onChangePhase();
+        }
+        else if (phase == 9)
+        {
+            turn++;
+            phase=2;
+            GM2.onChangePhase();
+            GM2.onChangePhase();
+            GM2.onPhase2();
+        }
+        */
+
     }
 
     // Update is called once per frame

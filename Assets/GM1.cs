@@ -15,11 +15,11 @@ public class GM1 : MonoBehaviour
     public static int CurrentCard;
     public static int turn;
     public static int phase;
-    public static int protestantSpaces;
     public static int englishSpaces;
+    public static int protestantSpaces;
+    public static int[] VPs;
     public static Religion[] religiousInfluence;
     public static PowerObject[] powerObjects;
-    public static int[] VPs;
     public static int[,] diplomacyState;
     public static Status0 status0;
     public static Status1 status1;
@@ -49,15 +49,14 @@ public class GM1 : MonoBehaviour
         status3 = Resources.Load("Objects/Status6/s3") as Status3;
         status4 = Resources.Load("Objects/Status6/s4") as Status4;
         status5 = Resources.Load("Objects/Status6/s5") as Status5;
-
-        Screen.SetResolution(1920, 1080, true);
+        
+        Screen.SetResolution(1920, 1080, false);
         
         player = 5;
         ScenarioObject scenario = Resources.Load("Objects/Scenario3/1517") as ScenarioObject;
         turn = scenario.turnStart;
         phase = scenario.phaseStart;
-        protestantSpaces = scenario.protestantSpaces;
-        englishSpaces = scenario.englishSpaces;
+        
         powerObjects = new PowerObject[10];
         powerObjects[0] = Resources.Load("Objects/Power10/PowerOttoman") as PowerObject;
         powerObjects[1] = Resources.Load("Objects/Power10/PowerHapsburgs") as PowerObject;
@@ -69,18 +68,21 @@ public class GM1 : MonoBehaviour
         powerObjects[7] = Resources.Load("Objects/Power10/PowerHB") as PowerObject;
         powerObjects[8] = Resources.Load("Objects/Power10/PowerScotland") as PowerObject;
         powerObjects[9] = Resources.Load("Objects/Power10/PowerVenice") as PowerObject;
+
         VPs = new int[6];
         for(int i = 0; i < 6; i++)
         {
             VPs[i] = scenario.VPs[i];
         }
+
         diplomacyState = new int[6, 10];
         Array.Clear(diplomacyState, 0, diplomacyState.Length);
         diplomacyState[1, 3] = 1;
         diplomacyState[3, 4] = 1;
         diplomacyState[0, 7] = 1;
-        
-        
+        englishSpaces = status5.englishSpaces;
+        protestantSpaces = status5.protestantSpaces;
+
         religiousInfluence = new Religion[134];
         
         Array.Clear(religiousInfluence, 0, 134);
@@ -100,7 +102,7 @@ public class GM1 : MonoBehaviour
 
     void checkWin()
     {
-        if (VPs.Contains(25))
+        if (false)
         {
             //win!
         }

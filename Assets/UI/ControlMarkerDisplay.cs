@@ -8,6 +8,7 @@ using static DeckScript;
 using static GM1;
 using static GM2;
 using System.ComponentModel;
+using static System.Net.Mime.MediaTypeNames;
 
 public class ControlMarkerDisplay : MonoBehaviour
 {
@@ -48,16 +49,17 @@ public class ControlMarkerDisplay : MonoBehaviour
     {
         GM2.onAddSpace += addControlMarker;
         GM2.onRemoveSpace += removeControlMarker;
-        
-        
+        GM2.onFlipSpace += flipControlMarker;
+
+
     }
 
     void OnDisable()
     {
         GM2.onAddSpace -= addControlMarker;
         GM2.onRemoveSpace -= removeControlMarker;
-        
-        
+        GM2.onFlipSpace -= flipControlMarker;
+
     }
 
     void updateList(int i, int power)
@@ -87,11 +89,10 @@ public class ControlMarkerDisplay : MonoBehaviour
 
     void initXY(int i)
     {
-        //List<Vector3> positions = new List<Vector3>();
 
 
         CitySetup temp = Resources.Load("Objects/1517/" + (i+1).ToString()) as CitySetup;
-        if (temp != null&&temp.regular!=0)
+        if (temp != null && temp.regular != 0 || temp != null && temp.controlMarker!=0)
         {
             //UnityEngine.Debug.Log(spaces.ElementAt(i - 1).name);
             
@@ -101,8 +102,8 @@ public class ControlMarkerDisplay : MonoBehaviour
             }
             string tempName = (temp.controlPower * 4 + temp.controlMarker - 1).ToString() + "_" + temp.controlPower.ToString();
             GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/ControlMarker21/" + tempName), new Vector3(spaces.ElementAt(i).posX+960, spaces.ElementAt(i).posY+540, 0), Quaternion.identity);
-            tempObject.transform.SetParent(GameObject.Find("SpacesDisplay").transform);
-            tempObject.name = spaces.ElementAt(i - 1).name;
+            tempObject.transform.SetParent(gameObject.transform);
+            tempObject.name = spaces.ElementAt(i).name;
             tempObject.SetActive(true);
         }
         
@@ -113,7 +114,7 @@ public class ControlMarkerDisplay : MonoBehaviour
 
     void addControlMarker(int index, int power, int marker)
     {
-
+        UnityEngine.Debug.Log(index.ToString() + ", " + power.ToString() + ", " + marker.ToString());
         if (power == 5 || marker == 0)
         {
             return;
@@ -145,7 +146,11 @@ public class ControlMarkerDisplay : MonoBehaviour
         
     }
 
-    
+    void flipControlMarker(int index, int power, int marker)
+    {
+        removeControlMarker(index);
+        addControlMarker(index, power, marker);
+    }
     
 
     

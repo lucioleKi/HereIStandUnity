@@ -29,9 +29,38 @@ public class CPButtonScript : MonoBehaviour
 
     void toCanvasBoard()
     {
+        if (GM1.phase==4)
+        {
+            
+            setSecretCP();
+            
+        }
+        else
+        {
+            setActionCP();
+            UnityEngine.Debug.Log(GM2.currentCP);
+            onCPChange(GM2.currentCP);
+
+            ConfirmScript.cardSelected = "";
+        }
         
-        
-        
+        GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().alpha = 1;
+        GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().interactable = true;
+
+        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().alpha = 0;
+        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().blocksRaycasts = false;
+        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().interactable = false;
+        foreach (Transform child in GameObject.Find("CardContainer").transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+
+    }
+
+    void setActionCP()
+    {
         switch (int.Parse(cardTag.Substring(0, 1)))
         {
             case 0:
@@ -59,23 +88,25 @@ public class CPButtonScript : MonoBehaviour
                 hand5.RemoveAt(int.Parse(cardTag.Substring(1)));
                 break;
         }
-        UnityEngine.Debug.Log(GM2.currentCP);
-        onCPChange(GM2.currentCP);
+    }
 
-        ConfirmScript.cardSelected = "";
-
-        GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().blocksRaycasts = true;
-        GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().interactable = true;
-
-        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().alpha = 0;
-        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().blocksRaycasts = false;
-        GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().interactable = false;
-        foreach (Transform child in GameObject.Find("CardContainer").transform)
+    void setSecretCP()
+    {
+        switch (int.Parse(cardTag.Substring(0, 1)))
         {
-            GameObject.Destroy(child.gameObject);
+            
+            case 1:
+                GM2.secretCP[1] = hand1.ElementAt(int.Parse(cardTag.Substring(1))).CP;
+                hand1.RemoveAt(int.Parse(cardTag.Substring(1)));
+                break;
+            case 4:
+                GM2.secretCP[4] = hand4.ElementAt(int.Parse(cardTag.Substring(1))).CP;
+                hand4.RemoveAt(int.Parse(cardTag.Substring(1)));
+                break;
+            case 5:
+                GM2.secretCP[5] = hand5.ElementAt(int.Parse(cardTag.Substring(1))).CP;
+                hand5.RemoveAt(int.Parse(cardTag.Substring(1)));
+                break;
         }
-
-
     }
 }

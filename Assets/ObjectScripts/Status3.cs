@@ -11,6 +11,11 @@ public class Status3 : StatusObject
     public int[] VPKey;
     public int[] chateaux;
 
+    public override void setVP()
+    {
+        VP = VPKey[cardTrack] + chateaux[chateauxTrack]; 
+    }
+
     public override void setUp()
     {
         if (cardTrack < 4)

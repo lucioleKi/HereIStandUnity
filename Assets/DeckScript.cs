@@ -71,7 +71,7 @@ public class DeckScript : MonoBehaviour
         for (int i = 1; i <= 134; i++)
         {
             CitySetup temp = Resources.Load("Objects/1517/" + i.ToString()) as CitySetup;
-            if (temp != null && i > 6)
+            if (temp != null)
             {
                 SpaceGM temp1 = new SpaceGM(temp);
                 spacesGM.Add(temp1);
@@ -89,12 +89,14 @@ public class DeckScript : MonoBehaviour
                 spacesGM.Add(temp1);
             }
         }
+        
         regulars[134] = 2;
         regulars[135] = 1;
         regulars[136] = 1;
         regulars[137] = 1;
         regulars[138] = 1;
         regulars[139] = 2;
+        
         //luther's 95 theses
         hand5.Add(cards.ElementAt(7));
     }
@@ -333,7 +335,6 @@ public class DeckScript : MonoBehaviour
                 temp.turn = int.Parse(values[6]);
 
                 leaders.Add(temp);
-                UnityEngine.Debug.Log(temp.command.ToString());
             }
         }
     }

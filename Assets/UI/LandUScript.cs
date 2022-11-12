@@ -14,7 +14,7 @@ public class LandUScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < spaces.Count(); i++)
+        for (int i = 0; i < spaces.Count()+6; i++)
         {
             
             initUnits(i);
@@ -49,11 +49,11 @@ public class LandUScript : MonoBehaviour
 
             //UnityEngine.Debug.Log(spaces.ElementAt(i).name);
             int number = temp.regular;
-            if (i < 6)
+            if (i >133)
             {
-                switch (i)
+                switch (i+1)
                 {
-                    case 0:
+                    case 135:
                         GameObject tempObject1 = Instantiate((GameObject)Resources.Load("Objects/LandU11/5"), new Vector3(86 + 960, 297 + 540, 0), Quaternion.identity);
                         tempObject1.transform.SetParent(GameObject.Find("LandUDisplay").transform);
                         tempObject1.name = "135";
@@ -63,7 +63,7 @@ public class LandUScript : MonoBehaviour
                         number1.name = "135_0";
 
                         break;
-                    case 1:
+                    case 136:
                         GameObject tempObject2 = Instantiate((GameObject)Resources.Load("Objects/LandU11/5"), new Vector3(165 + 960, 297 + 540, 0), Quaternion.identity);
                         tempObject2.transform.SetParent(GameObject.Find("LandUDisplay").transform);
                         tempObject2.name = "136";
@@ -72,7 +72,7 @@ public class LandUScript : MonoBehaviour
                         number2.GetComponent<TextMeshProUGUI>().text = number.ToString();
                         number2.name = "136_0";
                         break;
-                    case 2:
+                    case 137:
                         GameObject tempObject3 = Instantiate((GameObject)Resources.Load("Objects/LandU11/5"), new Vector3(126 + 960, 297 + 540, 0), Quaternion.identity);
                         tempObject3.transform.SetParent(GameObject.Find("LandUDisplay").transform);
                         tempObject3.name = "137";
@@ -81,7 +81,7 @@ public class LandUScript : MonoBehaviour
                         number3.GetComponent<TextMeshProUGUI>().text = number.ToString();
                         number3.name = "137_0";
                         break;
-                    case 3:
+                    case 138:
                         GameObject tempObject4 = Instantiate((GameObject)Resources.Load("Objects/LandU11/5"), new Vector3(165 + 960, 355 + 540, 0), Quaternion.identity);
                         tempObject4.transform.SetParent(GameObject.Find("LandUDisplay").transform);
                         tempObject4.name = "138";
@@ -90,7 +90,7 @@ public class LandUScript : MonoBehaviour
                         number4.GetComponent<TextMeshProUGUI>().text = number.ToString();
                         number4.name = "138_0";
                         break;
-                    case 4:
+                    case 139:
                         GameObject tempObject5 = Instantiate((GameObject)Resources.Load("Objects/LandU11/5"), new Vector3(126 + 960, 355 + 540, 0), Quaternion.identity);
                         tempObject5.transform.SetParent(GameObject.Find("LandUDisplay").transform);
                         tempObject5.name = "139";
@@ -99,7 +99,7 @@ public class LandUScript : MonoBehaviour
                         number5.GetComponent<TextMeshProUGUI>().text = number.ToString();
                         number5.name = "139_0";
                         break;
-                    case 5:
+                    case 140:
                         GameObject tempObject6 = Instantiate((GameObject)Resources.Load("Objects/LandU11/5"), new Vector3(86 + 960, 355 + 540, 0), Quaternion.identity);
                         tempObject6.transform.SetParent(GameObject.Find("LandUDisplay").transform);
                         tempObject6.name = "140";

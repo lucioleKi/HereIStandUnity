@@ -41,9 +41,9 @@ public class LeaderScript : MonoBehaviour
 
     void initUnits(int i)
     {
-        CitySetup temp = Resources.Load("Objects/1517/" + (i + 1).ToString()) as CitySetup;
-        if (temp != null)
-        {
+        SpaceGM temp = spacesGM.ElementAt(i);
+            //Resources.Load("Objects/1517/" + (i + 1).ToString()) as CitySetup;
+        
 
             //leader init
             if (temp.leader1 != 0)
@@ -95,14 +95,15 @@ public class LeaderScript : MonoBehaviour
 
 
 
-        }
+        
     }
 
     void changeLeader(int to, int index)
     {
 
-        if(gameObject.transform.Find("leader_" + (index).ToString()) != null)
+        if(gameObject.transform.Find("leader_" + (index).ToString()) == null)
         {
+            //UnityEngine.Debug.Log("cannot find leader_" + (index).ToString());
             //create leader
             GameObject newObject = new GameObject("leader_" + (index).ToString(), typeof(RectTransform), typeof(Image));
             if (to == 21)//vienna
@@ -132,19 +133,19 @@ public class LeaderScript : MonoBehaviour
             UnityEngine.Debug.Log("leader_" + (index).ToString());
             if (to == 21)//vienna
             {
-                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 103, spaces.ElementAt(to).posY + 543 + 63);
+                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + + 103, spaces.ElementAt(to).posY + 33 + 63);
             }
             else if (to == 27)//london
             {
-                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 - 217, spaces.ElementAt(to).posY + 510 + 70);
+                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + - 217, spaces.ElementAt(to).posY + 70);
             }
             else if (to == 41)//paris
             {
-                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 39, spaces.ElementAt(to).posY + 510 + 249);
+                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 39, spaces.ElementAt(to).posY + 249);
             }
             else
             {
-                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945, spaces.ElementAt(to).posY + 510);
+                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX-15, spaces.ElementAt(to).posY);
             }
             return;
         }

@@ -13,9 +13,7 @@ public class VPScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int index = gameObject.name[2]-'0';
-        displayVP = VPs[index];
-        position();
+        changeVP();
     }
 
     void OnEnable()
@@ -36,17 +34,15 @@ public class VPScript : MonoBehaviour
     void changeVP()
     {
         int index = gameObject.name[2] - '0';
-        if (displayVP != VPs[index])
-        {
-            displayVP = VPs[index];
-
-        }
+        displayVP = VPs[index];
         position();
+        
     }
 
     //offset VP markers according to current VP count
     void position()
     {
+        
         RectTransform pos = gameObject.GetComponent<RectTransform>();
         if (displayVP < 10)
         {
@@ -54,9 +50,9 @@ public class VPScript : MonoBehaviour
         }
         else
         {
-            pos.anchoredPosition = new Vector2(-665 + (displayVP-10) * 34.56f, -502);
+            pos.anchoredPosition = new Vector2(-665 + (displayVP - 10) * 34.56f, -502);
         }
     }
 
-   
+    
 }

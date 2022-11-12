@@ -10,6 +10,11 @@ public class Status2 : StatusObject
     public int[] VPKey;
     public bool[] maritalStatus;
 
+    public override void setVP()
+    {
+        VP = VPKey[cardTrack];
+    }
+
     public override void setUp()
     {
         if (cardTrack < 5)

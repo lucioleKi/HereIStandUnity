@@ -13,6 +13,17 @@ public class Status5 : StatusObject
     public int FullIndex2;
     public int[] NewTestamentTrack;
     public int[] FullTrack;
+    public int protestantSpaces;
+    public int englishSpaces;
+    public int[] spacesTrack;
+
+    public override void setVP()
+    {
+        VP = spacesTrack[protestantSpaces] + spacesTrack[englishSpaces];
+        UnityEngine.Debug.Log(VP.ToString());
+    }
+
+    
 
     public override void setUp()
     {

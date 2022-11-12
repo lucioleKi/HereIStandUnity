@@ -20,10 +20,26 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler
         {
             return;
         }
+        if (GM1.phase == 4)//non-participates of Diet of Worms
+        {
+            if (GM1.player == 0 || GM1.player == 2 || GM1.player == 3)
+            {
+                return;
+            }
+            if (GM1.player == 1 && GM2.secretCP[1]!=0|| GM1.player == 4 && GM2.secretCP[4] != 0|| GM1.player == 5 && GM2.secretCP[5] != 0)//participates can only submit once
+            {
+                return;
+            }
+            ConfirmScript.btn.interactable = false;
 
+        }
+        else
+        {
+            ConfirmScript.cardSelected = eventData.pointerCurrentRaycast.gameObject.name;
+            ConfirmScript.btn.interactable = true;
+        }
 
-        ConfirmScript.cardSelected = eventData.pointerCurrentRaycast.gameObject.name;
-        ConfirmScript.btn.interactable = true;
+        
         int index = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(4)) - 1;
         UnityEngine.Debug.Log(index);
         UnityEngine.Debug.Log(cardsLib.Count());

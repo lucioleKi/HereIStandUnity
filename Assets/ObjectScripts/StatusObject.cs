@@ -9,6 +9,12 @@ public class StatusObject : ScriptableObject
     public int[] posY;
     public float[] offsetX;
     public float[] offsetY;
+    public int VP;
+
+    public virtual void setVP()
+    {
+        return;
+    }
 
     public virtual void setUp()
     {

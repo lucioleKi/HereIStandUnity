@@ -13,6 +13,14 @@ public class Status4 : StatusObject
     public int[] CPTrack;
     public int[] VPTrack;
     public bool[] excommunicated;
+    public int protestantSpaces;
+    public int[] spacesTrack;
+
+    public override void setVP()
+    {
+        VP = VPKey[cardTrack] + spacesTrack[protestantSpaces] + VPTrack[VPIndex];
+        UnityEngine.Debug.Log(VP.ToString());
+    }
 
     public override void setUp()
     {

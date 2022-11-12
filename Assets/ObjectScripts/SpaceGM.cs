@@ -86,4 +86,23 @@ public class SpaceGM
             leader1 = leaderIndex;
         }
     }
+
+    public void flipControl()
+    {
+        switch (controlMarker)
+        {
+            case 1:
+                controlMarker = 2;
+                break;
+                case 2:
+                controlMarker = 1;
+                break;
+            case 3:
+                controlMarker = 4;
+                break;
+            case 4:
+                controlMarker = 3;
+                break;
+        }
+    }
 }

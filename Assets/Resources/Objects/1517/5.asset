@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Trier
   id: 5
-  regular: 1
+  regular: 0
   cavalry: 0
   squadron: 0
-  controlPower: 5
-  controlMarker: 0
+  controlPower: 1
+  controlMarker: 1
   leader1: 0
   leader2: 0
