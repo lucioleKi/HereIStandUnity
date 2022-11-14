@@ -11,9 +11,9 @@ public class StatusObject : ScriptableObject
     public float[] offsetY;
     public int VP;
 
-    public virtual void setVP()
+    public virtual int setVP(int index)
     {
-        return;
+        return 0;
     }
 
     public virtual void setUp()

@@ -9,9 +9,9 @@ public class Status1 : StatusObject
     public int[] CardsKey;
     public int[] VPKey;
 
-    public override void setVP()
+    public override int setVP(int index)
     {
-        VP = VPKey[cardTrack];
+        return VPKey[cardTrack];
     }
 
     public override void setUp()

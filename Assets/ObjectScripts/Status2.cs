@@ -10,10 +10,12 @@ public class Status2 : StatusObject
     public int[] VPKey;
     public bool[] maritalStatus;
 
-    public override void setVP()
+    public override int setVP(int index)
     {
-        VP = VPKey[cardTrack];
+        return VPKey[index];
     }
+
+
 
     public override void setUp()
     {

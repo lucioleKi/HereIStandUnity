@@ -63,12 +63,13 @@ public class SpaceGM
         return base.GetHashCode();
     }
 
+    
+
     public void removeLeader(int leaderIndex)
     {
-        if(leaderIndex == leader1&& leader2!=0)
+        if(leaderIndex == leader1)
         {
-            leader1 = leader2;
-            leader2 = 0;
+            leader1 = 0;
         }else if (leaderIndex == leader2)
         { 
             leader2 = 0;

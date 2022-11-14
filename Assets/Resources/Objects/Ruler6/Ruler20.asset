@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5a090bbbd6b0534cb95c8bd8a07671f, type: 3}
-  m_Name: RulerEngland
+  m_Name: Ruler20
   m_EditorClassIdentifier: 
-  name: Henry VIII
-  action: {fileID: 21300000, guid: ba52e67e25ed42f4780d8c72fb7a0d9d, type: 3}
+  name: Henry II
+  action: {fileID: 0}
   adminRating: 1
-  cardBonus: 1
+  cardBonus: 0

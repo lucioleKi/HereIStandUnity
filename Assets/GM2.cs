@@ -6,6 +6,7 @@ using System;
 using static EnumSpaceScript;
 using static DeckScript;
 using static GM1;
+using static GM3;
 using TMPro;
 using UnityEngine.UI;
 
@@ -48,6 +49,7 @@ public class GM2 : MonoBehaviour
     public static Int2Handler onChangeReg;
     public static Int2Handler onChangeSquadron;
     public static Int2Handler onChangeLeader;
+    public static Int2Handler onChangeRuler;
     public delegate void Int3Handler(int index1, int index2, int index3);
     public static Int3Handler onAddSpace;
     public static Int3Handler onFlipSpace;
@@ -68,6 +70,8 @@ public class GM2 : MonoBehaviour
     public static bool phaseEnd = false;
     public static int currentCP = 0;
     public static int[] secretCP = new int[6];
+
+    GM3 gm3;
 
     //
     void OnEnable()
@@ -99,60 +103,46 @@ public class GM2 : MonoBehaviour
     */
 
     
-    IEnumerator HIS008()
-    {
-        activeReformers.Add(reformers.ElementAt(0));
-        GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Reformer4/Luther"), new Vector3(spaces.ElementAt(0).posX + 965, spaces.ElementAt(0).posY + 545, 0), Quaternion.identity);
-        tempObject.transform.SetParent(GameObject.Find("Reformers").transform);
-        tempObject.name = "Luther";
-        tempObject.SetActive(true);
-        highlightSelected = 0;
-        changeReligion();
-        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        currentTextObject.pauseColor();
-        currentTextObject.post("Pick 5 highlighted target spaces");
-        for (int i = 0; i < 5; i++)
-        {
-            
-            
-            List<int> pickSpaces = highlightReformation();
-            highlightSelected = -1;
-            onHighlight(pickSpaces);
-
-            onHighlightSelected += reformAttempt;
-            while (highlightSelected == -1)
-            {
-                //UnityEngine.Debug.Log("here");
-                yield return null;
-            }
-            
-            UnityEngine.Debug.Log("end");
-            //onRemoveHighlight(converted);
-        }
-        yield return new WaitForSeconds(3);
-        currentTextObject.reset();
-        currentTextObject.restartColor();
-        highlightSelected = -1;
-        chosenCard = "";
-        onChosenCard();
-        //remove Luther's 95 theses from backend decks
-        cards.RemoveAt(7);
-        hand5.RemoveAt(0);
-    }
+    
 
 
     void mandatory(int index)
     {
+        StartCoroutine(gm3.HIS001B());
         switch (index)
         {
-            case 8:
-
-                StartCoroutine(HIS008());
-                
-                break;
             case 2:
-                StartCoroutine(HIS002());
-
+                StartCoroutine(gm3.HIS002());
+                break;
+            case 8:
+                StartCoroutine(gm3.HIS008());
+                break;
+            case 9:
+                gm3.HIS009();
+                break;
+            case 10:
+                gm3.HIS010();
+                break;
+            case 14:
+                gm3.HIS014();
+                break;
+            case 16:
+                gm3.HIS016();
+                break;
+            case 18:
+                gm3.HIS018();
+                break;
+            case 19:
+                gm3.HIS019();
+                break;
+            case 20:
+                gm3.HIS020();
+                break;
+            case 21:
+                gm3.HIS021();
+                break;
+            case 22:
+                gm3.HIS022();
                 break;
             default:
                 break;
@@ -160,7 +150,7 @@ public class GM2 : MonoBehaviour
         //player gets 2 CP after the event
     }
 
-    void reformAttempt()
+    public static void reformAttempt()
     {
         onHighlightSelected -= reformAttempt;
         //1. pick target space
@@ -294,7 +284,7 @@ public class GM2 : MonoBehaviour
         }
     }
 
-    List<int> highlightReformation()
+    public static List<int> highlightReformation()
     {
         //todo: make port
         List<int> highlightReformations = new List<int>();
@@ -628,7 +618,7 @@ public class GM2 : MonoBehaviour
         return highlightSpaces;
     }
 
-    void changeReligion()
+    public static void changeReligion()
     {
         onHighlightSelected -= changeReligion;
         if ((int)DeckScript.spaces.ElementAt(highlightSelected).spaceType == 4)
@@ -653,9 +643,9 @@ public class GM2 : MonoBehaviour
             religiousInfluence[highlightSelected] = (Religion)0;
             DeckScript.spacesGM.ElementAt(highlightSelected).flipControl();
             GM1.protestantSpaces--;
+            GM1.updateVP();
+            onVP();
             onMoveHome25();
-            
-            
             onFlipSpace(highlightSelected, DeckScript.spacesGM.ElementAt(highlightSelected).controlPower, DeckScript.spacesGM.ElementAt(highlightSelected).controlMarker);
         }
         else
@@ -663,6 +653,8 @@ public class GM2 : MonoBehaviour
             religiousInfluence[highlightSelected] = (Religion)1;
             DeckScript.spacesGM.ElementAt(highlightSelected).flipControl();
             GM1.protestantSpaces++;
+            GM1.updateVP();
+            onVP();
             onMoveHome25();
             onFlipSpace(highlightSelected, DeckScript.spacesGM.ElementAt(highlightSelected).controlPower, DeckScript.spacesGM.ElementAt(highlightSelected).controlMarker);
         }
@@ -844,83 +836,14 @@ public class GM2 : MonoBehaviour
 
     }
 
-    IEnumerator HIS002()
-    {
-        List<int> trace = new List<int>();
-        int CharlesPos = -1;
+    
 
-        highlightSelected = -1;
-        InputToggleObject inputToggleObject = GameObject.Find("InputToggle").GetComponent("InputToggleObject") as InputToggleObject;
-        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-
-        for (int i = 0; i < spacesGM.Count(); i++)
-        {
-            if (spacesGM.ElementAt(i).controlPower == 1)
-            {
-                trace.Add(i);
-                if (spacesGM.ElementAt(i).leader1 == 2 || spacesGM.ElementAt(i).leader1 == 4)
-                {
-                    CharlesPos = i;
-                    if (spacesGM.ElementAt(i).leader2 == 2 || spacesGM.ElementAt(i).leader2 == 4)
-                    {
-                        currentTextObject.pauseColor();
-                        currentTextObject.post("Also move Duke of Alva?");
-                        inputToggleObject.post();
-                    }
-                }
-            }
-        }
-        onHighlight(trace);
-        while (player != 1 || highlightSelected == -1)
-        {
-            yield return null;
-        }
-        if (CharlesPos != -1)
-        {
-            spacesGM.ElementAt(CharlesPos).removeLeader(2);
-
-            if (inputToggleObject.GetComponent<Toggle>().isOn)
-            {
-                currentTextObject.restartColor();
-                spacesGM.ElementAt(CharlesPos).removeLeader(4);
-            }
-
-            spacesGM.ElementAt(highlightSelected).addLeader(2);
-            onChangeLeader(highlightSelected, 2);
-            if (inputToggleObject.GetComponent<Toggle>().isOn)
-            {
-                spacesGM.ElementAt(highlightSelected).addLeader(4);
-                onChangeLeader(highlightSelected, 4);
-            }
-            
-        }
-        yield return new WaitForSeconds(3);
-
-        currentTextObject.reset();
-        
-        inputToggleObject.reset();
-        hand1.RemoveAt(0);
-    }
-
-    void HIS009()
-    {
-        
-        regulars[111] = 2;
-        regularsPower[111] = 0;
-        spacesGM.ElementAt(111).controlMarker = 3;
-        spacesGM.ElementAt(111).controlPower = 0;
-        spacesGM.ElementAt(111).regular = 2;
-        spacesGM.ElementAt(111).corsair = 2;
-        spacesGM.ElementAt(111).leader1 = 17;
-        onChangeReg(111, 0);
-        onChangeCorsair(111);
-        onChangeLeader(111, 17);
-    }
+    
 
     void Awake()
     {
         instance = this;
-
+        gm3 = new GM3();
 
     }
 

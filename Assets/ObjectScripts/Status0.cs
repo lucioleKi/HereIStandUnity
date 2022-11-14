@@ -11,9 +11,9 @@ public class Status0 : StatusObject
     public int[] VPKey;
     public int[] piracy;
 
-    public override void setVP()
+    public override int setVP(int index)
     {
-        VP = VPKey[cardTrack];
+        return VPKey[index];
     }
 
     public override void setUp() {

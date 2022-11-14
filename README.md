@@ -62,3 +62,7 @@ Improved UI for what the player needs to do next. More logic on buttons. Need to
 11/12/2022
 
 Finished turn 1 phase 4. Generic method for flipping a space marker. Need to improve VP calculation and redesign status object. 
+
+11/14/2022
+
+Added mandatory events involving changing a ruler. Started UI for filtering different layers of markers. Improved IO for ScriptableObject.

@@ -66,6 +66,10 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
             removeHighlight(highlights);
         
         highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(10));
-        onHighlightSelected();
+        if (onHighlightSelected != null)
+        {
+            onHighlightSelected();
+        }
+        
     }
 }

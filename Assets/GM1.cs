@@ -17,7 +17,12 @@ public class GM1 : MonoBehaviour
     public static int phase;
     public static int englishSpaces;
     public static int protestantSpaces;
+    public static RulerClass[] rulers;
+    public static int[] cardTracks;
     public static int[] VPs;
+    public static int[] translations;
+    public static bool[] excommunicated;
+    public static int[] StPeters;
     public static Religion[] religiousInfluence;
     public static PowerObject[] powerObjects;
     public static int[,] diplomacyState;
@@ -40,8 +45,8 @@ public class GM1 : MonoBehaviour
     }
     void Awake()
     {
-        
-        
+        Screen.SetResolution(1920, 1080, false);
+
         instance = this;
         status0 = Resources.Load("Objects/Status6/s0") as Status0;
         status1 = Resources.Load("Objects/Status6/s1") as Status1;
@@ -49,10 +54,16 @@ public class GM1 : MonoBehaviour
         status3 = Resources.Load("Objects/Status6/s3") as Status3;
         status4 = Resources.Load("Objects/Status6/s4") as Status4;
         status5 = Resources.Load("Objects/Status6/s5") as Status5;
-        
-        Screen.SetResolution(1920, 1080, false);
-        
-        player = 5;
+        cardTracks = new int[6];
+        cardTracks[0] = status0.cardTrack;
+        cardTracks[1] = status1.cardTrack;
+        cardTracks[2] = status2.cardTrack;
+        cardTracks[3] = status3.cardTrack;
+        cardTracks[4] = status4.cardTrack;
+        cardTracks[5] = status5.protestantSpaces;
+        excommunicated = status4.excommunicated;
+        translations = status5.translations;
+
         ScenarioObject scenario = Resources.Load("Objects/Scenario3/1517") as ScenarioObject;
         turn = scenario.turnStart;
         phase = scenario.phaseStart;
@@ -69,10 +80,15 @@ public class GM1 : MonoBehaviour
         powerObjects[8] = Resources.Load("Objects/Power10/PowerScotland") as PowerObject;
         powerObjects[9] = Resources.Load("Objects/Power10/PowerVenice") as PowerObject;
 
+        rulers = new RulerClass[6];
+
         VPs = new int[6];
         for(int i = 0; i < 6; i++)
         {
             VPs[i] = scenario.VPs[i];
+            RulerObject tempRuler = Resources.Load("Objects/Ruler6/Ruler"+i.ToString()) as RulerObject;
+            rulers[i] = new RulerClass(tempRuler.name, tempRuler.adminRating, tempRuler.cardBonus);
+            rulers[i].toString();
         }
 
         diplomacyState = new int[6, 10];
@@ -87,9 +103,9 @@ public class GM1 : MonoBehaviour
         
         Array.Clear(religiousInfluence, 0, 134);
 
-        
-        
-        
+
+
+        player = 5;
 
     }
 
@@ -98,6 +114,23 @@ public class GM1 : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public static void updateVP()
+    {
+        VPs[0] = status0.setVP(cardTracks[0]);
+        VPs[1] = status1.setVP(cardTracks[1]);
+        VPs[2] = status2.setVP(cardTracks[2]);
+        VPs[3] = status3.setVP(cardTracks[3]);
+        VPs[4] = status4.setVP(cardTracks[4])+15- status5.setVP(protestantSpaces);
+        VPs[5] = status5.setVP(protestantSpaces);
+    }
+
+    public static void updateRuler(int power, int index)
+    {
+        RulerObject tempRuler = Resources.Load("Objects/Ruler6/Ruler" + index.ToString()) as RulerObject;
+        rulers[power] = new RulerClass(tempRuler.name, tempRuler.adminRating, tempRuler.cardBonus);
+        rulers[power].toString();
     }
 
     void checkWin()

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5a090bbbd6b0534cb95c8bd8a07671f, type: 3}
-  m_Name: RulerHapsburgs
-  m_EditorClassIdentifier: Assembly-CSharp::Ruler
-  name: Charles V
-  action: {fileID: 21300000, guid: 1f1c23f0260e47e4c9451155c19a0e74, type: 3}
-  adminRating: 2
+  m_Name: Ruler21
+  m_EditorClassIdentifier: 
+  name: Mary I
+  action: {fileID: 0}
+  adminRating: 1
   cardBonus: 0

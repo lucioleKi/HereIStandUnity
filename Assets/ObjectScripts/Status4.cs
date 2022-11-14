@@ -16,10 +16,15 @@ public class Status4 : StatusObject
     public int protestantSpaces;
     public int[] spacesTrack;
 
-    public override void setVP()
+    public override int setVP(int index)
     {
-        VP = VPKey[cardTrack] + spacesTrack[protestantSpaces] + VPTrack[VPIndex];
-        UnityEngine.Debug.Log(VP.ToString());
+        return VPKey[index];
+        
+    }
+
+    public int getBonus1(int index)
+    {
+        return VPTrack[index];
     }
 
     public override void setUp()

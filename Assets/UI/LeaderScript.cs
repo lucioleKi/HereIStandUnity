@@ -100,65 +100,123 @@ public class LeaderScript : MonoBehaviour
 
     void changeLeader(int to, int index)
     {
-
-        if(gameObject.transform.Find("leader_" + (index).ToString()) == null)
-        {
-            //UnityEngine.Debug.Log("cannot find leader_" + (index).ToString());
-            //create leader
-            GameObject newObject = new GameObject("leader_" + (index).ToString(), typeof(RectTransform), typeof(Image));
-            if (to == 21)//vienna
-            {
-                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 103, spaces.ElementAt(to).posY + 543 + 63);
-            }
-            else if (to == 28)//london
-            {
-                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 - 217, spaces.ElementAt(to).posY + 543 + 70);
-            }
-            else if (to == 42)//paris
-            {
-                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 39, spaces.ElementAt(to).posY + 543 + 249);
-            }
-            else
-            {
-                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945, spaces.ElementAt(to).posY + 543);
-            }
-
-            newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + index.ToString());
-            newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
-            newObject.transform.SetParent(gameObject.transform);
-            newObject.AddComponent<LeaderClick>();
-        }else if (to != -1)
-        {
-            GameObject tempObject = GameObject.Find("leader_" + (index).ToString());
-            UnityEngine.Debug.Log("leader_" + (index).ToString());
-            if (to == 21)//vienna
-            {
-                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + + 103, spaces.ElementAt(to).posY + 33 + 63);
-            }
-            else if (to == 27)//london
-            {
-                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + - 217, spaces.ElementAt(to).posY + 70);
-            }
-            else if (to == 41)//paris
-            {
-                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 39, spaces.ElementAt(to).posY + 249);
-            }
-            else
-            {
-                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX-15, spaces.ElementAt(to).posY);
-            }
-            return;
-        }
-        
-        
         //destroy leader
-        if (to==-1)
+        if (to == -1)
         {
             GameObject tempObject = GameObject.Find("leader_" + (index).ToString());
             Destroy(tempObject.gameObject);
-            
+            return;
 
         }
+        SpaceGM temp = spacesGM.ElementAt(to);
+        if (temp.leader1 == index)//leader at pos 1
+        {
+            if (gameObject.transform.Find("leader_" + (index).ToString()) == null && to != -1)
+            {
+                //UnityEngine.Debug.Log("cannot find leader_" + (index).ToString());
+                //create leader
+                GameObject newObject = new GameObject("leader_" + (index).ToString(), typeof(RectTransform), typeof(Image));
+                if (to == 21)//vienna
+                {
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 103, spaces.ElementAt(to).posY + 543 + 63);
+                }
+                else if (to == 27)//london
+                {
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 - 217, spaces.ElementAt(to).posY + 543 + 70);
+                }
+                else if (to == 41)//paris
+                {
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 39, spaces.ElementAt(to).posY + 543 + 249);
+                }
+                else
+                {
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945, spaces.ElementAt(to).posY + 543);
+                }
+
+                newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + index.ToString());
+                newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
+                newObject.transform.SetParent(gameObject.transform);
+                newObject.AddComponent<LeaderClick>();
+            }
+            else if (to != -1)
+            {
+                GameObject tempObject = GameObject.Find("leader_" + (index).ToString());
+                UnityEngine.Debug.Log("leader_" + (index).ToString());
+                if (to == 21)//vienna
+                {
+                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 103, spaces.ElementAt(to).posY + 543 + 63);
+                }
+                else if (to == 27)//london
+                {
+                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 - 217, spaces.ElementAt(to).posY + 543 + 70);
+                }
+                else if (to == 41)//paris
+                {
+                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 39, spaces.ElementAt(to).posY + 543 + 249);
+                }
+                else
+                {
+                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945, spaces.ElementAt(to).posY + 543);
+                }
+                return;
+            }
+        }
+        else//leader at pos 2
+        {
+            if (gameObject.transform.Find("leader_" + (index).ToString()) == null && to != -1)
+            {
+                //UnityEngine.Debug.Log("cannot find leader_" + (index).ToString());
+                //create leader
+                GameObject newObject = new GameObject("leader_" + (index).ToString(), typeof(RectTransform), typeof(Image));
+                if (to == 21)//vienna
+                {
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 +103, spaces.ElementAt(to).posY + 510 + 63);
+                }
+                else if (to == 27)//london
+                {
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 - 217, spaces.ElementAt(to).posY + 510 + 70);
+                }
+                else if (to == 41)//paris
+                {
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 39, spaces.ElementAt(to).posY + 510 + 249);
+                }
+                else
+                {
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945, spaces.ElementAt(to).posY + 510);
+                }
+
+                newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + index.ToString());
+                newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
+                newObject.transform.SetParent(gameObject.transform);
+                newObject.AddComponent<LeaderClick>();
+            }
+            else if (to != -1)
+            {
+                GameObject tempObject = GameObject.Find("leader_" + (index).ToString());
+                UnityEngine.Debug.Log("leader_" + (index).ToString());
+                if (to == 21)//vienna
+                {
+                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 103, spaces.ElementAt(to).posY + 510 + 63);
+                }
+                else if (to == 27)//london
+                {
+                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 - 217, spaces.ElementAt(to).posY + 510 + 70);
+                }
+                else if (to == 41)//paris
+                {
+                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945+39, spaces.ElementAt(to).posY + 510+249);
+                }
+                else
+                {
+                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX - 15, spaces.ElementAt(to).posY);
+                }
+                return;
+            }
+        }
+        
+        
+        
+        
         
         
     }

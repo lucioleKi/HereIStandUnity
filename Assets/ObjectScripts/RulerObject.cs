@@ -10,4 +10,5 @@ public class RulerObject : ScriptableObject
     public int adminRating;
     public int cardBonus;
 
+    
 }
