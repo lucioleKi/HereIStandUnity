@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using static EnumSpaceScript;
 
@@ -16,7 +15,6 @@ public class DeckScript : MonoBehaviour
     public static List<CardObject> activeCards;
     public static List<CardObject> discardCards;
     public static List<DebaterObject> debaters;
-    public static List<DebaterObject> activeDebaters;
     public static List<LeaderObject> leaders;
     public static List<LeaderObject> activeLeaders;
     public static List<ReformerObject> reformers;
@@ -56,6 +54,7 @@ public class DeckScript : MonoBehaviour
         importDebaters();
         importLeaders();
         importReformers();
+        addActive(1);
         hand0 = new List<CardObject>();
         hand1 = new List<CardObject>();
         hand2 = new List<CardObject>();
@@ -263,9 +262,10 @@ public class DeckScript : MonoBehaviour
         }
         foreach(var debater in debaters)
         {
-            if (debater.turn <= turn && debater.turn != 0)
+            if (debater.turn <= turn && debater.turn != 0&&debater.status==(DebaterStatus)0)
             {
-                activeDebaters.Add(debater);
+                debater.status = (DebaterStatus)1;
+
             }
         }
         foreach(var leader in leaders)
@@ -290,9 +290,8 @@ public class DeckScript : MonoBehaviour
 
     void importDebaters()
     {
-        int id = 0;
+        int id = 1;
         debaters = new List<DebaterObject>();
-        activeDebaters = new List<DebaterObject>();
         using (var reader = new StreamReader("Assets/Input/debaters.csv"))
         {
             while (!reader.EndOfStream)
@@ -307,9 +306,10 @@ public class DeckScript : MonoBehaviour
                 temp.turn = int.Parse(values[3]);
                 
                 temp.language = (Language)int.Parse(values[4]);
-                
+                temp.status = (DebaterStatus)int.Parse(values[5]);
 
                 debaters.Add(temp);
+                id++;
             }
         }
     }

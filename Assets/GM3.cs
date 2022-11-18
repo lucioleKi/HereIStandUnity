@@ -112,6 +112,24 @@ public class GM3
         hand1.RemoveAt(0);
     }
 
+    public IEnumerator HIS006()
+    {
+        int attacker = 4;
+        InputToggleObject inputToggleObject = GameObject.Find("InputToggle").GetComponent("InputToggleObject") as InputToggleObject;
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        InputNumberObject inputNumberObject = GameObject.Find("InputNumber").GetComponent("InputNumberObject") as InputNumberObject;
+        currentTextObject.pauseColor();
+        currentTextObject.post("Specify your own debater?\nSpecify language zone.");
+        inputToggleObject.post();
+        inputNumberObject.post();
+        DebateNScript debateNScript = GameObject.Find("DebateNext").GetComponent("DebateNScript") as DebateNScript;
+        debateNScript.post();
+        while (false)
+        {
+            yield return null;
+        }
+    }
+
     public IEnumerator HIS008()
     {
         activeReformers.Add(reformers.ElementAt(0));

@@ -12,4 +12,5 @@ public class EnumSpaceScript : MonoBehaviour
     public enum CardType { Home, Mandatory, Response, Combat, Event, Diplomacy};
     public enum ActionType { Move, Build, Fight, NewWorld, Religion};
     public enum DiplomacyType { None, War, Allied};
+    public enum DebaterStatus { Unready, Uncommitted, Committed, Disgraced, Excommunicated, Burnt, Expelled, Debating};
 }

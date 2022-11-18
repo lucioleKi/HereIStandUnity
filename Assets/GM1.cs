@@ -88,7 +88,7 @@ public class GM1 : MonoBehaviour
             VPs[i] = scenario.VPs[i];
             RulerObject tempRuler = Resources.Load("Objects/Ruler6/Ruler"+i.ToString()) as RulerObject;
             rulers[i] = new RulerClass(tempRuler.name, tempRuler.adminRating, tempRuler.cardBonus);
-            rulers[i].toString();
+            //rulers[i].toString();
         }
 
         diplomacyState = new int[6, 10];

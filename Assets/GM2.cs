@@ -108,7 +108,8 @@ public class GM2 : MonoBehaviour
 
     void mandatory(int index)
     {
-        StartCoroutine(gm3.HIS001B());
+        StartCoroutine(gm3.HIS006());
+        //StartCoroutine(gm3.HIS001B());
         switch (index)
         {
             case 2:
@@ -283,6 +284,14 @@ public class GM2 : MonoBehaviour
             return;
         }
     }
+
+
+
+    public static void theologicalDebate()
+    {
+        
+    }
+
 
     public static List<int> highlightReformation()
     {

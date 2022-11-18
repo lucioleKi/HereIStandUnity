@@ -12,6 +12,7 @@ public class DebaterObject
     public int value;
     public int turn;
     public int type;
+    public DebaterStatus status;
     public Language language;
 
     public DebaterObject debater;
@@ -32,5 +33,10 @@ public class DebaterObject
     public override int GetHashCode()
     {
         return base.GetHashCode();
+    }
+
+    public void commit()
+    {
+        status = (DebaterStatus) 2;
     }
 }

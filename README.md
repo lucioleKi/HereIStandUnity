@@ -66,3 +66,7 @@ Finished turn 1 phase 4. Generic method for flipping a space marker. Need to imp
 11/14/2022
 
 Added mandatory events involving changing a ruler. Started UI for filtering different layers of markers. Improved IO for ScriptableObject.
+
+11/18/2022
+
+Started theological debates event.

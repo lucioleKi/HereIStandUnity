@@ -16,7 +16,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         UnityEngine.Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
-        if (GM1.phase != 1 && GM1.phase != 4 && GM1.phase != 6)
+        if (GM1.phase != 1 && GM1.phase != 4 && GM1.phase != 6 && GM1.phase!=2)
         {
             return;
         }
