@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 using static DeckScript;
 
 public class EmptyCard : MonoBehaviour, IPointerClickHandler
@@ -53,7 +54,22 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler
         {
             CPButtonScript.btn.interactable = false;
         }
-        
+
+        if (GM2.chosenCard == "HIS-004" && GM1.player == 3&&GM2.waitCard)
+        {
+            CPButtonScript.btn.interactable = false;
+            ConfirmScript.btn.interactable = false;
+            OtherButtonScript otherButtonScript = GameObject.Find("OtherButton").GetComponent("OtherButtonScript") as OtherButtonScript;
+            otherButtonScript.cardTag = eventData.pointerCurrentRaycast.gameObject.tag;
+            otherButtonScript.btn.interactable = true;
+        }
+        else
+        {
+            OtherButtonScript otherButtonScript = GameObject.Find("OtherButton").GetComponent("OtherButtonScript") as OtherButtonScript;
+            otherButtonScript.btn.interactable = false;
+        }
+
+
     }
     // Update is called once per frame
     void Update()

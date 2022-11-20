@@ -1,9 +1,10 @@
+
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using static EnumSpaceScript;
 using static DeckScript;
 using static GM1;
 using static GM2;
@@ -112,9 +113,123 @@ public class GM3
         hand1.RemoveAt(0);
     }
 
+    public IEnumerator HIS004()
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.pauseColor();
+        int randomIndex = UnityEngine.Random.Range(1, 7);
+        int bonus = 0;
+        if (spacesGM.ElementAt(76).controlPower == 2)
+        {
+            bonus = bonus+2;
+        }
+        if (spacesGM.ElementAt(77).controlPower == 2)
+        {
+            bonus++;
+        }
+        int italian = 0;
+        bool frenchHome = false;
+        bool foreignReg = false;
+        for(int i=0; i < spacesGM.Count(); i++)
+        {
+            if(spacesGM.ElementAt(i).controlPower==2&&spaces.ElementAt(i).language == (Language)3)
+            {
+                italian++;
+            }
+            if(spacesGM.ElementAt(i).controlPower != 3 && spaces.ElementAt(i).homePower == (PowerType2)3&&(spaces.ElementAt(i).spaceType == (SpaceType)2 ||spaces.ElementAt(i).spaceType == (SpaceType)3))
+            {
+                frenchHome = true;
+            }
+            if(spacesGM.ElementAt(i).controlPower != 3 && spaces.ElementAt(i).homePower == (PowerType2)3 && (spaces.ElementAt(i).spaceType == (SpaceType)2 || spaces.ElementAt(i).spaceType == (SpaceType)3) && spacesGM.ElementAt(i).regular > 0)
+            {
+                foreignReg = true;
+            }
+        }
+        if (italian >= 3)
+        {
+            bonus = bonus+2;
+        }
+        //no touranament scenario for now
+        if (frenchHome)
+        {
+            bonus--;
+        }
+        if (foreignReg) {
+            bonus = bonus - 2;
+        }
+        int total = randomIndex + bonus;
+        if (total > 2)
+        {
+            //updateVP
+            GM1.chateauxC++;
+            GM1.updateVP();
+            GM2.onVP();
+
+        }
+        hand3.RemoveAt(0);
+        if (bonus < 0)
+        {
+            if (total < 3 || total > 7)
+            {
+                currentTextObject.post("Modified roll: " + randomIndex.ToString() + bonus.ToString() + "=" + total.ToString()+"\nDraw 2 cards, then discard 1.");
+                
+                hand3.AddRange(activeCards.GetRange(0, 2));
+                activeCards.RemoveRange(0, 2);
+                GM2.waitCard = true;
+            }
+            else if (total == 3 || total == 4)
+            {
+                currentTextObject.post("Modified roll: " + randomIndex.ToString() + bonus.ToString() + "=" + total.ToString() + "\nDraw 1 card, then discard 1.");
+                GM2.waitCard = true;
+                hand3.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+            }
+            else if(total >5)
+            {
+                currentTextObject.post("Modified roll: " + randomIndex.ToString() + bonus.ToString() + "=" + total.ToString() + "\nDraw 1 card.");
+                hand3.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+            }
+            
+        }
+        else
+        {
+            if (total < 3 || total > 7)
+            {
+                currentTextObject.post("Modified roll: " + randomIndex.ToString() +"+"+ bonus.ToString() + "=" + total.ToString() + "\nDraw 2 cards, then discard 1.");
+                hand3.AddRange(activeCards.GetRange(0, 2));
+                activeCards.RemoveRange(0, 2);
+                GM2.waitCard = true;
+            }
+            else if (total == 3 || total == 4)
+            {
+                currentTextObject.post("Modified roll: " + randomIndex.ToString() + "+" + bonus.ToString() + "=" + total.ToString() + "\nDraw 1 card, then discard 1.");
+                hand3.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+                GM2.waitCard = true;
+            }
+            else if (total > 5)
+            {
+                currentTextObject.post("Modified roll: " + randomIndex.ToString() + "+" + bonus.ToString() + "=" + total.ToString() + "\nDraw 1 card.");
+                hand3.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+            }
+        }
+        while (GM2.waitCard)
+        {
+            yield return null;
+        }
+        yield return new WaitForSeconds(3);
+        currentTextObject.restartColor();
+        currentTextObject.reset();
+        chosenCard = "";
+        onChosenCard();
+
+
+    }
+
     public IEnumerator HIS006()
     {
-        int attacker = 4;
         InputToggleObject inputToggleObject = GameObject.Find("InputToggle").GetComponent("InputToggleObject") as InputToggleObject;
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         InputNumberObject inputNumberObject = GameObject.Find("InputNumber").GetComponent("InputNumberObject") as InputNumberObject;
@@ -124,10 +239,16 @@ public class GM3
         inputNumberObject.post();
         DebateNScript debateNScript = GameObject.Find("DebateNext").GetComponent("DebateNScript") as DebateNScript;
         debateNScript.post();
-        while (false)
+        while (debateNScript.btn.interactable==true)
         {
             yield return null;
         }
+        yield return new WaitForSeconds(3);
+        currentTextObject.reset();
+        currentTextObject.restartColor();
+        chosenCard = "";
+        onChosenCard();
+        hand4.RemoveAt(0);
     }
 
     public IEnumerator HIS008()
@@ -325,5 +446,39 @@ public class GM3
     {
         GM1.updateRuler(2, 23);
         onChangeRuler(2, 23);
+    }
+
+    public IEnumerator HIS065()
+    {
+        if (DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1) {
+            DeckScript.debaters.ElementAt(12).status = (DebaterStatus)2;
+            CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+            currentTextObject.pauseColor();
+            currentTextObject.post("Pick 6 highlighted target spaces");
+            for (int i = 0; i < 5; i++)
+            {
+
+
+                List<int> pickSpaces = highlightReformation();
+                highlightSelected = -1;
+                onHighlight(pickSpaces);
+
+                onHighlightSelected += reformAttempt;
+                while (highlightSelected == -1)
+                {
+                    //UnityEngine.Debug.Log("here");
+                    yield return null;
+                }
+
+                UnityEngine.Debug.Log("end");
+                //onRemoveHighlight(converted);
+            }
+            yield return new WaitForSeconds(3);
+            currentTextObject.reset();
+            currentTextObject.restartColor();
+            highlightSelected = -1;
+            chosenCard = "";
+            onChosenCard();
+        }
     }
 }

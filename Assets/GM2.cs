@@ -65,6 +65,7 @@ public class GM2 : MonoBehaviour
     public static List1Handler onHighlight;
     public static List1Handler onRemoveHighlight;
 
+    public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
     public static bool phaseEnd = false;
@@ -108,12 +109,21 @@ public class GM2 : MonoBehaviour
 
     void mandatory(int index)
     {
-        StartCoroutine(gm3.HIS006());
+        if (index > 8)
+        {
+            discardCard(index);
+        }
         //StartCoroutine(gm3.HIS001B());
         switch (index)
         {
             case 2:
                 StartCoroutine(gm3.HIS002());
+                break;
+            case 4:
+                StartCoroutine(gm3.HIS004());
+                break;
+            case 6:
+                StartCoroutine(gm3.HIS006());
                 break;
             case 8:
                 StartCoroutine(gm3.HIS008());
@@ -144,6 +154,9 @@ public class GM2 : MonoBehaviour
                 break;
             case 22:
                 gm3.HIS022();
+                break;
+            case 65:
+                StartCoroutine(gm3.HIS065());
                 break;
             default:
                 break;
@@ -287,10 +300,6 @@ public class GM2 : MonoBehaviour
 
 
 
-    public static void theologicalDebate()
-    {
-        
-    }
 
 
     public static List<int> highlightReformation()
@@ -339,6 +348,172 @@ public class GM2 : MonoBehaviour
 
         }
         return highlightReformations;
+    }
+
+    public static void reformCAttempt()
+    {
+        onHighlightSelected -= reformCAttempt;
+        //1. pick target space
+
+
+        UnityEngine.Debug.Log(highlightSelected);
+        int target = highlightSelected;
+
+        SpaceObject targetSpace = spaces.ElementAt(target);
+        //2. add up reformer dice
+        int reformerDice = 1;
+        int papalDice = 1;
+        //+2 if reformer in target space, +1 if reformer adjacent
+        for (int i = 0; i < activeReformers.Count(); i++)
+        {
+            if (activeReformers.ElementAt(i).space == target)
+            {
+                reformerDice = reformerDice + 2;
+            }
+            else
+            {
+
+                SpaceObject tempSpace = spaces.ElementAt(activeReformers.ElementAt(i).space);
+                for (int j = 0; j < tempSpace.adjacent.Count(); j++)
+                {
+                    if (tempSpace.adjacent.ElementAt(j) == targetSpace.id)
+                    {
+                        reformerDice++;
+                    }
+                }
+            }
+        }
+
+        //+1 for every adjacent under protestant/catholic religious influence 
+        for (int i = 0; i < spaces.ElementAt(target).adjacent.Count; i++)
+        {
+            if (religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)] == (Religion)1)
+            {
+                reformerDice++;
+            }
+            else if (religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)] == (Religion)0)
+            {
+                papalDice++;
+            }
+        }
+
+        //+2 if protestant land units, +1 if land units adjacent
+        if (regulars[target] > 0 && spacesGM.ElementAt(target).controlPower == 5)
+        {
+            reformerDice = reformerDice + 2;
+        }
+        else if (regulars[target] > 0 && spacesGM.ElementAt(target).controlPower == 4)
+        {
+            papalDice = papalDice + 2;
+        }
+        for (int i = 0; i < targetSpace.adjacent.Count(); i++)
+        {
+            if (regulars[targetSpace.adjacent.ElementAt(i)] > 0 && regularsPower[targetSpace.adjacent.ElementAt(i)] == 5)
+            {
+                reformerDice++;
+            }
+            else if (regulars[targetSpace.adjacent.ElementAt(i)] > 0 && regularsPower[targetSpace.adjacent.ElementAt(i)] == 4)
+            {
+                papalDice++;
+            }
+        }
+
+
+        //3. add bonus dice
+        
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+
+
+        //4. roll papal dice
+        int dice2 = 0;
+        for (int i = 0; i < papalDice; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(1, 7);
+
+            if (dice2 < randomIndex)
+            {
+                dice2 = randomIndex;
+            }
+            if (dice2 == 6 && (GM1.rulers[5].name== "Paul III" || GM1.rulers[5].name== "Julius III"))
+            {
+                //UnityEngine.Debug.Log("6!");
+                changeReligion();
+                currentTextObject.post("Catholic dices: " + papalDice.ToString() + ". Highest: 6. \nAutomatic success.");
+                //send signal to various parties
+                return;
+            }
+        }
+
+        //7. roll protestant dice
+        int dice1 = 0;
+        for (int i = 0; i < reformerDice; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(1, 7);
+
+            if (dice1 < randomIndex)
+            {
+                dice1 = randomIndex;
+            }
+            
+        }
+
+
+
+        //8. determine result
+        if (dice2 >= dice1)
+        {
+            UnityEngine.Debug.Log("win");
+            changeReligion();
+            currentTextObject.post("Catholic dices: " + papalDice.ToString() + ". Highest: " + dice2.ToString() + ".\nProtestant dices: " + reformerDice.ToString() + ". Highest: " + dice1.ToString() + "\nSuccessful counter-reformation.");
+
+            //send signal to various parties
+
+            return;
+        }
+        else
+        {
+            UnityEngine.Debug.Log("lose");
+            currentTextObject.post("Catholic dices: " + papalDice.ToString() + ". Highest: " + dice2.ToString() + ".\nProtestant dices: " + reformerDice.ToString() + ". Highest: " + dice1.ToString() + "\nSuccessful counter-reformation.");
+            return;
+        }
+    }
+
+    public static List<int> highlightCReformation()
+    {
+        //todo: make port
+        List<int> highlightCReformations = new List<int>();
+        for (int i = 0; i < spaces.Count(); i++)
+        {
+            if ((int)religiousInfluence[i] == 0)
+            {
+                continue;
+            }
+            for (int j = 0; j < spaces.ElementAt(i).adjacent.Count(); j++)
+            {
+
+                if (religiousInfluence[spaces.ElementAt(i).adjacent.ElementAt(j) - 1] == (Religion)0)
+                {
+
+                    highlightCReformations.Add(i);
+                    break;
+                }
+            }
+            if (!highlightCReformations.Contains(i))
+            {
+                for (int j = 0; i < spaces.ElementAt(i).pass.Count(); j++)
+                {
+                    if (religiousInfluence[spaces.ElementAt(i).pass.ElementAt(j)] == (Religion)0)
+                    {
+                        highlightCReformations.Add(i);
+                        break;
+                    }
+                }
+            }
+            
+
+
+        }
+        return highlightCReformations;
     }
 
     void phase2()
@@ -845,9 +1020,60 @@ public class GM2 : MonoBehaviour
 
     }
 
-    
 
-    
+    void discardCard(int index)
+    {
+        
+        for (int i = 0; i < hand0.Count(); i++)
+        {
+            if (hand0.ElementAt(i).id == index)
+            {
+                discardCards.Add(hand0.ElementAt(i));
+                hand0.RemoveAt(i);
+            }
+        }
+        for (int i = 0; i < hand1.Count(); i++)
+        {
+            if (hand1.ElementAt(i).id == index)
+            {
+                discardCards.Add(hand1.ElementAt(i));
+                hand1.RemoveAt(i);
+            }
+        }
+        for (int i = 0; i < hand2.Count(); i++)
+        {
+            if (hand2.ElementAt(i).id == index)
+            {
+                discardCards.Add(hand2.ElementAt(i));
+                hand2.RemoveAt(i);
+            }
+        }
+        for (int i = 0; i < hand3.Count(); i++)
+        {
+            if (hand3.ElementAt(i).id == index)
+            {
+                discardCards.Add(hand3.ElementAt(i));
+                hand3.RemoveAt(i);
+            }
+        }
+        for (int i = 0; i < hand4.Count(); i++)
+        {
+            if (hand4.ElementAt(i).id == index)
+            {
+                discardCards.Add(hand4.ElementAt(i));
+                hand4.RemoveAt(i);
+            }
+        }
+        for (int i = 0; i < hand5.Count(); i++)
+        {
+            if (hand5.ElementAt(i).id == index)
+            {
+                discardCards.Add(hand5.ElementAt(i));
+                hand5.RemoveAt(i);
+            }
+        }
+    }
+
 
     void Awake()
     {

@@ -69,4 +69,8 @@ Added mandatory events involving changing a ruler. Started UI for filtering diff
 
 11/18/2022
 
-Started theological debates event.
+Started theological debate event.
+
+11/20/2022
+
+Finished theological debate event, counter-reformation, chateaux-building, and HIS065. Improved discarding cards.

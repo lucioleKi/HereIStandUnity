@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 using UnityEngine;
 using static EnumSpaceScript;
+using static System.Net.Mime.MediaTypeNames;
 
 public class DeckScript : MonoBehaviour
 {
@@ -98,6 +99,7 @@ public class DeckScript : MonoBehaviour
         
         //luther's 95 theses
         hand5.Add(cards.ElementAt(7));
+        hand5.Add(cards.ElementAt(64));
     }
 
     // Update is called once per frame
@@ -348,4 +350,6 @@ public class DeckScript : MonoBehaviour
         reformers.Add(Resources.Load("Objects/Reformer4/Calvin") as ReformerObject);
         reformers.Add(Resources.Load("Objects/Reformer4/Cranmer") as ReformerObject);
     }
+
+    
 }

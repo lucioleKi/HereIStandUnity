@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using static DeckScript;
 using static GM1;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MyCardsScript : MonoBehaviour
 {
@@ -43,7 +44,19 @@ public class MyCardsScript : MonoBehaviour
         GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().alpha = 1;
         GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().blocksRaycasts = true;
         GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().interactable = true;
-        //
+        //HIS004 chateaux discard
+        if (GM2.chosenCard == "HIS-004" && GM1.player == 3&&GM2.waitCard)
+        {
+            OtherButtonScript otherButtonObject = GameObject.Find("OtherButton").GetComponent("OtherButtonScript") as OtherButtonScript;
+            GameObject.Find("OtherButtonText").GetComponent<TextMeshProUGUI>().text = "Discard";
+            otherButtonObject.btn.interactable = false;
+        }
+        else
+        {
+            OtherButtonScript otherButtonObject = GameObject.Find("OtherButton").GetComponent("OtherButtonScript") as OtherButtonScript;
+            GameObject.Find("OtherButtonText").GetComponent<TextMeshProUGUI>().text = "Other";
+            otherButtonObject.btn.interactable = false;
+        }
     }
 
     

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GM1;
 
 [CreateAssetMenu]
 public class Status1 : StatusObject
@@ -16,9 +17,9 @@ public class Status1 : StatusObject
 
     public override void setUp()
     {
-        if (cardTrack < 5)
+        if (cardTracks[1] < 5)
         {
-            for (int i = cardTrack + 1; i < 5; i++)
+            for (int i = cardTracks[1] + 1; i < 5; i++)
             {
                 GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_1"), new Vector3(0, 0, 0), Quaternion.identity);
                 newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[0] + i * offsetX[0] + 960, posY[0] + 540);
@@ -37,9 +38,9 @@ public class Status1 : StatusObject
                 newObject.transform.SetParent(GameObject.Find("HandMarkerDisplay").transform);
             }
         }
-        else if (cardTrack < 10)
+        else if (cardTracks[1] < 10)
         {
-            for (int i = cardTrack + 1; i < 10; i++)
+            for (int i = cardTracks[1] + 1; i < 10; i++)
             {
                 GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_1"), new Vector3(0, 0, 0), Quaternion.identity);
                 newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[0] + (i - 5) * offsetX[0] + 960, posY[0] + 540 + offsetY[0]);
@@ -54,7 +55,7 @@ public class Status1 : StatusObject
         }
         else
         {
-            for (int i = cardTrack + 1; i < 14; i++)
+            for (int i = cardTracks[1] + 1; i < 14; i++)
             {
                 GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_1"), new Vector3(0, 0, 0), Quaternion.identity);
                 newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[0] + (i - 10) * offsetX[0] + 960, posY[0] + 540 + offsetY[0] * 2);

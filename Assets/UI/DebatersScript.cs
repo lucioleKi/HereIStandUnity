@@ -51,7 +51,14 @@ public class DebatersScript : MonoBehaviour
             if (temp.status == (DebaterStatus)1 || temp.status == (DebaterStatus)2)
             {
                 GameObject newObject = new GameObject("debater_" + temp.id.ToString(), typeof(RectTransform), typeof(Image));
-                newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Debaters/" + temp.name + "Debater");
+                if (temp.status == (DebaterStatus)1)
+                {
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Debaters/" + temp.name + "Debater");
+                }
+                else
+                {
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Debaters/" + temp.name + "Debater_back");
+                }
                 newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(27, 27);
                 newObject.transform.SetParent(gameObject.transform);
                 newObject.AddComponent<DebaterClick>();
@@ -63,7 +70,7 @@ public class DebatersScript : MonoBehaviour
                     newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(650 + index0 * 27, 370);
                     index0++;
                 }
-                else
+                else if(temp.type == 1)
                 {
                     newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(595 + index1 % 2 * 27, 283 + index1 / 2 * 27);
                     index1++;
@@ -77,7 +84,18 @@ public class DebatersScript : MonoBehaviour
             {
                 Destroy(tempObject1.gameObject);
             }
-            
+
+        }
+        else
+        {
+            if (temp.type == 0)
+            {
+                index0++;
+            }
+            else if (temp.type == 1)
+            {
+                index1++;
+            }
         }
         
 

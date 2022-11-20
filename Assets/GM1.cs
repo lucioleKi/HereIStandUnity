@@ -32,6 +32,9 @@ public class GM1 : MonoBehaviour
     public static Status3 status3;
     public static Status4 status4;
     public static Status5 status5;
+    public static int[] bonusVPs;
+    public static int piracyC;
+    public static int chateauxC;
 
     public static GM1 Instance { 
         get { 
@@ -61,6 +64,7 @@ public class GM1 : MonoBehaviour
         cardTracks[3] = status3.cardTrack;
         cardTracks[4] = status4.cardTrack;
         cardTracks[5] = status5.protestantSpaces;
+        piracyC = status0.piracyTrack;
         excommunicated = status4.excommunicated;
         translations = status5.translations;
 
@@ -83,12 +87,13 @@ public class GM1 : MonoBehaviour
         rulers = new RulerClass[6];
 
         VPs = new int[6];
+        bonusVPs = new int[6];
         for(int i = 0; i < 6; i++)
         {
             VPs[i] = scenario.VPs[i];
             RulerObject tempRuler = Resources.Load("Objects/Ruler6/Ruler"+i.ToString()) as RulerObject;
             rulers[i] = new RulerClass(tempRuler.name, tempRuler.adminRating, tempRuler.cardBonus);
-            //rulers[i].toString();
+            bonusVPs[i] = 0;
         }
 
         diplomacyState = new int[6, 10];
@@ -118,12 +123,12 @@ public class GM1 : MonoBehaviour
 
     public static void updateVP()
     {
-        VPs[0] = status0.setVP(cardTracks[0]);
-        VPs[1] = status1.setVP(cardTracks[1]);
-        VPs[2] = status2.setVP(cardTracks[2]);
-        VPs[3] = status3.setVP(cardTracks[3]);
-        VPs[4] = status4.setVP(cardTracks[4])+15- status5.setVP(protestantSpaces);
-        VPs[5] = status5.setVP(protestantSpaces);
+        VPs[0] = status0.setVP(cardTracks[0]) + status0.piracy[piracyC] + bonusVPs[0];
+        VPs[1] = status1.setVP(cardTracks[1]) + bonusVPs[1];
+        VPs[2] = status2.setVP(cardTracks[2]) + bonusVPs[2];
+        VPs[3] = status3.setVP(cardTracks[3]) + status3.chateaux[chateauxC]+bonusVPs[3];
+        VPs[4] = status4.setVP(cardTracks[4])+15- status5.setVP(protestantSpaces) + bonusVPs[4];
+        VPs[5] = status5.setVP(protestantSpaces) + bonusVPs[5];
     }
 
     public static void updateRuler(int power, int index)

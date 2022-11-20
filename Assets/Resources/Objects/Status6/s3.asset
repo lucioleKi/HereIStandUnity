@@ -16,11 +16,12 @@ MonoBehaviour:
   posX: 4f020000c0020000
   posY: 2dfeffff4dfeffff
   offsetX:
-  - 31.83
+  - 31
   - 26.67
   offsetY:
   - -32
   - -28
+  VP: 0
   cardTrack: 5
   chateauxTrack: 0
   CardsKey: 0100000001000000010000000200000002000000030000000300000004000000040000000500000006000000

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GM1;
 
 [CreateAssetMenu]
 public class Status4 : StatusObject
@@ -29,7 +30,7 @@ public class Status4 : StatusObject
 
     public override void setUp()
     {
-        for (int i = cardTrack + 1; i < 7; i++)
+        for (int i = cardTracks[4] + 1; i < 7; i++)
         {
             GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_4"), new Vector3(0, 0, 0), Quaternion.identity);
             newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[0] + (i) * offsetX[0] + 960, posY[0] + 540);
@@ -49,7 +50,7 @@ public class Status4 : StatusObject
         }
         for (int i = 0; i < 7; i++)
         {
-            if (excommunicated[i])
+            if (GM1.excommunicated[i])
             {
                 GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_17"), new Vector3(0, 0, 0), Quaternion.identity);
                 newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[3] + i * offsetX[3] + 960, posY[3] + 540);
