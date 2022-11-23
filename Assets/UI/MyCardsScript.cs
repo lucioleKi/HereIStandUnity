@@ -34,6 +34,8 @@ public class MyCardsScript : MonoBehaviour
     void toCanvasCards()
     {
         playerIndex = GM1.player;
+        ContainerScript containerScript = GameObject.Find("CardContainer").GetComponent("ContainerScript") as ContainerScript;
+        containerScript.showHands();
         GM2.onPlayerChange();
         GameObject.Find("Confirm").GetComponent<Button>().interactable = false;
         GameObject.Find("CPButton").GetComponent<Button>().interactable = false;

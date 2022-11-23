@@ -14,6 +14,8 @@ public class LayerScript : MonoBehaviour
         gameObject.transform.Find("Layer3").GetComponent<TMP_InputField>().onValueChanged.AddListener(delegate { changeLayer(); });
         gameObject.transform.Find("Layer4").GetComponent<TMP_InputField>().onValueChanged.AddListener(delegate { changeLayer(); });
         gameObject.transform.Find("Layer5").GetComponent<TMP_InputField>().onValueChanged.AddListener(delegate { changeLayer(); });
+        gameObject.transform.Find("Layer6").GetComponent<TMP_InputField>().onValueChanged.AddListener(delegate { changeLayer(); });
+        gameObject.transform.Find("Layer7").GetComponent<TMP_InputField>().onValueChanged.AddListener(delegate { changeLayer(); });
     }
 
     // Update is called once per frame
@@ -22,13 +24,31 @@ public class LayerScript : MonoBehaviour
         
     }
 
-    
-
-    
-
-    void changeLayer()
+    void OnEnable()
     {
-        int[] l = new int[5];
+
+        GM2.onSpaceLayer += highlightSpace;
+        GM2.onRegLayer += highlightRegular;
+        GM2.onLeaderLayer += highlightLeader;
+        GM2.onNoLayer += highlightDark;
+        GM2.onLeaderULayer += highlightLeaderRegular;
+    }
+
+    void OnDisable()
+    {
+
+        GM2.onSpaceLayer -= highlightSpace;
+        GM2.onRegLayer -= highlightRegular;
+        GM2.onLeaderLayer -= highlightLeader;
+        GM2.onNoLayer -= highlightDark;
+        GM2.onLeaderULayer -= highlightLeaderRegular;
+    }
+
+
+
+    public void changeLayer()
+    {
+        int[] l = new int[7];
         if (!string.IsNullOrEmpty(gameObject.transform.Find("Layer1").GetComponent<TMP_InputField>().text))
         {
             l[0] = int.Parse(gameObject.transform.Find("Layer1").GetComponent<TMP_InputField>().text);
@@ -68,8 +88,41 @@ public class LayerScript : MonoBehaviour
         {
             l[4] = 5;
         }
-        
+        if (!string.IsNullOrEmpty(gameObject.transform.Find("Layer6").GetComponent<TMP_InputField>().text))
+        {
+            l[5] = int.Parse(gameObject.transform.Find("Layer6").GetComponent<TMP_InputField>().text);
+            
+        }
+        else
+        {
+            
+            l[5] = 6;
+        }
+        if (!string.IsNullOrEmpty(gameObject.transform.Find("Layer7").GetComponent<TMP_InputField>().text))
+        {
+            l[6] = int.Parse(gameObject.transform.Find("Layer7").GetComponent<TMP_InputField>().text);
+        }
+        else
+        {
+            l[6] = 7;
+        }
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 0;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = false;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = false;
+        GameObject.Find("Darken").transform.SetSiblingIndex(3);
         int invis = 0;
+        GameObject[] count = new GameObject[7];
+        count[0] = GameObject.Find("SpacesDisplay");
+        count[1] = GameObject.Find("LandUDisplay");
+        count[2] = GameObject.Find("MercDisplay");
+        count[3] = GameObject.Find("CavDisplay");
+        count[4] = GameObject.Find("LeaderDisplay");
+        count[5] = GameObject.Find("NavalDisplay");
+        count[6] = GameObject.Find("OtherDisplay");
+        for(int i = 0; i < count.Length; i++)
+        {
+            count[i].transform.SetSiblingIndex(l[i]+4);
+        }
         if (l[0] == 0)
         {
             GameObject.Find("SpacesDisplay").GetComponent<CanvasGroup>().alpha = 0;
@@ -79,7 +132,8 @@ public class LayerScript : MonoBehaviour
         }
         else
         {
-            GameObject.Find("SpacesDisplay").GetComponent<CanvasGroup>().alpha = 1;
+            
+           GameObject.Find("SpacesDisplay").GetComponent<CanvasGroup>().alpha = 1;
             GameObject.Find("SpacesDisplay").GetComponent<CanvasGroup>().blocksRaycasts = true;
             GameObject.Find("SpacesDisplay").GetComponent<CanvasGroup>().interactable = true;
         }
@@ -98,18 +152,31 @@ public class LayerScript : MonoBehaviour
         }
         if (l[2] == 0)
         {
-            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().alpha = 0;
-            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().blocksRaycasts = false;
-            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().interactable = false;
+            GameObject.Find("MercDisplay").GetComponent<CanvasGroup>().alpha = 0;
+            GameObject.Find("MercDisplay").GetComponent<CanvasGroup>().blocksRaycasts = false;
+            GameObject.Find("MercDisplay").GetComponent<CanvasGroup>().interactable = false;
             invis++;
         }
         else
         {
-            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().alpha = 1;
-            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().blocksRaycasts = true;
-            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().interactable = true;
+            GameObject.Find("MercDisplay").GetComponent<CanvasGroup>().alpha = 1;
+            GameObject.Find("MercDisplay").GetComponent<CanvasGroup>().blocksRaycasts = true;
+            GameObject.Find("MercDisplay").GetComponent<CanvasGroup>().interactable = true;
         }
         if (l[3] == 0)
+        {
+            GameObject.Find("CavDisplay").GetComponent<CanvasGroup>().alpha = 0;
+            GameObject.Find("CavDisplay").GetComponent<CanvasGroup>().blocksRaycasts = false;
+            GameObject.Find("CavDisplay").GetComponent<CanvasGroup>().interactable = false;
+            invis++;
+        }
+        else
+        {
+            GameObject.Find("CavDisplay").GetComponent<CanvasGroup>().alpha = 1;
+            GameObject.Find("CavDisplay").GetComponent<CanvasGroup>().blocksRaycasts = true;
+            GameObject.Find("CavDisplay").GetComponent<CanvasGroup>().interactable = true;
+        }
+        if (l[4] == 0)
         {
             GameObject.Find("LeaderDisplay").GetComponent<CanvasGroup>().alpha = 0;
             GameObject.Find("LeaderDisplay").GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -122,7 +189,22 @@ public class LayerScript : MonoBehaviour
             GameObject.Find("LeaderDisplay").GetComponent<CanvasGroup>().blocksRaycasts = true;
             GameObject.Find("LeaderDisplay").GetComponent<CanvasGroup>().interactable = true;
         }
-        if (l[4] == 0)
+        if (l[5] == 0)
+        {
+           
+            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().alpha = 0;
+            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().blocksRaycasts = false;
+            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().interactable = false;
+            invis++;
+        }
+        else
+        {
+            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().alpha = 1;
+            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().blocksRaycasts = true;
+            GameObject.Find("NavalDisplay").GetComponent<CanvasGroup>().interactable = true;
+        }
+        
+        if (l[6] == 0)
         {
             GameObject.Find("OtherDisplay").GetComponent<CanvasGroup>().alpha = 0;
             GameObject.Find("OtherDisplay").GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -135,11 +217,52 @@ public class LayerScript : MonoBehaviour
             GameObject.Find("OtherDisplay").GetComponent<CanvasGroup>().blocksRaycasts = true;
             GameObject.Find("OtherDisplay").GetComponent<CanvasGroup>().interactable = true;
         }
-        if (l.Distinct().Count()!=5)
-        {
-            return;
-        }
         
-        
+    }
+
+    public void highlightSpace()
+    {
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
+        GameObject.Find("Darken").transform.SetSiblingIndex(12);
+        GameObject.Find("SpacesDisplay").transform.SetSiblingIndex(13);
+
+    }
+    
+    public void highlightRegular()
+    {
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
+        GameObject.Find("Darken").transform.SetSiblingIndex(12);
+        GameObject.Find("LandUDisplay").transform.SetSiblingIndex(14);
+    }
+
+    public void highlightLeader()
+    {
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
+        GameObject.Find("Darken").transform.SetSiblingIndex(12);
+        GameObject.Find("LeaderDisplay").transform.SetSiblingIndex(17);
+    }
+
+    public void highlightLeaderRegular()
+    {
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
+        GameObject.Find("Darken").transform.SetSiblingIndex(12);
+        GameObject.Find("LandUDisplay").transform.SetSiblingIndex(14);
+        GameObject.Find("LeaderDisplay").transform.SetSiblingIndex(17);
+    }
+
+    public void highlightDark()
+    {
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
+        GameObject.Find("Darken").transform.SetSiblingIndex(12);
     }
 }

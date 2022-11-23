@@ -42,11 +42,19 @@ public class GM2 : MonoBehaviour
     public static SimpleHandler onChosenCard;
     public static SimpleHandler onPlayerChange;
     public static SimpleHandler onMoveHome25;
+    public static SimpleHandler onSpaceLayer;
+    public static SimpleHandler onRegLayer;
+    public static SimpleHandler onLeaderLayer;
+    public static SimpleHandler onNoLayer;
+    public static SimpleHandler onLeaderULayer;
+    public static SimpleHandler onRemoveHighlight;
 
     public delegate void Int2Handler(int index1, int index2);
     
     //(card index = id - 1, power)
     public static Int2Handler onChangeReg;
+    public static Int2Handler onChangeMerc;
+    public static Int2Handler onChangeCav;
     public static Int2Handler onChangeSquadron;
     public static Int2Handler onChangeLeader;
     public static Int2Handler onChangeRuler;
@@ -61,9 +69,11 @@ public class GM2 : MonoBehaviour
     public static Int1Handler onCPChange;
     public static Int1Handler onMandatory;
     public static Int1Handler onChangeCorsair;
+    public static Int1Handler onHighlightRectangles;
     public delegate void List1Handler(List<int> index);
     public static List1Handler onHighlight;
-    public static List1Handler onRemoveHighlight;
+    
+    
 
     public static bool waitCard = false;
     public static int highlightSelected = -1;
@@ -113,9 +123,11 @@ public class GM2 : MonoBehaviour
         {
             discardCard(index);
         }
-        //StartCoroutine(gm3.HIS001B());
         switch (index)
         {
+            case 1:
+                StartCoroutine(gm3.HIS001B());
+                break;
             case 2:
                 StartCoroutine(gm3.HIS002());
                 break;
@@ -705,6 +717,7 @@ public class GM2 : MonoBehaviour
                 highlightSelected = -1;
                 List<int> canConvert = dietSpaces(true);
                 UnityEngine.Debug.Log("can convert" + canConvert.Count().ToString());
+                onSpaceLayer();
                 onHighlight(canConvert);
 
                 onHighlightSelected += changeReligion;
@@ -767,12 +780,12 @@ public class GM2 : MonoBehaviour
             return 10+hit1- hit2;
         }else if (hit1 < hit2)
         {
-            currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + "Catholic hit: " + hit2.ToString() + "\nCatholic victory. Flip "+(hit2-hit1).ToString()+" space(s).");
+            currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + ". Catholic hit: " + hit2.ToString() + "\nCatholic victory. Flip "+(hit2-hit1).ToString()+" space(s).");
             return hit2 - hit1;
         }
         else
         {
-            currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + "Catholic hit: " + hit2.ToString()+"\nThe Diet is inconclusive.");
+            currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + ". Catholic hit: " + hit2.ToString()+"\nThe Diet is inconclusive.");
             return 0;
         }
         
@@ -862,6 +875,9 @@ public class GM2 : MonoBehaviour
             List<int> trace = findTrace(i);
             highlightSelected = -1;
             leaderSelected = -1;
+            onLeaderULayer();
+            
+            
             onHighlight(trace);
             onHighlightSelected += springDeploy;
             while (player != i || highlightSelected == -1)

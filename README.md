@@ -74,3 +74,7 @@ Started theological debate event.
 11/20/2022
 
 Finished theological debate event, counter-reformation, chateaux-building, and HIS065. Improved discarding cards.
+
+11/23/2022
+
+Improved hands display. Finished frontend highlight for CP actions.

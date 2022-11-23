@@ -64,7 +64,7 @@ public class NextButton : MonoBehaviour
             currentTextObject.reset();
             phase++;
             GM2.onChangePhase();
-            //GM2.onPhase6();
+            GM2.onPhase5();
         }
         else if (phase == 5)
         {

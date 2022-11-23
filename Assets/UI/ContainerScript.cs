@@ -12,15 +12,13 @@ public class ContainerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerIndex = GM1.player;
-        UnityEngine.Debug.Log(playerIndex);
-        showHands();
+        
     }
 
     void OnEnable()
     {
 
-        GM2.onPlayerChange += showHands;
+        //GM2.onPlayerChange += showHands;
 
         //chooseCard();
     }
@@ -28,11 +26,11 @@ public class ContainerScript : MonoBehaviour
     void OnDisable()
     {
 
-        GM2.onPlayerChange -= showHands;
+        //GM2.onPlayerChange -= showHands;
 
     }
 
-    void showHands()
+    public void showHands()
     {
         //hands.Clear();
 

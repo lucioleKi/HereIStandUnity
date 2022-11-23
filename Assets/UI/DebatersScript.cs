@@ -14,12 +14,7 @@ public class DebatersScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        index0 = 0;
-        index1 = 0;
-        for(int i = 0; i < debaters.Count(); i++)
-        {
-            initUnits(i);
-        }
+        
     }
 
     // Update is called once per frame
@@ -30,15 +25,16 @@ public class DebatersScript : MonoBehaviour
 
     void OnEnable()
     {
+        GM2.onPhase2 += updateDebater;
 
-        
+
 
     }
 
     void OnDisable()
     {
+        GM2.onPhase2 -= updateDebater;
 
-        
     }
 
     void initUnits(int i)

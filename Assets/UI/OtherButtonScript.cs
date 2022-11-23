@@ -30,6 +30,7 @@ public class OtherButtonScript : MonoBehaviour
     void toCanvasBoard()
     {
         GM2.waitCard = false;
+        discardCards.Add(hand2.ElementAt(int.Parse(cardTag.Substring(1))));
         hand3.RemoveAt(int.Parse(cardTag.Substring(1)));
 
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().alpha = 1;

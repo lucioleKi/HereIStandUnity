@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using static EnumSpaceScript;
 using static DeckScript;
 
 public class EmptyCard : MonoBehaviour, IPointerClickHandler
@@ -17,6 +18,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         UnityEngine.Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
+        int index = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(4)) - 1;
         if (GM1.phase != 1 && GM1.phase != 4 && GM1.phase != 6 && GM1.phase!=2)
         {
             return;
@@ -34,14 +36,14 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler
             ConfirmScript.btn.interactable = false;
 
         }
-        else
+        else if(playAsEvent(index))
         {
             ConfirmScript.cardSelected = eventData.pointerCurrentRaycast.gameObject.name;
             ConfirmScript.btn.interactable = true;
         }
 
         
-        int index = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(4)) - 1;
+        
         UnityEngine.Debug.Log(index);
         UnityEngine.Debug.Log(cardsLib.Count());
         if ((int)cardsLib.ElementAt(index).cardType != 1)
@@ -71,6 +73,24 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler
 
 
     }
+
+    bool playAsEvent(int index)
+    {
+        if (index == 64)
+        {
+            if (GM1.player == 5 && DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1)
+            {
+                
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // Update is called once per frame
     void Update()
     {

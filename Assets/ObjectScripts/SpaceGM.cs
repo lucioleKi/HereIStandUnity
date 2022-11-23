@@ -10,6 +10,7 @@ public class SpaceGM
     public string name;
     public int id;
     public int regular;
+    public int merc;
     public int cavalry;
     public int squadron;
     public int corsair;
@@ -21,6 +22,7 @@ public class SpaceGM
     public SpaceGM()
     {
         this.regular = 0;
+        this.merc = 0;
         this.cavalry = 0;
         this.squadron = 0;
         this.corsair = 0;
@@ -35,6 +37,7 @@ public class SpaceGM
         this.name = city.name;
         this.id = city.id;
         this.regular = city.regular;
+        this.merc = 0;
         this.cavalry = city.cavalry;
         this.squadron = city.squadron;
         this.corsair = 0;

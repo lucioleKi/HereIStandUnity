@@ -55,13 +55,19 @@ public class DeckScript : MonoBehaviour
         importDebaters();
         importLeaders();
         importReformers();
-        addActive(1);
+        
+        
         hand0 = new List<CardObject>();
         hand1 = new List<CardObject>();
         hand2 = new List<CardObject>();
         hand3 = new List<CardObject>();
         hand4 = new List<CardObject>();
         hand5 = new List<CardObject>();
+
+        hand5.Add(cards.ElementAt(7));
+        cards.RemoveAt(7);
+
+        addActive(1);
 
         regulars = new int[134 + 6];
         regularsPower = new int[134];
@@ -98,8 +104,7 @@ public class DeckScript : MonoBehaviour
         regulars[139] = 2;
         
         //luther's 95 theses
-        hand5.Add(cards.ElementAt(7));
-        hand5.Add(cards.ElementAt(64));
+        
     }
 
     // Update is called once per frame

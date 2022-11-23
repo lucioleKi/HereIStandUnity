@@ -37,12 +37,13 @@ public class CPTextScript : MonoBehaviour
 
     void showCP(int value)
     {
-        if (GM1.phase == 6)
+        if (true)//GM1.phase == 6)
         {
-            
+            GM2.onRemoveHighlight();
             string temp = "CP : " + value.ToString();
             TextMeshProUGUI mtext = gameObject.GetComponent<TextMeshProUGUI>();
             mtext.text = temp;
+            GM2.onHighlightRectangles(value);
         }
 
     }

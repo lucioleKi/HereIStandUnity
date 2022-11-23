@@ -42,6 +42,7 @@ public class GM3
             currentTextObject.pauseColor();
             currentTextObject.post("Pick "+(4-i).ToString()+ " highlighted target spaces to add 1 regular.");
             highlightSelected = -1;
+            onRegLayer();
             onHighlight(trace);
             while (player != 0 || highlightSelected == -1)//if player is not 1 this wouldn't work
             {
@@ -52,6 +53,9 @@ public class GM3
             onChangeReg(highlightSelected, 0);
         }
         highlightSelected = -1;
+        yield return new WaitForSeconds(3);
+
+        currentTextObject.reset();
 
     }
 
@@ -81,6 +85,7 @@ public class GM3
                 }
             }
         }
+        onSpaceLayer();
         onHighlight(trace);
         while (player != 1 || highlightSelected == -1)
         {
@@ -111,6 +116,15 @@ public class GM3
 
         inputToggleObject.reset();
         hand1.RemoveAt(0);
+    }
+
+    public IEnumerator HIS003()
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.pauseColor();
+        while (false){
+            yield return null;
+        }
     }
 
     public IEnumerator HIS004()
@@ -263,12 +277,13 @@ public class GM3
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.pauseColor();
         currentTextObject.post("Pick 5 highlighted target spaces");
-        for (int i = 0; i < 5; i++)
-        {
+        for (int i = 0; i < 5; i++) { 
+        
 
 
             List<int> pickSpaces = highlightReformation();
             highlightSelected = -1;
+            onSpaceLayer();
             onHighlight(pickSpaces);
 
             onHighlightSelected += reformAttempt;
@@ -288,7 +303,7 @@ public class GM3
         chosenCard = "";
         onChosenCard();
         //remove Luther's 95 theses from backend decks
-        cards.RemoveAt(7);
+        //cards.RemoveAt(7);
         hand5.RemoveAt(0);
     }
 
@@ -461,6 +476,7 @@ public class GM3
 
                 List<int> pickSpaces = highlightReformation();
                 highlightSelected = -1;
+                onSpaceLayer();
                 onHighlight(pickSpaces);
 
                 onHighlightSelected += reformAttempt;
