@@ -44,7 +44,71 @@ public class LayerScript : MonoBehaviour
         GM2.onLeaderULayer -= highlightLeaderRegular;
     }
 
+    public int getMax()
+    {
+        int max = 0;
+        if (!string.IsNullOrEmpty(gameObject.transform.Find("Layer1").GetComponent<TMP_InputField>().text))
+        {
+            if(max< int.Parse(gameObject.transform.Find("Layer1").GetComponent<TMP_InputField>().text))
+            {
+                max = int.Parse(gameObject.transform.Find("Layer1").GetComponent<TMP_InputField>().text);
+            }
+        }
+        
+        if (!string.IsNullOrEmpty(gameObject.transform.Find("Layer2").GetComponent<TMP_InputField>().text))
+        {
+            if (max < int.Parse(gameObject.transform.Find("Layer2").GetComponent<TMP_InputField>().text))
+            {
+                max = int.Parse(gameObject.transform.Find("Layer2").GetComponent<TMP_InputField>().text);
+            }
+        }
+        
+        if (!string.IsNullOrEmpty(gameObject.transform.Find("Layer3").GetComponent<TMP_InputField>().text))
+        {
+            if (max < int.Parse(gameObject.transform.Find("Layer3").GetComponent<TMP_InputField>().text))
+            {
+                max = int.Parse(gameObject.transform.Find("Layer3").GetComponent<TMP_InputField>().text);
+            }
+        }
+        
+        if (!string.IsNullOrEmpty(gameObject.transform.Find("Layer4").GetComponent<TMP_InputField>().text))
+        {
+            if (max < int.Parse(gameObject.transform.Find("Layer4").GetComponent<TMP_InputField>().text))
+            {
+                max = int.Parse(gameObject.transform.Find("Layer4").GetComponent<TMP_InputField>().text);
+            }
+        }
+        
+        if (!string.IsNullOrEmpty(gameObject.transform.Find("Layer5").GetComponent<TMP_InputField>().text))
+        {
+            if (max < int.Parse(gameObject.transform.Find("Layer5").GetComponent<TMP_InputField>().text))
+            {
+                max = int.Parse(gameObject.transform.Find("Layer5").GetComponent<TMP_InputField>().text);
+            }
+        }
+        
+        if (!string.IsNullOrEmpty(gameObject.transform.Find("Layer6").GetComponent<TMP_InputField>().text))
+        {
+            if (max < int.Parse(gameObject.transform.Find("Layer6").GetComponent<TMP_InputField>().text))
+            {
+                max = int.Parse(gameObject.transform.Find("Layer6").GetComponent<TMP_InputField>().text);
+            }
 
+        }
+        
+        if (!string.IsNullOrEmpty(gameObject.transform.Find("Layer7").GetComponent<TMP_InputField>().text))
+        {
+            if (max < int.Parse(gameObject.transform.Find("Layer7").GetComponent<TMP_InputField>().text))
+            {
+                max = int.Parse(gameObject.transform.Find("Layer7").GetComponent<TMP_InputField>().text);
+            }
+        }
+        if (max == 0)
+        {
+            return 7;
+        }
+        return max;
+    }
 
     public void changeLayer()
     {
@@ -226,7 +290,7 @@ public class LayerScript : MonoBehaviour
         GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
-        GameObject.Find("SpacesDisplay").transform.SetSiblingIndex(13);
+        //GameObject.Find("SpacesDisplay").transform.SetSiblingIndex(13);
 
     }
     
@@ -236,7 +300,7 @@ public class LayerScript : MonoBehaviour
         GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
-        GameObject.Find("LandUDisplay").transform.SetSiblingIndex(14);
+        //GameObject.Find("LandUDisplay").transform.SetSiblingIndex(14);
     }
 
     public void highlightLeader()
@@ -245,7 +309,7 @@ public class LayerScript : MonoBehaviour
         GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
-        GameObject.Find("LeaderDisplay").transform.SetSiblingIndex(17);
+        //GameObject.Find("LeaderDisplay").transform.SetSiblingIndex(17);
     }
 
     public void highlightLeaderRegular()
@@ -254,15 +318,15 @@ public class LayerScript : MonoBehaviour
         GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
-        GameObject.Find("LandUDisplay").transform.SetSiblingIndex(14);
-        GameObject.Find("LeaderDisplay").transform.SetSiblingIndex(17);
+        //GameObject.Find("LandUDisplay").transform.SetSiblingIndex(14);
+        //GameObject.Find("LeaderDisplay").transform.SetSiblingIndex(17);
     }
 
     public void highlightDark()
     {
         GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
-        GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
-        GameObject.Find("Darken").transform.SetSiblingIndex(12);
+        //GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
+        //GameObject.Find("Darken").transform.SetSiblingIndex(12);
     }
 }
