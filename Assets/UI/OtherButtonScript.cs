@@ -29,7 +29,7 @@ public class OtherButtonScript : MonoBehaviour
 
     void toCanvasBoard()
     {
-        GM2.waitCard = false;
+        GM2.boolStates[0] = false;
         discardCards.Add(hand2.ElementAt(int.Parse(cardTag.Substring(1))));
         hand3.RemoveAt(int.Parse(cardTag.Substring(1)));
 

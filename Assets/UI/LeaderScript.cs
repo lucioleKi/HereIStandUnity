@@ -12,11 +12,7 @@ public class LeaderScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < spaces.Count(); i++)
-        {
-
-            initUnits(i);
-        }
+        
     }
 
     // Update is called once per frame
@@ -27,16 +23,25 @@ public class LeaderScript : MonoBehaviour
 
     void OnEnable()
     {
-
+        GM2.onPhase2 += initLeaders;
         GM2.onChangeLeader += changeLeader;
 
     }
 
     void OnDisable()
     {
-
+        GM2.onPhase2 -= initLeaders;
         GM2.onChangeLeader -= changeLeader;
 
+    }
+
+    void initLeaders()
+    {
+        for (int i = 0; i < spaces.Count(); i++)
+        {
+
+            initUnits(i);
+        }
     }
 
     void initUnits(int i)
@@ -68,7 +73,16 @@ public class LeaderScript : MonoBehaviour
 
                 newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + temp.leader1.ToString());
                 newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
-                newObject.transform.SetParent(gameObject.transform);
+            
+            if(temp.controlPower > 5)
+            {
+                newObject.transform.SetParent(GameObject.Find("Leaders6").transform);
+            }
+            else
+            {
+                newObject.transform.SetParent(GameObject.Find("Leaders" + temp.controlPower.ToString()).transform);
+            }
+                
                 newObject.AddComponent<LeaderClick>();
             }
             if (temp.leader2 != 0)
@@ -89,7 +103,7 @@ public class LeaderScript : MonoBehaviour
 
                 newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + temp.leader2.ToString());
                 newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
-                newObject.transform.SetParent(gameObject.transform);
+                newObject.transform.SetParent(GameObject.Find("Leaders" + temp.controlPower.ToString()).transform);
                 newObject.AddComponent<LeaderClick>();
             }
 
@@ -111,7 +125,7 @@ public class LeaderScript : MonoBehaviour
         SpaceGM temp = spacesGM.ElementAt(to);
         if (temp.leader1 == index)//leader at pos 1
         {
-            if (gameObject.transform.Find("leader_" + (index).ToString()) == null && to != -1)
+            if (GameObject.Find("leader_" + (index).ToString()) == null && to != -1|| GameObject.Find("leader_" + (index).ToString()).transform.parent.gameObject.name=="LeaderDisplay")
             {
                 //UnityEngine.Debug.Log("cannot find leader_" + (index).ToString());
                 //create leader
@@ -135,13 +149,12 @@ public class LeaderScript : MonoBehaviour
 
                 newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + index.ToString());
                 newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
-                newObject.transform.SetParent(gameObject.transform);
+                newObject.transform.SetParent(GameObject.Find("Leaders" + temp.controlPower.ToString()).transform);
                 newObject.AddComponent<LeaderClick>();
             }
             else if (to != -1)
             {
                 GameObject tempObject = GameObject.Find("leader_" + (index).ToString());
-                UnityEngine.Debug.Log("leader_" + (index).ToString());
                 if (to == 21)//vienna
                 {
                     tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 103, spaces.ElementAt(to).posY + 543 + 63);
@@ -163,7 +176,7 @@ public class LeaderScript : MonoBehaviour
         }
         else//leader at pos 2
         {
-            if (gameObject.transform.Find("leader_" + (index).ToString()) == null && to != -1)
+            if (GameObject.Find("leader_" + (index).ToString()) == null && to != -1||GameObject.Find("leader_" + (index).ToString()).transform.parent.gameObject.name == "LeaderDisplay")
             {
                 //UnityEngine.Debug.Log("cannot find leader_" + (index).ToString());
                 //create leader
@@ -187,7 +200,7 @@ public class LeaderScript : MonoBehaviour
 
                 newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + index.ToString());
                 newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
-                newObject.transform.SetParent(gameObject.transform);
+                newObject.transform.SetParent(GameObject.Find("Leaders" + temp.controlPower.ToString()).transform);
                 newObject.AddComponent<LeaderClick>();
             }
             else if (to != -1)
@@ -208,7 +221,7 @@ public class LeaderScript : MonoBehaviour
                 }
                 else
                 {
-                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX - 15, spaces.ElementAt(to).posY);
+                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX +945- 15, spaces.ElementAt(to).posY+510);
                 }
                 return;
             }

@@ -145,7 +145,7 @@ public class DebateNScript : MonoBehaviour
                     {
                         int randomIndex = UnityEngine.Random.Range(0, count41.Count());
                         defenderIndex = count41.ElementAt(randomIndex) - 1;
-                        debatersScript.putProtestant(defenderIndex);
+                        
                         debaters.ElementAt(defenderIndex).status = (DebaterStatus)7;
                         debatersScript.putPapal(defenderIndex);
                         debatersScript.updateDebater();
@@ -154,7 +154,7 @@ public class DebateNScript : MonoBehaviour
                     {
                         int randomIndex = UnityEngine.Random.Range(0, count42.Count());
                         defenderIndex = count42.ElementAt(randomIndex) - 1;
-                        debatersScript.putProtestant(defenderIndex);
+                        
                         debaters.ElementAt(defenderIndex).status = (DebaterStatus)7;
                         debatersScript.putPapal(defenderIndex);
                         debatersScript.updateDebater();
@@ -168,13 +168,13 @@ public class DebateNScript : MonoBehaviour
                 switch (result)
                 {
                     case 1:
-                        step = step + 2;
+                        step = step + 3;
                         break;
                     case 0:
                         step++;
                         break;
                     case -1:
-                        step = step + 3;
+                        step = step + 4;
                         break;
                 }
                 debaters.ElementAt(defenderIndex).status = (DebaterStatus)2;
@@ -201,12 +201,14 @@ public class DebateNScript : MonoBehaviour
                 {
                     int randomIndex = UnityEngine.Random.Range(0, count41.Count());
                     attackerIndex = count41.ElementAt(randomIndex) - 1;
-                    debaters.ElementAt(attackerIndex).status = (DebaterStatus)7;
                     debatersScript.putPapal(attackerIndex);
+                    UnityEngine.Debug.Log(attackerIndex);
+                    debaters.ElementAt(attackerIndex).status = (DebaterStatus)7;
                     randomIndex = UnityEngine.Random.Range(0, count51.Count());
                     defenderIndex = count51.ElementAt(randomIndex) - 1;
-                    debaters.ElementAt(defenderIndex).status = (DebaterStatus)7;
                     debatersScript.putProtestant(defenderIndex);
+                    UnityEngine.Debug.Log(defenderIndex);
+                    debaters.ElementAt(defenderIndex).status = (DebaterStatus)7;
                     debatersScript.updateDebater();
 
                 }
@@ -214,14 +216,18 @@ public class DebateNScript : MonoBehaviour
                 {
                     int randomIndex = UnityEngine.Random.Range(0, count41.Count());
                     defenderIndex = count41.ElementAt(randomIndex) - 1;
-                    debaters.ElementAt(defenderIndex).status = (DebaterStatus)7;
                     debatersScript.putPapal(defenderIndex);
+                    debaters.ElementAt(defenderIndex).status = (DebaterStatus)7;
+                    debatersScript.updateDebater();
                     randomIndex = UnityEngine.Random.Range(0, count51.Count());
                     attackerIndex = count51.ElementAt(randomIndex) - 1;
-                    debaters.ElementAt(attackerIndex).status = (DebaterStatus)7;
                     debatersScript.putProtestant(attackerIndex);
+                    debaters.ElementAt(attackerIndex).status = (DebaterStatus)7;
                     debatersScript.updateDebater();
                 }
+                step++;
+                break;
+            case 4:
                 result = step46();
                 switch (result)
                 {
@@ -229,7 +235,7 @@ public class DebateNScript : MonoBehaviour
                         step++;
                         break;
                     default:
-                        step = 5;
+                        step = 6;
                         break;
                 }
                 debaters.ElementAt(defenderIndex).status = (DebaterStatus)2;
@@ -247,13 +253,13 @@ public class DebateNScript : MonoBehaviour
                 }
                 debatersScript.updateDebater();
                 break;
-            case 4:
+            case 5:
 
                 StartCoroutine(step79());
                 debatersScript.updateDebater();
                 step++;
                 break;
-            case 5:
+            case 6:
 
                 step=5;
                 inputNumberObject.reset();
@@ -269,6 +275,7 @@ public class DebateNScript : MonoBehaviour
 
     public void post()
     {
+        GM2.boolStates[2] = true;
         btn.interactable = true;
         gameObject.GetComponent<CanvasGroup>().alpha = 1;
         gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -278,6 +285,7 @@ public class DebateNScript : MonoBehaviour
 
     void reset()
     {
+        GM2.boolStates[2] = false;
         btn.interactable = false;
         gameObject.GetComponent<CanvasGroup>().alpha = 0;
         gameObject.GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -405,18 +413,24 @@ public class DebateNScript : MonoBehaviour
 
     public IEnumerator step79()
     {
+        DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
         //resolve
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         HandMarkerScript handMarkerObject = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
         UnityEngine.Debug.Log(hit4.ToString()+", "+hit5.ToString());
         if (hit4 > hit5)
         {
+            if(hit4-hit5>= GM1.protestantSpaces)
+            {
+                hit4 = GM1.protestantSpaces;
+            }
             for (int i = 0; i < hit4 - hit5; i++)
             {
 
                 List<int> pickSpaces = GM2.highlightCReformation();
                 GM2.highlightSelected = -1;
                 currentTextObject.post("Flip a space to Catholic influence.");
+                onNoLayer();
                 onHighlight(pickSpaces);
 
                 onHighlightSelected += changeReligion;
@@ -427,34 +441,37 @@ public class DebateNScript : MonoBehaviour
                 }
 
                 UnityEngine.Debug.Log("end");
-                if (attacker == 4)
-                {
-                    if (hit4 - hit5 > debaters.ElementAt(attackerIndex).value- debaters.ElementAt(defenderIndex).value)
-                    {
-                        currentTextObject.post("The protestant debater is burnt.");
-                        debaters.ElementAt(defenderIndex).status = (DebaterStatus)5;
-                        GM1.bonusVPs[4] = GM1.bonusVPs[4] + debaters.ElementAt(defenderIndex).value;
-                        handMarkerObject.bonus4.Add("Sprites/jpg/Debaters/" + debaters.ElementAt(defenderIndex).name + "Debater");
-                        GM1.updateVP();
-                        GM2.onVP();
-                        
-                    }
-                }
-                else
-                {
-                    if (hit4 - hit5 > debaters.ElementAt(defenderIndex).value - debaters.ElementAt(attackerIndex).value)
-                    {
-                        currentTextObject.post("The protestant debater is burnt.");
-                        debaters.ElementAt(attackerIndex).status = (DebaterStatus)5;
-                        GM1.bonusVPs[4] = GM1.bonusVPs[4] + debaters.ElementAt(attackerIndex).value;
-                        handMarkerObject.bonus4.Add("Sprites/jpg/Debaters/" + debaters.ElementAt(attackerIndex).name + "Debater");
-                        GM1.updateVP();
-                        GM2.onVP();
-                        
-                    }
-                }
+                
                 
                 //onRemoveHighlight(converted);
+            }
+            if (attacker == 4)
+            {
+                if (hit4 - hit5 > debaters.ElementAt(attackerIndex).value - debaters.ElementAt(defenderIndex).value)
+                {
+                    currentTextObject.post("The protestant debater is burnt.");
+                    debaters.ElementAt(defenderIndex).status = (DebaterStatus)5;
+                    GM1.bonusVPs[4] = GM1.bonusVPs[4] + debaters.ElementAt(defenderIndex).value;
+                    handMarkerObject.bonus4.Add("Sprites/jpg/Debaters/" + debaters.ElementAt(defenderIndex).name + "Debater");
+                    debatersScript.updateDebater();
+                    GM1.updateVP();
+                    GM2.onVP();
+
+                }
+            }
+            else
+            {
+                if (hit4 - hit5 > debaters.ElementAt(defenderIndex).value - debaters.ElementAt(attackerIndex).value)
+                {
+                    currentTextObject.post("The protestant debater is burnt.");
+                    debaters.ElementAt(attackerIndex).status = (DebaterStatus)5;
+                    GM1.bonusVPs[4] = GM1.bonusVPs[4] + debaters.ElementAt(attackerIndex).value;
+                    handMarkerObject.bonus4.Add("Sprites/jpg/Debaters/" + debaters.ElementAt(attackerIndex).name + "Debater");
+                    debatersScript.updateDebater();
+                    GM1.updateVP();
+                    GM2.onVP();
+
+                }
             }
         }
         else if (hit4 < hit5)
@@ -467,6 +484,7 @@ public class DebateNScript : MonoBehaviour
                 List<int> pickSpaces = highlightReformation();
                 highlightSelected = -1;
                 currentTextObject.post("Flip a space to Protestant influence.");
+                onNoLayer();
                 onHighlight(pickSpaces);
 
                 onHighlightSelected += changeReligion;
@@ -475,34 +493,38 @@ public class DebateNScript : MonoBehaviour
                     //UnityEngine.Debug.Log("here");
                     yield return null;
                 }
-                if (attacker == 5)
-                {
-                    if (hit5 - hit4 > debaters.ElementAt(attackerIndex).value - debaters.ElementAt(defenderIndex).value)
-                    {
-                        currentTextObject.post("The papal debater is disgraced.");
-                        debaters.ElementAt(defenderIndex).status = (DebaterStatus)3;
-                        GM1.bonusVPs[5] = GM1.bonusVPs[5] + debaters.ElementAt(defenderIndex).value;
-                        handMarkerObject.bonus5.Add("Sprites/jpg/Debaters/" + debaters.ElementAt(defenderIndex).name + "Debater");
-                        GM1.updateVP();
-                        GM2.onVP();
-                        
-                    }
-                }
-                else
-                {
-                    if (hit5 - hit4> debaters.ElementAt(defenderIndex).value - debaters.ElementAt(attackerIndex).value)
-                    {
-                        currentTextObject.post("The papal debater is disgraced.");
-                        debaters.ElementAt(attackerIndex).status = (DebaterStatus)3;
-                        GM1.bonusVPs[5] = GM1.bonusVPs[5] + debaters.ElementAt(attackerIndex).value;
-                        handMarkerObject.bonus5.Add("Sprites/jpg/Debaters/" + debaters.ElementAt(attackerIndex).name + "Debater");
-                        GM1.updateVP();
-                        GM2.onVP();
-                        
-                    }
-                }
+                
                 UnityEngine.Debug.Log("end");
                 //onRemoveHighlight(converted);
+            }
+            if (attacker == 5)
+            {
+                if (hit5 - hit4 > debaters.ElementAt(attackerIndex).value - debaters.ElementAt(defenderIndex).value)
+                {
+                    currentTextObject.post("The papal debater is disgraced.");
+                    debaters.ElementAt(defenderIndex).status = (DebaterStatus)3;
+                    GM1.bonusVPs[5] = GM1.bonusVPs[5] + debaters.ElementAt(defenderIndex).value;
+                    handMarkerObject.bonus5.Add("Sprites/jpg/Debaters/" + debaters.ElementAt(defenderIndex).name + "Debater");
+                    debatersScript.updateDebater();
+                    GM1.updateVP();
+                    GM2.onVP();
+
+                }
+            }
+            else
+            {
+                if (hit5 - hit4 > debaters.ElementAt(defenderIndex).value - debaters.ElementAt(attackerIndex).value)
+                {
+                    currentTextObject.post("The papal debater is disgraced.");
+                    debaters.ElementAt(attackerIndex).status = (DebaterStatus)3;
+
+                    GM1.bonusVPs[5] = GM1.bonusVPs[5] + debaters.ElementAt(attackerIndex).value;
+                    handMarkerObject.bonus5.Add("Sprites/jpg/Debaters/" + debaters.ElementAt(attackerIndex).name + "Debater");
+                    debatersScript.updateDebater();
+                    GM1.updateVP();
+                    GM2.onVP();
+
+                }
             }
         }
         

@@ -48,6 +48,9 @@ public class CPButtonScript : MonoBehaviour
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().blocksRaycasts = true;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().interactable = true;
 
+        GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+        GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+
         GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().alpha = 0;
         GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().blocksRaycasts = false;
         GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().interactable = false;

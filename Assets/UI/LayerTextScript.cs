@@ -30,21 +30,25 @@ public class LayerTextScript : MonoBehaviour, IPointerClickHandler
             switch (int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(12, 1)))
             {
                 case 0:
-                    GM2.onSpaceLayer();
+                    layerScript.highlightSpace();
                     break;
                 case 1:
-                    GM2.onRegLayer();
+                    layerScript.highlightRegular();
                     break;
                 case 2:
+                    layerScript.highlightMerc();
                     break;
                 case 3:
+                    layerScript.highlightCav();
                     break;
                 case 4:
-                    GM2.onLeaderLayer();
+                    layerScript.highlightLeader();
                     break;
                 case 5:
+                    layerScript.highlightNaval();
                     break;
                 case 6:
+                    layerScript.highlightOther();
                     break;
             }
         }
@@ -54,32 +58,32 @@ public class LayerTextScript : MonoBehaviour, IPointerClickHandler
             switch (int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(12, 1)))
             {
                 case 0:
-                    GameObject.Find("Layer1").GetComponent<TMP_InputField>().text = (max + 5).ToString();
-                    GameObject.Find("SpacesDisplay").transform.SetSiblingIndex(max + 5);
+                    GameObject.Find("Layer1").GetComponent<TMP_InputField>().text = (max + 1).ToString();
+                    GameObject.Find("SpacesDisplay").transform.SetSiblingIndex(max + 1);
                     break;
                 case 1:
-                    GameObject.Find("Layer2").GetComponent<TMP_InputField>().text = (max + 5).ToString();
-                    GameObject.Find("LandUDisplay").transform.SetSiblingIndex(max + 5);
+                    GameObject.Find("Layer2").GetComponent<TMP_InputField>().text = (max + 1).ToString();
+                    GameObject.Find("LandUDisplay").transform.SetSiblingIndex(max + 1);
                     break;
                 case 2:
-                    GameObject.Find("Layer3").GetComponent<TMP_InputField>().text = (max + 5).ToString();
-                    GameObject.Find("MercDisplay").transform.SetSiblingIndex(max + 5);
+                    GameObject.Find("Layer3").GetComponent<TMP_InputField>().text = (max + 1).ToString();
+                    GameObject.Find("MercDisplay").transform.SetSiblingIndex(max + 1);
                     break;
                 case 3:
-                    GameObject.Find("Layer4").GetComponent<TMP_InputField>().text = (max + 5).ToString();
-                    GameObject.Find("CavDisplay").transform.SetSiblingIndex(max + 5);
+                    GameObject.Find("Layer4").GetComponent<TMP_InputField>().text = (max + 1).ToString();
+                    GameObject.Find("CavDisplay").transform.SetSiblingIndex(max + 1);
                     break;
                 case 4:
-                    GameObject.Find("Layer5").GetComponent<TMP_InputField>().text = (max + 5).ToString();
-                    GameObject.Find("LeaderDisplay").transform.SetSiblingIndex(max + 5);
+                    GameObject.Find("Layer5").GetComponent<TMP_InputField>().text = (max + 1).ToString();
+                    GameObject.Find("LeaderDisplay").transform.SetSiblingIndex(max + 1);
                     break;
                 case 5:
-                    GameObject.Find("Layer6").GetComponent<TMP_InputField>().text = (max + 5).ToString();
-                    GameObject.Find("NavalDisplay").transform.SetSiblingIndex(max + 5);
+                    GameObject.Find("Layer6").GetComponent<TMP_InputField>().text = (max + 1).ToString();
+                    GameObject.Find("NavalDisplay").transform.SetSiblingIndex(max + 1);
                     break;
                 case 6:
-                    GameObject.Find("Layer7").GetComponent<TMP_InputField>().text = (max + 5).ToString();
-                    GameObject.Find("OtherDisplay").transform.SetSiblingIndex(max + 5);
+                    GameObject.Find("Layer7").GetComponent<TMP_InputField>().text = (max + 1).ToString();
+                    GameObject.Find("OtherDisplay").transform.SetSiblingIndex(max + 1);
                     break;
             }
             //clicked = false;

@@ -57,7 +57,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler
             CPButtonScript.btn.interactable = false;
         }
 
-        if (GM2.chosenCard == "HIS-004" && GM1.player == 3&&GM2.waitCard)
+        if (GM2.chosenCard == "HIS-004" && GM1.player == 3 && GM2.boolStates[0])
         {
             CPButtonScript.btn.interactable = false;
             ConfirmScript.btn.interactable = false;

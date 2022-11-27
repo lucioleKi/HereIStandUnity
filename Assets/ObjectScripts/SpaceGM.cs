@@ -89,6 +89,10 @@ public class SpaceGM
         {
             leader1 = leaderIndex;
         }
+        else
+        {
+            leader1 = leaderIndex;
+        }
     }
 
     public void flipControl()

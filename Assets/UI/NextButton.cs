@@ -70,7 +70,7 @@ public class NextButton : MonoBehaviour
         {
             phase++;
             GM2.onChangePhase();
-            //GM2.onPhase6();
+            GM2.onPhase6();
         }
         /*else if (phase == 6)
         {

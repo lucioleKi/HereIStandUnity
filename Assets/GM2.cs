@@ -72,13 +72,14 @@ public class GM2 : MonoBehaviour
     public static Int1Handler onHighlightRectangles;
     public delegate void List1Handler(List<int> index);
     public static List1Handler onHighlight;
-    
-    
 
-    public static bool waitCard = false;
+
+    public static bool[] boolStates;
+    //0: waitCard for HIS003. 1: phaseEnd. 2: theological debate (CP action)
+    //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
-    public static bool phaseEnd = false;
+    //public static bool phaseEnd = false;
     public static int currentCP = 0;
     public static int[] secretCP = new int[6];
 
@@ -87,6 +88,7 @@ public class GM2 : MonoBehaviour
     //
     void OnEnable()
     {
+        boolStates = new bool[10];
         onMandatory += mandatory;
         onPhase2 += phase2;
         onPhase3 += phase3;
@@ -135,7 +137,7 @@ public class GM2 : MonoBehaviour
                 StartCoroutine(gm3.HIS004());
                 break;
             case 6:
-                StartCoroutine(gm3.HIS006());
+                gm3.HIS006();
                 break;
             case 8:
                 StartCoroutine(gm3.HIS008());
@@ -174,6 +176,21 @@ public class GM2 : MonoBehaviour
                 break;
         }
         //player gets 2 CP after the event
+    }
+
+    public static void theologicalDebate()
+    {
+        InputToggleObject inputToggleObject = GameObject.Find("InputToggle").GetComponent("InputToggleObject") as InputToggleObject;
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        InputNumberObject inputNumberObject = GameObject.Find("InputNumber").GetComponent("InputNumberObject") as InputNumberObject;
+        currentTextObject.pauseColor();
+        currentTextObject.post("Specify your own debater?\nSpecify language zone.");
+        inputToggleObject.post();
+        inputNumberObject.post();
+        DebateNScript debateNScript = GameObject.Find("DebateNext").GetComponent("DebateNScript") as DebateNScript;
+        debateNScript.post();
+        
+        
     }
 
     public static void reformAttempt()
@@ -717,7 +734,7 @@ public class GM2 : MonoBehaviour
                 highlightSelected = -1;
                 List<int> canConvert = dietSpaces(true);
                 UnityEngine.Debug.Log("can convert" + canConvert.Count().ToString());
-                onSpaceLayer();
+                onNoLayer();
                 onHighlight(canConvert);
 
                 onHighlightSelected += changeReligion;
@@ -736,6 +753,7 @@ public class GM2 : MonoBehaviour
             {
                 highlightSelected = -1;
                 List<int> canConvert = dietSpaces(false);
+                onNoLayer();
                 onHighlight(canConvert);
 
                 onHighlightSelected += changeReligion;
@@ -818,7 +836,7 @@ public class GM2 : MonoBehaviour
     public static void changeReligion()
     {
         onHighlightSelected -= changeReligion;
-        if ((int)DeckScript.spaces.ElementAt(highlightSelected).spaceType == 4)
+        if ((int)DeckScript.spaces.ElementAt(highlightSelected).spaceType == 4 && regulars[134+highlightSelected]!=0)
         {
             regulars[134 + highlightSelected] = 0;
             onChangeReg(134 + highlightSelected, 5);
@@ -863,8 +881,9 @@ public class GM2 : MonoBehaviour
         player = 0;
         onPlayerChange();
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        currentTextObject.post("Click a commander.\nEnter number of units:");
+        currentTextObject.post("Click a leader.\nEnter number of units:");
         InputNumberObject inputNumberObject = GameObject.Find("InputNumber").GetComponent("InputNumberObject") as InputNumberObject;
+        LayerScript layerObject = GameObject.Find("Layers").GetComponent("LayerScript") as LayerScript;
         for (int i = 0; i < 5; i++)
         {
             UnityEngine.Debug.Log("spring deployment: " + i.ToString());
@@ -875,9 +894,10 @@ public class GM2 : MonoBehaviour
             List<int> trace = findTrace(i);
             highlightSelected = -1;
             leaderSelected = -1;
-            onLeaderULayer();
-            
-            
+            layerObject.highlightLeaderPower();
+
+
+
             onHighlight(trace);
             onHighlightSelected += springDeploy;
             while (player != i || highlightSelected == -1)
@@ -888,6 +908,7 @@ public class GM2 : MonoBehaviour
             player = i + 1;
             onPlayerChange();
         }
+        layerObject.resetLeaderPower();
         currentTextObject.reset();
 
 
@@ -900,7 +921,7 @@ public class GM2 : MonoBehaviour
 
     }
 
-    List<int> findTrace(int playerIndex)
+    public static List<int> findTrace(int playerIndex)
     {
         bool[] traceable = new bool[134];
         Array.Clear(traceable, 0, 134);
@@ -945,6 +966,7 @@ public class GM2 : MonoBehaviour
             searchIndex.RemoveAt(0);
 
         }
+        
         traceable[97] = false;
         traceable[83] = false;
         traceable[21] = false;
@@ -959,6 +981,51 @@ public class GM2 : MonoBehaviour
             }
         }
         return trace;
+    }
+
+    public static List<int> findUnfortified(int playerIndex)
+    {
+        UnityEngine.Debug.Log("size1");
+        List<int> searchIndex = new List<int>();
+        UnityEngine.Debug.Log("size2");
+        List<int> trace = findTrace(playerIndex);
+        UnityEngine.Debug.Log("size3");
+        for (int i=0; i<134; i++)
+        {
+            //the space is unfortified
+            if(spaces.ElementAt(i).spaceType != (SpaceType)0)
+            {
+                continue;
+            }
+            //the space is independent or controlled by an enemy power
+            if(spacesGM.ElementAt(i).controlPower!=10&& diplomacyState[spacesGM.ElementAt(i).controlPower, playerIndex] != 1)
+            {
+                continue;
+            }
+            //the power has an LOC to the space, and regular troops
+            bool LOC = false;
+            for (int j = 0; j < spaces.ElementAt(i).adjacent.Count(); j++)
+            {
+
+                if (trace.Contains(spaces.ElementAt(i).adjacent[j]) && spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).regular>0)
+                {
+                    LOC = true;
+                    break;
+                }
+            }
+            if (!LOC&& spacesGM.ElementAt(i).regular==0)
+            {
+                continue;
+            }
+            //not occupied by land units from another power, unless allies
+            if (spacesGM.ElementAt(i).controlPower!=playerIndex&& spacesGM.ElementAt(i).regular>0&& diplomacyState[spacesGM.ElementAt(i).controlPower, playerIndex]!=2)
+            {
+                continue;
+            }
+            searchIndex.Add(i);
+        }
+        
+        return searchIndex;
     }
 
     void springDeploy()

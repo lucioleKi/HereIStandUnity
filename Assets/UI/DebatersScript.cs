@@ -113,6 +113,7 @@ public class DebatersScript : MonoBehaviour
     public void putPapal(int i)
     {
         DebaterObject temp = debaters.ElementAt(i);
+        UnityEngine.Debug.Log(temp.id);
         GameObject newObject = new GameObject("papal_" + temp.id.ToString(), typeof(RectTransform), typeof(Image));
         newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Debaters/" + temp.name + "Debater");
         newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
@@ -125,6 +126,7 @@ public class DebatersScript : MonoBehaviour
     public void putProtestant(int i)
     {
         DebaterObject temp = debaters.ElementAt(i);
+        UnityEngine.Debug.Log(temp.id);
         GameObject newObject = new GameObject("protestant_" + (i + 1).ToString(), typeof(RectTransform), typeof(Image));
         newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Debaters/" + temp.name + "Debater");
         newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);

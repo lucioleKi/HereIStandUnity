@@ -85,12 +85,14 @@ public class GM3
                 }
             }
         }
-        onSpaceLayer();
+        LayerScript layerObject = GameObject.Find("Layers").GetComponent("LayerScript") as LayerScript;
+        layerObject.highlight1Leader("leader_2");
         onHighlight(trace);
         while (player != 1 || highlightSelected == -1)
         {
             yield return null;
         }
+        layerObject.reset1Leader();
         if (CharlesPos != -1)
         {
             spacesGM.ElementAt(CharlesPos).removeLeader(2);
@@ -100,8 +102,9 @@ public class GM3
                 currentTextObject.restartColor();
                 spacesGM.ElementAt(CharlesPos).removeLeader(4);
             }
-
+            
             spacesGM.ElementAt(highlightSelected).addLeader(2);
+            UnityEngine.Debug.Log(highlightSelected.ToString());
             onChangeLeader(highlightSelected, 2);
             if (inputToggleObject.GetComponent<Toggle>().isOn)
             {
@@ -189,12 +192,12 @@ public class GM3
                 
                 hand3.AddRange(activeCards.GetRange(0, 2));
                 activeCards.RemoveRange(0, 2);
-                GM2.waitCard = true;
+                GM2.boolStates[0] = true;
             }
             else if (total == 3 || total == 4)
             {
                 currentTextObject.post("Modified roll: " + randomIndex.ToString() + bonus.ToString() + "=" + total.ToString() + "\nDraw 1 card, then discard 1.");
-                GM2.waitCard = true;
+                GM2.boolStates[0] = true;
                 hand3.AddRange(activeCards.GetRange(0, 1));
                 activeCards.RemoveRange(0, 1);
             }
@@ -213,14 +216,14 @@ public class GM3
                 currentTextObject.post("Modified roll: " + randomIndex.ToString() +"+"+ bonus.ToString() + "=" + total.ToString() + "\nDraw 2 cards, then discard 1.");
                 hand3.AddRange(activeCards.GetRange(0, 2));
                 activeCards.RemoveRange(0, 2);
-                GM2.waitCard = true;
+                GM2.boolStates[0] = true;
             }
             else if (total == 3 || total == 4)
             {
                 currentTextObject.post("Modified roll: " + randomIndex.ToString() + "+" + bonus.ToString() + "=" + total.ToString() + "\nDraw 1 card, then discard 1.");
                 hand3.AddRange(activeCards.GetRange(0, 1));
                 activeCards.RemoveRange(0, 1);
-                GM2.waitCard = true;
+                GM2.boolStates[0] = true;
             }
             else if (total > 5)
             {
@@ -229,7 +232,7 @@ public class GM3
                 activeCards.RemoveRange(0, 1);
             }
         }
-        while (GM2.waitCard)
+        while (GM2.boolStates[0])
         {
             yield return null;
         }
@@ -283,7 +286,7 @@ public class GM3
 
             List<int> pickSpaces = highlightReformation();
             highlightSelected = -1;
-            onSpaceLayer();
+            onNoLayer();
             onHighlight(pickSpaces);
 
             onHighlightSelected += reformAttempt;

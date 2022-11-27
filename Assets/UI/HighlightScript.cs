@@ -68,6 +68,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
 
                         }
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlight_" + i.ToString();
                     }
                 }
@@ -87,6 +88,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
 
                         }
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlight_" + i.ToString();
                     }
                 }
@@ -106,6 +108,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
 
                         }
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlight_" + i.ToString();
                     }
                 }
@@ -119,6 +122,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(628 + 960, -334 - 9.4f * i + 540, 0), Quaternion.identity);
                         tempObject.GetComponent<RectTransform>().sizeDelta = new Vector2(95, 9);
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlight_" + i.ToString();
                     }
                 }
@@ -138,6 +142,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
 
                         }
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlight_" + i.ToString();
                     }
                 }
@@ -157,6 +162,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
 
                         }
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlight_" + i.ToString();
                     }
                 }
