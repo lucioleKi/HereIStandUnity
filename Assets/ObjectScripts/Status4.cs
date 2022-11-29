@@ -39,13 +39,13 @@ public class Status4 : StatusObject
         if (true)
         {
             GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_15"), new Vector3(0, 0, 0), Quaternion.identity);
-            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[1] + CPIndex * offsetX[1] + 960, posY[1] + 540);
+            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[1] + GM1.StPeters[0] * offsetX[1] + 960, posY[1] + 540);
             newObject.transform.SetParent(GameObject.Find("HandMarkerDisplay").transform);
         }
         if (true)
         {
             GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_16"), new Vector3(0, 0, 0), Quaternion.identity);
-            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[2] + VPIndex * offsetX[2] + 960, posY[2] + 540);
+            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[2] + GM1.StPeters[1] * offsetX[2] + 960, posY[2] + 540);
             newObject.transform.SetParent(GameObject.Find("HandMarkerDisplay").transform);
         }
         for (int i = 0; i < 7; i++)

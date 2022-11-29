@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using static GM2;
 
 public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 {
@@ -24,6 +25,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         actionIndex = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(10));
         GM2.boolStates[3] = true;
         GM2.onRemoveHighlight();
@@ -117,6 +119,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //translate scripture
                     cost = 1;
+                    StartCoroutine(translate());
                 }
                 else
                 {
@@ -131,16 +134,11 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     cost = 2;
                     StartCoroutine(buyRegular());
                 }
-                else if (GM1.player == 4)
-                {
-                    //control unfortified space
-                    cost = 1;
-                    StartCoroutine(controlUnfortified());
-                }
                 else if (GM1.player == 5)
                 {
                     //publish treatise
                     cost = 2;
+                    StartCoroutine(treatise5());
                 }
                 else
                 {
@@ -159,6 +157,15 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //build st. peters
                     cost = 1;
+                    GM1.StPeters[0]++;
+                    if (GM1.StPeters[0] == 5)
+                    {
+                        GM1.StPeters[1]++;
+                        GM1.StPeters[0] = 0;
+                    }
+                    GM1.updateVP();
+                    GM2.onVP();
+                    GM2.onCPChange(textScript.displayCP - cost);
                 }
                 else if (GM1.player == 5)
                 {
@@ -184,6 +191,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //burn books
                     cost = 2;
+                    StartCoroutine(burnBook());
                 }
                 else if (GM1.player == 1)
                 {
@@ -201,6 +209,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //found jesuit university
                     cost = 3;
+                    //TODO: after turn 5
                 }
                 else
                 {
@@ -214,6 +223,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //publish treatise(english zone)
                     cost = 3;
+                    //TODO: after Henry VIII marries Anne Boleyn
                 }
                 else if (GM1.player == 4)
                 {
@@ -335,12 +345,17 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         List<int> trace = GM2.findUnfortified(GM1.player);
+        if(trace.Count()== 0)
+        {
+            GM2.onCPChange(textScript.displayCP);
+            yield break;
+        }
         GM2.highlightSelected = -1;
         GM2.onNoLayer();
 
 
-
         GM2.onHighlight(trace);
+        UnityEngine.Debug.Log(trace.Count());
         //onHighlightSelected += springDeploy;
         while (GM2.highlightSelected == -1)
         {
@@ -355,6 +370,157 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             yield break;
         }
 
+        GM2.onCPChange(textScript.displayCP - cost);
+    }
+
+    public IEnumerator burnBook()
+    {
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        if (GM1.protestantSpaces == 0)
+        {
+            GM2.onCPChange(textScript.displayCP);
+            yield break;
+        }
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        HandMarkerScript handMarkerObject = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        for(int i= 0; i < 2; i++)
+        {
+            List<int> pickSpaces = GM2.highlightCReformation();
+            GM2.highlightSelected = -1;
+            currentTextObject.post("Flip a space to Catholic influence.");
+            onNoLayer();
+            onHighlight(pickSpaces);
+
+            onHighlightSelected += changeReligion;
+            while (GM2.highlightSelected == -1)
+            {
+                //UnityEngine.Debug.Log("here");
+                yield return null;
+            }
+
+            UnityEngine.Debug.Log("end");
+        }
+        GM2.highlightSelected = -1;
+        if (!GM2.boolStates[3])
+        {
+            yield break;
+        }
+
+        GM2.onCPChange(textScript.displayCP - cost);
+    }
+
+    public IEnumerator treatise5()
+    {
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        if (GM1.protestantSpaces == 0)
+        {
+            GM2.onCPChange(textScript.displayCP);
+            yield break;
+        }
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        HandMarkerScript handMarkerObject = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        for (int i = 0; i < 2; i++)
+        {
+            List<int> pickSpaces = GM2.highlightReformation();
+            GM2.highlightSelected = -1;
+            currentTextObject.post("Flip a space to Protestant influence.");
+            onNoLayer();
+            onHighlight(pickSpaces);
+
+            onHighlightSelected += changeReligion;
+            while (GM2.highlightSelected == -1)
+            {
+                //UnityEngine.Debug.Log("here");
+                yield return null;
+            }
+
+            UnityEngine.Debug.Log("end");
+        }
+        GM2.highlightSelected = -1;
+        if (!GM2.boolStates[3])
+        {
+            yield break;
+        }
+
+        GM2.onCPChange(textScript.displayCP - cost);
+    }
+
+    public IEnumerator translate()
+    {
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        List<int> pickSpaces = new List<int>();
+        if (GM1.translations[3] <10)
+        {
+            pickSpaces.Add(28);
+        }
+        if (GM1.translations[4] < 10)
+        {
+            pickSpaces.Add(42);
+        }
+        if (GM1.translations[5] < 10)
+        {
+            pickSpaces.Add(1);
+        }
+        if(pickSpaces.Count() == 0)
+        {
+            GM2.onCPChange(textScript.displayCP);
+            yield break;
+        }
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        HandMarkerScript handMarkerObject = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        
+            
+            GM2.highlightSelected = -1;
+            currentTextObject.post("Select a language zone.");
+            onNoLayer();
+            onHighlight(pickSpaces);
+            while (GM2.highlightSelected == -1)
+            {
+                //UnityEngine.Debug.Log("here");
+                yield return null;
+            }
+        switch (GM2.highlightSelected)
+        {
+            case 28:
+                
+                if (GM1.translations[0] == 6)
+                {
+                    GM1.translations[3]++;
+                }
+                else
+                {
+                    GM1.translations[0]++;
+                }
+                break;
+                case 42:
+                if (GM1.translations[1] == 6)
+                {
+                    GM1.translations[4]++;
+                }
+                else
+                {
+                    GM1.translations[1]++;
+                }
+                break;
+            case 1:
+                if (GM1.translations[2] == 6)
+                {
+                    GM1.translations[5]++;
+                }
+                else
+                {
+                    GM1.translations[2]++;
+                }
+                break;
+                
+        }
+        GM2.highlightSelected = -1;
+        if (!GM2.boolStates[3])
+        {
+            yield break;
+        }
+        GM1.updateVP();
+        GM2.onVP();
         GM2.onCPChange(textScript.displayCP - cost);
     }
 

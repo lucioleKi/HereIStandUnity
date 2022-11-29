@@ -33,7 +33,7 @@ public class DipConfirmScript : MonoBehaviour
             GM2.onConfirmDipForm(playerIndex);
         }else if (gameObject.name == "Confirm_peace")
         {
-
+            GM2.onConfirmPeace(playerIndex);
         }
         
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().alpha = 1;

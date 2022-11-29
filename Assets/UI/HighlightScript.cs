@@ -132,6 +132,10 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status4.CPcost[i])
                     {
+                        if (GM1.turn < 5&&i==10)
+                        {
+                            continue;
+                        }
                         if (i < 6)
                         {
                             tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(628 + 960, -346 - 10 * i + 540, 0), Quaternion.identity);

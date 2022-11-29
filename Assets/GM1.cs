@@ -15,6 +15,7 @@ public class GM1 : MonoBehaviour
     public static int CurrentCard;
     public static int turn;
     public static int phase;
+    public static int segment;
     public static int englishSpaces;
     public static int protestantSpaces;
     public static RulerClass[] rulers;
@@ -67,11 +68,11 @@ public class GM1 : MonoBehaviour
         piracyC = status0.piracyTrack;
         excommunicated = status4.excommunicated;
         translations = status5.translations;
-
+        StPeters = new int[2];
         ScenarioObject scenario = Resources.Load("Objects/Scenario3/1517") as ScenarioObject;
         turn = scenario.turnStart;
         phase = scenario.phaseStart;
-        
+        segment = 1;
         powerObjects = new PowerObject[10];
         powerObjects[0] = Resources.Load("Objects/Power10/PowerOttoman") as PowerObject;
         powerObjects[1] = Resources.Load("Objects/Power10/PowerHapsburgs") as PowerObject;
@@ -127,7 +128,7 @@ public class GM1 : MonoBehaviour
         VPs[1] = status1.setVP(cardTracks[1]) + bonusVPs[1];
         VPs[2] = status2.setVP(cardTracks[2]) + bonusVPs[2];
         VPs[3] = status3.setVP(cardTracks[3]) + status3.chateaux[chateauxC]+bonusVPs[3];
-        VPs[4] = status4.setVP(cardTracks[4])+15- status5.setVP(protestantSpaces) + bonusVPs[4];
+        VPs[4] = status4.setVP(cardTracks[4])+15- status5.setVP(protestantSpaces) + bonusVPs[4] + StPeters[1];
         VPs[5] = status5.setVP(protestantSpaces) + bonusVPs[5];
     }
 

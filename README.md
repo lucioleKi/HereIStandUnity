@@ -82,3 +82,7 @@ Improved hands display. Finished frontend highlight for CP actions.
 11/27/2022
 
 Finished backend logic for CP actions and land units construction. Need to finish 12.2 and naval units construction.
+
+11/29/2022
+
+Debugged diplomacy phase negotiation segment. 

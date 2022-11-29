@@ -48,6 +48,7 @@ public class GM2 : MonoBehaviour
     public static SimpleHandler onNoLayer;
     public static SimpleHandler onLeaderULayer;
     public static SimpleHandler onRemoveHighlight;
+    public static SimpleHandler onChangeSegment;
 
     public delegate void Int2Handler(int index1, int index2);
     
@@ -66,6 +67,7 @@ public class GM2 : MonoBehaviour
     public static Int1Handler onRemoveSpace;
     public static Int1Handler onAddReformer;
     public static Int1Handler onConfirmDipForm;
+    public static Int1Handler onConfirmPeace;
     public static Int1Handler onCPChange;
     public static Int1Handler onMandatory;
     public static Int1Handler onChangeCorsair;
@@ -75,7 +77,7 @@ public class GM2 : MonoBehaviour
 
 
     public static bool[] boolStates;
-    //0: waitCard for HIS003. 1: phaseEnd. 2: theological debate (CP action)
+    //0: waitCard for HIS003. 1: phaseEnd. 2: theological debate (CP action). 3: CP action coroutine finished once. 4: Henry VIII marries Anne Boleyn
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
@@ -638,30 +640,75 @@ public class GM2 : MonoBehaviour
     IEnumerator waitDipForm()
     {
 
-        DipForm tempForm = ScriptableObject.CreateInstance<DipForm>();
-        //tempForm.init();
-
-
-        for (int i = 0; i < 6; i++)
+        DipForm tempForm = GameObject.Find("CanvasDiplomacy").GetComponent("DipForm") as DipForm;
+        GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+        GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+        if (segment == 1)
         {
-            UnityEngine.Debug.Log("wait" + i.ToString());
-
-
-            while (!tempForm.completed[i])
+            GM1.player = 0;
+            onPlayerChange();
+            for (int i = 0; i < 6; i++)
             {
-                //UnityEngine.Debug.Log("here");
-                yield return null;
+                UnityEngine.Debug.Log("wait" + i.ToString());
+
+                
+                while (!tempForm.completed[i])
+                {
+                    //UnityEngine.Debug.Log("here");
+                    yield return null;
+                }
+                if (i < 5)
+                {
+                    GM1.player++;
+                    onPlayerChange();
+                }
+                else
+                {
+                    GM1.player = 0;
+                    onPlayerChange();
+                }
+
+                UnityEngine.Debug.Log("endwait");
+
+                
+            }
+            tempForm.verifyDip();
+            negotiationSegment(tempForm);
+            onChangeDip();
+            segment++;
+            onChangeSegment();
+        }
+        else if(segment == 2)
+        {
+            GM1.player = 0;
+            onPlayerChange();
+            GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+            GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+            for (int i = 0; i < 6; i++)
+            {
+
+
+                while (!tempForm.completed[i])
+                {
+                    //UnityEngine.Debug.Log("here");
+                    yield return null;
+                }
+                suingPeace();
+                if (i < 5)
+                {
+                    GM1.player++;
+                    onPlayerChange();
+                }
+                
+                UnityEngine.Debug.Log("endwait");
+
+
+                //onRemoveHighlight(converted);
             }
 
-            UnityEngine.Debug.Log("endwait");
-
-
-            //onRemoveHighlight(converted);
         }
-        tempForm.verifyDip();
-        negotiationSegment(tempForm);
-        onChangeDip();
-
+        
+        
     }
 
     void negotiationSegment(DipForm tempForm)
@@ -678,6 +725,11 @@ public class GM2 : MonoBehaviour
 
             }
         }
+    }
+
+    void suingPeace()
+    {
+
     }
 
     /*IEnumerator waitPeaceForm()
@@ -700,7 +752,7 @@ public class GM2 : MonoBehaviour
 
     void phase3()
     {
-
+        
         StartCoroutine(waitDipForm());
         if (turn != 1)
         {
@@ -985,20 +1037,22 @@ public class GM2 : MonoBehaviour
 
     public static List<int> findUnfortified(int playerIndex)
     {
-        UnityEngine.Debug.Log("size1");
+        //need to debug more
         List<int> searchIndex = new List<int>();
-        UnityEngine.Debug.Log("size2");
         List<int> trace = findTrace(playerIndex);
-        UnityEngine.Debug.Log("size3");
         for (int i=0; i<134; i++)
         {
+            if(spacesGM.ElementAt(i).controlPower == playerIndex)
+            {
+                continue;
+            }
             //the space is unfortified
             if(spaces.ElementAt(i).spaceType != (SpaceType)0)
             {
                 continue;
             }
             //the space is independent or controlled by an enemy power
-            if(spacesGM.ElementAt(i).controlPower!=10&& diplomacyState[spacesGM.ElementAt(i).controlPower, playerIndex] != 1)
+            if(spacesGM.ElementAt(i).controlPower!=10&& diplomacyState[playerIndex, spacesGM.ElementAt(i).controlPower] != 1)
             {
                 continue;
             }
@@ -1007,19 +1061,21 @@ public class GM2 : MonoBehaviour
             for (int j = 0; j < spaces.ElementAt(i).adjacent.Count(); j++)
             {
 
-                if (trace.Contains(spaces.ElementAt(i).adjacent[j]) && spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).regular>0)
+                if (trace.Contains(spaces.ElementAt(i).adjacent[j]))// && spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).regular>0
                 {
                     LOC = true;
                     break;
                 }
             }
-            if (!LOC&& spacesGM.ElementAt(i).regular==0)
+            if (!LOC)//&& spacesGM.ElementAt(i).regular==0
             {
+                //UnityEngine.Debug.Log("filter out "+i.ToString());
                 continue;
             }
             //not occupied by land units from another power, unless allies
-            if (spacesGM.ElementAt(i).controlPower!=playerIndex&& spacesGM.ElementAt(i).regular>0&& diplomacyState[spacesGM.ElementAt(i).controlPower, playerIndex]!=2)
+            if (spacesGM.ElementAt(i).regular > 0 && diplomacyState[spacesGM.ElementAt(i).controlPower, playerIndex] != 2)
             {
+                //UnityEngine.Debug.Log("land units " + i.ToString());
                 continue;
             }
             searchIndex.Add(i);
