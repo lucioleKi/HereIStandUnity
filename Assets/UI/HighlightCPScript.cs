@@ -14,7 +14,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     // Start is called before the first frame update
     void Start()
     {
-
+        actionIndex = -1;
     }
 
     // Update is called once per frame
@@ -26,7 +26,15 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        actionIndex = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(10));
+        if (eventData.pointerCurrentRaycast.gameObject.name[9] == 'R')
+        {
+            actionIndex = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(14));
+            UnityEngine.Debug.Log("actionIndex " + actionIndex.ToString());
+        }
+        else
+        {
+            return;
+        }
         GM2.boolStates[3] = true;
         GM2.onRemoveHighlight();
         switch (actionIndex)
@@ -519,6 +527,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         {
             yield break;
         }
+        currentTextObject.reset();
         GM1.updateVP();
         GM2.onVP();
         GM2.onCPChange(textScript.displayCP - cost);

@@ -69,7 +69,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         }
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
-                        tempObject.name = "highlight_" + i.ToString();
+                        tempObject.name = "highlightRect_" + i.ToString();
                     }
                 }
                 break;
@@ -89,7 +89,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         }
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
-                        tempObject.name = "highlight_" + i.ToString();
+                        tempObject.name = "highlightRect_" + i.ToString();
                     }
                 }
                 break;
@@ -109,7 +109,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         }
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
-                        tempObject.name = "highlight_" + i.ToString();
+                        tempObject.name = "highlightRect_" + i.ToString();
                     }
                 }
                 break;
@@ -123,7 +123,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         tempObject.GetComponent<RectTransform>().sizeDelta = new Vector2(95, 9);
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
-                        tempObject.name = "highlight_" + i.ToString();
+                        tempObject.name = "highlightRect_" + i.ToString();
                     }
                 }
                 break;
@@ -147,7 +147,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         }
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
-                        tempObject.name = "highlight_" + i.ToString();
+                        tempObject.name = "highlightRect_" + i.ToString();
                     }
                 }
                 break;
@@ -156,6 +156,10 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status5.CPcost[i])
                     {
+                        if (GM1.turn < 2 && i < 6)
+                        {
+                            continue;
+                        }
                         if (i < 4)
                         {
                             tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(628 + 960, -335 - 10 * i + 540, 0), Quaternion.identity);
@@ -167,7 +171,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         }
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
-                        tempObject.name = "highlight_" + i.ToString();
+                        tempObject.name = "highlightRect_" + i.ToString();
                     }
                 }
                 break;
@@ -202,7 +206,15 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         removeHighlight();
         LayerScript layerScript = GameObject.Find("Layers").GetComponent("LayerScript") as LayerScript;
         layerScript.changeLayer();
-        highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(10));
+        if (eventData.pointerCurrentRaycast.gameObject.name[9] == '_')
+        {
+            highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(10));
+        }
+        else
+        {
+            return;
+        }
+        
         if (onHighlightSelected != null)
         {
             onHighlightSelected();

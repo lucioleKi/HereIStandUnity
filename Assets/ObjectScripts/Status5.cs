@@ -6,7 +6,7 @@ using UnityEngine;
 public class Status5 : StatusObject
 {
     
-    public int[] translations;
+    public int[] translationInit;
     public int[] NewTestamentTrack;
     public int[] FullTrack;
     public int protestantSpaces;

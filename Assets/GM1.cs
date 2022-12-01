@@ -21,7 +21,7 @@ public class GM1 : MonoBehaviour
     public static RulerClass[] rulers;
     public static int[] cardTracks;
     public static int[] VPs;
-    public static int[] translations;
+    public static int[] translations = new int[6];
     public static bool[] excommunicated;
     public static int[] StPeters;
     public static Religion[] religiousInfluence;
@@ -67,7 +67,7 @@ public class GM1 : MonoBehaviour
         cardTracks[5] = status5.protestantSpaces;
         piracyC = status0.piracyTrack;
         excommunicated = status4.excommunicated;
-        translations = status5.translations;
+        translations = status5.translationInit;
         StPeters = new int[2];
         ScenarioObject scenario = Resources.Load("Objects/Scenario3/1517") as ScenarioObject;
         turn = scenario.turnStart;

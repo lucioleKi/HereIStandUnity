@@ -262,6 +262,8 @@ public class GM3
         }
         yield return new WaitForSeconds(3);
         currentTextObject.reset();
+        inputNumberObject.reset();
+        inputToggleObject.reset();
         currentTextObject.restartColor();
         chosenCard = "";
         onChosenCard();

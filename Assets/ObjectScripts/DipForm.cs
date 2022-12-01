@@ -272,6 +272,9 @@ public class DipForm : MonoBehaviour
             GameObject.Find("PeaceRequest_0").GetComponent<Toggle>().isOn = false;
             if (GM1.diplomacyState[playerIndex, 0] == 1)
             {
+                GM1.diplomacyState[playerIndex, 0] = 0;
+                GM1.diplomacyState[0, playerIndex] = 0;
+                GM2.onChangeDip();
 
             }
         }
@@ -281,7 +284,9 @@ public class DipForm : MonoBehaviour
             GameObject.Find("PeaceRequest_1").GetComponent<Toggle>().isOn = false;
             if (GM1.diplomacyState[playerIndex, 1] == 1)
             {
-
+                GM1.diplomacyState[playerIndex, 1] = 0;
+                GM1.diplomacyState[1, playerIndex] = 0;
+                GM2.onChangeDip();
             }
         }
         if (GameObject.Find("PeaceRequest_2").GetComponent<Toggle>().isOn)
@@ -290,7 +295,9 @@ public class DipForm : MonoBehaviour
             GameObject.Find("PeaceRequest_2").GetComponent<Toggle>().isOn = false;
             if (GM1.diplomacyState[playerIndex, 2] == 1)
             {
-
+                GM1.diplomacyState[playerIndex, 2] = 0;
+                GM1.diplomacyState[2, playerIndex] = 0;
+                GM2.onChangeDip();
             }
         }
         if (GameObject.Find("PeaceRequest_3").GetComponent<Toggle>().isOn)
@@ -299,7 +306,9 @@ public class DipForm : MonoBehaviour
             GameObject.Find("PeaceRequest_3").GetComponent<Toggle>().isOn = false;
             if (GM1.diplomacyState[playerIndex, 3] == 1)
             {
-
+                GM1.diplomacyState[playerIndex, 3] = 0;
+                GM1.diplomacyState[3, playerIndex] = 0;
+                GM2.onChangeDip();
             }
         }
         if (GameObject.Find("PeaceRequest_4").GetComponent<Toggle>().isOn)
@@ -308,7 +317,9 @@ public class DipForm : MonoBehaviour
             GameObject.Find("PeaceRequest_4").GetComponent<Toggle>().isOn = false;
             if (GM1.diplomacyState[playerIndex, 4] == 1)
             {
-
+                GM1.diplomacyState[playerIndex, 4] = 0;
+                GM1.diplomacyState[4, playerIndex] = 0;
+                GM2.onChangeDip();
             }
         }
         if (GameObject.Find("PeaceRequest_5").GetComponent<Toggle>().isOn)
@@ -317,7 +328,9 @@ public class DipForm : MonoBehaviour
             GameObject.Find("PeaceRequest_5").GetComponent<Toggle>().isOn = false;
             if (GM1.diplomacyState[playerIndex, 5] == 1)
             {
-
+                GM1.diplomacyState[playerIndex, 5] = 0;
+                GM1.diplomacyState[5, playerIndex] = 0;
+                GM2.onChangeDip();
             }
         }
     }

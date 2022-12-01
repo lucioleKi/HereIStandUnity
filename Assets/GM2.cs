@@ -139,7 +139,7 @@ public class GM2 : MonoBehaviour
                 StartCoroutine(gm3.HIS004());
                 break;
             case 6:
-                gm3.HIS006();
+                StartCoroutine(gm3.HIS006());
                 break;
             case 8:
                 StartCoroutine(gm3.HIS008());
@@ -643,8 +643,7 @@ public class GM2 : MonoBehaviour
         DipForm tempForm = GameObject.Find("CanvasDiplomacy").GetComponent("DipForm") as DipForm;
         GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
         GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
-        if (segment == 1)
-        {
+        
             GM1.player = 0;
             onPlayerChange();
             for (int i = 0; i < 6; i++)
@@ -677,36 +676,7 @@ public class GM2 : MonoBehaviour
             onChangeDip();
             segment++;
             onChangeSegment();
-        }
-        else if(segment == 2)
-        {
-            GM1.player = 0;
-            onPlayerChange();
-            GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
-            GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
-            for (int i = 0; i < 6; i++)
-            {
-
-
-                while (!tempForm.completed[i])
-                {
-                    //UnityEngine.Debug.Log("here");
-                    yield return null;
-                }
-                suingPeace();
-                if (i < 5)
-                {
-                    GM1.player++;
-                    onPlayerChange();
-                }
-                
-                UnityEngine.Debug.Log("endwait");
-
-
-                //onRemoveHighlight(converted);
-            }
-
-        }
+        yield break;
         
         
     }
@@ -732,33 +702,63 @@ public class GM2 : MonoBehaviour
 
     }
 
-    /*IEnumerator waitPeaceForm()
+    IEnumerator waitPeaceForm()
     {
-
-        for (int i = 0; i < 6; i++)
-        {
-
-        }
-        if (true)
+        while (segment == 1)
         {
             yield return null;
         }
-       
+        DipForm tempForm = GameObject.Find("CanvasDiplomacy").GetComponent("DipForm") as DipForm;
+        GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+        GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+        GM1.player = 0;
+        onPlayerChange();
+        for (int i = 0; i < 6; i++)
+        {
+
+
+            while (!tempForm.completed[i])
+            {
+                UnityEngine.Debug.Log("peace "+i.ToString());
+                yield return null;
+            }
+            tempForm.peace29(GM1.player);
+            if (i < 5)
+            {
+                GM1.player++;
+                onPlayerChange();
+            }
+            else
+            {
+                GM1.player = 0;
+                onPlayerChange();
+            }
+
+            UnityEngine.Debug.Log("endwait");
+
+
+            //onRemoveHighlight(converted);
+        }
+        segment++;
+        onChangeSegment();
+        yield break;
         //automatic: 2, 3
         //4: highlight 2 units to remove them from map
         //5, 7: highlight, choose to regain home keys and other spaces
         //
-    }*/
+    }
 
     void phase3()
     {
         
-        StartCoroutine(waitDipForm());
-        if (turn != 1)
-        {
-            //StartCoroutine(waitPeaceForm());
+        
+        
+            StartCoroutine(waitDipForm());
 
-        }
+        
+        
+            StartCoroutine(waitPeaceForm());
+        
     }
 
     void phase4()
