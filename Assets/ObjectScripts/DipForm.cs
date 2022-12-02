@@ -55,7 +55,6 @@ public class DipForm : MonoBehaviour
 
     public void confirmDip(int playerIndex)
     {
-        //UnityEngine.Debug.Log(playerIndex.ToString() + "finished");
         if (!completed[playerIndex])
         {
             completed[playerIndex] = true;
@@ -266,6 +265,9 @@ public class DipForm : MonoBehaviour
 
     public void peace29(int playerIndex)
     {
+        HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        //TODO 9.3.4 remove units
+        completed[playerIndex] = true;
         if (GameObject.Find("PeaceRequest_0").GetComponent<Toggle>().isOn)
         {
             dipStatus[playerIndex, 0] = 1;
@@ -275,7 +277,8 @@ public class DipForm : MonoBehaviour
                 GM1.diplomacyState[playerIndex, 0] = 0;
                 GM1.diplomacyState[0, playerIndex] = 0;
                 GM2.onChangeDip();
-
+                handMarkerScript.bonus0.Add("Sprites/jpg/WarWinner2VP");
+                GM1.bonusVPs[0] += 2;
             }
         }
         if (GameObject.Find("PeaceRequest_1").GetComponent<Toggle>().isOn)
@@ -287,6 +290,16 @@ public class DipForm : MonoBehaviour
                 GM1.diplomacyState[playerIndex, 1] = 0;
                 GM1.diplomacyState[1, playerIndex] = 0;
                 GM2.onChangeDip();
+                if(playerIndex== 0) {
+                    handMarkerScript.bonus1.Add("Sprites/jpg/WarWinner2VP");
+                    GM1.bonusVPs[1] += 2;
+                }
+                else
+                {
+                    handMarkerScript.bonus1.Add("Sprites/jpg/WarWinner1VP");
+                    GM1.bonusVPs[1] += 1;
+                }
+                
             }
         }
         if (GameObject.Find("PeaceRequest_2").GetComponent<Toggle>().isOn)
@@ -298,6 +311,16 @@ public class DipForm : MonoBehaviour
                 GM1.diplomacyState[playerIndex, 2] = 0;
                 GM1.diplomacyState[2, playerIndex] = 0;
                 GM2.onChangeDip();
+                if (playerIndex == 0)
+                {
+                    handMarkerScript.bonus2.Add("Sprites/jpg/WarWinner2VP");
+                    GM1.bonusVPs[2] += 2;
+                }
+                else
+                {
+                    handMarkerScript.bonus2.Add("Sprites/jpg/WarWinner1VP");
+                    GM1.bonusVPs[2] += 1;
+                }
             }
         }
         if (GameObject.Find("PeaceRequest_3").GetComponent<Toggle>().isOn)
@@ -309,6 +332,16 @@ public class DipForm : MonoBehaviour
                 GM1.diplomacyState[playerIndex, 3] = 0;
                 GM1.diplomacyState[3, playerIndex] = 0;
                 GM2.onChangeDip();
+                if (playerIndex == 0)
+                {
+                    handMarkerScript.bonus3.Add("Sprites/jpg/WarWinner2VP");
+                    GM1.bonusVPs[3] += 2;
+                }
+                else
+                {
+                    handMarkerScript.bonus3.Add("Sprites/jpg/WarWinner1VP");
+                    GM1.bonusVPs[3] += 1;
+                }
             }
         }
         if (GameObject.Find("PeaceRequest_4").GetComponent<Toggle>().isOn)
@@ -320,6 +353,16 @@ public class DipForm : MonoBehaviour
                 GM1.diplomacyState[playerIndex, 4] = 0;
                 GM1.diplomacyState[4, playerIndex] = 0;
                 GM2.onChangeDip();
+                if (playerIndex == 0)
+                {
+                    handMarkerScript.bonus4.Add("Sprites/jpg/WarWinner2VP");
+                    GM1.bonusVPs[4] += 2;
+                }
+                else
+                {
+                    handMarkerScript.bonus4.Add("Sprites/jpg/WarWinner1VP");
+                    GM1.bonusVPs[4] += 1;
+                }
             }
         }
         if (GameObject.Find("PeaceRequest_5").GetComponent<Toggle>().isOn)
@@ -331,7 +374,19 @@ public class DipForm : MonoBehaviour
                 GM1.diplomacyState[playerIndex, 5] = 0;
                 GM1.diplomacyState[5, playerIndex] = 0;
                 GM2.onChangeDip();
+                if (playerIndex == 0)
+                {
+                    handMarkerScript.bonus5.Add("Sprites/jpg/WarWinner2VP");
+                    GM1.bonusVPs[5] += 2;
+                }
+                else
+                {
+                    handMarkerScript.bonus5.Add("Sprites/jpg/WarWinner1VP");
+                    GM1.bonusVPs[5] += 1;
+                }
             }
         }
+        GM1.updateVP();
+        GM2.onVP();
     }
 }

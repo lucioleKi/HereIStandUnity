@@ -85,4 +85,8 @@ Finished backend logic for CP actions and land units construction. Need to finis
 
 11/29/2022
 
-Debugged diplomacy phase negotiation segment. 
+Debugged diplomacy phase negotiation segment.
+
+12/2/2022 
+
+Peace segment, QOL improvements

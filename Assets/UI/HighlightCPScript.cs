@@ -35,7 +35,6 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         {
             return;
         }
-        GM2.boolStates[3] = true;
         GM2.onRemoveHighlight();
         switch (actionIndex)
         {
@@ -255,12 +254,6 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         {
             yield return null;
         }
-        //UnityEngine.Debug.Log(textScript.displayCP - cost);
-        if (!GM2.boolStates[3])
-        {
-            yield break;
-        }
-        
         GM2.onCPChange(textScript.displayCP - cost);
         
 
@@ -278,7 +271,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
 
         GM2.onHighlight(trace);
-        //onHighlightSelected += springDeploy;
+        
         while (GM2.highlightSelected == -1)
         {
             yield return null;
@@ -286,10 +279,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).merc++;
         GM2.onChangeMerc(GM2.highlightSelected, GM1.player);
         GM2.highlightSelected = -1;
-        if (!GM2.boolStates[3])
-        {
-            
-        }
+        
 
         GM2.onCPChange(textScript.displayCP - cost);
         UnityEngine.Debug.Log(new System.Diagnostics.StackTrace().ToString());
@@ -308,7 +298,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
 
         GM2.onHighlight(trace);
-        //onHighlightSelected += springDeploy;
+        
         while (GM2.highlightSelected == -1)
         {
             yield return null;
@@ -317,11 +307,6 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         DeckScript.regulars[GM2.highlightSelected]++;
         GM2.onChangeReg(GM2.highlightSelected, GM1.player);
         GM2.highlightSelected = -1;
-        if (!GM2.boolStates[3])
-        {
-            yield break;
-        }
-
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
@@ -336,7 +321,6 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
 
         GM2.onHighlight(trace);
-        //onHighlightSelected += springDeploy;
         while (GM2.highlightSelected == -1)
         {
             yield return null;
@@ -344,11 +328,6 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).cavalry++;
         GM2.onChangeCav(GM2.highlightSelected, GM1.player);
         GM2.highlightSelected = -1;
-        if (!GM2.boolStates[3])
-        {
-            yield break;
-        }
-
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
@@ -367,11 +346,8 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
         GM2.onHighlight(trace);
         UnityEngine.Debug.Log(trace.Count());
-        //onHighlightSelected += springDeploy;
-        while (GM2.highlightSelected == -1)
-        {
-            yield return null;
-        }
+       
+        
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).controlPower = GM1.player;
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).controlMarker = 1;
         GM2.onAddSpace(GM2.highlightSelected, GM1.player, 1);
@@ -405,18 +381,13 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             onHighlightSelected += changeReligion;
             while (GM2.highlightSelected == -1)
             {
-                //UnityEngine.Debug.Log("here");
                 yield return null;
             }
 
             UnityEngine.Debug.Log("end");
         }
         GM2.highlightSelected = -1;
-        if (!GM2.boolStates[3])
-        {
-            yield break;
-        }
-
+        
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
@@ -441,17 +412,13 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             onHighlightSelected += changeReligion;
             while (GM2.highlightSelected == -1)
             {
-                //UnityEngine.Debug.Log("here");
                 yield return null;
             }
 
             UnityEngine.Debug.Log("end");
         }
         GM2.highlightSelected = -1;
-        if (!GM2.boolStates[3])
-        {
-            yield break;
-        }
+        
 
         GM2.onCPChange(textScript.displayCP - cost);
     }
@@ -526,10 +493,6 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 
         }
         GM2.highlightSelected = -1;
-        if (!GM2.boolStates[3])
-        {
-            yield break;
-        }
         currentTextObject.reset();
         GM1.updateVP();
         GM2.onVP();

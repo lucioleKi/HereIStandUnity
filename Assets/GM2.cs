@@ -51,7 +51,7 @@ public class GM2 : MonoBehaviour
     public static SimpleHandler onChangeSegment;
 
     public delegate void Int2Handler(int index1, int index2);
-    
+
     //(card index = id - 1, power)
     public static Int2Handler onChangeReg;
     public static Int2Handler onChangeMerc;
@@ -77,7 +77,7 @@ public class GM2 : MonoBehaviour
 
 
     public static bool[] boolStates;
-    //0: waitCard for HIS003. 1: phaseEnd. 2: theological debate (CP action). 3: CP action coroutine finished once. 4: Henry VIII marries Anne Boleyn
+    //0: waitCard for HIS003. 1: phaseEnd. 2: theological debate (CP action). 3: empty for now. 4: Henry VIII marries Anne Boleyn
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
@@ -117,8 +117,8 @@ public class GM2 : MonoBehaviour
 }
     */
 
-    
-    
+
+
 
 
     void mandatory(int index)
@@ -191,8 +191,8 @@ public class GM2 : MonoBehaviour
         inputNumberObject.post();
         DebateNScript debateNScript = GameObject.Find("DebateNext").GetComponent("DebateNScript") as DebateNScript;
         debateNScript.post();
-        
-        
+
+
     }
 
     public static void reformAttempt()
@@ -271,8 +271,8 @@ public class GM2 : MonoBehaviour
             reformerDice++;
         }
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        
-        
+
+
         //4. roll dice
         int dice1 = 0;
         for (int i = 0; i < reformerDice; i++)
@@ -287,12 +287,12 @@ public class GM2 : MonoBehaviour
             {
                 //UnityEngine.Debug.Log("6!");
                 changeReligion();
-                currentTextObject.post("Reformer dices: " + reformerDice.ToString() +". Highest: 6. \nAutomatic success.");
+                currentTextObject.post("Reformer dices: " + reformerDice.ToString() + ". Highest: 6. \nAutomatic success.");
                 //send signal to various parties
                 return;
             }
         }
-        
+
 
         //5. add up papal dice
 
@@ -315,10 +315,10 @@ public class GM2 : MonoBehaviour
         {
             UnityEngine.Debug.Log("win");
             changeReligion();
-            currentTextObject.post("Reformer dices: " + reformerDice.ToString() + ". Highest: " + dice1.ToString() + ".\nPapal dices: " + papalDice.ToString() + ". Highest: " +dice2.ToString()+"\nSuccessful reformation attempt.");
+            currentTextObject.post("Reformer dices: " + reformerDice.ToString() + ". Highest: " + dice1.ToString() + ".\nPapal dices: " + papalDice.ToString() + ". Highest: " + dice2.ToString() + "\nSuccessful reformation attempt.");
 
             //send signal to various parties
-            
+
             return;
         }
         else
@@ -451,7 +451,7 @@ public class GM2 : MonoBehaviour
 
 
         //3. add bonus dice
-        
+
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
 
 
@@ -465,7 +465,7 @@ public class GM2 : MonoBehaviour
             {
                 dice2 = randomIndex;
             }
-            if (dice2 == 6 && (GM1.rulers[5].name== "Paul III" || GM1.rulers[5].name== "Julius III"))
+            if (dice2 == 6 && (GM1.rulers[5].name == "Paul III" || GM1.rulers[5].name == "Julius III"))
             {
                 //UnityEngine.Debug.Log("6!");
                 changeReligion();
@@ -485,7 +485,7 @@ public class GM2 : MonoBehaviour
             {
                 dice1 = randomIndex;
             }
-            
+
         }
 
 
@@ -540,7 +540,7 @@ public class GM2 : MonoBehaviour
                     }
                 }
             }
-            
+
 
 
         }
@@ -643,42 +643,43 @@ public class GM2 : MonoBehaviour
         DipForm tempForm = GameObject.Find("CanvasDiplomacy").GetComponent("DipForm") as DipForm;
         GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
         GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
-        
-            GM1.player = 0;
-            onPlayerChange();
-            for (int i = 0; i < 6; i++)
+
+        GM1.player = 0;
+        onPlayerChange();
+        for (int i = 0; i < 6; i++)
+        {
+            UnityEngine.Debug.Log("wait" + i.ToString());
+
+
+            while (!tempForm.completed[i])
             {
-                UnityEngine.Debug.Log("wait" + i.ToString());
-
-                
-                while (!tempForm.completed[i])
-                {
-                    //UnityEngine.Debug.Log("here");
-                    yield return null;
-                }
-                if (i < 5)
-                {
-                    GM1.player++;
-                    onPlayerChange();
-                }
-                else
-                {
-                    GM1.player = 0;
-                    onPlayerChange();
-                }
-
-                UnityEngine.Debug.Log("endwait");
-
-                
+                //UnityEngine.Debug.Log("here");
+                yield return null;
             }
-            tempForm.verifyDip();
-            negotiationSegment(tempForm);
-            onChangeDip();
-            segment++;
-            onChangeSegment();
+            if (i < 5)
+            {
+                GM1.player++;
+                onPlayerChange();
+            }
+            else
+            {
+                GM1.player = 0;
+                onPlayerChange();
+            }
+
+            UnityEngine.Debug.Log("endwait");
+
+
+        }
+        tempForm.verifyDip();
+        negotiationSegment(tempForm);
+        onChangeDip();
+        segment++;
+        onChangeSegment();
+        phase3();
         yield break;
-        
-        
+
+
     }
 
     void negotiationSegment(DipForm tempForm)
@@ -697,17 +698,11 @@ public class GM2 : MonoBehaviour
         }
     }
 
-    void suingPeace()
-    {
 
-    }
 
     IEnumerator waitPeaceForm()
     {
-        while (segment == 1)
-        {
-            yield return null;
-        }
+
         DipForm tempForm = GameObject.Find("CanvasDiplomacy").GetComponent("DipForm") as DipForm;
         GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
         GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
@@ -715,14 +710,10 @@ public class GM2 : MonoBehaviour
         onPlayerChange();
         for (int i = 0; i < 6; i++)
         {
-
-
             while (!tempForm.completed[i])
             {
-                UnityEngine.Debug.Log("peace "+i.ToString());
                 yield return null;
             }
-            tempForm.peace29(GM1.player);
             if (i < 5)
             {
                 GM1.player++;
@@ -741,6 +732,7 @@ public class GM2 : MonoBehaviour
         }
         segment++;
         onChangeSegment();
+        phase3();
         yield break;
         //automatic: 2, 3
         //4: highlight 2 units to remove them from map
@@ -750,15 +742,25 @@ public class GM2 : MonoBehaviour
 
     void phase3()
     {
-        
-        
-        
-            StartCoroutine(waitDipForm());
+        switch (segment)
+        {
+            case 1:
+                StartCoroutine(waitDipForm());
+                break;
+            case 2:
+                StartCoroutine(waitPeaceForm());
+                break;
+            default:
+                break;
+        }
 
-        
-        
-            StartCoroutine(waitPeaceForm());
-        
+
+
+
+
+
+
+
     }
 
     void phase4()
@@ -773,7 +775,7 @@ public class GM2 : MonoBehaviour
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.post("Select commitment card if you are involved");
         Array.Clear(secretCP, 0, 6);
-        while (secretCP[1] == 0 || secretCP[4] == 0 || secretCP[5]==0)
+        while (secretCP[1] == 0 || secretCP[4] == 0 || secretCP[5] == 0)
         {
             yield return null;
         }
@@ -781,7 +783,7 @@ public class GM2 : MonoBehaviour
         if (result > 10)
         {
             //only player 5
-            for(int i = 0; i < result-10; i++)
+            for (int i = 0; i < result - 10; i++)
             {
                 highlightSelected = -1;
                 List<int> canConvert = dietSpaces(true);
@@ -792,16 +794,16 @@ public class GM2 : MonoBehaviour
                 onHighlightSelected += changeReligion;
                 while (highlightSelected == -1)
                 {
-                    
+
                     yield return null;
                 }
             }
-            
+
         }
         else if (result > 0)
         {
             //only player 4
-            for(int i= 0; i < result; i++)
+            for (int i = 0; i < result; i++)
             {
                 highlightSelected = -1;
                 List<int> canConvert = dietSpaces(false);
@@ -811,11 +813,11 @@ public class GM2 : MonoBehaviour
                 onHighlightSelected += changeReligion;
                 while (highlightSelected == -1)
                 {
-                    
+
                     yield return null;
                 }
             }
-            
+
         }
 
     }
@@ -825,11 +827,11 @@ public class GM2 : MonoBehaviour
 
         int hit1 = 0;
         int hit2 = 0;
-        for (int i = 0; i < secretCP[5]+4; i++)
+        for (int i = 0; i < secretCP[5] + 4; i++)
         {
             int randomIndex = UnityEngine.Random.Range(1, 6);
 
-            if (randomIndex>4)
+            if (randomIndex > 4)
             {
                 hit1++;
             }
@@ -847,34 +849,35 @@ public class GM2 : MonoBehaviour
         if (hit1 > hit2)
         {
             currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + ". Catholic hit: " + hit2.ToString() + "\nProtestant victory. Flip " + (hit1 - hit2).ToString() + " space(s).");
-            return 10+hit1- hit2;
-        }else if (hit1 < hit2)
+            return 10 + hit1 - hit2;
+        }
+        else if (hit1 < hit2)
         {
-            currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + ". Catholic hit: " + hit2.ToString() + "\nCatholic victory. Flip "+(hit2-hit1).ToString()+" space(s).");
+            currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + ". Catholic hit: " + hit2.ToString() + "\nCatholic victory. Flip " + (hit2 - hit1).ToString() + " space(s).");
             return hit2 - hit1;
         }
         else
         {
-            currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + ". Catholic hit: " + hit2.ToString()+"\nThe Diet is inconclusive.");
+            currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + ". Catholic hit: " + hit2.ToString() + "\nThe Diet is inconclusive.");
             return 0;
         }
-        
+
     }
 
     List<int> dietSpaces(bool isProtestant)
     {
         List<int> highlightSpaces = new List<int>();
-        for(int i = 0; i < DeckScript.spaces.Count(); i++)
+        for (int i = 0; i < DeckScript.spaces.Count(); i++)
         {
-            
-            if ((int)religiousInfluence[i] == 1 && isProtestant || (int)religiousInfluence[i]==0&&!isProtestant)
+
+            if ((int)religiousInfluence[i] == 1 && isProtestant || (int)religiousInfluence[i] == 0 && !isProtestant)
             {
                 continue;
             }
             for (int j = 0; j < spaces.ElementAt(i).adjacent.Count(); j++)
             {
 
-                if (religiousInfluence[spaces.ElementAt(i).adjacent.ElementAt(j) - 1] == (Religion)0 && !isProtestant && DeckScript.spaces.ElementAt(i).language == (Language)2 || religiousInfluence[spaces.ElementAt(i).adjacent.ElementAt(j) - 1] == (Religion)1 && isProtestant&& DeckScript.spaces.ElementAt(i).language == (Language)2)
+                if (religiousInfluence[spaces.ElementAt(i).adjacent.ElementAt(j) - 1] == (Religion)0 && !isProtestant && DeckScript.spaces.ElementAt(i).language == (Language)2 || religiousInfluence[spaces.ElementAt(i).adjacent.ElementAt(j) - 1] == (Religion)1 && isProtestant && DeckScript.spaces.ElementAt(i).language == (Language)2)
                 {
 
                     highlightSpaces.Add(i);
@@ -888,7 +891,7 @@ public class GM2 : MonoBehaviour
     public static void changeReligion()
     {
         onHighlightSelected -= changeReligion;
-        if ((int)DeckScript.spaces.ElementAt(highlightSelected).spaceType == 4 && regulars[134+highlightSelected]!=0)
+        if ((int)DeckScript.spaces.ElementAt(highlightSelected).spaceType == 4 && regulars[134 + highlightSelected] != 0)
         {
             regulars[134 + highlightSelected] = 0;
             onChangeReg(134 + highlightSelected, 5);
@@ -900,7 +903,7 @@ public class GM2 : MonoBehaviour
             {
                 regulars[highlightSelected] = 1;
             }
-            
+
             onChangeReg(highlightSelected, 5);
 
 
@@ -925,7 +928,7 @@ public class GM2 : MonoBehaviour
             onMoveHome25();
             onFlipSpace(highlightSelected, DeckScript.spacesGM.ElementAt(highlightSelected).controlPower, DeckScript.spacesGM.ElementAt(highlightSelected).controlMarker);
         }
-        
+
     }
 
     IEnumerator waitDeployment()
@@ -941,7 +944,7 @@ public class GM2 : MonoBehaviour
             UnityEngine.Debug.Log("spring deployment: " + i.ToString());
             UnityEngine.Debug.Log("click commander ");
             //todo: reset click after one valid choice
-            
+
             inputNumberObject.post();
             List<int> trace = findTrace(i);
             highlightSelected = -1;
@@ -1018,7 +1021,7 @@ public class GM2 : MonoBehaviour
             searchIndex.RemoveAt(0);
 
         }
-        
+
         traceable[97] = false;
         traceable[83] = false;
         traceable[21] = false;
@@ -1040,19 +1043,19 @@ public class GM2 : MonoBehaviour
         //need to debug more
         List<int> searchIndex = new List<int>();
         List<int> trace = findTrace(playerIndex);
-        for (int i=0; i<134; i++)
+        for (int i = 0; i < 134; i++)
         {
-            if(spacesGM.ElementAt(i).controlPower == playerIndex)
+            if (spacesGM.ElementAt(i).controlPower == playerIndex)
             {
                 continue;
             }
             //the space is unfortified
-            if(spaces.ElementAt(i).spaceType != (SpaceType)0)
+            if (spaces.ElementAt(i).spaceType != (SpaceType)0)
             {
                 continue;
             }
             //the space is independent or controlled by an enemy power
-            if(spacesGM.ElementAt(i).controlPower!=10&& diplomacyState[playerIndex, spacesGM.ElementAt(i).controlPower] != 1)
+            if (spacesGM.ElementAt(i).controlPower != 10 && diplomacyState[playerIndex, spacesGM.ElementAt(i).controlPower] != 1)
             {
                 continue;
             }
@@ -1080,7 +1083,7 @@ public class GM2 : MonoBehaviour
             }
             searchIndex.Add(i);
         }
-        
+
         return searchIndex;
     }
 
@@ -1116,7 +1119,7 @@ public class GM2 : MonoBehaviour
         if (leaderSelected != spacesGM.ElementAt(capital - 1).leader1 && leaderSelected != spacesGM.ElementAt(capital - 1).leader2)
         {
             leaderSelected = 0;
-            
+
         }
         else
         {
@@ -1129,9 +1132,9 @@ public class GM2 : MonoBehaviour
                 spacesGM.ElementAt(highlightSelected).addLeader(leaderSelected);
                 onChangeLeader(highlightSelected, leaderSelected);
                 command = int.Parse(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text);
-                if (command > leaders.ElementAt(leaderSelected-1).command)
+                if (command > leaders.ElementAt(leaderSelected - 1).command)
                 {
-                    command = leaders.ElementAt(leaderSelected-1).command;
+                    command = leaders.ElementAt(leaderSelected - 1).command;
                 }
 
                 if (command > regulars[capital - 1])
@@ -1148,8 +1151,8 @@ public class GM2 : MonoBehaviour
             onChangeReg(highlightSelected, player);
             onChangeReg(capital - 1, player);
         }
-        
-        
+
+
 
 
     }
@@ -1162,7 +1165,7 @@ public class GM2 : MonoBehaviour
 
     void discardCard(int index)
     {
-        
+
         for (int i = 0; i < hand0.Count(); i++)
         {
             if (hand0.ElementAt(i).id == index)

@@ -45,7 +45,6 @@ public class CPTextScript : MonoBehaviour
             UnityEngine.Debug.Log(value.ToString());
             GM2.onHighlightRectangles(value);
             displayCP = value;
-            GM2.boolStates[3] = false;
         }
         else
         {
