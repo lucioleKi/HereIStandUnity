@@ -33,7 +33,7 @@ public class BackButton : MonoBehaviour
             }
             
         }
-        else if (transform.parent.name == "CanvasDiplomacy")
+        else if (transform.parent.parent.name == "CanvasDiplomacy")
         {
             GameObject.Find("CanvasDiplomacy").GetComponent<CanvasGroup>().alpha = 0;
             GameObject.Find("CanvasDiplomacy").GetComponent<CanvasGroup>().blocksRaycasts = false;

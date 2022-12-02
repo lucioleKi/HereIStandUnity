@@ -288,10 +288,13 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         GM2.highlightSelected = -1;
         if (!GM2.boolStates[3])
         {
-            yield break;
+            
         }
 
         GM2.onCPChange(textScript.displayCP - cost);
+        UnityEngine.Debug.Log(new System.Diagnostics.StackTrace().ToString());
+        UnityEngine.Debug.Log("\n");
+        
     }
 
     public IEnumerator buyRegular()
