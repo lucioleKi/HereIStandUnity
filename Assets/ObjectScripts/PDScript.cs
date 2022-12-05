@@ -35,7 +35,7 @@ public class PDScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && GameObject.Find("KeyLeft").GetComponent<Button>().interactable)
         {
             GM1.player = (GM1.player - 1) % 6;
 
@@ -45,7 +45,7 @@ public class PDScript : MonoBehaviour
             }
             GM2.onPlayerChange();
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKeyDown(KeyCode.RightArrow) && GameObject.Find("KeyRight").GetComponent<Button>().interactable)
         {
             GM1.player = (GM1.player + 1) % 6;
             GM2.onPlayerChange();

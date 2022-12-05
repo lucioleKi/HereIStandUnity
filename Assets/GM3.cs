@@ -8,6 +8,7 @@ using static EnumSpaceScript;
 using static DeckScript;
 using static GM1;
 using static GM2;
+using static GraphUtils;
 
 public class GM3
 {
@@ -325,6 +326,7 @@ public class GM3
         onChangeReg(111, 0);
         onChangeCorsair(111);
         onChangeLeader(111, 17);
+        GM2.boolStates[3]=true;
     }
 
     public void HIS010()

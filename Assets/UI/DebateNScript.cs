@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 using static EnumSpaceScript;
 using static DeckScript;
 using static GM2;
+using static GraphUtils;
 
 public class DebateNScript : MonoBehaviour
 {
@@ -427,7 +428,7 @@ public class DebateNScript : MonoBehaviour
             for (int i = 0; i < hit4 - hit5; i++)
             {
 
-                List<int> pickSpaces = GM2.highlightCReformation();
+                List<int> pickSpaces = highlightCReformation();
                 GM2.highlightSelected = -1;
                 currentTextObject.post("Flip a space to Catholic influence.");
                 onNoLayer();

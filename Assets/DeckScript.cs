@@ -11,6 +11,7 @@ public class DeckScript : MonoBehaviour
 {
     public static DeckScript instanceDeck;
     public static List<SpaceObject> spaces;
+    public static List<SeaObject> seas;
     public static List<CardObject> cardsLib;
     public static List<CardObject> cards;
     public static List<CardObject> activeCards;
@@ -49,6 +50,7 @@ public class DeckScript : MonoBehaviour
     {
         instanceDeck = this;
         importSpaces();
+        importSeas();
         importCards();
         actionName = getAction1d();
         action2d = getAction2d();
@@ -91,6 +93,9 @@ public class DeckScript : MonoBehaviour
                 temp1.name = spaces.ElementAt(i - 1).name;
                 temp1.id = i;
                 temp1.controlPower = (int)spaces.ElementAt(i - 1).homePower;
+                temp1.regularPower = (int)spaces.ElementAt(i - 1).homePower;
+                temp1.mercPower = (int)spaces.ElementAt(i - 1).homePower;
+                temp1.squadronPower = (int)spaces.ElementAt(i - 1).homePower;
                 regularsPower[i - 1] = (int)spaces.ElementAt(i - 1).homePower;
                 spacesGM.Add(temp1);
             }
@@ -159,6 +164,46 @@ public class DeckScript : MonoBehaviour
                 row++;
             }
             
+
+        }
+    }
+
+    void importSeas()
+    {
+        seas = new List<SeaObject>();
+        int row = 0;
+        using (var reader = new StreamReader("Assets/Input/seas.csv"))
+        {
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+                SeaObject temp = new SeaObject();
+                temp.name = values[1];
+                temp.id = int.Parse(values[0]);
+                temp.adjacent = new List<int>();
+                temp.ports = new List<int>();
+                for (int j = 2; j <= 5; j++)
+                {
+                    if (values[j] != null && values[j] != "")
+                    {
+                        temp.adjacent.Add(int.Parse(values[j]));
+                    }
+
+                }
+                for (int j = 6; j <= 14; j++)
+                {
+                    if (values[j] != null && values[j] != "")
+                    {
+                        temp.ports.Add(int.Parse(values[j]));
+                    }
+
+                }
+
+                seas.Add(temp);
+                row++;
+            }
+
 
         }
     }

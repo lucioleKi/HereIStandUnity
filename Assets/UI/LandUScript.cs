@@ -113,7 +113,6 @@ public class LandUScript : MonoBehaviour
 
                 return;
             }
-
             string tempName = temp.controlPower.ToString();
             GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/LandU11/" + tempName), new Vector3(spaces.ElementAt(i).posX + 970, spaces.ElementAt(i).posY + 547, 0), Quaternion.identity);
             tempObject.transform.SetParent(gameObject.transform);
@@ -199,7 +198,7 @@ public class LandUScript : MonoBehaviour
         //make new marker and #
         else if (regulars[index]!=0)
         {
-            
+            DeckScript.spacesGM.ElementAt(index).regularPower = power;
             string tempName = power.ToString();
             GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/LandU11/" + tempName), new Vector3(spaces.ElementAt(index).posX + 970, spaces.ElementAt(index).posY + 547, 0), Quaternion.identity);
             tempObject.transform.SetParent(GameObject.Find("LandUDisplay").transform);

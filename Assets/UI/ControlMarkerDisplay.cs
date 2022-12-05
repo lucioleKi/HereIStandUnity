@@ -101,7 +101,7 @@ public class ControlMarkerDisplay : MonoBehaviour
                 return;
             }
             string tempName = (temp.controlPower * 4 + temp.controlMarker - 1).ToString() + "_" + temp.controlPower.ToString();
-            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/ControlMarker21/" + tempName), new Vector3(spaces.ElementAt(i).posX+960, spaces.ElementAt(i).posY+540, 0), Quaternion.identity);
+            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/ControlMarker21/" + tempName), new Vector3(spaces.ElementAt(i).posX+760, spaces.ElementAt(i).posY+590, 0), Quaternion.identity);
             tempObject.transform.SetParent(gameObject.transform);
             tempObject.name = spaces.ElementAt(i).name;
             tempObject.SetActive(true);
@@ -120,7 +120,7 @@ public class ControlMarkerDisplay : MonoBehaviour
             return;
         }
         string tempName = (power * 4 + marker - 1).ToString() + "_" + power.ToString();
-        GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/ControlMarker21/" + tempName), new Vector3(spaces.ElementAt(index).posX + 960, spaces.ElementAt(index).posY + 540, 0), Quaternion.identity);
+        GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/ControlMarker21/" + tempName), new Vector3(spaces.ElementAt(index).posX + 760, spaces.ElementAt(index).posY + 590, 0), Quaternion.identity);
         tempObject.transform.SetParent(GameObject.Find("SpacesDisplay").transform);
         tempObject.name = spaces.ElementAt(index).name;
         tempObject.SetActive(true);

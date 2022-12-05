@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using static EnumSpaceScript;
 using static DeckScript;
 using static GM2;
+using static GraphUtils;
 
 public class HighlightScript : MonoBehaviour, IPointerClickHandler
 {
@@ -58,6 +59,15 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status0.CPcost[i])
                     {
+                        //check if there are units that can move over a pass
+                        if (findPassFormation(0).Count() == 0&&i==1)
+                        {
+                            continue;
+                        }
+                        if (!GM2.boolStates[3]&&(i==4||i==8))
+                        {
+                            continue;
+                        }
                         if (i < 5)
                         {
                             tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(628 + 960, -333 - 10 * i + 540, 0), Quaternion.identity);
@@ -78,6 +88,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status1.CPcost[i])
                     {
+                        //check if there are units that can move over a pass
+                        if (findPassFormation(1).Count() == 0 && i == 1)
+                        {
+                            continue;
+                        }
                         if (i < 6)
                         {
                             tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(628 + 960, -333 - 10 * i + 540, 0), Quaternion.identity);
@@ -98,6 +113,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status2.CPcost[i])
                     {
+                        //check if there are units that can move over a pass
+                        if (findPassFormation(2).Count() == 0 && i == 1)
+                        {
+                            continue;
+                        }
                         if (i < 6)
                         {
                             tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(631 + 960, -331 - 10 * i + 540, 0), Quaternion.identity);
@@ -118,7 +138,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status3.CPcost[i])
                     {
-
+                        //check if there are units that can move over a pass
+                        if (findPassFormation(3).Count() == 0 && i == 1)
+                        {
+                            continue;
+                        }
                         tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(628 + 960, -334 - 9.4f * i + 540, 0), Quaternion.identity);
                         tempObject.GetComponent<RectTransform>().sizeDelta = new Vector2(95, 9);
                         tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
@@ -132,6 +156,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status4.CPcost[i])
                     {
+                        //check if there are units that can move over a pass
+                        if (findPassFormation(4).Count() == 0 && i == 1)
+                        {
+                            continue;
+                        }
                         if (GM1.turn < 5&&i==10)
                         {
                             continue;
@@ -156,6 +185,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status5.CPcost[i])
                     {
+                        //check if there are units that can move over a pass
+                        if (findPassFormation(5).Count() == 0 && i == 1)
+                        {
+                            continue;
+                        }
                         if (GM1.turn < 2 && i < 6)
                         {
                             continue;

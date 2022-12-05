@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using static GM2;
+using static GraphUtils;
 
 public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 {
@@ -41,10 +42,12 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             case 0:
                 //move formation in clear
                 cost = 1;
+                StartCoroutine(moveInClear1());
                 break;
             case 1:
                 //move formation over pass
                 cost = 2;
+                StartCoroutine(moveOverPass());
                 break;
             case 2:
                 if (GM1.player == 5)
@@ -113,6 +116,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //build naval squadron
                     cost = 2;
+                    StartCoroutine(buySquadron());
                 }
                 break;
             case 6:
@@ -159,6 +163,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //build corsair
                     cost = 1;
+                    StartCoroutine(buyCorsair());
                 }
                 else if (GM1.player == 4)
                 {
@@ -193,6 +198,8 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 if (GM1.player == 0)
                 {
                     //build naval squadron
+                    cost = 2;
+                    StartCoroutine(buySquadron());
                 }
                 else if (GM1.player == 4)
                 {
@@ -247,6 +254,57 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         
     }
 
+    public IEnumerator moveInClear1()
+    {
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        List<int> trace = findClearFormation(GM1.player);
+        GM2.highlightSelected = -1;
+        GM2.onNoLayer();
+
+        //declare formation and starting space for moving
+
+        //declare destination
+
+       
+
+
+        GM2.onHighlight(trace);
+        while (GM2.highlightSelected == -1)
+        {
+            yield return null;
+        }
+        GM2.highlightSelected = -1;
+        GM2.onCPChange(textScript.displayCP - cost);
+    }
+
+    public IEnumerator moveInClear2()
+    {
+        yield break;
+    }
+
+    public IEnumerator moveOverPass()
+    {
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        List<int> trace = findPassFormation(GM1.player);
+        GM2.highlightSelected = -1;
+        GM2.onNoLayer();
+
+        //declare formation and starting space for moving
+
+        //declare destination
+
+
+
+
+        GM2.onHighlight(trace);
+        while (GM2.highlightSelected == -1)
+        {
+            yield return null;
+        }
+        GM2.highlightSelected = -1;
+        GM2.onCPChange(textScript.displayCP - cost);
+    }
+
     public IEnumerator theologicalDebate()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
@@ -263,7 +321,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     public IEnumerator buyMerc()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        List<int> trace = GM2.findTrace(GM1.player);
+        List<int> trace = findTrace(GM1.player);
         improveTrace(trace);
         GM2.highlightSelected = -1;
         GM2.onNoLayer();
@@ -282,15 +340,13 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         
 
         GM2.onCPChange(textScript.displayCP - cost);
-        UnityEngine.Debug.Log(new System.Diagnostics.StackTrace().ToString());
-        UnityEngine.Debug.Log("\n");
-        
+        //UnityEngine.Debug.Log(new System.Diagnostics.StackTrace().ToString());
     }
 
     public IEnumerator buyRegular()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        List<int> trace = GM2.findTrace(GM1.player);
+        List<int> trace = findTrace(GM1.player);
         improveTrace(trace);
         GM2.highlightSelected = -1;
         GM2.onNoLayer();
@@ -313,7 +369,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     public IEnumerator buyCav()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        List<int> trace = GM2.findTrace(GM1.player);
+        List<int> trace = findTrace(GM1.player);
         improveTrace(trace);
         GM2.highlightSelected = -1;
         GM2.onNoLayer();
@@ -331,10 +387,52 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
+    public IEnumerator buySquadron()
+    {
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        List<int> trace = findPorts(GM1.player);
+       
+        GM2.highlightSelected = -1;
+        GM2.onNoLayer();
+
+
+
+        GM2.onHighlight(trace);
+        while (GM2.highlightSelected == -1)
+        {
+            yield return null;
+        }
+        DeckScript.spacesGM.ElementAt(GM2.highlightSelected).squadron++;
+        GM2.onChangeSquadron(GM2.highlightSelected, GM1.player);
+        GM2.highlightSelected = -1;
+        GM2.onCPChange(textScript.displayCP - cost);
+    }
+
+    public IEnumerator buyCorsair()
+    {
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        List<int> trace = findPorts(0);
+
+        GM2.highlightSelected = -1;
+        GM2.onNoLayer();
+
+
+
+        GM2.onHighlight(trace);
+        while (GM2.highlightSelected == -1)
+        {
+            yield return null;
+        }
+        DeckScript.spacesGM.ElementAt(GM2.highlightSelected).corsair++;
+        GM2.onChangeCorsair(GM2.highlightSelected);
+        GM2.highlightSelected = -1;
+        GM2.onCPChange(textScript.displayCP - cost);
+    }
+
     public IEnumerator controlUnfortified()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        List<int> trace = GM2.findUnfortified(GM1.player);
+        List<int> trace = findUnfortified(GM1.player);
         if(trace.Count()== 0)
         {
             GM2.onCPChange(textScript.displayCP);
@@ -372,7 +470,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         HandMarkerScript handMarkerObject = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
         for(int i= 0; i < 2; i++)
         {
-            List<int> pickSpaces = GM2.highlightCReformation();
+            List<int> pickSpaces = highlightCReformation();
             GM2.highlightSelected = -1;
             currentTextObject.post("Flip a space to Catholic influence.");
             onNoLayer();
@@ -403,7 +501,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         HandMarkerScript handMarkerObject = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
         for (int i = 0; i < 2; i++)
         {
-            List<int> pickSpaces = GM2.highlightReformation();
+            List<int> pickSpaces = highlightReformation();
             GM2.highlightSelected = -1;
             currentTextObject.post("Flip a space to Protestant influence.");
             onNoLayer();
@@ -499,28 +597,5 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
-    public List<int> improveTrace(List<int> trace)
-    {
-        switch (GM1.player)
-        {
-            case 0:
-                trace.Add(97);
-                break;
-            case 1:
-                trace.Add(83);
-                trace.Add(21);
-                break;
-            case 2:
-                trace.Add(27);
-                break;
-            case 3:
-                trace.Add(41);
-                break;
-            case 4:
-                trace.Add(65);
-                break;
-            
-        }
-        return trace;
-    }
+    
 }
