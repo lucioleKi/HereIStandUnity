@@ -1,30 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class MapSize : MonoBehaviour
+public class MapSize : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    float currentX;
-    float currentY;
+    bool hover = false;
     // Start is called before the first frame update
     void Start()
     {
-        currentX = 1536f;
-        currentY = 993.75f;
+        
+    }
+
+    void OnEnable()
+    {
+    }
+
+    void OnDisable()
+    {
     }
 
     // Update is called once per frame
     void Update()
     {
-        //todo: fix the refresh or put a hard stop when the mouse zooms out too much
-        float factor = Mathf.Clamp(gameObject.transform.localScale.x + Input.GetAxis("Mouse ScrollWheel"), 0.25f, 4f);
-        if (factor < 1 && currentY<1000 || factor>1&&currentX>=6144&&currentY>=3975)
-        {
-            return;
+       
+        if(hover) {
+            float factor = Mathf.Clamp(gameObject.transform.localScale.x + Input.GetAxis("Mouse ScrollWheel"), 0.25f, 4f);
+            if (gameObject.transform.localScale.x < 1)
+            {
+                gameObject.transform.localScale = new Vector3(1, 1, 1);
+
+                return;
+            }
+            else if (gameObject.transform.localScale.x > 4 && factor > 1)
+            {
+                return;
+            }
+            gameObject.transform.localScale = new Vector3(factor, factor, 1);
         }
-        gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, factor * currentX);
-        gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, factor * currentY);
-        currentX = factor * currentX;
-        currentY = factor * currentY;
+        
+
+    }
+
+    
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        hover= true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        hover= false;
     }
 }

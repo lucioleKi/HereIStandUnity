@@ -37,6 +37,7 @@ public class LeaderScript : MonoBehaviour
 
     void initLeaders()
     {
+        GM2.resetMap();
         for (int i = 0; i < spaces.Count(); i++)
         {
 
@@ -114,6 +115,7 @@ public class LeaderScript : MonoBehaviour
 
     void changeLeader(int to, int index)
     {
+        GM2.resetMap();
         //destroy leader
         if (to == -1)
         {

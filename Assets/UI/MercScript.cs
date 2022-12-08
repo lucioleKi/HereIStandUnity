@@ -40,6 +40,7 @@ public class MercScript : MonoBehaviour
 
     void changeMerc(int index, int power)
     {
+        GM2.resetMap();
         SpaceGM temp = spacesGM.ElementAt(index);
 
 

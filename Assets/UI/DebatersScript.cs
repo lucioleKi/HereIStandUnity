@@ -39,7 +39,6 @@ public class DebatersScript : MonoBehaviour
 
     void initUnits(int i)
     {
-
         DebaterObject temp = debaters.ElementAt(i);
         GameObject tempObject1 = GameObject.Find("debater_" + temp.id.ToString());
         if(tempObject1 == null)
@@ -63,12 +62,12 @@ public class DebatersScript : MonoBehaviour
                 if (temp.type == 0)
                 {
 
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(650 + index0 * 27, 370);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-100 + index0 * 27, 80);
                     index0++;
                 }
                 else if(temp.type == 1)
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(595 + index1 % 2 * 27, 283 + index1 / 2 * 27);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-150 + index1 % 2 * 27, -3 + index1 / 2 * 27);
                     index1++;
                 }
             }
@@ -84,6 +83,14 @@ public class DebatersScript : MonoBehaviour
         }
         else
         {
+            if (temp.status == (DebaterStatus)1)
+            {
+                GameObject.Find("debater_" + temp.id.ToString()).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Debaters/" + temp.name + "Debater");
+            }
+            else if(temp.status==(DebaterStatus)2)
+            {
+                GameObject.Find("debater_" + temp.id.ToString()).GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Debaters/" + temp.name + "Debater_back");
+            }
             if (temp.type == 0)
             {
                 index0++;
@@ -102,6 +109,7 @@ public class DebatersScript : MonoBehaviour
 
     public void updateDebater()
     {
+        GM2.resetReligious();
         index0 = 0;
         index1 = 0;
         for (int i = 0; i < debaters.Count(); i++)
@@ -112,6 +120,7 @@ public class DebatersScript : MonoBehaviour
 
     public void putPapal(int i)
     {
+        GM2.resetReligious();
         DebaterObject temp = debaters.ElementAt(i);
         UnityEngine.Debug.Log(temp.id);
         GameObject newObject = new GameObject("papal_" + temp.id.ToString(), typeof(RectTransform), typeof(Image));
@@ -119,12 +128,13 @@ public class DebatersScript : MonoBehaviour
         newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
         newObject.transform.SetParent(gameObject.transform);
         newObject.AddComponent<DebaterClick>();
-        newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(862, 296);
+        newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(103, 6);
         
     }
 
     public void putProtestant(int i)
     {
+        GM2.resetReligious();
         DebaterObject temp = debaters.ElementAt(i);
         UnityEngine.Debug.Log(temp.id);
         GameObject newObject = new GameObject("protestant_" + (i + 1).ToString(), typeof(RectTransform), typeof(Image));
@@ -132,12 +142,13 @@ public class DebatersScript : MonoBehaviour
         newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
         newObject.transform.SetParent(gameObject.transform);
         newObject.AddComponent<DebaterClick>();
-        newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(905, 296);
+        newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(142, 6);
         
     }
 
     public void removePapal(int i)
     {
+        GM2.resetReligious();
         DebaterObject temp = debaters.ElementAt(i);
         GameObject tempObject1 = GameObject.Find("papal_" + temp.id.ToString());
         Destroy(tempObject1.gameObject);
@@ -145,8 +156,22 @@ public class DebatersScript : MonoBehaviour
 
     public void removeProtestant(int i)
     {
+        GM2.resetReligious();
         DebaterObject temp = debaters.ElementAt(i);
         GameObject tempObject1 = GameObject.Find("protestant_" + temp.id.ToString());
         Destroy(tempObject1.gameObject);
+    }
+
+    public void toUncommited()
+    {
+        for(int i=0; i< debaters.Count(); i++)
+        {
+            if (debaters.ElementAt(i).status == (DebaterStatus)2)
+            {
+                debaters.ElementAt(i).status = (DebaterStatus)1;
+                
+            }
+        }
+        updateDebater();
     }
 }

@@ -49,6 +49,7 @@ public class NavalScript : MonoBehaviour
 
     void changeSquadron(int index, int power)
     {
+        GM2.resetMap();
         if (gameObject.transform.Find("squadron_" + (index + 1).ToString()) != null)
         {
             //destroy if changed to 0
@@ -77,6 +78,7 @@ public class NavalScript : MonoBehaviour
 
     void makeSquadron(int index, int power)
     {
+        GM2.resetMap();
         GameObject newObject = new GameObject("squadron_" + (index + 1).ToString(), typeof(RectTransform), typeof(Image));
         GameObject number1 = Instantiate((GameObject)Resources.Load("Objects/Number"), new Vector3(spaces.ElementAt(index).posX + 970f + 14, spaces.ElementAt(index).posY + 532f - 9f, 0), Quaternion.identity);
 
@@ -101,6 +103,7 @@ public class NavalScript : MonoBehaviour
 
     void changeCorsair(int index)
     {
+        GM2.resetMap();
         if (gameObject.transform.Find("corsair_" + (index + 1).ToString()) != null)
         {
             //destroy if changed to 0

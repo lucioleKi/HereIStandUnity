@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using static EnumSpaceScript;
 using static DeckScript;
 using static GM2;
@@ -39,10 +40,12 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
 
     void highlight(List<int> highlightSpaces)
     {
-
+        GM2.resetMap();
+        //GameObject.Find("Map1").transform.position = new Vector2(0, 0);
         for (int i = 0; i < highlightSpaces.Count; i++)
         {
-            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/circle"), new Vector3(spaces.ElementAt(highlightSpaces.ElementAt(i)).posX + 960, spaces.ElementAt(highlightSpaces.ElementAt(i)).posY + 540, 0), Quaternion.identity);
+            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/circle"), new Vector3(0, 0, 0), Quaternion.identity);
+            tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(highlightSpaces.ElementAt(i)).posX + 960, spaces.ElementAt(highlightSpaces.ElementAt(i)).posY + 540);
             tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
             tempObject.name = "highlight_" + highlightSpaces.ElementAt(i).ToString();
         }
@@ -51,6 +54,8 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
 
     void highlightCP(int currentCP)
     {
+        GM2.resetPower();
+
         GameObject tempObject;
         switch (GM1.player)
         {
@@ -64,20 +69,26 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if piracy is possible
                         if (!GM2.boolStates[3]&&(i==4||i==8))
+                        {
+                            continue;
+                        }
+                        //check if there are unfortified space
+                        if (findUnfortified(0).Count() == 0 && i == 3)
                         {
                             continue;
                         }
                         if (i < 5)
                         {
-                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(628 + 960, -333 - 10 * i + 540, 0), Quaternion.identity);
+                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(637 + 960, -336 - 10 * i + 540, 0), Quaternion.identity);
                         }
                         else
                         {
-                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(736 + 960, -333 - 10 * (i-5) + 540, 0), Quaternion.identity);
+                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(745 + 960, -336 - 10 * (i-5) + 540, 0), Quaternion.identity);
 
                         }
-                        tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        tempObject.transform.SetParent(GameObject.Find("HighlightCPDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlightRect_" + i.ToString();
                     }
@@ -93,16 +104,21 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if there are unfortified space
+                        if (findUnfortified(1).Count() == 0 && i == 7)
+                        {
+                            continue;
+                        }
                         if (i < 6)
                         {
-                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(628 + 960, -333 - 10 * i + 540, 0), Quaternion.identity);
+                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(637 + 960, -336 - 10 * i + 540, 0), Quaternion.identity);
                         }
                         else
                         {
-                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(736 + 960, -333 - 10 * (i-6) + 540, 0), Quaternion.identity);
+                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(745 + 960, -336 - 10 * (i-6) + 540, 0), Quaternion.identity);
 
                         }
-                        tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        tempObject.transform.SetParent(GameObject.Find("HighlightCPDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlightRect_" + i.ToString();
                     }
@@ -118,16 +134,21 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if there are unfortified space
+                        if (findUnfortified(2).Count() == 0 && i == 7)
+                        {
+                            continue;
+                        }
                         if (i < 6)
                         {
-                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(631 + 960, -331 - 10 * i + 540, 0), Quaternion.identity);
+                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(640 + 960, -334 - 10 * i + 540, 0), Quaternion.identity);
                         }
                         else
                         {
-                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(738 + 960, -333 - 10 * (i-6) + 540, 0), Quaternion.identity);
+                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(747 + 960, -336 - 10 * (i-6) + 540, 0), Quaternion.identity);
 
                         }
-                        tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        tempObject.transform.SetParent(GameObject.Find("HighlightCPDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlightRect_" + i.ToString();
                     }
@@ -143,9 +164,14 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
-                        tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(628 + 960, -334 - 9.4f * i + 540, 0), Quaternion.identity);
+                        //check if there are unfortified space
+                        if (findUnfortified(3).Count() == 0 && i == 7)
+                        {
+                            continue;
+                        }
+                        tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(637 + 960, -337 - 9.4f * i + 540, 0), Quaternion.identity);
                         tempObject.GetComponent<RectTransform>().sizeDelta = new Vector2(95, 9);
-                        tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        tempObject.transform.SetParent(GameObject.Find("HighlightCPDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlightRect_" + i.ToString();
                     }
@@ -161,20 +187,26 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if can build jesuit university
                         if (GM1.turn < 5&&i==10)
+                        {
+                            continue;
+                        }
+                        //check if there are unfortified space
+                        if (findUnfortified(4).Count() == 0 && i == 7)
                         {
                             continue;
                         }
                         if (i < 6)
                         {
-                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(628 + 960, -346 - 10 * i + 540, 0), Quaternion.identity);
+                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(637 + 960, -349 - 10 * i + 540, 0), Quaternion.identity);
                         }
                         else
                         {
-                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(735 + 960, -346 - 10 * (i-6) + 540, 0), Quaternion.identity);
+                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(744 + 960, -349 - 10 * (i-6) + 540, 0), Quaternion.identity);
 
                         }
-                        tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        tempObject.transform.SetParent(GameObject.Find("HighlightCPDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlightRect_" + i.ToString();
                     }
@@ -190,20 +222,26 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if can raise army
                         if (GM1.turn < 2 && i < 6)
+                        {
+                            continue;
+                        }
+                        //check if there are unfortified space
+                        if (findUnfortified(5).Count() == 0 && i == 5)
                         {
                             continue;
                         }
                         if (i < 4)
                         {
-                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(628 + 960, -335 - 10 * i + 540, 0), Quaternion.identity);
+                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(637 + 960, -338 - 10 * i + 540, 0), Quaternion.identity);
                         }
                         else
                         {
-                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(735 + 960, -335 - 10 * (i-4) + 540, 0), Quaternion.identity);
+                            tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(744 + 960, -338 - 10 * (i-4) + 540, 0), Quaternion.identity);
 
                         }
-                        tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                        tempObject.transform.SetParent(GameObject.Find("HighlightCPDisplay").transform);
                         //tempObject.AddComponent<HighlightCPScript>();
                         tempObject.name = "highlightRect_" + i.ToString();
                     }
@@ -212,8 +250,8 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    void removeHighlight()
-    {
+    void removeHighlight() { 
+  
         /*for (int i = 0; i < highlightSpaces.Count; i++)
         {
 
@@ -236,7 +274,6 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         //UnityEngine.Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
-
         removeHighlight();
         LayerScript layerScript = GameObject.Find("Layers").GetComponent("LayerScript") as LayerScript;
         layerScript.changeLayer();

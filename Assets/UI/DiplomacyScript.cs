@@ -30,6 +30,7 @@ public class DiplomacyScript : MonoBehaviour
 
     void changeDip()
     {
+        GM2.resetMap();
         foreach (Transform child in GameObject.Find("DiplomacyDisplay").transform)
         {
             GameObject.Destroy(child.gameObject);

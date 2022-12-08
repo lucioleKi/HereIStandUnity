@@ -24,8 +24,11 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
     }
 
+   
+
     public void OnPointerClick(PointerEventData eventData)
     {
+        GM2.resetPower();
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         if (eventData.pointerCurrentRaycast.gameObject.name[9] == 'R')
         {
@@ -36,7 +39,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         {
             return;
         }
-        GM2.onRemoveHighlight();
+        removeHighlight();
         switch (actionIndex)
         {
             case 0:
@@ -444,17 +447,16 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
         GM2.onHighlight(trace);
         UnityEngine.Debug.Log(trace.Count());
-       
-        
+        while (GM2.highlightSelected == -1)
+        {
+            yield return null;
+        }
+
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).controlPower = GM1.player;
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).controlMarker = 1;
         GM2.onAddSpace(GM2.highlightSelected, GM1.player, 1);
         GM2.highlightSelected = -1;
-        if (!GM2.boolStates[3])
-        {
-            yield break;
-        }
-
+        
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
@@ -597,5 +599,13 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
-    
+    void removeHighlight() { 
+  
+        
+        foreach (Transform child in gameObject.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+    }
 }

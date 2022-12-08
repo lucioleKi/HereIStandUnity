@@ -30,13 +30,13 @@ public class GM2 : MonoBehaviour
     public static string chosenCard = "";
 
     public delegate void SimpleHandler();
-    public static SimpleHandler on8;
     public static SimpleHandler onVP;
     public static SimpleHandler onPhase2;
     public static SimpleHandler onPhase3;
     public static SimpleHandler onPhase4;
     public static SimpleHandler onPhase5;
     public static SimpleHandler onPhase6;
+    public static SimpleHandler onPhase7;
     public static SimpleHandler onHighlightSelected;
     public static SimpleHandler onChangeDip;
     public static SimpleHandler onChangePhase;
@@ -78,7 +78,8 @@ public class GM2 : MonoBehaviour
 
 
     public static bool[] boolStates;
-    //0: waitCard for HIS003. 1: phaseEnd. 2: theological debate (CP action). 3: is piracy allowed. 4: Henry VIII marries Anne Boleyn
+    //0: waitCard for HIS003. 1: phaseEnd. 2: theological debate (CP action). 3: is piracy allowed. 4: Henry VIII marries Anne Boleyn. 5: turn 2 card 10. 6: turn 3 card 9. 
+    //7: turn 4 card 13. 8: turn 4 card 14. 9: turn 6 card 15.
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
@@ -98,6 +99,7 @@ public class GM2 : MonoBehaviour
         onPhase4 += phase4;
         onPhase5 += phase5;
         onPhase6 += phase6;
+        onPhase7 += phase7;
     }
 
 
@@ -109,6 +111,7 @@ public class GM2 : MonoBehaviour
         onPhase4 -= phase4;
         onPhase5 -= phase5;
         onPhase6 -= phase6;
+        onPhase7 -= phase7;
     }
 
     /*if (onMoveHome25 != null)
@@ -119,7 +122,26 @@ public class GM2 : MonoBehaviour
     */
 
 
+    public static void resetMap()
+    {
+        GameObject.Find("Map1").transform.localScale = new Vector3(1, 1, 1);
+        GameObject.Find("ScrollMapElements").GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+        GameObject.Find("ScrollMapElements").GetComponent<ScrollRect>().horizontalNormalizedPosition = 0;
+    }
 
+    public static void resetReligious()
+    {
+        GameObject.Find("Religious").transform.localScale = new Vector3(1, 1, 1);
+        GameObject.Find("ScrollReligiousCard").GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+        GameObject.Find("ScrollReligiousCard").GetComponent<ScrollRect>().horizontalNormalizedPosition = 0;
+    }
+
+    public static void resetPower()
+    {
+        GameObject.Find("PowerDisplay").transform.localScale = new Vector3(1, 1, 1);
+        GameObject.Find("ScrollPowerCard").GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+        GameObject.Find("ScrollPowerCard").GetComponent<ScrollRect>().horizontalNormalizedPosition = 0;
+    }
 
 
     void mandatory(int index)
@@ -952,6 +974,34 @@ public class GM2 : MonoBehaviour
 
     }
 
+    void phase7()
+    {
+        //return naval units
+
+        //return land units
+
+        //remove alliance markers
+        GM1.clearAlliance();
+        onChangeDip();
+        //add 1 regular to each friendly-controlled capital, todo: not under unrest
+        checkCapital(0, 98);
+        checkCapital(1, 84);
+        checkCapital(1, 22);
+        checkCapital(2, 28);
+        checkCapital(3, 42);
+        checkCapital(4, 66);
+        //flip debaters to uncommitted
+        DebatersScript debaterObject = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
+        debaterObject.toUncommited();
+        //resolve mandatory events
+    }
+
+    void checkCapital(int power, int index)
+    {
+        DeckScript.spacesGM.ElementAt(index-1).regular++;
+        DeckScript.regulars[index-1]++;
+        onChangeReg(index-1, power);
+    }
 
     void discardCard(int index)
     {

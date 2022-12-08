@@ -94,3 +94,7 @@ Peace segment, QOL improvements.
 12/5/2022
 
 Seas and naval movements. Move formation over clear/pass part 1. Started scroll view for map and zoom in/out.
+
+12/8/2022
+
+Finished scroll view for all 3 boards. Started logic for winter phase.

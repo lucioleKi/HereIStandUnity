@@ -23,13 +23,13 @@ public class Status0 : StatusObject
             for (int i = GM1.cardTracks[0] + 1; i < 6; i++)
             {
                 GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_0"), new Vector3(0, 0, 0), Quaternion.identity);
-                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[1] + i * offsetX[1] + 960, posY[1] + 540);
+                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[1] + i * offsetX[1] + 965, posY[1] + 537);
                 newObject.transform.SetParent(GameObject.Find("HandMarkerDisplay").transform);
             }
             for (int i = 6; i < 11; i++)
             {
                 GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_0"), new Vector3(0, 0, 0), Quaternion.identity);
-                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[1] + (i - 6) * offsetX[1] + 960, posY[1] + 540 + offsetY[1]);
+                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[1] + (i - 6) * offsetX[1] + 965, posY[1] + 537 + offsetY[1]);
                 newObject.transform.SetParent(GameObject.Find("HandMarkerDisplay").transform);
             }
 
@@ -39,14 +39,14 @@ public class Status0 : StatusObject
             for (int i = GM1.cardTracks[0] + 1; i < 11; i++)
             {
                 GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_0"), new Vector3(0, 0, 0), Quaternion.identity);
-                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[1] + (i - 6) * offsetX[1] + 960, posY[1] + 540 + offsetY[1]);
+                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[1] + (i - 6) * offsetX[1] + 965, posY[1] + 537 + offsetY[1]);
                 newObject.transform.SetParent(GameObject.Find("HandMarkerDisplay").transform);
             }
         }
         if (GM1.piracyC < 5)
         {
             GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_6"), new Vector3(0, 0, 0), Quaternion.identity);
-            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[0] + piracyTrack * offsetX[0] + 960, posY[0] + 540);
+            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[0] + piracyTrack * offsetX[0] + 960, posY[0] + 537);
             newObject.transform.SetParent(GameObject.Find("HandMarkerDisplay").transform);
 
         }
@@ -54,7 +54,7 @@ public class Status0 : StatusObject
         {
 
             GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_6"), new Vector3(0, 0, 0), Quaternion.identity);
-            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[0] + (piracyTrack - 6) * offsetX[0] + 960, posY[0] + 540 + offsetY[0]);
+            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[0] + (piracyTrack - 6) * offsetX[0] + 965, posY[0] + 537 + offsetY[0]);
             newObject.transform.SetParent(GameObject.Find("HandMarkerDisplay").transform);
 
         }

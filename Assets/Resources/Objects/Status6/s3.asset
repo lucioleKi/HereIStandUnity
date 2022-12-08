@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: s3
   m_EditorClassIdentifier: 
   playerIndex: 3
-  posX: 4f020000c0020000
-  posY: 2dfeffff4dfeffff
+  posX: 52020000c3020000
+  posY: 29feffff49feffff
   offsetX:
-  - 31
+  - 32
   - 26.67
   offsetY:
   - -32

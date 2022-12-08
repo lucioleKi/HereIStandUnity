@@ -34,7 +34,8 @@ public class RulerScript : MonoBehaviour
 
     void changeRuler(int power, int index)
     {
-        if(gameObject.transform.Find("ruler_" + (power).ToString()) == null)
+        GM2.resetPower();
+        if (gameObject.transform.Find("ruler_" + (power).ToString()) == null)
         {
             GameObject newObject = new GameObject("ruler_" + (power).ToString(), typeof(RectTransform), typeof(Image), typeof(CanvasGroup));
             newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(864+961, -375+540);

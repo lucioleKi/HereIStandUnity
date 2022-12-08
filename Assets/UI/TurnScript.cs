@@ -10,28 +10,40 @@ public class TurnScript : MonoBehaviour
     void Start()
     {
         
-        displayTurn = GM1.turn;
+        displayTurn = GM1.phase;
        
         turnPosition();
+    }
+
+    void OnEnable()
+    {
+
+        //GM2.onChangePhase += turnPosition;
+
+    }
+
+    void OnDisable()
+    {
+
+        //GM2.onChangePhase -= turnPosition;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (displayTurn != GM1.turn)
-        {
-            displayTurn = GM1.turn;
-            turnPosition();
-        }
+        
         
     }
 
 
     void turnPosition()
     {
+        GM2.resetMap();
+        displayTurn = GM1.phase;
         RectTransform pos = gameObject.GetComponent<RectTransform>();
         
-        pos.anchoredPosition = new Vector2(195 + (displayTurn-1) * 40.375f, -485);
+        pos.localPosition = new Vector2(195 + (displayTurn-1) * 40.375f, -485);
         
     }
 }

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: s1
   m_EditorClassIdentifier: 
   playerIndex: 1
-  posX: 4c020000
-  posY: 50feffff
+  posX: 50020000
+  posY: 4afeffff
   offsetX:
   - 34
   offsetY:

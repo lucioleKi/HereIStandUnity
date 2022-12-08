@@ -43,6 +43,7 @@ public class LandUScript : MonoBehaviour
 
     void initUnits(int i)
     {
+        GM2.resetMap();
         CitySetup temp = Resources.Load("Objects/1517/" + (i + 1).ToString()) as CitySetup;
         if (temp != null && temp.regular != 0)
         {
@@ -130,7 +131,7 @@ public class LandUScript : MonoBehaviour
 
     void changeReg(int index, int power)
     {
-
+        GM2.resetMap();
         //if reg marker and # already exist
         if (index > 133)
         {

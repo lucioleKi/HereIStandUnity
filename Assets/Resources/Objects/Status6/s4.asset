@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: s4
   m_EditorClassIdentifier: 
   playerIndex: 4
-  posX: 4b02000049020000490200007f020000
-  posY: 0cfeffff52feffff36feffffc8feffff
+  posX: 4d0200004c0200004c02000082020000
+  posY: 09feffff4ffeffff33feffffc5feffff
   offsetX:
-  - 33
+  - 34
   - 28
   - 28
   - 24.83

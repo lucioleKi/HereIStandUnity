@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: s5
   m_EditorClassIdentifier: 
   playerIndex: 5
-  posX: 4902000049020000
-  posY: 4efeffff26feffff
+  posX: 4d0200004d020000
+  posY: 4afeffff22feffff
   offsetX:
   - 28
   - 28

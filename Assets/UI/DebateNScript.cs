@@ -51,6 +51,7 @@ public class DebateNScript : MonoBehaviour
 
     void buttonCallBack()
     {
+        GM2.resetReligious();
         DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
         InputToggleObject inputToggleObject = GameObject.Find("InputToggle").GetComponent("InputToggleObject") as InputToggleObject;
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
@@ -414,6 +415,7 @@ public class DebateNScript : MonoBehaviour
 
     public IEnumerator step79()
     {
+        GM2.resetReligious();
         DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
         //resolve
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;

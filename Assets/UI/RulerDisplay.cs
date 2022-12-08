@@ -31,6 +31,7 @@ public class RulerDisplay : MonoBehaviour
 
     void changeDisplay()
     {
+        GM2.resetPower();
         if (GM1.player == int.Parse(gameObject.name.Substring(6))){
             
             gameObject.GetComponent<CanvasGroup>().alpha = 1;

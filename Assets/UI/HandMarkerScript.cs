@@ -47,6 +47,7 @@ public class HandMarkerScript : MonoBehaviour
 
     void showHandMarker()
     {
+        GM2.resetPower();
         player = GM1.player;
 
         foreach (Transform child in GameObject.Find("HandMarkerDisplay").transform)
@@ -80,6 +81,7 @@ public class HandMarkerScript : MonoBehaviour
 
     void putBonus()
     {
+        GM2.resetPower();
         List<string> names = new List<string>();
         switch (player)
         {
@@ -107,7 +109,7 @@ public class HandMarkerScript : MonoBehaviour
             GameObject newObject = new GameObject("bonus_"+i.ToString(), typeof(RectTransform), typeof(Image));
             newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(names.ElementAt(i));
             newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(27, 27);
-            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(830 + i * 27+960, -490+540);
+            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(810 + i * 36+990, 30);
             newObject.transform.SetParent(gameObject.transform);
         }
     }

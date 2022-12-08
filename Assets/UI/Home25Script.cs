@@ -33,6 +33,7 @@ public class Home25Script : MonoBehaviour
 
     void HomePosition()
     {
+        GM2.resetReligious();
         place2 = GM1.englishSpaces;
         place5 = GM1.protestantSpaces;
         RectTransform pos = gameObject.GetComponent<RectTransform>();
@@ -40,38 +41,38 @@ public class Home25Script : MonoBehaviour
         {
             if (place2 < 13)
             {
-                pos.anchoredPosition = new Vector2(592 + place2 * 26.92f, 252);
+                pos.anchoredPosition = new Vector2(-150 + place2 * 25, -35);
             }
             else if (place2 < 26)
             {
-                pos.anchoredPosition = new Vector2(592 + (place2 - 13) * 26.92f, 223);
+                pos.anchoredPosition = new Vector2(-150 + (place2 - 13) * 25, -63);
             }
             else if (place2 < 39)
             {
-                pos.anchoredPosition = new Vector2(592 + (place2 - 26) * 26.92f, 194);
+                pos.anchoredPosition = new Vector2(-150 + (place2 - 26) * 25, -91);
             }
             else
             {
-                pos.anchoredPosition = new Vector2(592 + (place2 - 39) * 26.92f, 165);
+                pos.anchoredPosition = new Vector2(-150 + (place2 - 39) * 25, -119);
             }
         }
         else
         {
             if (place5 < 13)
             {
-                pos.anchoredPosition = new Vector2(592 + place5 * 26.92f, 252);
+                pos.anchoredPosition = new Vector2(-150 + place5 * 25, -35);
             }
             else if (place5 < 26)
             {
-                pos.anchoredPosition = new Vector2(592 + (place5 - 13) * 26.92f, 223);
+                pos.anchoredPosition = new Vector2(-150 + (place5 - 13) * 25, -63);
             }
             else if (place5 < 39)
             {
-                pos.anchoredPosition = new Vector2(592 + (place5 - 26) * 26.92f, 194);
+                pos.anchoredPosition = new Vector2(-150 + (place5 - 26) * 25, -91);
             }
             else
             {
-                pos.anchoredPosition = new Vector2(592 + (place5 - 39) * 26.92f, 165);
+                pos.anchoredPosition = new Vector2(-150 + (place5 - 39) * 25, -119);
             }
         }
         

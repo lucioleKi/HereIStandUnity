@@ -40,6 +40,7 @@ public class CavScript : MonoBehaviour
 
     void changeCav(int index, int power)
     {
+        GM2.resetMap();
         SpaceGM temp = spacesGM.ElementAt(index);
 
 

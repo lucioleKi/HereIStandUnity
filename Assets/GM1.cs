@@ -139,6 +139,20 @@ public class GM1 : MonoBehaviour
         rulers[power].toString();
     }
 
+    public static void clearAlliance()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 6; j++)
+            {
+                if (diplomacyState[i, j] == 2)
+                {
+                    diplomacyState[i, j] = 0;
+                }
+            }
+        }
+    }
+
     void checkWin()
     {
         if (false)

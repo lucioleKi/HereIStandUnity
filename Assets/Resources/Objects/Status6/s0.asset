@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: s0
   m_EditorClassIdentifier: 
   playerIndex: 0
-  posX: 670200004c020000
+  posX: 6a0200004c020000
   posY: 72feffff2dfeffff
   offsetX:
   - 28
-  - 34
+  - 34.5
   offsetY:
   - -27
-  - -31
+  - -33
   VP: 0
   CPcost: 01000000020000000100000001000000020000000100000001000000020000000100000002000000
   cardTrack: 3

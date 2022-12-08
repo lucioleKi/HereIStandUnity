@@ -33,6 +33,7 @@ public class VPScript : MonoBehaviour
 
     void changeVP()
     {
+        GM2.resetMap();
         int index = gameObject.name[2] - '0';
         displayVP = VPs[index];
         position();

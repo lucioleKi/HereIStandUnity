@@ -80,6 +80,7 @@ public class NextButton : MonoBehaviour
         {
             phase++;
             GM2.onChangePhase();
+            GM2.onPhase7(); 
         }
         else if (phase == 8)
         {
