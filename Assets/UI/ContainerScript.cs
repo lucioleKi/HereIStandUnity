@@ -63,7 +63,7 @@ public class ContainerScript : MonoBehaviour
             //UnityEngine.Debug.Log(temp.ElementAt(i).id);
             int x = i % 4;
             int y = i / 4;
-            GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/EmptyCard"), new Vector3(400 + 250 * x, 850 - y * 300, 0), Quaternion.identity);
+            GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/EmptyCard"), new Vector3(400 + 250 * x, 790 - y * 280, 0), Quaternion.identity);
             newObject.tag = player.ToString()+i.ToString();
 
 

@@ -273,6 +273,7 @@ public class GM3
 
     public IEnumerator HIS008()
     {
+        GM1.enq1("Protestant player to pick 5 target spaces");
         activeReformers.Add(reformers.ElementAt(0));
         GameObject tempObject = UnityEngine.Object.Instantiate((GameObject)Resources.Load("Objects/Reformer4/Luther"), new Vector3(spaces.ElementAt(0).posX + 965, spaces.ElementAt(0).posY + 545, 0), Quaternion.identity);
         tempObject.transform.SetParent(GameObject.Find("Reformers").transform);
@@ -302,6 +303,8 @@ public class GM3
             UnityEngine.Debug.Log("end");
             //onRemoveHighlight(converted);
         }
+        GM1.deq1(1);
+        GM1.enq2("Any player to go to phase 2");
         yield return new WaitForSeconds(3);
         currentTextObject.reset();
         currentTextObject.restartColor();
@@ -326,6 +329,7 @@ public class GM3
         onChangeReg(111, 0);
         onChangeCorsair(111);
         onChangeLeader(111, 17);
+        //mandatory event by turn 3
         GM2.boolStates[3]=true;
     }
 
@@ -333,12 +337,16 @@ public class GM3
     {
         GM1.updateRuler(4, 10);
         onChangeRuler(4, 10);
+        //mandatory event by turn 2
+        GM2.boolStates[5]=true;
     }
 
     public void HIS014()
     {
         GM1.updateRuler(4, 14);
         onChangeRuler(4, 14);
+        //mandatory event by turn 4
+        GM2.boolStates[7]=true;
     }
 
     public void HIS016()

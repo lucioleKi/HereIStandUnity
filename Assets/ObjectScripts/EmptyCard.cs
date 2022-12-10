@@ -8,8 +8,9 @@ using TMPro;
 using static EnumSpaceScript;
 using static DeckScript;
 
-public class EmptyCard : MonoBehaviour, IPointerClickHandler
+public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    bool hover = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -94,6 +95,26 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler
     // Update is called once per frame
     void Update()
     {
-        
+        if (hover)
+        {
+            gameObject.transform.SetSiblingIndex(10);
+            gameObject.transform.localScale = new Vector3(2, 2, 1);
+            
+            
+        }
+        else
+        {
+            gameObject.transform.localScale = new Vector3(1, 1, 1);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        hover = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        hover = false;
     }
 }

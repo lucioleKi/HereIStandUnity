@@ -109,6 +109,21 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if can colonize
+                        if ((GM2.boolStates[16] || GM2.boolStates[15])&&i==9)
+                        {
+                            continue;
+                        }
+                        //check if can explore
+                        if (GM2.boolStates[19])
+                        {
+                            continue;
+                        }
+                        //check if can conquer
+                        if (GM2.boolStates[22])
+                        {
+                            continue;
+                        }
                         if (i < 6)
                         {
                             tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(637 + 960, -336 - 10 * i + 540, 0), Quaternion.identity);
@@ -139,6 +154,21 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if can colonize
+                        if ((GM2.boolStates[17] || GM2.boolStates[10]) && i == 9)
+                        {
+                            continue;
+                        }
+                        //check if can explore
+                        if (GM2.boolStates[20])
+                        {
+                            continue;
+                        }
+                        //check if can conquer
+                        if (GM2.boolStates[23])
+                        {
+                            continue;
+                        }
                         if (i < 6)
                         {
                             tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(640 + 960, -334 - 10 * i + 540, 0), Quaternion.identity);
@@ -164,11 +194,27 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if can colonize
+                        if ((GM2.boolStates[18] || GM2.boolStates[12]) && i == 9)
+                        {
+                            continue;
+                        }
+                        //check if can explore
+                        if (GM2.boolStates[21])
+                        {
+                            continue;
+                        }
+                        //check if can conquer
+                        if (GM2.boolStates[24])
+                        {
+                            continue;
+                        }
                         //check if there are unfortified space
                         if (findUnfortified(3).Count() == 0 && i == 7)
                         {
                             continue;
                         }
+
                         tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(637 + 960, -337 - 9.4f * i + 540, 0), Quaternion.identity);
                         tempObject.GetComponent<RectTransform>().sizeDelta = new Vector2(95, 9);
                         tempObject.transform.SetParent(GameObject.Find("HighlightCPDisplay").transform);
@@ -227,6 +273,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if can publish treatise
+                        if (GM1.protestantSpaces == 0&&i==7)
+                        {
+                            continue;
+                        }
                         //check if there are unfortified space
                         if (findUnfortified(5).Count() == 0 && i == 5)
                         {
@@ -274,7 +325,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         //UnityEngine.Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
-        removeHighlight();
+        GM2.onRemoveHighlight();
         LayerScript layerScript = GameObject.Find("Layers").GetComponent("LayerScript") as LayerScript;
         layerScript.changeLayer();
         if (eventData.pointerCurrentRaycast.gameObject.name[9] == '_')

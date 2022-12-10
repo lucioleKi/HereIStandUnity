@@ -214,11 +214,15 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //colonize
                     cost = 2;
+                    colonize();
+                    GM2.onCPChange(textScript.displayCP - cost);
                 }
                 else
                 {
                     //colonize
                     cost = 3;
+                    colonize();
+                    GM2.onCPChange(textScript.displayCP - cost);
                 }
                 break;
             case 10:
@@ -494,22 +498,20 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     public IEnumerator treatise5()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        if (GM1.protestantSpaces == 0)
-        {
-            GM2.onCPChange(textScript.displayCP);
-            yield break;
-        }
+        
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         HandMarkerScript handMarkerObject = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        currentTextObject.pauseColor();
+        currentTextObject.post("Pick 2 highlighted target spaces for Reformation attempts");
         for (int i = 0; i < 2; i++)
         {
             List<int> pickSpaces = highlightReformation();
             GM2.highlightSelected = -1;
-            currentTextObject.post("Flip a space to Protestant influence.");
+            
             onNoLayer();
             onHighlight(pickSpaces);
 
-            onHighlightSelected += changeReligion;
+            onHighlightSelected += GM2.reformAttempt;
             while (GM2.highlightSelected == -1)
             {
                 yield return null;
@@ -518,7 +520,9 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             UnityEngine.Debug.Log("end");
         }
         GM2.highlightSelected = -1;
-        
+        yield return new WaitForSeconds(3);
+        currentTextObject.reset();
+        currentTextObject.restartColor();
 
         GM2.onCPChange(textScript.displayCP - cost);
     }
@@ -597,6 +601,62 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         GM1.updateVP();
         GM2.onVP();
         GM2.onCPChange(textScript.displayCP - cost);
+    }
+
+    public void colonize()
+    {
+        switch (GM1.player)
+        {
+            case 1:
+                if (!GM2.boolStates[13])
+                {
+                    GameObject.Find("Cuba").GetComponent<CanvasGroup>().alpha = 1;
+                    GM2.boolStates[13] = true;
+                }
+                else if (!GM2.boolStates[14])
+                {
+                    GameObject.Find("Hispaniola").GetComponent<CanvasGroup>().alpha = 1;
+                    GM2.boolStates[14] = true;
+                }
+                else
+                {
+                    GameObject.Find("PuertoRico").GetComponent<CanvasGroup>().alpha = 1;
+                    GM2.boolStates[15] = true;
+                }
+                GM2.boolStates[16] = true;
+                break; 
+            case 2:
+                if (!GM2.boolStates[9])
+                {
+                    GameObject.Find("Jamestown").GetComponent<CanvasGroup>().alpha = 1;
+                    GM2.boolStates[9] = true;
+                }
+                else
+                {
+                    GameObject.Find("Roanoke").GetComponent<CanvasGroup>().alpha = 1;
+                    GM2.boolStates[10] = true;
+                }
+                GM2.boolStates[17] = true;
+                break; 
+            case 3:
+                if (!GM2.boolStates[11])
+                {
+                    GameObject.Find("Charlesbourg").GetComponent<CanvasGroup>().alpha = 1;
+                    GM2.boolStates[11] = true;
+                }
+                else
+                {
+                    GameObject.Find("Montreal").GetComponent<CanvasGroup>().alpha = 1;
+                    GM2.boolStates[12] = true;
+                }
+                GM2.boolStates[17] = true;
+                break;
+        }
+    }
+
+    public void explore()
+    {
+
     }
 
     void removeHighlight() { 

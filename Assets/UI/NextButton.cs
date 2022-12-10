@@ -40,12 +40,15 @@ public class NextButton : MonoBehaviour
             phase++;
             GM2.onChangePhase();
             GM2.onPhase2();
+            GM1.enq1("Any player to go to phase 3");
         }
         else if (phase == 2)
         {
             phase++;
             GM2.onChangePhase();
             GM2.onPhase3();
+            TodoScript todoObject = GameObject.Find("TodoBox").GetComponent("TodoScript") as TodoScript;
+            todoObject.put2();
         }
         else if (phase == 3 && turn == 1)
         {

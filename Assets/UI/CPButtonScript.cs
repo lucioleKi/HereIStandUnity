@@ -47,9 +47,12 @@ public class CPButtonScript : MonoBehaviour
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().alpha = 1;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().blocksRaycasts = true;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().interactable = true;
-
-        GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
-        GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+        if (GM1.phase != 4)
+        {
+            GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+            GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+        }
+        
 
         GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().alpha = 0;
         GameObject.Find("CanvasCards").GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -101,14 +104,32 @@ public class CPButtonScript : MonoBehaviour
             case 1:
                 GM2.secretCP[1] = hand1.ElementAt(int.Parse(cardTag.Substring(1))).CP;
                 hand1.RemoveAt(int.Parse(cardTag.Substring(1)));
+                if(GM1.toDo.Count > 0)
+                {
+                    GM1.deq1(0);
+                }
+                else
+                {
+                    GM1.deq1(1);
+                }
                 break;
             case 4:
                 GM2.secretCP[4] = hand4.ElementAt(int.Parse(cardTag.Substring(1))).CP;
                 hand4.RemoveAt(int.Parse(cardTag.Substring(1)));
+                if (GM1.toDo.Count > 0)
+                {
+                    GM1.deq1(0);
+                }
+                else
+                {
+                    GM1.deq1(1);
+
+                }
                 break;
             case 5:
                 GM2.secretCP[5] = hand5.ElementAt(int.Parse(cardTag.Substring(1))).CP;
                 hand5.RemoveAt(int.Parse(cardTag.Substring(1)));
+                GM1.deq1(2);
                 break;
         }
     }

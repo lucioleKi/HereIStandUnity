@@ -78,8 +78,13 @@ public class GM2 : MonoBehaviour
 
 
     public static bool[] boolStates;
-    //0: waitCard for HIS003. 1: phaseEnd. 2: theological debate (CP action). 3: is piracy allowed. 4: Henry VIII marries Anne Boleyn. 5: turn 2 card 10. 6: turn 3 card 9. 
-    //7: turn 4 card 13. 8: turn 4 card 14. 9: turn 6 card 15.
+    //0: waitCard for HIS003. 1: phaseEnd. 2: in theological debate (CP action). 3: is piracy allowed (turn 3 card 9). 4: Henry VIII marries Anne Boleyn. 5: turn 2 card 10.
+    //6: turn 4 card 13. 7: turn 4 card 14. 8: turn 6 card 15.
+    //9: Jamestown colonized. 10: Roanoke colonized. 11: Charlesbourg colonized. 12: Montreal colonized. 13: Cuba colonized. 14: Hispaniola colonized. 15: PuertoRico colonized.
+    //16: 1 already colonized. 17: 2 already colonized. 18: 3 already colonized. TODO: reset end of turn 
+    //19: 1 already explored. 20: 2 already explored. 21: 3 already explored.
+    //22: 1 already conquered. 23: 2 already conquered. 24: 3 already conquered.
+    //25: 1 charted. 26: 2 charted. 27: 3 charted.
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
@@ -92,7 +97,7 @@ public class GM2 : MonoBehaviour
     //
     void OnEnable()
     {
-        boolStates = new bool[10];
+        boolStates = new bool[30];
         onMandatory += mandatory;
         onPhase2 += phase2;
         onPhase3 += phase3;
@@ -594,21 +599,31 @@ public class GM2 : MonoBehaviour
 
             while (!tempForm.completed[i])
             {
-                //UnityEngine.Debug.Log("here");
                 yield return null;
             }
             if (i < 5)
             {
                 GM1.player++;
                 onPlayerChange();
+                
             }
             else
             {
                 GM1.player = 0;
                 onPlayerChange();
+                
+                
             }
-
-            UnityEngine.Debug.Log("endwait");
+            if (i ==0)
+            {
+                GM1.deq1(1);
+            }
+            else
+            {
+                GM1.deq1(0);
+                GM1.deq1(1);
+            }
+            
 
 
         }
@@ -659,13 +674,34 @@ public class GM2 : MonoBehaviour
             {
                 GM1.player++;
                 onPlayerChange();
+                
             }
             else
             {
                 GM1.player = 0;
                 onPlayerChange();
+                
             }
+            if (i == 0)
+            {
+                GM1.deq1(1);
+            }
+            else if (i == 5)
+            {
+                if (GM1.turn == 1)
+                {
+                    GM1.enq2("Any player to go to phase 4");
 
+                }
+                else
+                {
+                    GM1.enq2("Any player to go to phase 5");
+                }
+            }else
+            {
+                GM1.deq1(0);
+                GM1.deq1(1);
+            }
             UnityEngine.Debug.Log("endwait");
 
 
@@ -675,7 +711,6 @@ public class GM2 : MonoBehaviour
         onChangeSegment();
         GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
         GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
-        yield break;
         //automatic: 2, 3
         //4: highlight 2 units to remove them from map
         //5, 7: highlight, choose to regain home keys and other spaces
@@ -687,9 +722,21 @@ public class GM2 : MonoBehaviour
         switch (segment)
         {
             case 1:
+                GM1.enq1("Ottoman to complete diplomacy form");
+                GM1.toDo.Enqueue("Hapsburgs to complete diplomacy form");
+                GM1.toDo.Enqueue("England to complete diplomacy form");
+                GM1.toDo.Enqueue("France to complete diplomacy form");
+                GM1.toDo.Enqueue("Papacy to complete diplomacy form");
+                GM1.toDo.Enqueue("Protestant to complete diplomacy form");
                 StartCoroutine(waitDipForm());
                 break;
             case 2:
+                GM1.enq1("Ottoman to complete peace form");
+                GM1.enq2("Hapsburgs to complete peace form");
+                GM1.toDo.Enqueue("England to complete peace form");
+                GM1.toDo.Enqueue("France to complete peace form");
+                GM1.toDo.Enqueue("Papacy to complete peace form");
+                GM1.toDo.Enqueue("Protestant to complete peace form");
                 StartCoroutine(waitPeaceForm());
                 break;
             default:
@@ -707,6 +754,9 @@ public class GM2 : MonoBehaviour
 
     void phase4()
     {
+        GM1.enq1("Hapsburgs to select commitment card");
+        GM1.enq2("Papacy to select commitment card");
+        GM1.toDo.Enqueue("Protestant to select commitment card");
         StartCoroutine(DietofWorms());
     }
 

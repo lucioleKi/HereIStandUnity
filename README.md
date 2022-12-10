@@ -98,3 +98,7 @@ Seas and naval movements. Move formation over clear/pass part 1. Started scroll 
 12/8/2022
 
 Finished scroll view for all 3 boards. Started logic for winter phase.
+
+12/10/2022
+
+Logic for winter phase and colonize action. Finished 'currently waiting for' UI up to phase 4.

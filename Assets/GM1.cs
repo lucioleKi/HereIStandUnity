@@ -36,6 +36,7 @@ public class GM1 : MonoBehaviour
     public static int[] bonusVPs;
     public static int piracyC;
     public static int chateauxC;
+    public static Queue<string> toDo;
 
     public static GM1 Instance { 
         get { 
@@ -110,7 +111,8 @@ public class GM1 : MonoBehaviour
         Array.Clear(religiousInfluence, 0, 134);
 
 
-
+        toDo = new Queue<string>();
+        enq1("Protestant to play Luther's 95 Theses");
         player = 5;
 
     }
@@ -150,6 +152,45 @@ public class GM1 : MonoBehaviour
                     diplomacyState[i, j] = 0;
                 }
             }
+        }
+    }
+
+    public static void enq1(string message)
+    {
+        toDo.Enqueue(message);
+        TodoScript todoObject = GameObject.Find("TodoBox").GetComponent("TodoScript") as TodoScript;
+        todoObject.put1();
+
+    }
+
+    public static void enq2(string message)
+    {
+        toDo.Enqueue(message);
+        TodoScript todoObject = GameObject.Find("TodoBox").GetComponent("TodoScript") as TodoScript;
+        todoObject.put2();
+    }
+
+    public static void deq1(int index)
+    {
+        
+        TodoScript todoObject = GameObject.Find("TodoBox").GetComponent("TodoScript") as TodoScript;
+        switch (index)
+        {
+            case 0:
+                todoObject.moveUp();
+                break;
+            case 1:
+                todoObject.check1();
+                break;
+            case 2:
+                todoObject.check2();
+                break;
+            case 3:
+                todoObject.remove2();
+                break;
+            default:
+                break;
+
         }
     }
 
