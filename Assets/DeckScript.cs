@@ -14,6 +14,7 @@ public class DeckScript : MonoBehaviour
     public static List<SeaObject> seas;
     public static List<CardObject> cardsLib;
     public static List<CardObject> cards;
+    public static List<int> choiceCards = new List<int> { 1, 3, 5, 7, 30, 34, 38, 68, 72, 73, 86, 112, 115 };
     public static List<CardObject> activeCards;
     public static List<CardObject> discardCards;
     public static List<DebaterObject> debaters;

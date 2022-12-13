@@ -115,12 +115,12 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                             continue;
                         }
                         //check if can explore
-                        if (GM2.boolStates[19])
+                        if (GM2.boolStates[19] && i == 8)
                         {
                             continue;
                         }
                         //check if can conquer
-                        if (GM2.boolStates[22])
+                        if (GM2.boolStates[22] && i == 10)
                         {
                             continue;
                         }
@@ -160,12 +160,12 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                             continue;
                         }
                         //check if can explore
-                        if (GM2.boolStates[20])
+                        if (GM2.boolStates[20] && i == 8)
                         {
                             continue;
                         }
                         //check if can conquer
-                        if (GM2.boolStates[23])
+                        if (GM2.boolStates[23] && i == 10)
                         {
                             continue;
                         }
@@ -200,12 +200,12 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                             continue;
                         }
                         //check if can explore
-                        if (GM2.boolStates[21])
+                        if (GM2.boolStates[21]&&i==8)
                         {
                             continue;
                         }
                         //check if can conquer
-                        if (GM2.boolStates[24])
+                        if (GM2.boolStates[24]&&i==10)
                         {
                             continue;
                         }

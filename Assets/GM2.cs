@@ -31,12 +31,14 @@ public class GM2 : MonoBehaviour
 
     public delegate void SimpleHandler();
     public static SimpleHandler onVP;
+    public static SimpleHandler onPhaseEnd;
     public static SimpleHandler onPhase2;
     public static SimpleHandler onPhase3;
     public static SimpleHandler onPhase4;
     public static SimpleHandler onPhase5;
     public static SimpleHandler onPhase6;
     public static SimpleHandler onPhase7;
+    public static SimpleHandler onPhase8;
     public static SimpleHandler onHighlightSelected;
     public static SimpleHandler onChangeDip;
     public static SimpleHandler onChangePhase;
@@ -97,7 +99,7 @@ public class GM2 : MonoBehaviour
     //
     void OnEnable()
     {
-        boolStates = new bool[30];
+        boolStates = new bool[40];
         onMandatory += mandatory;
         onPhase2 += phase2;
         onPhase3 += phase3;
@@ -105,6 +107,7 @@ public class GM2 : MonoBehaviour
         onPhase5 += phase5;
         onPhase6 += phase6;
         onPhase7 += phase7;
+        onPhase8 += phase8;
     }
 
 
@@ -117,6 +120,7 @@ public class GM2 : MonoBehaviour
         onPhase5 -= phase5;
         onPhase6 -= phase6;
         onPhase7 -= phase7;
+        onPhase8 -= phase8;
     }
 
     /*if (onMoveHome25 != null)
@@ -534,6 +538,7 @@ public class GM2 : MonoBehaviour
             }
             activeCards.RemoveRange(0, temp);
         }
+        onPhaseEnd();
     }
 
     int drawNumber(int playerIndex)
@@ -711,6 +716,7 @@ public class GM2 : MonoBehaviour
         onChangeSegment();
         GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
         GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
+        onPhaseEnd();
         //automatic: 2, 3
         //4: highlight 2 units to remove them from map
         //5, 7: highlight, choose to regain home keys and other spaces
@@ -811,7 +817,7 @@ public class GM2 : MonoBehaviour
             }
 
         }
-
+        onPhaseEnd();
     }
 
     int evaluateDiet()
@@ -902,8 +908,11 @@ public class GM2 : MonoBehaviour
 
     IEnumerator waitDeployment()
     {
+        GM1.deq1(2);
         player = 0;
         onPlayerChange();
+        GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+        GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.post("Click a leader.\nEnter number of units:");
         InputNumberObject inputNumberObject = GameObject.Find("InputNumber").GetComponent("InputNumberObject") as InputNumberObject;
@@ -928,19 +937,39 @@ public class GM2 : MonoBehaviour
             {
                 yield return null;
             }
+            if (i == 0)
+            {
+                GM1.deq1(1);
+            }
+            else if (i == 4)
+            {
+                GM1.enq2("Any player to go to phase 6");
+            }
+            else
+            {
+                GM1.deq1(0);
+                GM1.deq1(1);
+            }
             inputNumberObject.reset();
             player = i + 1;
             onPlayerChange();
         }
         layerObject.resetLeaderPower();
         currentTextObject.reset();
-
+        GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
+        GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
+        onPhaseEnd();
 
     }
 
     void phase5()
     {
         //spring deployment
+        GM1.enq1("Ottoman to complete deployment");
+        GM1.enq2("Hapsburgs to complete deployment");
+        GM1.toDo.Enqueue("England to complete deployment");
+        GM1.toDo.Enqueue("France to complete deployment");
+        GM1.toDo.Enqueue("Papacy to complete deployment");
         StartCoroutine(waitDeployment());
 
     }
@@ -1021,7 +1050,7 @@ public class GM2 : MonoBehaviour
 
     void phase6()
     {
-
+        onPhaseEnd();
     }
 
     void phase7()
@@ -1044,6 +1073,7 @@ public class GM2 : MonoBehaviour
         DebatersScript debaterObject = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
         debaterObject.toUncommited();
         //resolve mandatory events
+        onPhaseEnd();
     }
 
     void checkCapital(int power, int index)
@@ -1106,6 +1136,27 @@ public class GM2 : MonoBehaviour
         }
     }
 
+    void phase8()
+    {
+
+        //resolve exploration
+        for (int i = 19; i < 22; i++)
+        {
+            if (boolStates[i])
+            {
+                
+            }
+        }
+        //resolve conquest
+        for (int i = 22; i < 25; i++)
+        {
+            if (boolStates[i])
+            {
+                
+            }
+        }
+        onPhaseEnd();
+    }
 
     void Awake()
     {

@@ -24,7 +24,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
     }
 
-   
+
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -189,12 +189,14 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     actionIndex = -1;
                     GM2.theologicalDebate();
                     StartCoroutine(theologicalDebate());
-                    
+
                 }
                 else
                 {
                     //explore
                     cost = 2;
+                    explore();
+                    GM2.onCPChange(textScript.displayCP - cost);
                 }
                 break;
             case 9:
@@ -236,6 +238,8 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //conquer
                     cost = 4;
+                    conquest();
+                    GM2.onCPChange(textScript.displayCP - cost);
                 }
 
                 break;
@@ -258,7 +262,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
         }
         actionIndex = -1;
-        
+
     }
 
     public IEnumerator moveInClear1()
@@ -272,7 +276,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
         //declare destination
 
-       
+
 
 
         GM2.onHighlight(trace);
@@ -320,7 +324,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             yield return null;
         }
         GM2.onCPChange(textScript.displayCP - cost);
-        
+
 
 
     }
@@ -336,7 +340,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
 
         GM2.onHighlight(trace);
-        
+
         while (GM2.highlightSelected == -1)
         {
             yield return null;
@@ -344,7 +348,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).merc++;
         GM2.onChangeMerc(GM2.highlightSelected, GM1.player);
         GM2.highlightSelected = -1;
-        
+
 
         GM2.onCPChange(textScript.displayCP - cost);
         //UnityEngine.Debug.Log(new System.Diagnostics.StackTrace().ToString());
@@ -361,7 +365,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
 
         GM2.onHighlight(trace);
-        
+
         while (GM2.highlightSelected == -1)
         {
             yield return null;
@@ -398,7 +402,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         List<int> trace = findPorts(GM1.player);
-       
+
         GM2.highlightSelected = -1;
         GM2.onNoLayer();
 
@@ -440,7 +444,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         List<int> trace = findUnfortified(GM1.player);
-        if(trace.Count()== 0)
+        if (trace.Count() == 0)
         {
             GM2.onCPChange(textScript.displayCP);
             yield break;
@@ -460,7 +464,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).controlMarker = 1;
         GM2.onAddSpace(GM2.highlightSelected, GM1.player, 1);
         GM2.highlightSelected = -1;
-        
+
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
@@ -474,7 +478,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         }
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         HandMarkerScript handMarkerObject = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
-        for(int i= 0; i < 2; i++)
+        for (int i = 0; i < 2; i++)
         {
             List<int> pickSpaces = highlightCReformation();
             GM2.highlightSelected = -1;
@@ -491,14 +495,14 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             UnityEngine.Debug.Log("end");
         }
         GM2.highlightSelected = -1;
-        
+
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
     public IEnumerator treatise5()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        
+
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         HandMarkerScript handMarkerObject = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
         currentTextObject.pauseColor();
@@ -507,7 +511,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         {
             List<int> pickSpaces = highlightReformation();
             GM2.highlightSelected = -1;
-            
+
             onNoLayer();
             onHighlight(pickSpaces);
 
@@ -531,7 +535,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         List<int> pickSpaces = new List<int>();
-        if (GM1.translations[3] <10)
+        if (GM1.translations[3] < 10)
         {
             pickSpaces.Add(28);
         }
@@ -543,28 +547,28 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         {
             pickSpaces.Add(1);
         }
-        if(pickSpaces.Count() == 0)
+        if (pickSpaces.Count() == 0)
         {
             GM2.onCPChange(textScript.displayCP);
             yield break;
         }
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         HandMarkerScript handMarkerObject = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
-        
-            
-            GM2.highlightSelected = -1;
-            currentTextObject.post("Select a language zone.");
-            onNoLayer();
-            onHighlight(pickSpaces);
-            while (GM2.highlightSelected == -1)
-            {
-                //UnityEngine.Debug.Log("here");
-                yield return null;
-            }
+
+
+        GM2.highlightSelected = -1;
+        currentTextObject.post("Select a language zone.");
+        onNoLayer();
+        onHighlight(pickSpaces);
+        while (GM2.highlightSelected == -1)
+        {
+            //UnityEngine.Debug.Log("here");
+            yield return null;
+        }
         switch (GM2.highlightSelected)
         {
             case 28:
-                
+
                 if (GM1.translations[0] == 6)
                 {
                     GM1.translations[3]++;
@@ -574,7 +578,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     GM1.translations[0]++;
                 }
                 break;
-                case 42:
+            case 42:
                 if (GM1.translations[1] == 6)
                 {
                     GM1.translations[4]++;
@@ -594,7 +598,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     GM1.translations[2]++;
                 }
                 break;
-                
+
         }
         GM2.highlightSelected = -1;
         currentTextObject.reset();
@@ -624,7 +628,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     GM2.boolStates[15] = true;
                 }
                 GM2.boolStates[16] = true;
-                break; 
+                break;
             case 2:
                 if (!GM2.boolStates[9])
                 {
@@ -637,7 +641,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     GM2.boolStates[10] = true;
                 }
                 GM2.boolStates[17] = true;
-                break; 
+                break;
             case 3:
                 if (!GM2.boolStates[11])
                 {
@@ -656,12 +660,126 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
     public void explore()
     {
+        int currentCount = 0;
+        for (int i = 19; i < 25; i++)
+        {
+            if (GM2.boolStates[i])
+            {
+                currentCount++;
+            }
+        }
+        switch (GM1.player)
+        {
+            case 1:
+                if (!GM2.boolStates[25])
+                {
+                    GameObject newObject = new GameObject("uncharted_1", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/Hapsburg_Exploration");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                    GM2.boolStates[13] = true;
+                }
+                else
+                {
+                    GameObject newObject = new GameObject("charted_1", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/Hapsburg_ExplorationCharted");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                }
 
+                GM2.boolStates[19] = true;
+                break;
+            case 2:
+                if (!GM2.boolStates[26])
+                {
+                    GameObject newObject = new GameObject("uncharted_2", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/English_Exploration");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                    GM2.boolStates[9] = true;
+                }
+                else
+                {
+                    GameObject newObject = new GameObject("charted_2", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/English_ExplorationCharted");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                }
+                GM2.boolStates[20] = true;
+                break;
+            case 3:
+                if (!GM2.boolStates[27])
+                {
+                    GameObject newObject = new GameObject("uncharted_3", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/French_Exploration");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                    GM2.boolStates[27] = true;
+                }
+                else
+                {
+                    GameObject newObject = new GameObject("charted_3", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/French_ExplorationCharted");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                }
+                GM2.boolStates[21] = true;
+                break;
+        }
     }
 
-    void removeHighlight() { 
-  
-        
+    public void conquest()
+    {
+        int currentCount = 0;
+        for (int i = 19; i < 25; i++)
+        {
+            if (GM2.boolStates[i])
+            {
+                currentCount++;
+            }
+        }
+        switch (GM1.player)
+        {
+            case 1:
+
+                GameObject newObject = new GameObject("conquest_1", typeof(RectTransform), typeof(Image));
+                newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/Hapsburg_Conquest");
+                newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                GM2.boolStates[22] = true;
+                break;
+            case 2:
+
+                GameObject newObject1 = new GameObject("conquest_2", typeof(RectTransform), typeof(Image));
+                newObject1.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/English_Conquest");
+                newObject1.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                newObject1.transform.SetParent(GameObject.Find("Atlantic").transform);
+                newObject1.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                GM2.boolStates[23] = true;
+                break;
+            case 3:
+
+                GameObject newObject2 = new GameObject("conquest_3", typeof(RectTransform), typeof(Image));
+                newObject2.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/French_Conquest");
+                newObject2.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                newObject2.transform.SetParent(GameObject.Find("Atlantic").transform);
+                newObject2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                GM2.boolStates[24] = true;
+                break;
+        }
+    }
+
+    void removeHighlight()
+    {
+
+
         foreach (Transform child in gameObject.transform)
         {
             GameObject.Destroy(child.gameObject);

@@ -314,6 +314,7 @@ public class GM3
         //remove Luther's 95 theses from backend decks
         //cards.RemoveAt(7);
         hand5.RemoveAt(0);
+        GM2.onPhaseEnd();
     }
 
     public void HIS009()

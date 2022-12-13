@@ -110,11 +110,10 @@ public class GM1 : MonoBehaviour
         
         Array.Clear(religiousInfluence, 0, 134);
 
-
         toDo = new Queue<string>();
         enq1("Protestant to play Luther's 95 Theses");
         player = 5;
-
+        GM2.boolStates[22] = true;
     }
 
     

@@ -102,3 +102,7 @@ Finished scroll view for all 3 boards. Started logic for winter phase.
 12/10/2022
 
 Logic for winter phase and colonize action. Finished 'currently waiting for' UI up to phase 4.
+
+12/13/2022
+
+Logic for explore and conquer action. 

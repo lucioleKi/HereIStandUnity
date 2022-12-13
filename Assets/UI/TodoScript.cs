@@ -66,7 +66,15 @@ public class TodoScript : MonoBehaviour
 
     public void check2()
     {
-        gameObject.transform.Find("Todo2").GetComponent<Toggle>().isOn = true;
+        if (gameObject.transform.Find("Todo2").GetComponent<Toggle>().isOn)
+        {
+            gameObject.transform.Find("Todo2").GetComponent<Toggle>().isOn = false;
+        }
+        else
+        {
+            gameObject.transform.Find("Todo2").GetComponent<Toggle>().isOn = true;
+        }
+        
     }
 
     public void put2()

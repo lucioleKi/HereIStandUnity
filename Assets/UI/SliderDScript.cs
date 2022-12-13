@@ -33,8 +33,15 @@ public class SliderDScript : MonoBehaviour
 
     public void OnValueChanged()
     {
-        UnityEngine.Debug.Log("here");
-        GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = s.value;
+        if (GM1.phase == 5)
+        {
+            GameObject.Find("LeaderDarken").GetComponent<CanvasGroup>().alpha = s.value;
+        }
+        else
+        {
+            GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = s.value;
+        }
+        
     }
 
     public void post(List<int> index)
