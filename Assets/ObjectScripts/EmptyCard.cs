@@ -111,10 +111,12 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
     public void OnPointerEnter(PointerEventData eventData)
     {
         hover = true;
+
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (!eventData.fullyExited) return;
         hover = false;
     }
 }

@@ -41,12 +41,12 @@ public class DiplomacyScript : MonoBehaviour
             {
                 if (diplomacyState[i, j] == 1)
                 {
-                    GameObject tempObject1 = Instantiate((GameObject)Resources.Load("Objects/Diplomacy2/AtWar"), new Vector3(309f + 27.25f*j+932.75f, 361f - 27.2f*i+540f, 0), Quaternion.identity);
+                    GameObject tempObject1 = Instantiate((GameObject)Resources.Load("Objects/Diplomacy2/AtWar"), new Vector3(312f + 27.25f*j+932.75f, 363f - 27.2f*i+540f, 0), Quaternion.identity);
                     tempObject1.transform.SetParent(GameObject.Find("DiplomacyDisplay").transform);
                     tempObject1.name = i.ToString()+j.ToString();
                 }else if (diplomacyState[i, j] == 2)
                 {
-                    GameObject tempObject1 = Instantiate((GameObject)Resources.Load("Objects/Diplomacy2/Allied"), new Vector3(309f + 27.25f * j + 932.75f, 361f - 27.2f * i + 540f, 0), Quaternion.identity);
+                    GameObject tempObject1 = Instantiate((GameObject)Resources.Load("Objects/Diplomacy2/Allied"), new Vector3(312f + 27.25f * j + 932.75f, 363f - 27.2f * i + 540f, 0), Quaternion.identity);
                     tempObject1.transform.SetParent(GameObject.Find("DiplomacyDisplay").transform);
                     tempObject1.name = i.ToString() + j.ToString();
                 }

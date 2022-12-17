@@ -106,3 +106,7 @@ Logic for winter phase and colonize action. Finished 'currently waiting for' UI 
 12/13/2022
 
 Logic for explore and conquer action. 
+
+12/17/2022
+
+Boards resized. Various QOL improvements. Unrest. Started frontend for land movements.

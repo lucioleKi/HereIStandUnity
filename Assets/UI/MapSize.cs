@@ -25,17 +25,8 @@ public class MapSize : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
        
         if(hover) {
-            float factor = Mathf.Clamp(gameObject.transform.localScale.x + Input.GetAxis("Mouse ScrollWheel"), 0.25f, 4f);
-            if (gameObject.transform.localScale.x < 1)
-            {
-                gameObject.transform.localScale = new Vector3(1, 1, 1);
-
-                return;
-            }
-            else if (gameObject.transform.localScale.x > 4 && factor > 1)
-            {
-                return;
-            }
+            float factor = Mathf.Clamp(gameObject.transform.localScale.x + Input.GetAxis("Mouse ScrollWheel"), 1f, 4f);
+            
             gameObject.transform.localScale = new Vector3(factor, factor, 1);
         }
         

@@ -442,11 +442,8 @@ public class DebateNScript : MonoBehaviour
                     //UnityEngine.Debug.Log("here");
                     yield return null;
                 }
-
-                UnityEngine.Debug.Log("end");
+                currentTextObject.reset();
                 
-                
-                //onRemoveHighlight(converted);
             }
             if (attacker == 4)
             {
@@ -496,9 +493,8 @@ public class DebateNScript : MonoBehaviour
                     //UnityEngine.Debug.Log("here");
                     yield return null;
                 }
-                
-                UnityEngine.Debug.Log("end");
-                //onRemoveHighlight(converted);
+
+                currentTextObject.reset();
             }
             if (attacker == 5)
             {

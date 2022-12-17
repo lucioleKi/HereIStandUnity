@@ -37,10 +37,14 @@ public class CPButtonScript : MonoBehaviour
         }
         else
         {
+            foreach (Transform child in GameObject.Find("HighlightCPDisplay").transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
             setActionCP();
             UnityEngine.Debug.Log(GM2.currentCP);
             onCPChange(GM2.currentCP);
-
+            
             ConfirmScript.cardSelected = "";
         }
         

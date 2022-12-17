@@ -41,38 +41,38 @@ public class Home25Script : MonoBehaviour
         {
             if (place2 < 13)
             {
-                pos.anchoredPosition = new Vector2(-150 + place2 * 25, -35);
+                pos.anchoredPosition = new Vector2(-165 + place2 * 27.5f, -33);
             }
             else if (place2 < 26)
             {
-                pos.anchoredPosition = new Vector2(-150 + (place2 - 13) * 25, -63);
+                pos.anchoredPosition = new Vector2(-165 + (place2 - 13) * 27.5f, -62);
             }
             else if (place2 < 39)
             {
-                pos.anchoredPosition = new Vector2(-150 + (place2 - 26) * 25, -91);
+                pos.anchoredPosition = new Vector2(-165 + (place2 - 26) * 27.5f, -91);
             }
             else
             {
-                pos.anchoredPosition = new Vector2(-150 + (place2 - 39) * 25, -119);
+                pos.anchoredPosition = new Vector2(-165 + (place2 - 39) * 27.5f, -121);
             }
         }
         else
         {
             if (place5 < 13)
             {
-                pos.anchoredPosition = new Vector2(-150 + place5 * 25, -35);
+                pos.anchoredPosition = new Vector2(-165 + place5 * 27.5f, -33);
             }
             else if (place5 < 26)
             {
-                pos.anchoredPosition = new Vector2(-150 + (place5 - 13) * 25, -63);
+                pos.anchoredPosition = new Vector2(-165 + (place5 - 13) * 27.5f, -62);
             }
             else if (place5 < 39)
             {
-                pos.anchoredPosition = new Vector2(-150 + (place5 - 26) * 25, -91);
+                pos.anchoredPosition = new Vector2(-165 + (place5 - 26) * 27.5f, -91);
             }
             else
             {
-                pos.anchoredPosition = new Vector2(-150 + (place5 - 39) * 25, -119);
+                pos.anchoredPosition = new Vector2(-165 + (place5 - 39) * 27.5f, -121);
             }
         }
         

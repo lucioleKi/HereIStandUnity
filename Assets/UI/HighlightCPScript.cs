@@ -40,16 +40,19 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             return;
         }
         removeHighlight();
+        LandMvmt movementScript = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
         switch (actionIndex)
         {
             case 0:
                 //move formation in clear
                 cost = 1;
-                StartCoroutine(moveInClear1());
+                movementScript.post();
+                StartCoroutine(moveInClear());
                 break;
             case 1:
                 //move formation over pass
                 cost = 2;
+                movementScript.post();
                 StartCoroutine(moveOverPass());
                 break;
             case 2:
@@ -265,54 +268,51 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
     }
 
-    public IEnumerator moveInClear1()
+    public IEnumerator moveInClear()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        List<int> trace = findClearFormation(GM1.player);
-        GM2.highlightSelected = -1;
-        GM2.onNoLayer();
+        //List<int> trace = findClearFormation(GM1.player);
+        //GM2.highlightSelected = -1;
+        //GM2.onNoLayer();
 
-        //declare formation and starting space for moving
+        ////declare formation and starting space for moving
 
-        //declare destination
-
-
+        ////declare destination
 
 
-        GM2.onHighlight(trace);
-        while (GM2.highlightSelected == -1)
+
+
+        //GM2.onHighlight(trace);
+        while (GM2.boolStates[28])
         {
             yield return null;
         }
-        GM2.highlightSelected = -1;
+        //GM2.highlightSelected = -1;
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
-    public IEnumerator moveInClear2()
-    {
-        yield break;
-    }
+    
 
     public IEnumerator moveOverPass()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        List<int> trace = findPassFormation(GM1.player);
-        GM2.highlightSelected = -1;
-        GM2.onNoLayer();
+        //List<int> trace = findPassFormation(GM1.player);
+        //GM2.highlightSelected = -1;
+        //GM2.onNoLayer();
 
-        //declare formation and starting space for moving
+        ////declare formation and starting space for moving
 
-        //declare destination
-
-
+        ////declare destination
 
 
-        GM2.onHighlight(trace);
-        while (GM2.highlightSelected == -1)
+
+
+        //GM2.onHighlight(trace);
+        while (GM2.boolStates[28])
         {
             yield return null;
         }
-        GM2.highlightSelected = -1;
+        //GM2.highlightSelected = -1;
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
@@ -444,6 +444,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         List<int> trace = findUnfortified(GM1.player);
+        //todo: removing unrest
         if (trace.Count() == 0)
         {
             GM2.onCPChange(textScript.displayCP);

@@ -29,13 +29,13 @@ public class DipButtonScript : MonoBehaviour
     void OnEnable()
     {
         GM2.onPhase3 += active3;
-        GM2.onPhase4 += deactivate3;
+        //GM2.onPhase4 += deactivate3;
     }
 
     void OnDisable()
     {
         GM2.onPhase3 -= active3;
-        GM2.onPhase4 -= deactivate3;
+        //GM2.onPhase4 -= deactivate3;
     }
 
     void active3()

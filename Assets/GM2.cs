@@ -87,10 +87,10 @@ public class GM2 : MonoBehaviour
     //19: 1 already explored. 20: 2 already explored. 21: 3 already explored.
     //22: 1 already conquered. 23: 2 already conquered. 24: 3 already conquered.
     //25: 1 charted. 26: 2 charted. 27: 3 charted.
+    //28: in land movement procedure (CP action)
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
-    //public static bool phaseEnd = false;
     public static int currentCP = 0;
     public static int[] secretCP = new int[6];
 
@@ -671,10 +671,23 @@ public class GM2 : MonoBehaviour
         onPlayerChange();
         for (int i = 0; i < 6; i++)
         {
-            while (!tempForm.completed[i])
+            bool atWar = false;
+            for(int j=0; j<6; j++)
             {
-                yield return null;
+                if(diplomacyState[i, j] == 1)
+                {
+                    atWar = true;
+                    break;
+                }
             }
+            if (atWar)
+            {
+                while (!tempForm.completed[i])
+                {
+                    yield return null;
+                }
+            }
+            
             if (i < 5)
             {
                 GM1.player++;
@@ -695,14 +708,17 @@ public class GM2 : MonoBehaviour
             {
                 if (GM1.turn == 1)
                 {
-                    GM1.enq2("Any player to go to phase 4");
+                    GM1.enq2("Go to phase 4 - (Any player)");
 
                 }
                 else
                 {
-                    GM1.enq2("Any player to go to phase 5");
+                    GM1.enq2("Go to phase 5 - (Any player)");
                 }
-            }else
+                //deactivate diplomacy button
+                GameObject.Find("DiplomacyButton").GetComponent<Button>().interactable = false;
+            }
+            else
             {
                 GM1.deq1(0);
                 GM1.deq1(1);
@@ -728,21 +744,21 @@ public class GM2 : MonoBehaviour
         switch (segment)
         {
             case 1:
-                GM1.enq1("Ottoman to complete diplomacy form");
-                GM1.toDo.Enqueue("Hapsburgs to complete diplomacy form");
-                GM1.toDo.Enqueue("England to complete diplomacy form");
-                GM1.toDo.Enqueue("France to complete diplomacy form");
-                GM1.toDo.Enqueue("Papacy to complete diplomacy form");
-                GM1.toDo.Enqueue("Protestant to complete diplomacy form");
+                GM1.enq1("Complete diplomacy form - (Ottoman)");
+                GM1.toDo.Enqueue("Complete diplomacy form - (Hapsburgs)");
+                GM1.toDo.Enqueue("Complete diplomacy form - (England)");
+                GM1.toDo.Enqueue("Complete diplomacy form - (France)");
+                GM1.toDo.Enqueue("Complete diplomacy form - (Papacy)");
+                GM1.toDo.Enqueue("Complete diplomacy form - (Protestant)");
                 StartCoroutine(waitDipForm());
                 break;
             case 2:
-                GM1.enq1("Ottoman to complete peace form");
-                GM1.enq2("Hapsburgs to complete peace form");
-                GM1.toDo.Enqueue("England to complete peace form");
-                GM1.toDo.Enqueue("France to complete peace form");
-                GM1.toDo.Enqueue("Papacy to complete peace form");
-                GM1.toDo.Enqueue("Protestant to complete peace form");
+                GM1.enq1("Complete peace form - (Ottoman)");
+                GM1.enq2("Complete peace form - (Hapsburgs)");
+                GM1.toDo.Enqueue("Complete peace form - (England)");
+                GM1.toDo.Enqueue("Complete peace form - (France)");
+                GM1.toDo.Enqueue("Complete peace form - (Papacy)");
+                GM1.toDo.Enqueue("Complete peace form - (Protestant)");
                 StartCoroutine(waitPeaceForm());
                 break;
             default:
@@ -760,9 +776,9 @@ public class GM2 : MonoBehaviour
 
     void phase4()
     {
-        GM1.enq1("Hapsburgs to select commitment card");
-        GM1.enq2("Papacy to select commitment card");
-        GM1.toDo.Enqueue("Protestant to select commitment card");
+        GM1.enq1("Select commitment card - (Hapsburgs)");
+        GM1.enq2("Select commitment card - (Papacy)");
+        GM1.toDo.Enqueue("Select commitment card - (Protestant)");
         StartCoroutine(DietofWorms());
     }
 
@@ -943,7 +959,7 @@ public class GM2 : MonoBehaviour
             }
             else if (i == 4)
             {
-                GM1.enq2("Any player to go to phase 6");
+                GM1.enq2("Go to phase 6 - (Any player)");
             }
             else
             {
@@ -965,11 +981,11 @@ public class GM2 : MonoBehaviour
     void phase5()
     {
         //spring deployment
-        GM1.enq1("Ottoman to complete deployment");
-        GM1.enq2("Hapsburgs to complete deployment");
-        GM1.toDo.Enqueue("England to complete deployment");
-        GM1.toDo.Enqueue("France to complete deployment");
-        GM1.toDo.Enqueue("Papacy to complete deployment");
+        GM1.enq1("Complete deployment - (Ottoman)");
+        GM1.enq2("Complete deployment - (Hapsburgs)");
+        GM1.toDo.Enqueue("Complete deployment - (England)");
+        GM1.toDo.Enqueue("Complete deployment - (France)");
+        GM1.toDo.Enqueue("Complete deployment - (Papacy)");
         StartCoroutine(waitDeployment());
 
     }

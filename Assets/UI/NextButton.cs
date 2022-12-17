@@ -41,7 +41,10 @@ public class NextButton : MonoBehaviour
             phase++;
             GM2.onChangePhase();
             GM2.onPhase2();
-            GM1.enq1("Any player to go to phase 3");
+            GM1.enq1("Draw cards - (Automatic)");
+            GM1.deq1(1);
+            GM1.enq2("Go to phase 3 - (Any player)");
+            
         }
         else if (phase == 2)
         {

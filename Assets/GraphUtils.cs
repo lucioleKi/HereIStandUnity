@@ -155,7 +155,7 @@ public class GraphUtils
             for (int j = 0; j < spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent.Count(); j++)
             {
 
-                if (!traceable[spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j] - 1] && spacesGM.ElementAt(searchIndex.ElementAt(0) - 1).controlPower == spacesGM.ElementAt(spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j] - 1).controlPower)
+                if (!spacesGM.ElementAt(spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j] - 1).unrest &&!traceable[spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j] - 1] && spacesGM.ElementAt(searchIndex.ElementAt(0) - 1).controlPower == spacesGM.ElementAt(spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j] - 1).controlPower)
                 {
                     searchIndex.Add(spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j]);
                 }
@@ -214,6 +214,31 @@ public class GraphUtils
         List<int> trace = findTrace(playerIndex);
         for (int i = 0; i < 134; i++)
         {
+            //removing unrest
+            if (spacesGM.ElementAt(i).unrest && spacesGM.ElementAt(i).regular > 0&&spacesGM.ElementAt(i).controlPower==playerIndex)
+            {
+                bool friendUnits = false;
+                bool enemyUnits = false;
+                for(int j=0; j< spaces.ElementAt(i).adjacent.Count(); j++)
+                {
+                    if (spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).regular > 0 && spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).controlPower == playerIndex)
+                    {
+                        friendUnits = true;
+                        break;
+                    }
+                    if (spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).regular>0&& spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).controlPower != playerIndex)
+                    {
+                        enemyUnits = true;
+                        break;
+                    }
+                }
+                if (friendUnits && !enemyUnits)
+                {
+                    searchIndex.Add(i);
+                }
+                continue;
+            }
+            //not under unrest
             if (spacesGM.ElementAt(i).controlPower == playerIndex)
             {
                 continue;

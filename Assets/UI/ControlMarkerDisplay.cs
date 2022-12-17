@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using static EnumSpaceScript;
 using static DeckScript;
 using static GM1;
 using static GM2;
-using System.ComponentModel;
-using static System.Net.Mime.MediaTypeNames;
 
 public class ControlMarkerDisplay : MonoBehaviour
 {
@@ -151,6 +150,22 @@ public class ControlMarkerDisplay : MonoBehaviour
         addControlMarker(index, power, marker);
     }
     
-
+    //0-indexing
+    void updateUnrest(int index)
+    {
+        if (spacesGM.ElementAt(index).unrest)
+        {
+            GameObject newObject = new GameObject("unrest_" + index.ToString(), typeof(RectTransform), typeof(Image));
+            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(spaces.ElementAt(index).posX + 965, spaces.ElementAt(index).posY + 545, 0);
+            newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Unrest");
+            newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+        }
+        else
+        {
+            GameObject tempObject = GameObject.Find("unrest_" + index.ToString());
+            Destroy(tempObject.gameObject);
+        }
+        
+    }
     
 }

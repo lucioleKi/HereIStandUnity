@@ -61,7 +61,7 @@ public class DipForm : MonoBehaviour
         }
         else
         {
-            for(int i = 0; i < 6; i++)
+            for (int i = 0; i < 6; i++)
             {
                 dipStatus[playerIndex, i] = 0;
                 loanSquadron[playerIndex, i] = 0;
@@ -69,78 +69,72 @@ public class DipForm : MonoBehaviour
                 giveMerc[playerIndex, i] = 0;
             }
         }
-        
-        if (GameObject.Find("EndWar").GetComponent<Toggle>().isOn)
+
+
+        if (GameObject.Find("EndWar_0").GetComponent<Toggle>().isOn)
         {
-            
-            if (GameObject.Find("EndWar_0").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 0] = 1;
-                GameObject.Find("EndWar_0").GetComponent<Toggle>().isOn = false;
-            }
-            if (GameObject.Find("EndWar_1").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 1] = 1;
-                GameObject.Find("EndWar_1").GetComponent<Toggle>().isOn = false;
-            }
-            if (GameObject.Find("EndWar_2").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 2] = 1;
-                GameObject.Find("EndWar_2").GetComponent<Toggle>().isOn = false;
-            }
-            if (GameObject.Find("EndWar_3").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 3] = 1;
-                GameObject.Find("EndWar_3").GetComponent<Toggle>().isOn = false;
-            }
-            if (GameObject.Find("EndWar_4").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 4] = 1;
-                GameObject.Find("EndWar_4").GetComponent<Toggle>().isOn = false;
-            }
-            if (GameObject.Find("EndWar_5").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 5] = 1;
-                GameObject.Find("EndWar_5").GetComponent<Toggle>().isOn = false;
-            }
-            GameObject.Find("EndWar").GetComponent<Toggle>().isOn = false;
+            dipStatus[playerIndex, 0] = 1;
+            GameObject.Find("EndWar_0").GetComponent<Toggle>().isOn = false;
+        }
+        if (GameObject.Find("EndWar_1").GetComponent<Toggle>().isOn)
+        {
+            dipStatus[playerIndex, 1] = 1;
+            GameObject.Find("EndWar_1").GetComponent<Toggle>().isOn = false;
+        }
+        if (GameObject.Find("EndWar_2").GetComponent<Toggle>().isOn)
+        {
+            dipStatus[playerIndex, 2] = 1;
+            GameObject.Find("EndWar_2").GetComponent<Toggle>().isOn = false;
+        }
+        if (GameObject.Find("EndWar_3").GetComponent<Toggle>().isOn)
+        {
+            dipStatus[playerIndex, 3] = 1;
+            GameObject.Find("EndWar_3").GetComponent<Toggle>().isOn = false;
+        }
+        if (GameObject.Find("EndWar_4").GetComponent<Toggle>().isOn)
+        {
+            dipStatus[playerIndex, 4] = 1;
+            GameObject.Find("EndWar_4").GetComponent<Toggle>().isOn = false;
+        }
+        if (GameObject.Find("EndWar_5").GetComponent<Toggle>().isOn)
+        {
+            dipStatus[playerIndex, 5] = 1;
+            GameObject.Find("EndWar_5").GetComponent<Toggle>().isOn = false;
         }
 
-        if (GameObject.Find("Alliance").GetComponent<Toggle>().isOn)
+
+
+        if (GameObject.Find("Alliance_0").GetComponent<Toggle>().isOn)
         {
-            
-            if (GameObject.Find("Alliance_0").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 0] = 2;
-                GameObject.Find("Alliance_0").GetComponent<Toggle>().isOn = false;
-            }
-            if (GameObject.Find("Alliance_1").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 1] = 2;
-                GameObject.Find("Alliance_1").GetComponent<Toggle>().isOn = false;
-            }
-            if (GameObject.Find("Alliance_2").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 2] = 2;
-                GameObject.Find("Alliance_2").GetComponent<Toggle>().isOn = false;
-            }
-            if (GameObject.Find("Alliance_3").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 3] = 2;
-                GameObject.Find("Alliance_3").GetComponent<Toggle>().isOn = false;
-            }
-            if (GameObject.Find("Alliance_4").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 4] = 2;
-                GameObject.Find("Alliance_4").GetComponent<Toggle>().isOn = false;
-            }
-            if (GameObject.Find("Alliance_5").GetComponent<Toggle>().isOn)
-            {
-                dipStatus[playerIndex, 5] = 2;
-                GameObject.Find("Alliance_5").GetComponent<Toggle>().isOn = false;
-            }
-            GameObject.Find("Alliance").GetComponent<Toggle>().isOn = false;
+            dipStatus[playerIndex, 0] = 2;
+            GameObject.Find("Alliance_0").GetComponent<Toggle>().isOn = false;
         }
+        if (GameObject.Find("Alliance_1").GetComponent<Toggle>().isOn)
+        {
+            dipStatus[playerIndex, 1] = 2;
+            GameObject.Find("Alliance_1").GetComponent<Toggle>().isOn = false;
+        }
+        if (GameObject.Find("Alliance_2").GetComponent<Toggle>().isOn)
+        {
+            dipStatus[playerIndex, 2] = 2;
+            GameObject.Find("Alliance_2").GetComponent<Toggle>().isOn = false;
+        }
+        if (GameObject.Find("Alliance_3").GetComponent<Toggle>().isOn)
+        {
+            dipStatus[playerIndex, 3] = 2;
+            GameObject.Find("Alliance_3").GetComponent<Toggle>().isOn = false;
+        }
+        if (GameObject.Find("Alliance_4").GetComponent<Toggle>().isOn)
+        {
+            dipStatus[playerIndex, 4] = 2;
+            GameObject.Find("Alliance_4").GetComponent<Toggle>().isOn = false;
+        }
+        if (GameObject.Find("Alliance_5").GetComponent<Toggle>().isOn)
+        {
+            dipStatus[playerIndex, 5] = 2;
+            GameObject.Find("Alliance_5").GetComponent<Toggle>().isOn = false;
+        }
+
 
         for (int i = 0; i < 6; i++)
         {
@@ -202,7 +196,7 @@ public class DipForm : MonoBehaviour
                     dipStatus[j, i] = 0;
                     UnityEngine.Debug.Log(i.ToString() + " and " + j.ToString() + " are still at war");
                 }
-                
+
                 if (i != j && randomDraw[i, j] != 0 && randomDraw[j, i] != 0)
                 {
                     randomDraw[i, j] = 0;
@@ -226,7 +220,7 @@ public class DipForm : MonoBehaviour
         {
             for (int j = 0; j < 6; j++)
             {
-                if (i != j && dipStatus[i, j]==2 && loanSquadron[i, j] != 0 && loanSquadron[j, i] != 0)
+                if (i != j && dipStatus[i, j] == 2 && loanSquadron[i, j] != 0 && loanSquadron[j, i] != 0)
                 {
                     loanSquadron[i, j] = 0;
                     loanSquadron[j, i] = 0;
@@ -238,9 +232,9 @@ public class DipForm : MonoBehaviour
 
     public void verifyTurn1()
     {
-        for(int i=0; i < 6; i++)
+        for (int i = 0; i < 6; i++)
         {
-            for(int j = 0; j < 6; j++)
+            for (int j = 0; j < 6; j++)
             {
                 if (i != 2 && j != 2)
                 {
@@ -290,7 +284,8 @@ public class DipForm : MonoBehaviour
                 GM1.diplomacyState[playerIndex, 1] = 0;
                 GM1.diplomacyState[1, playerIndex] = 0;
                 GM2.onChangeDip();
-                if(playerIndex== 0) {
+                if (playerIndex == 0)
+                {
                     handMarkerScript.bonus1.Add("Sprites/jpg/WarWinner2VP");
                     GM1.bonusVPs[1] += 2;
                 }
@@ -299,7 +294,7 @@ public class DipForm : MonoBehaviour
                     handMarkerScript.bonus1.Add("Sprites/jpg/WarWinner1VP");
                     GM1.bonusVPs[1] += 1;
                 }
-                
+
             }
         }
         if (GameObject.Find("PeaceRequest_2").GetComponent<Toggle>().isOn)

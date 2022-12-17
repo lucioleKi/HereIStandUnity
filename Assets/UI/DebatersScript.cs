@@ -62,12 +62,12 @@ public class DebatersScript : MonoBehaviour
                 if (temp.type == 0)
                 {
 
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-100 + index0 * 27, 80);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-110 + index0 * 27, 80);
                     index0++;
                 }
                 else if(temp.type == 1)
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-150 + index1 % 2 * 27, -3 + index1 / 2 * 27);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-164 + index1 % 2 * 27, 5 + index1 / 2 * 27);
                     index1++;
                 }
             }
@@ -125,10 +125,10 @@ public class DebatersScript : MonoBehaviour
         UnityEngine.Debug.Log(temp.id);
         GameObject newObject = new GameObject("papal_" + temp.id.ToString(), typeof(RectTransform), typeof(Image));
         newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Debaters/" + temp.name + "Debater");
-        newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+        newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
         newObject.transform.SetParent(gameObject.transform);
         newObject.AddComponent<DebaterClick>();
-        newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(103, 6);
+        newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(114, 10);
         
     }
 
@@ -139,10 +139,10 @@ public class DebatersScript : MonoBehaviour
         UnityEngine.Debug.Log(temp.id);
         GameObject newObject = new GameObject("protestant_" + (i + 1).ToString(), typeof(RectTransform), typeof(Image));
         newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Debaters/" + temp.name + "Debater");
-        newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+        newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(38, 38);
         newObject.transform.SetParent(gameObject.transform);
         newObject.AddComponent<DebaterClick>();
-        newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(142, 6);
+        newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(157, 10);
         
     }
 

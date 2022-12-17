@@ -22,6 +22,7 @@ public class SpaceGM
     public int controlMarker;//0 = empty, 1 = HCM, 2 = hcm, 3 = SCM, 4 = merc
     public int leader1;
     public int leader2;
+    public bool unrest;
 
     public SpaceGM()
     {
@@ -38,6 +39,7 @@ public class SpaceGM
         this.controlPower = 0;
         this.leader1 = 0;
         this.leader2 = 0;
+        this.unrest = false;
     }
 
     public SpaceGM(CitySetup city)
@@ -57,6 +59,7 @@ public class SpaceGM
         this.controlPower = city.controlPower;
         this.leader1 = city.leader1;
         this.leader2 = city.leader2;
+        this.unrest = false;
 
     }
 
@@ -125,4 +128,5 @@ public class SpaceGM
                 break;
         }
     }
+
 }
