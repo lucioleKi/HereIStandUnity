@@ -287,7 +287,7 @@ public class LayerScript : MonoBehaviour
     public void highlightSpace()
     {
         GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = false;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
         GameObject.Find("SpacesDisplay").transform.SetSiblingIndex(13);
@@ -297,7 +297,7 @@ public class LayerScript : MonoBehaviour
     public void highlightRegular()
     {
         GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = false;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
         GameObject.Find("LandUDisplay").transform.SetSiblingIndex(14);
@@ -306,7 +306,7 @@ public class LayerScript : MonoBehaviour
     public void highlightMerc()
     {
         GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = false;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
         GameObject.Find("MercDisplay").transform.SetSiblingIndex(15);
@@ -316,7 +316,7 @@ public class LayerScript : MonoBehaviour
     public void highlightCav()
     {
         GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = false;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
         GameObject.Find("CavDisplay").transform.SetSiblingIndex(16);
@@ -327,7 +327,7 @@ public class LayerScript : MonoBehaviour
     public void highlightLeader()
     {
         GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = false;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
         GameObject.Find("LeaderDisplay").transform.SetSiblingIndex(17);
@@ -336,7 +336,7 @@ public class LayerScript : MonoBehaviour
     public void highlightNaval()
     {
         GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = false;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
         GameObject.Find("NavalDisplay").transform.SetSiblingIndex(18);
@@ -345,7 +345,7 @@ public class LayerScript : MonoBehaviour
     public void highlightOther()
     {
         GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = false;
         GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
         GameObject.Find("OtherDisplay").transform.SetSiblingIndex(19);
@@ -355,15 +355,15 @@ public class LayerScript : MonoBehaviour
     public void highlightDark()
     {
         GameObject.Find("Darken").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = true;
-        //GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().blocksRaycasts = false;
+        GameObject.Find("Darken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("Darken").transform.SetSiblingIndex(12);
     }
 
     public void highlightLeaderPower()
     {
         GameObject.Find("LeaderDarken").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("LeaderDarken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("LeaderDarken").GetComponent<CanvasGroup>().blocksRaycasts = false;
         GameObject.Find("LeaderDarken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("LeaderDarken").transform.SetSiblingIndex(7);
         GameObject.Find("Leaders" + GM1.player.ToString()).transform.SetSiblingIndex(8);
@@ -382,7 +382,7 @@ public class LayerScript : MonoBehaviour
     public void highlight1Leader(string unit)
     {
         GameObject.Find("LeaderDarken").GetComponent<CanvasGroup>().alpha = 1;
-        GameObject.Find("LeaderDarken").GetComponent<CanvasGroup>().blocksRaycasts = true;
+        GameObject.Find("LeaderDarken").GetComponent<CanvasGroup>().blocksRaycasts = false;
         GameObject.Find("LeaderDarken").GetComponent<CanvasGroup>().interactable = true;
         GameObject.Find("LeaderDarken").transform.SetSiblingIndex(7);
         GameObject.Find(unit).transform.SetParent(GameObject.Find("LeaderDisplay").transform);

@@ -223,7 +223,7 @@ public class LeaderScript : MonoBehaviour
                 }
                 else
                 {
-                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX+200- 15, spaces.ElementAt(to).posY + 50);
+                    tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX+200- 65, spaces.ElementAt(to).posY + 50);
                 }
                 return;
             }

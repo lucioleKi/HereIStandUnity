@@ -270,7 +270,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
     public IEnumerator moveInClear()
     {
-        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        //CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         //List<int> trace = findClearFormation(GM1.player);
         //GM2.highlightSelected = -1;
         //GM2.onNoLayer();
@@ -288,7 +288,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             yield return null;
         }
         //GM2.highlightSelected = -1;
-        GM2.onCPChange(textScript.displayCP - cost);
+        
     }
 
     
@@ -777,7 +777,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    void removeHighlight()
+    public void removeHighlight()
     {
 
 

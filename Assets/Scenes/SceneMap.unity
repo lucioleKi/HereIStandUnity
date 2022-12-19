@@ -728,6 +728,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   playerIndex: 0
+  lockExcept: 0
 --- !u!1 &47884476
 GameObject:
   m_ObjectHideFlags: 0
@@ -3064,6 +3065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fda247d58a45be643a401d2e9c0080b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisPlayer: 0
 --- !u!1 &208804443
 GameObject:
   m_ObjectHideFlags: 0
@@ -5615,7 +5617,7 @@ RectTransform:
   - {fileID: 806737934}
   - {fileID: 582765367}
   m_Father: {fileID: 1668327931}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -10976,7 +10978,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1668327931}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -13178,7 +13180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Next Step
+  m_text: Skip
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -19822,7 +19824,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 870, y: -170}
-  m_SizeDelta: {x: 130, y: 57}
+  m_SizeDelta: {x: 80, y: 57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1228796884
 MonoBehaviour:
@@ -19837,6 +19839,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
+  status: 0
+  btnStatus: 0
+  initial: 0
+  destination: 0
+  lockExcept: 0
 --- !u!114 &1228796885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27017,8 +27024,8 @@ RectTransform:
   - {fileID: 320261296}
   - {fileID: 1815022329}
   - {fileID: 1779146964}
-  - {fileID: 676291997}
   - {fileID: 409789776}
+  - {fileID: 676291997}
   - {fileID: 463847827}
   m_Father: {fileID: 1176924816}
   m_RootOrder: 0

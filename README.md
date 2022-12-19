@@ -110,3 +110,7 @@ Logic for explore and conquer action.
 12/17/2022
 
 Boards resized. Various QOL improvements. Unrest. Started frontend for land movements.
+
+12/19/2022
+
+Finished land movements step 1-4.

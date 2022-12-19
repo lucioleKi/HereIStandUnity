@@ -479,6 +479,48 @@ public class GM3
         onChangeRuler(2, 23);
     }
 
+    public void HIS031()
+    {
+        GM2.boolStates[29] = true;
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        GM2.intStates[0] = landMvmt.mvmtPlayer;
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        if (textScript.displayCP >= 1)
+        {
+            GM2.onCPChange(textScript.displayCP - 1);
+            HighlightCPScript highlightCPScript = GameObject.Find("HighlightCPDisplay").GetComponent("HighlightCPScript") as HighlightCPScript;
+            highlightCPScript.removeHighlight();
+        }
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.discardById(GM1.player, 31);
+
+        GM1.player = landMvmt.mvmtPlayer;
+        GM2.onPlayerChange();
+        landMvmt.status = 4;
+        landMvmt.required2();
+    }
+
+    public void HIS032()
+    {
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        landMvmt.hasLeader = false;
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        if (textScript.displayCP >= 1)
+        {
+            GM2.onCPChange(textScript.displayCP - 1);
+            HighlightCPScript highlightCPScript = GameObject.Find("HighlightCPDisplay").GetComponent("HighlightCPScript") as HighlightCPScript;
+            highlightCPScript.removeHighlight();
+        }
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.discardById(GM1.player, 32);
+        GM1.player = landMvmt.mvmtPlayer;
+        GM2.onPlayerChange();
+        landMvmt.status = 5;
+        landMvmt.required2();
+    }
+
     public IEnumerator HIS065()
     {
         if (DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1) {

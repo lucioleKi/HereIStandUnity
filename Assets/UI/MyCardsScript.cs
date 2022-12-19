@@ -13,22 +13,24 @@ public class MyCardsScript : MonoBehaviour
 {
     public Button btn;
     public int playerIndex;
+    public int lockExcept;
     // Start is called before the first frame update
     void Start()
     {
         btn = gameObject.GetComponent<Button>();
         playerIndex = GM1.player;
         btn.onClick.AddListener(() => toCanvasCards());
+        lockExcept = -1;
     }
 
     void OnEnable()
     {
-        //GM2.onAddReformer += nextPhase;
+        GM2.onPlayerChange += disableMyCards;
     }
 
     void OnDisable()
     {
-        //GM2.onAddReformer -= nextPhase;
+        GM2.onPlayerChange -= disableMyCards;
     }
 
     void toCanvasCards()
@@ -61,7 +63,20 @@ public class MyCardsScript : MonoBehaviour
         }
     }
 
-    
+    void disableMyCards()
+    {
+        if (lockExcept!=-1)
+        {
+            if (GM1.player != lockExcept)
+            {
+                btn.interactable = false;
+            }
+            else
+            {
+                btn.interactable = true;
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update()

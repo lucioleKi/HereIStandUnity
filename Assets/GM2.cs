@@ -80,6 +80,7 @@ public class GM2 : MonoBehaviour
 
 
     public static bool[] boolStates;
+    public static int[] intStates;
     //0: waitCard for HIS003. 1: phaseEnd. 2: in theological debate (CP action). 3: is piracy allowed (turn 3 card 9). 4: Henry VIII marries Anne Boleyn. 5: turn 2 card 10.
     //6: turn 4 card 13. 7: turn 4 card 14. 8: turn 6 card 15.
     //9: Jamestown colonized. 10: Roanoke colonized. 11: Charlesbourg colonized. 12: Montreal colonized. 13: Cuba colonized. 14: Hispaniola colonized. 15: PuertoRico colonized.
@@ -88,6 +89,8 @@ public class GM2 : MonoBehaviour
     //22: 1 already conquered. 23: 2 already conquered. 24: 3 already conquered.
     //25: 1 charted. 26: 2 charted. 27: 3 charted.
     //28: in land movement procedure (CP action)
+    //29: HIS031 has effect
+    //0: which power has HIS031 effect
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
@@ -100,6 +103,7 @@ public class GM2 : MonoBehaviour
     void OnEnable()
     {
         boolStates = new bool[40];
+        intStates = new int[10];
         onMandatory += mandatory;
         onPhase2 += phase2;
         onPhase3 += phase3;
@@ -202,6 +206,12 @@ public class GM2 : MonoBehaviour
                 break;
             case 22:
                 gm3.HIS022();
+                break;
+            case 31:
+                gm3.HIS031();
+                break;
+            case 32:
+                gm3.HIS032();
                 break;
             case 65:
                 StartCoroutine(gm3.HIS065());
@@ -365,7 +375,7 @@ public class GM2 : MonoBehaviour
 
 
 
-    
+
 
     public static void reformCAttempt()
     {
@@ -495,7 +505,7 @@ public class GM2 : MonoBehaviour
         }
     }
 
-    
+
 
     void phase2()
     {
@@ -610,16 +620,16 @@ public class GM2 : MonoBehaviour
             {
                 GM1.player++;
                 onPlayerChange();
-                
+
             }
             else
             {
                 GM1.player = 0;
                 onPlayerChange();
-                
-                
+
+
             }
-            if (i ==0)
+            if (i == 0)
             {
                 GM1.deq1(1);
             }
@@ -628,7 +638,7 @@ public class GM2 : MonoBehaviour
                 GM1.deq1(0);
                 GM1.deq1(1);
             }
-            
+
 
 
         }
@@ -672,9 +682,9 @@ public class GM2 : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             bool atWar = false;
-            for(int j=0; j<6; j++)
+            for (int j = 0; j < 6; j++)
             {
-                if(diplomacyState[i, j] == 1)
+                if (diplomacyState[i, j] == 1)
                 {
                     atWar = true;
                     break;
@@ -687,18 +697,18 @@ public class GM2 : MonoBehaviour
                     yield return null;
                 }
             }
-            
+
             if (i < 5)
             {
                 GM1.player++;
                 onPlayerChange();
-                
+
             }
             else
             {
                 GM1.player = 0;
                 onPlayerChange();
-                
+
             }
             if (i == 0)
             {
@@ -878,7 +888,7 @@ public class GM2 : MonoBehaviour
 
     }
 
-    
+
 
     public static void changeReligion()
     {
@@ -990,9 +1000,9 @@ public class GM2 : MonoBehaviour
 
     }
 
-    
 
-    
+
+
 
     void springDeploy()
     {
@@ -1094,9 +1104,9 @@ public class GM2 : MonoBehaviour
 
     void checkCapital(int power, int index)
     {
-        DeckScript.spacesGM.ElementAt(index-1).regular++;
-        DeckScript.regulars[index-1]++;
-        onChangeReg(index-1, power);
+        DeckScript.spacesGM.ElementAt(index - 1).regular++;
+        DeckScript.regulars[index - 1]++;
+        onChangeReg(index - 1, power);
     }
 
     void discardCard(int index)
@@ -1160,7 +1170,7 @@ public class GM2 : MonoBehaviour
         {
             if (boolStates[i])
             {
-                
+
             }
         }
         //resolve conquest
@@ -1168,7 +1178,7 @@ public class GM2 : MonoBehaviour
         {
             if (boolStates[i])
             {
-                
+
             }
         }
         onPhaseEnd();

@@ -79,6 +79,14 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if HIS031 has effect
+                        if (GM2.boolStates[29] && GM2.intStates[0]==0)
+                        {
+                            if (i < 6 && i != 3)
+                            {
+                                continue;
+                            }
+                        }
                         if (i < 5)
                         {
                             tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(637 + 960, -336 - 10 * i + 540, 0), Quaternion.identity);
@@ -123,6 +131,14 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         if (GM2.boolStates[22] && i == 10)
                         {
                             continue;
+                        }
+                        //check if HIS031 has effect
+                        if (GM2.boolStates[29] && GM2.intStates[0] == 1)
+                        {
+                            if (i < 3 || i == 6)
+                            {
+                                continue;
+                            }
                         }
                         if (i < 6)
                         {
@@ -169,6 +185,14 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if HIS031 has effect
+                        if (GM2.boolStates[29] && GM2.intStates[0] == 2)
+                        {
+                            if (i < 3 || i == 6)
+                            {
+                                continue;
+                            }
+                        }
                         if (i < 6)
                         {
                             tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(640 + 960, -334 - 10 * i + 540, 0), Quaternion.identity);
@@ -214,7 +238,14 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
-
+                        //check if HIS031 has effect
+                        if (GM2.boolStates[29] && GM2.intStates[0] == 3)
+                        {
+                            if (i < 3 || i == 6)
+                            {
+                                continue;
+                            }
+                        }
                         tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/rectangle"), new Vector3(637 + 960, -337 - 9.4f * i + 540, 0), Quaternion.identity);
                         tempObject.GetComponent<RectTransform>().sizeDelta = new Vector2(95, 9);
                         tempObject.transform.SetParent(GameObject.Find("HighlightCPDisplay").transform);
@@ -242,6 +273,14 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         if (findUnfortified(4).Count() == 0 && i == 7)
                         {
                             continue;
+                        }
+                        //check if HIS031 has effect
+                        if (GM2.boolStates[29] && GM2.intStates[0] == 4)
+                        {
+                            if (i < 3 || i == 6)
+                            {
+                                continue;
+                            }
                         }
                         if (i < 6)
                         {
@@ -282,6 +321,14 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         if (findUnfortified(5).Count() == 0 && i == 5)
                         {
                             continue;
+                        }
+                        //check if HIS031 has effect
+                        if (GM2.boolStates[29] && GM2.intStates[0] == 5)
+                        {
+                            if (i < 2 || i == 4)
+                            {
+                                continue;
+                            }
                         }
                         if (i < 4)
                         {
