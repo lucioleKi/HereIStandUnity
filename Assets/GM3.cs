@@ -1,4 +1,4 @@
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +23,31 @@ public class GM3
             }
             return instance;
         }
+    }
+
+    public void HIS001A()
+    {
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        for(int i=0; i<5; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(1, 7);
+            if (randomIndex >= 5)
+            {
+                if (landMvmt.mvmtPlayer == 0)
+                {
+                    landMvmt.attackerHit++;
+                }
+                else
+                {
+                    landMvmt.defenderHit++;
+                }
+            }
+        }
+        hand0.RemoveAt(0);
+        GM1.player = landMvmt.mvmtPlayer;
+        GM2.onPlayerChange();
+        landMvmt.status = 14;
+        landMvmt.required2();
     }
 
     public IEnumerator HIS001B()
@@ -57,7 +82,7 @@ public class GM3
         yield return new WaitForSeconds(3);
 
         currentTextObject.reset();
-
+        hand0.RemoveAt(0);
     }
 
     public IEnumerator HIS002()
@@ -129,6 +154,7 @@ public class GM3
         while (false){
             yield return null;
         }
+        hand2.RemoveAt(0);
     }
 
     public IEnumerator HIS004()
@@ -479,6 +505,115 @@ public class GM3
         onChangeRuler(2, 23);
     }
 
+    public void HIS024()
+    {
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        if (GM1.player == landMvmt.mvmtPlayer)
+        {
+            landMvmt.attackerDice += 2;
+        }
+        else
+        {
+            landMvmt.defenderDice += 2;
+        }
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.discardById(GM1.player, 24);
+        landMvmt.required2();
+    }
+
+    public void HIS025()
+    {
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        if (GM1.player == landMvmt.mvmtPlayer)
+        {
+            if (GM1.player==0||GM1.player==3)
+            {
+                landMvmt.attackerDice += 3;
+            }
+            else
+            {
+                landMvmt.attackerDice += 2;
+            }
+            
+        }
+        else
+        {
+            if (GM1.player == 0 || GM1.player == 3)
+            {
+                landMvmt.defenderDice += 3;
+            }
+            else
+            {
+                landMvmt.defenderDice += 2;
+            }
+        }
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.discardById(GM1.player, 25);
+        landMvmt.required2();
+    }
+
+    public void HIS026()
+    {
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        int changeNumber = 0;
+        if (GM1.player == landMvmt.mvmtPlayer)
+        {
+            changeNumber = (spacesGM.ElementAt(landMvmt.destination).merc+1)/ 2;
+            spacesGM.ElementAt(landMvmt.destination).merc-= changeNumber;
+            spacesGM.ElementAt(landMvmt.initial).merc += changeNumber;
+        }
+        else
+        {
+            changeNumber = (spacesGM.ElementAt(landMvmt.initial).merc + 1) / 2;
+            spacesGM.ElementAt(landMvmt.destination).merc += changeNumber;
+            spacesGM.ElementAt(landMvmt.initial).merc -= changeNumber;
+        }
+        onChangeMerc(landMvmt.initial, spacesGM.ElementAt(landMvmt.initial).regularPower);
+        onChangeMerc(landMvmt.destination, spacesGM.ElementAt(landMvmt.destination).regularPower);
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.discardById(GM1.player, 26);
+        landMvmt.required2();
+    }
+
+    public void HIS029()
+    {
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        landMvmt.has29 = GM1.player;
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.discardById(GM1.player, 29);
+        landMvmt.required2();
+    }
+
+    public void HIS030()
+    {
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        landMvmt.has29 = GM1.player;
+        if(GM1.player!=1)
+        {
+            if(GM1.player == landMvmt.mvmtPlayer)
+            {
+                landMvmt.defenderDice = Math.Max(0, landMvmt.defenderDice - 3);
+            }
+            else
+            {
+                landMvmt.attackerDice = Math.Max(0, landMvmt.attackerDice - 3);
+            }
+        }
+        else
+        {
+            landMvmt.has30 = true;
+            
+        }
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.discardById(GM1.player, 30);
+        landMvmt.required2();
+    }
+
     public void HIS031()
     {
         GM2.boolStates[29] = true;
@@ -519,6 +654,156 @@ public class GM3
         GM2.onPlayerChange();
         landMvmt.status = 5;
         landMvmt.required2();
+    }
+
+    public IEnumerator HIS033()
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.pauseColor();
+        if (GM1.player == 1)
+        {
+            
+            currentTextObject.post("Add 4 mercenaries");
+            for (int i = 0; i<4; i++)
+            {
+                List<int> pickSpaces = findClearFormation(GM1.player);
+                highlightSelected = -1;
+                onMercLayer();
+                onHighlight(pickSpaces);
+                while (highlightSelected == -1)
+                {
+                    //UnityEngine.Debug.Log("here");
+                    yield return null;
+                }
+                spacesGM.ElementAt(highlightSelected).merc++;
+                onChangeMerc(highlightSelected, GM1.player);
+            }
+            
+            highlightSelected = -1;
+        }
+        else if(GM1.player==0)
+        {
+            currentTextObject.post("Add 2 mercenaries");
+            for (int i = 0; i < 2; i++){
+                List<int> pickSpaces = new List<int>();
+                for (int j = 0; j < 134; i++)
+                {
+                    if (spacesGM.ElementAt(j).merc > 0)
+                    {
+                        pickSpaces.Add(j);
+                    }
+                }
+                highlightSelected = -1;
+                onMercLayer();
+                onHighlight(pickSpaces);
+                while (highlightSelected == -1)
+                {
+                    //UnityEngine.Debug.Log("here");
+                    yield return null;
+                }
+                if (spacesGM.ElementAt(highlightSelected).merc == 1)
+                {
+                    spacesGM.ElementAt(highlightSelected).merc = 0;
+                }
+                else
+                {
+                    spacesGM.ElementAt(highlightSelected).merc--;
+                }
+                onChangeMerc(highlightSelected, spacesGM.ElementAt(highlightSelected).regularPower);
+            }
+            
+            highlightSelected = -1;
+        }
+        else
+        {
+            currentTextObject.post("Add 2 mercenaries");
+            for (int i = 0; i < 2; i++)
+            {
+                List<int> pickSpaces = findClearFormation(GM1.player);
+                highlightSelected = -1;
+                onMercLayer();
+                onHighlight(pickSpaces);
+                while (highlightSelected == -1)
+                {
+                    //UnityEngine.Debug.Log("here");
+                    yield return null;
+                }
+                spacesGM.ElementAt(highlightSelected).merc++;
+                onChangeMerc(highlightSelected, GM1.player);
+            }
+                
+            highlightSelected = -1;
+        }
+        currentTextObject.reset();
+        currentTextObject.restartColor();
+        DeckScript.discardById(GM1.player, 33);
+        chosenCard = "";
+        onChosenCard();
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        if (landMvmt.status == 7)
+        {
+            landMvmt.status = 8;
+            landMvmt.required2();
+        }
+    }
+
+    public IEnumerator HIS036()
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.pauseColor();
+        if (GM1.player == 0||GM1.player==3)
+        {
+            currentTextObject.post("Add 4 mercenaries");
+            for (int i = 0; i < 4; i++)
+            {
+                List<int> pickSpaces = findClearFormation(3);
+                highlightSelected = -1;
+                onMercLayer();
+                onHighlight(pickSpaces);
+                while (highlightSelected == -1)
+                {
+                    //UnityEngine.Debug.Log("here");
+                    yield return null;
+                }
+                spacesGM.ElementAt(highlightSelected).merc++;
+                onChangeMerc(highlightSelected, 3);
+            }
+
+            highlightSelected = -1;
+        }
+        else
+        {
+            currentTextObject.post("Add 2 mercenaries");
+            for (int i = 0; i < 2; i++)
+            {
+                List<int> pickSpaces = findClearFormation(GM1.player);
+                highlightSelected = -1;
+                onMercLayer();
+                onHighlight(pickSpaces);
+                while (highlightSelected == -1)
+                {
+                    //UnityEngine.Debug.Log("here");
+                    yield return null;
+                }
+                
+                spacesGM.ElementAt(highlightSelected).merc++;
+                
+                onChangeMerc(highlightSelected, GM1.player);
+            }
+
+            highlightSelected = -1;
+        }
+        currentTextObject.reset();
+        currentTextObject.restartColor();
+        DeckScript.discardById(GM1.player, 36);
+        chosenCard = "";
+        onChosenCard();
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        if (landMvmt.status == 8)
+        {
+            landMvmt.status = 9;
+            landMvmt.required2();
+        }
     }
 
     public IEnumerator HIS065()

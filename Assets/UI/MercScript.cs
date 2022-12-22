@@ -42,7 +42,7 @@ public class MercScript : MonoBehaviour
     {
         GM2.resetMap();
         SpaceGM temp = spacesGM.ElementAt(index);
-
+        UnityEngine.Debug.Log(index);
 
         if (gameObject.transform.Find(spaces.ElementAt(index).name + "_2") != null)
         {
@@ -66,7 +66,7 @@ public class MercScript : MonoBehaviour
         //make new marker and #
         else if (temp.merc != 0)
         {
-
+            UnityEngine.Debug.Log(temp.merc);
             string tempName = power.ToString();
             GameObject tempObject = new GameObject(spaces.ElementAt(index).name + "_2", typeof(RectTransform), typeof(Image));
             tempObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/LandMercs/"+tempName);

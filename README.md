@@ -114,3 +114,7 @@ Boards resized. Various QOL improvements. Unrest. Started frontend for land move
 12/19/2022
 
 Finished land movements step 1-4.
+
+12/22/2022
+
+Finished interception and field battle.

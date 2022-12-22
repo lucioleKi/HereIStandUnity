@@ -23,6 +23,7 @@ public class SpaceGM
     public int leader1;
     public int leader2;
     public bool unrest;
+    public bool sieged;
 
     public SpaceGM()
     {

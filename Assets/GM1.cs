@@ -98,7 +98,7 @@ public class GM1 : MonoBehaviour
             bonusVPs[i] = 0;
         }
 
-        diplomacyState = new int[6, 10];
+        diplomacyState = new int[6, 11];
         Array.Clear(diplomacyState, 0, diplomacyState.Length);
         diplomacyState[1, 3] = 1;
         diplomacyState[3, 4] = 1;

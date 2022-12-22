@@ -10,17 +10,18 @@ using static DeckScript;
 
 public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    public bool inFieldBattle;
     bool hover = false;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
     public void OnPointerClick(PointerEventData eventData)
     {
         UnityEngine.Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
         int index = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(4)) - 1;
-        if (GM1.phase != 1 && GM1.phase != 4 && GM1.phase != 6 && GM1.phase!=2)
+        if (GM1.phase != 1 && GM1.phase != 4 && GM1.phase != 6 && GM1.phase != 2)
         {
             return;
         }
@@ -30,21 +31,21 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             {
                 return;
             }
-            if (GM1.player == 1 && GM2.secretCP[1]!=0|| GM1.player == 4 && GM2.secretCP[4] != 0|| GM1.player == 5 && GM2.secretCP[5] != 0)//participates can only submit once
+            if (GM1.player == 1 && GM2.secretCP[1] != 0 || GM1.player == 4 && GM2.secretCP[4] != 0 || GM1.player == 5 && GM2.secretCP[5] != 0)//participates can only submit once
             {
                 return;
             }
             ConfirmScript.btn.interactable = false;
 
         }
-        else if(playAsEvent(index))
+        else if (playAsEvent(index))
         {
             ConfirmScript.cardSelected = eventData.pointerCurrentRaycast.gameObject.name;
             ConfirmScript.btn.interactable = true;
         }
 
-        
-        
+
+
         UnityEngine.Debug.Log(index);
         UnityEngine.Debug.Log(cardsLib.Count());
         if ((int)cardsLib.ElementAt(index).cardType != 1)
@@ -77,11 +78,84 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
     bool playAsEvent(int index)
     {
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        //combat cards
+        if ((int)cardsLib.ElementAt(index).cardType == 3) { 
+            if (landMvmt.status!=11&&landMvmt.status!=10)
+        
+            
+            {
+                return false;
+            }
+        }
+        if((int)cardsLib.ElementAt(index).cardType != 3&&(landMvmt.status == 10 || landMvmt.status == 11))
+        {
+            return false;
+        }
+        if (index == 24 && index == 25)
+        {
+            if (landMvmt.status >= 10 && landMvmt.status <= 11)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+        if (index == 26)
+        {
+            if (landMvmt.status >= 10 && landMvmt.status <= 11)
+            {
+                if (landMvmt.mvmtPlayer == 0 || landMvmt.fieldPlayer == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 29)
+        {
+            if (landMvmt.status >= 10 && landMvmt.status <= 11)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if(index == 30)
+        {
+            if (landMvmt.status >= 10 && landMvmt.status <= 11)
+            {
+                if (landMvmt.mvmtPlayer == 0 || landMvmt.fieldPlayer == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
         if (index == 64)
         {
             if (GM1.player == 5 && DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1)
             {
-                
+
                 return true;
             }
             else
@@ -99,8 +173,8 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         {
             gameObject.transform.SetSiblingIndex(10);
             gameObject.transform.localScale = new Vector3(2, 2, 1);
-            
-            
+
+
         }
         else
         {

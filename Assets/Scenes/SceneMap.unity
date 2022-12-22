@@ -7480,7 +7480,7 @@ GameObject:
   - component: {fileID: 484678124}
   - component: {fileID: 484678123}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: StartText (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19839,10 +19839,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
+  mvmtPlayer: 0
   status: 0
   btnStatus: 0
   initial: 0
   destination: 0
+  hasLeader: 0
   lockExcept: 0
 --- !u!114 &1228796885
 MonoBehaviour:

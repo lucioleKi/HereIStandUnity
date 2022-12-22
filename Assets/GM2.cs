@@ -47,6 +47,7 @@ public class GM2 : MonoBehaviour
     public static SimpleHandler onMoveHome25;
     public static SimpleHandler onSpaceLayer;
     public static SimpleHandler onRegLayer;
+    public static SimpleHandler onMercLayer;
     public static SimpleHandler onLeaderLayer;
     public static SimpleHandler onNoLayer;
     public static SimpleHandler onLeaderULayer;
@@ -166,7 +167,14 @@ public class GM2 : MonoBehaviour
         switch (index)
         {
             case 1:
-                StartCoroutine(gm3.HIS001B());
+                if (boolStates[28])
+                {
+                    gm3.HIS001A();
+                }
+                else
+                {
+                    StartCoroutine(gm3.HIS001B());
+                }
                 break;
             case 2:
                 StartCoroutine(gm3.HIS002());
@@ -207,11 +215,35 @@ public class GM2 : MonoBehaviour
             case 22:
                 gm3.HIS022();
                 break;
+            case 23:
+                gm3.HIS023();
+                break;
+            case 24:
+                gm3.HIS024();
+                break;
+            case 25:
+                gm3.HIS025();
+                break;
+            case 26:
+                gm3.HIS026();
+                break;
+            case 29:
+                gm3.HIS029();
+                break;
+            case 30:
+                gm3.HIS030();
+                break;
             case 31:
                 gm3.HIS031();
                 break;
             case 32:
                 gm3.HIS032();
+                break;
+            case 33:
+                StartCoroutine(gm3.HIS033());
+                break;
+            case 36:
+                StartCoroutine(gm3.HIS036());
                 break;
             case 65:
                 StartCoroutine(gm3.HIS065());
