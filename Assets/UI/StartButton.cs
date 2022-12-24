@@ -14,6 +14,8 @@ public class StartButton : MonoBehaviour
     public Button btn;
     public int cardIndex;
     public bool forIntercept;
+    public bool forAvoid;
+    public bool forWithdraw;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +24,7 @@ public class StartButton : MonoBehaviour
         cardIndex = 8;
         btn.interactable = false;
         btn.onClick.AddListener(() => buttonCallBack(cardIndex));
-        forIntercept= false;
+        forIntercept = false;
 
     }
 
@@ -46,13 +48,21 @@ public class StartButton : MonoBehaviour
 
             StartCoroutine(wait132());
         }
+        else if (forAvoid)
+        {
+            StartCoroutine(wait133());
+        }else if (forWithdraw)
+        {
+            withdraw();
+        }
         else
         {
             string tempName = GameObject.Find("CardDisplay").GetComponent<Image>().sprite.name;
             cardIndex = int.Parse(tempName.Substring(4));
             GM2.onMandatory(cardIndex);
-            btn.interactable = false;
+            
         }
+        btn.interactable = false;
 
     }
 
@@ -74,20 +84,29 @@ public class StartButton : MonoBehaviour
             case 1:
                 btn.interactable = true;
                 forIntercept = true;
-                makeInteractable();
+                
+                break;
+            case 2:
+                btn.interactable = true;
+                forAvoid = true;
+                
+                break;
+            case 3:
+                btn.interactable = true;
+                forWithdraw = true;
                 break;
         }
-        
-        
+
+
     }
 
     void makeInteractable()
     {
-        if (GM2.chosenCard == ""&&forIntercept)
+        if (GM2.chosenCard == "" && (forIntercept||forAvoid||forWithdraw))
         {
             btn.interactable = true;
         }
-        else if(GM2.chosenCard=="")
+        else if (GM2.chosenCard == "")
         {
             btn.interactable = false;
         }
@@ -155,7 +174,7 @@ public class StartButton : MonoBehaviour
             randomIndex = randomIndex + leaders.ElementAt(GM2.leaderSelected).battle;
         }
         UnityEngine.Debug.Log("interception dice " + randomIndex.ToString());
-        if (randomIndex >= 9&&command>0)
+        if (randomIndex >= 9 && command > 0)
         {
             spacesGM.ElementAt(landMvmt.destination).regular = spacesGM.ElementAt(landMvmt.destination).regular + command;
             spacesGM.ElementAt(GM2.highlightSelected).regular = spacesGM.ElementAt(GM2.highlightSelected).regular - command;
@@ -165,7 +184,7 @@ public class StartButton : MonoBehaviour
             GM2.onChangeReg(GM2.highlightSelected, GM1.player);
             //successful interception, go to 14.field battle
             landMvmt.defenderDice = command;
-            if(hasLeader)
+            if (hasLeader)
             {
                 landMvmt.defenderDice += leaders.ElementAt(GM2.leaderSelected).battle;
             }
@@ -180,6 +199,78 @@ public class StartButton : MonoBehaviour
         GM1.player = landMvmt.mvmtPlayer;
         GM2.onPlayerChange();
         //continue to look for powers that can have an interception attempt
+        landMvmt.required2();
+    }
+
+    IEnumerator wait133()
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.post("Choose Units");
+        InputNumberObject inputNumberObject = GameObject.Find("InputNumber").GetComponent("InputNumberObject") as InputNumberObject;
+        inputNumberObject.post();
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        List<int> trace = landMvmt.tempTrace;
+        GM2.highlightSelected = -1;
+        GM2.leaderSelected = -1;
+        GM2.onRegLayer();
+        GM2.onHighlight(trace);
+        while (GM2.highlightSelected == -1)
+        {
+            yield return null;
+        }
+        UnityEngine.Debug.Log("highlight " + GM2.highlightSelected.ToString());
+        bool hasLeader = false;
+        if (GM2.leaderSelected == spacesGM.ElementAt(landMvmt.destination).leader1 || GM2.leaderSelected == spacesGM.ElementAt(landMvmt.destination).leader2)
+        {
+            hasLeader = true;
+
+        }
+        int command = 0;
+        if (!string.IsNullOrEmpty(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text))
+        {
+            
+            command = int.Parse(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text);
+            
+        }
+        int randomIndex = UnityEngine.Random.Range(1, 7) + UnityEngine.Random.Range(1, 7);
+        if (hasLeader)
+        {
+            randomIndex = randomIndex + leaders.ElementAt(GM2.leaderSelected).battle;
+        }
+        UnityEngine.Debug.Log("avoid dice " + randomIndex.ToString());
+        if (randomIndex >= 9 && command > 0)
+        {
+            spacesGM.ElementAt(landMvmt.destination).regular = spacesGM.ElementAt(landMvmt.destination).regular - command;
+            spacesGM.ElementAt(GM2.highlightSelected).regular = spacesGM.ElementAt(GM2.highlightSelected).regular + command;
+            regulars[landMvmt.destination] = regulars[landMvmt.destination] - command;
+            regulars[GM2.highlightSelected] = regulars[GM2.highlightSelected] + command;
+            GM2.onChangeReg(landMvmt.destination, GM1.player);
+            GM2.onChangeReg(GM2.highlightSelected, GM1.player);
+            //successful avoid
+            landMvmt.status = 17;
+        }
+        forAvoid = false;
+        GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
+        startOther(0);
+        GM2.highlightSelected = -1;
+        inputNumberObject.reset();
+       
+        GM1.player = landMvmt.mvmtPlayer;
+        GM2.onPlayerChange();
+        //try to withdraw into fortifications
+        landMvmt.status = 17;
+        landMvmt.required2();
+    }
+
+    public void withdraw()
+    {
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        spacesGM.ElementAt(landMvmt.destination).sieged = true;
+        forWithdraw = false;
+        UnityEngine.Debug.Log("withdraw success");
+        GM1.player = landMvmt.mvmtPlayer;
+        GM2.onPlayerChange();
+        landMvmt.status = 18;
         landMvmt.required2();
     }
 }

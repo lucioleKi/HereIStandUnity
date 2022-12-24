@@ -60,9 +60,12 @@ public class LandMvmt : MonoBehaviour
     void buttonCallBack()
     {
         btn.interactable = false;
+        StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+
         switch (btnStatus)
         {
             case 0:
+                //skip HIS-031
                 status = 4;
                 GM2.chosenCard = "";
                 GM2.onChosenCard();
@@ -71,6 +74,7 @@ public class LandMvmt : MonoBehaviour
                 required2();
                 break;
             case 1:
+                //skip HIS-032
                 status = 5;
                 GM2.chosenCard = "";
                 GM2.onChosenCard();
@@ -100,6 +104,7 @@ public class LandMvmt : MonoBehaviour
                 required2();
                 break;
             case 5:
+                //skip attacker combat cards
                 status = 11;
                 GM2.chosenCard = "";
                 GM2.onChosenCard();
@@ -108,6 +113,7 @@ public class LandMvmt : MonoBehaviour
                 required2();
                 break;
             case 6:
+                //skip defender combat cards
                 status = 12;
                 GM2.chosenCard = "";
                 GM2.onChosenCard();
@@ -121,6 +127,24 @@ public class LandMvmt : MonoBehaviour
                 GM2.onChosenCard();
                 GM1.player = mvmtPlayer;
                 GM2.onPlayerChange();
+                required2();
+                break;
+            case 8:
+                //skip avoid battle
+                status = 17;
+                GM1.player = mvmtPlayer;
+                GM2.onPlayerChange();
+                startButton.btn.interactable = false;
+                startButton.forAvoid = false;
+                required2();
+                break;
+            case 9:
+                //skip withdraw into fortifications, go to field battle
+                status = 7;
+                GM1.player = mvmtPlayer;
+                GM2.onPlayerChange();
+                startButton.btn.interactable = false;
+                startButton.forWithdraw = false;
                 required2();
                 break;
         }
@@ -145,6 +169,12 @@ public class LandMvmt : MonoBehaviour
         gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
         gameObject.GetComponent<CanvasGroup>().interactable = true;
         status = 0;
+        initial = -1;
+        destination = -1;
+        hasLeader = false;
+        lockExcept = -1;
+        Array.Clear(alreadyIntercepted, 0, 6);
+        tempTrace.Clear();
         mvmtPlayer = GM1.player;
         attackerDice = 0;
         defenderDice = 0;
@@ -157,7 +187,8 @@ public class LandMvmt : MonoBehaviour
 
     void reset()
     {
-        GM2.boolStates[28] = false;
+        GM1.player = mvmtPlayer;
+        GM2.onPlayerChange();
         btn.interactable = false;
         gameObject.GetComponent<CanvasGroup>().alpha = 0;
         gameObject.GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -169,6 +200,12 @@ public class LandMvmt : MonoBehaviour
         lockExcept = -1;
         Array.Clear(alreadyIntercepted, 0, 6);
         tempTrace.Clear();
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        GM2.onCPChange(textScript.displayCP - 1);
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.reset();
+        GM2.boolStates[28] = false;
+
     }
 
     public void required2()
@@ -182,24 +219,32 @@ public class LandMvmt : MonoBehaviour
                 StartCoroutine(wait1312());
                 break;
             case 2:
-                //expend CP
-                //CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-                //GM2.onCPChange(textScript.displayCP - 1);
-                //HighlightCPScript highlightCPScript = GameObject.Find("HighlightCPDisplay").GetComponent("HighlightCPScript") as HighlightCPScript;
-                //highlightCPScript.removeHighlight();
-                status = 3;
-                required2();
+                //check empty siege
+                if (spaces.ElementAt(destination).spaceType != 0 && (spacesGM.ElementAt(destination).regularPower!=mvmtPlayer)&&(spacesGM.ElementAt(destination).regular ==0 && spacesGM.ElementAt(destination).merc ==0))
+                {
+                    spacesGM.ElementAt(destination).sieged = true;
+                    reset();
+                }
+                else
+                {
+                    status = 3;
+                    required2();
+                }
                 break;
             case 3:
+                //HIS-031
                 check13141();
                 break;
             case 4:
+                //HIS-032
                 check13142();
                 break;
             case 5:
+                //interception
                 check132();
                 break;
             case 6:
+                //end state
                 moveClear();
                 reset();
                 break;
@@ -223,7 +268,7 @@ public class LandMvmt : MonoBehaviour
                 defenderCombatCards();
                 break;
             case 12:
-                roll146();
+                StartCoroutine(roll146());
                 break;
             case 13:
                 //field battle 7: if power is ottoman, offer the option to play janissaries
@@ -243,6 +288,18 @@ public class LandMvmt : MonoBehaviour
                 retreat();
                 moveClear();
                 reset();
+                break;
+            case 16:
+                //avoid battle
+                check133();
+                break;
+            case 17:
+                //withdraw into fortifications
+                check134();
+                break;
+            case 18:
+                //successful withdraw
+                checkField();
                 break;
         }
     }
@@ -299,8 +356,11 @@ public class LandMvmt : MonoBehaviour
         currentTextObject.reset();
         destination = GM2.highlightSelected;
         GM2.highlightSelected = -1;
+
         status = 2;
         required2();
+
+
     }
 
     void moveClear()
@@ -347,11 +407,7 @@ public class LandMvmt : MonoBehaviour
         regulars[initial] = regulars[initial] - command;
         onChangeReg(destination, GM1.player);
         onChangeReg(initial, GM1.player);
-        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        GM2.onCPChange(textScript.displayCP-1);
-        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        currentTextObject.reset();
-        GM2.boolStates[28] = false;
+        
     }
 
     void check13141()
@@ -482,7 +538,7 @@ public class LandMvmt : MonoBehaviour
             if (!alreadyIntercepted[i])
             {
                 alreadyIntercepted[i] = true;
-                if (GM1.diplomacyState[GM1.player, i] == 1 || GM1.diplomacyState[i, GM1.player]==1)
+                if (GM1.diplomacyState[GM1.player, i] == 1 || GM1.diplomacyState[i, GM1.player] == 1)
                 {
 
                     for (int j = 0; j < spaces.ElementAt(destination).adjacent.Count(); j++)
@@ -517,7 +573,11 @@ public class LandMvmt : MonoBehaviour
         }
         else
         {
-            status = 6;
+            GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
+            StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+            startButton.startOther(0);
+            startButton.forIntercept = false;
+            status = 16;
             required2();
         }
     }
@@ -668,6 +728,16 @@ public class LandMvmt : MonoBehaviour
         {
             attackerDice += leaders.ElementAt(leaderSelected - 1).battle;
         }
+        if (spacesGM.ElementAt(destination).leader1 != 0)
+        {
+            defenderDice += leaders.ElementAt(spacesGM.ElementAt(destination).leader1 - 1).battle;
+        }
+        if (spacesGM.ElementAt(destination).leader2 != 0)
+        {
+            defenderDice += leaders.ElementAt(spacesGM.ElementAt(destination).leader2 - 1).battle;
+        }
+        defenderDice += spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc+1;
+
         status = 10;
         required2();
     }
@@ -688,15 +758,15 @@ public class LandMvmt : MonoBehaviour
         btnStatus = 6;
     }
 
-    void roll146()
+    IEnumerator roll146()
     {
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        
+
         attackerHit = 0;
         defenderHit = 0;
         if (has30)
         {
-            for(int i=0; i<3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 int randomIndex = UnityEngine.Random.Range(1, 7);
                 if (randomIndex >= 4)
@@ -711,11 +781,11 @@ public class LandMvmt : MonoBehaviour
                     }
                 }
             }
-            
+
         }
         if (has29 == mvmtPlayer)
         {
-            for(int i=0; i<attackerDice; i++)
+            for (int i = 0; i < attackerDice; i++)
             {
                 int randomIndex = UnityEngine.Random.Range(1, 7);
                 if (randomIndex >= 5)
@@ -734,9 +804,9 @@ public class LandMvmt : MonoBehaviour
                 }
             }
 
-            currentTextObject.post("Attacker hit: "+attackerHit.ToString()+" .\nDefender hit: "+defenderHit.ToString());
+            currentTextObject.post("Attacker hit: " + attackerHit.ToString() + " out of " + attackerDice.ToString() + ".\nDefender hit: " + defenderHit.ToString() + " out of " + defenderDice.ToString() + ".");
         }
-        else if(has29==fieldPlayer)
+        else if (has29 == fieldPlayer)
         {
             for (int i = 0; i < defenderDice; i++)
             {
@@ -757,7 +827,7 @@ public class LandMvmt : MonoBehaviour
                 }
             }
 
-            currentTextObject.post("Attacker hit: " + attackerHit.ToString() + " .\nDefender hit: " + defenderHit.ToString());
+            currentTextObject.post("Attacker hit: " + attackerHit.ToString() + " out of " + attackerDice.ToString() + ".\nDefender hit: " + defenderHit.ToString() + " out of " + defenderDice.ToString() + ".");
         }
         else
         {
@@ -779,12 +849,13 @@ public class LandMvmt : MonoBehaviour
                 }
             }
 
-            currentTextObject.post("Attacker hit: " + attackerHit.ToString() +" out of " + attackerDice.ToString()+ " .\nDefender hit: " + defenderHit.ToString()+" out of "+defenderDice.ToString());
+            currentTextObject.post("Attacker hit: " + attackerHit.ToString() + " out of " + attackerDice.ToString() + ".\nDefender hit: " + defenderHit.ToString() + " out of " + defenderDice.ToString()+".");
         }
+        yield return new WaitForSeconds(3);
         if ((mvmtPlayer == 0 || fieldPlayer == 0) && hand0.ElementAt(0).cardType != 0)
         {
             status = 13;
-            
+
         }
         else
         {
@@ -796,21 +867,21 @@ public class LandMvmt : MonoBehaviour
     void check1420()
     {
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        
-       
-            if (has29 == mvmtPlayer)
-            {
-                casualties(mvmtPlayer, initial, defenderHit);
-            }
-            else if (has29 == fieldPlayer)
-            {
-                casualties(fieldPlayer, destination, attackerHit);
-            }
-            else
-            {
-                casualties(mvmtPlayer, initial, defenderHit);
-                casualties(fieldPlayer, destination, attackerHit);
-            }
+
+
+        if (has29 == mvmtPlayer)
+        {
+            casualties(mvmtPlayer, initial, defenderHit);
+        }
+        else if (has29 == fieldPlayer)
+        {
+            casualties(fieldPlayer, destination, attackerHit);
+        }
+        else
+        {
+            casualties(mvmtPlayer, initial, defenderHit);
+            casualties(fieldPlayer, destination, attackerHit);
+        }
         if (attackerElim && defenderElim)
         {
             if (attackerHit <= defenderHit)
@@ -856,7 +927,8 @@ public class LandMvmt : MonoBehaviour
             }
             spacesGM.ElementAt(initial).removeLeader(spacesGM.ElementAt(initial).leader1);
             onChangeLeader(initial, spacesGM.ElementAt(initial).leader1);
-        }else if(defenderElim&& spacesGM.ElementAt(destination).leader1>0&& spacesGM.ElementAt(destination).leader2 > 0)
+        }
+        else if (defenderElim && spacesGM.ElementAt(destination).leader1 > 0 && spacesGM.ElementAt(destination).leader2 > 0)
         {
             switch (mvmtPlayer)
             {
@@ -887,30 +959,31 @@ public class LandMvmt : MonoBehaviour
             currentTextObject.post("Winner: Attacker");
             if (!defenderElim)
             {
-                if (spaces.ElementAt(destination).spaceType != 0&&spacesGM.ElementAt(initial).regular+spacesGM.ElementAt(initial).merc> spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc)
+                if (spaces.ElementAt(destination).spaceType != 0 && spacesGM.ElementAt(initial).regular + spacesGM.ElementAt(initial).merc > spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc)
                 {
                     //active player retreat because no siege
-                    currentTextObject.post("Field battle is winner: Attacker.\nDefender is not under siege.");
-                    GM2.boolStates[28] = false;
+                    currentTextObject.post("Field battle winner: Attacker.\nDefender is not under siege.");
                     reset();
                 }
-                else if(spaces.ElementAt(destination).spaceType != 0&& spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc>4)
+                else if (spaces.ElementAt(destination).spaceType != 0 && spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc > 4)
                 {
                     //defender retreats #-4 units from fortified space
                     status = 15;
                     required2();
-                }else if(spaces.ElementAt(destination).spaceType != 0)
+                }
+                else if (spaces.ElementAt(destination).spaceType != 0)
                 {
                     //start siege
                     spacesGM.ElementAt(destination).sieged = true;
                     reset();
                 }
-                else{
+                else
+                {
                     //defender retreats all
                     status = 15;
                     required2();
                 }
-                
+
             }
             else
             {
@@ -918,7 +991,7 @@ public class LandMvmt : MonoBehaviour
                 status = 6;
                 required2();
             }
-            
+
         }
         else
         {
@@ -926,15 +999,117 @@ public class LandMvmt : MonoBehaviour
 
             GM2.boolStates[28] = false;
             reset();
-           
+
         }
-        
+
+
     }
+
+    public void check133()
+    {
+        tempTrace.Clear();
+
+
+        if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0))
+        {
+            fieldPlayer = spacesGM.ElementAt(destination).regularPower;
+            for (int j = 0; j < spaces.ElementAt(destination).adjacent.Count(); j++)
+            {
+                if (spacesGM.ElementAt(spaces.ElementAt(destination).adjacent[j] - 1).regularPower == fieldPlayer || spacesGM.ElementAt(spaces.ElementAt(destination).adjacent[j] - 1).regularPower == -1)
+                {
+                    tempTrace.Add(spaces.ElementAt(destination).adjacent[j] - 1);
+                    UnityEngine.Debug.Log(spaces.ElementAt(destination).adjacent[j] - 1);
+                }
+
+            }
+            GM1.player = spacesGM.ElementAt(destination).regularPower;
+            UnityEngine.Debug.Log("avoid? " + tempTrace.Count().ToString());
+            GM2.onPlayerChange();
+            btn.interactable = true;
+            btnStatus = 8;
+            GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Avoid battle";
+            StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+            startButton.startOther(2);
+        }
+        else
+        {
+            UnityEngine.Debug.Log("no avoid battle");
+            GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
+            StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+            startButton.btn.interactable = false;
+            startButton.forAvoid = false;
+            status = 6;
+            required2();
+        }
+    }
+
+    public void check134()
+    {
+        StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+        if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0) && (spaces.ElementAt(destination).spaceType != 0 && (spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc <= 4)))
+        {
+            //can withdraw
+            fieldPlayer = spacesGM.ElementAt(destination).regularPower;
+            GM1.player = spacesGM.ElementAt(destination).regularPower;
+            GM2.onPlayerChange();
+            btn.interactable = true;
+            btnStatus = 9;
+            GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Withdraw";
+            startButton.startOther(3);
+        }
+        else if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0)&&spaces.ElementAt(destination).spaceType != 0) {
+            //cannot withdraw because not fortified, go to field battle
+            fieldPlayer = spacesGM.ElementAt(destination).regularPower;
+            status = 7;
+            GM1.player = mvmtPlayer;
+            GM2.onPlayerChange();
+            startButton.btn.interactable = false;
+            startButton.forWithdraw = false;
+            required2();
+        }
+        else
+        {
+            //no enemy units, move clear
+            UnityEngine.Debug.Log("no enemy units left");
+            GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
+            
+            startButton.btn.interactable = false;
+            startButton.forAvoid = false;
+            status = 6;
+            required2();
+        }
+    }
+
+    public void checkField()
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        GM2.onCPChange(textScript.displayCP - 1);
+        HighlightCPScript highlightCPObject = GameObject.Find("HighlightCPDisplay").GetComponent("CurrentTextScript") as HighlightCPScript;
+        highlightCPObject.removeHighlight();
+        if (textScript.displayCP >= 1)
+        {
+            //active player retreat because no siege
+            currentTextObject.post("Defender is not under siege.");
+
+            reset();
+            post();
+            required2();
+        }
+        else
+        {
+            //active player retreat because no siege
+            GM2.boolStates[28] = false;
+            reset();
+        }
+
+    }
+
 
     IEnumerator retreat()
     {
         List<int> trace = new List<int>();
-        for(int i=0; i<spaces.ElementAt(destination).adjacent.Count(); i++)
+        for (int i = 0; i < spaces.ElementAt(destination).adjacent.Count(); i++)
         {
             //cannot retreat into initial space
             if (spaces.ElementAt(destination).adjacent.ElementAt(i) == initial)
@@ -947,7 +1122,7 @@ public class LandMvmt : MonoBehaviour
                 continue;
             }
             //cannot retreat into independent space
-            if (spacesGM.ElementAt(spaces.ElementAt(destination).adjacent.ElementAt(i)).controlPower==10)
+            if (spacesGM.ElementAt(spaces.ElementAt(destination).adjacent.ElementAt(i)).controlPower == 10)
             {
                 continue;
             }
@@ -973,10 +1148,10 @@ public class LandMvmt : MonoBehaviour
         }
 
         int retreatTo = GM2.highlightSelected;
-        
+
         if (spaces.ElementAt(destination).spaceType == 0)
         {
-            
+
             spacesGM.ElementAt(retreatTo).regular += spacesGM.ElementAt(destination).regular;
             spacesGM.ElementAt(destination).regular = 0;
             spacesGM.ElementAt(retreatTo).regularPower = fieldPlayer;
@@ -988,16 +1163,16 @@ public class LandMvmt : MonoBehaviour
 
             spacesGM.ElementAt(retreatTo).merc += spacesGM.ElementAt(destination).merc;
             spacesGM.ElementAt(destination).merc = 0;
-            
+
             onChangeMerc(destination, fieldPlayer);
             onChangeMerc(initial, fieldPlayer);
         }
         else
         {
-            spacesGM.ElementAt(retreatTo).regular += spacesGM.ElementAt(destination).regular-4;
+            spacesGM.ElementAt(retreatTo).regular += spacesGM.ElementAt(destination).regular - 4;
             spacesGM.ElementAt(destination).regular = 4;
             spacesGM.ElementAt(retreatTo).regularPower = fieldPlayer;
-            regulars[retreatTo] += regulars[destination]-4;
+            regulars[retreatTo] += regulars[destination] - 4;
             regulars[destination] = 4;
             onChangeReg(destination, fieldPlayer);
             onChangeReg(initial, fieldPlayer);
@@ -1015,7 +1190,7 @@ public class LandMvmt : MonoBehaviour
 
         if (spacesGM.ElementAt(place).merc >= hit)
         {
-            
+
             spacesGM.ElementAt(place).merc -= hit;
             hit = 0;
             GM2.onChangeMerc(place, player);
@@ -1047,7 +1222,8 @@ public class LandMvmt : MonoBehaviour
             hit = 0;
             GM2.onChangeReg(place, player);
             return;
-        }else if(spacesGM.ElementAt(place).regular > 0)
+        }
+        else if (spacesGM.ElementAt(place).regular > 0)
         {
             if (player == mvmtPlayer)
             {

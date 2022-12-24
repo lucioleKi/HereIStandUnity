@@ -578,6 +578,36 @@ public class GM3
         landMvmt.required2();
     }
 
+    public void HIS027()
+    {
+        SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
+        spacesGM.ElementAt(siegeScript.initial).merc = 0;
+        onChangeMerc(siegeScript.initial, spacesGM.ElementAt(siegeScript.initial).regularPower);
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.discardById(GM1.player, 27);
+        GM1.player = siegeScript.mvmtPlayer;
+        GM2.onPlayerChange();
+        if (spacesGM.ElementAt(siegeScript.initial).regular+ spacesGM.ElementAt(siegeScript.initial).cavalry<= spacesGM.ElementAt(siegeScript.initial).regular+ spacesGM.ElementAt(siegeScript.initial).merc)
+        {
+            siegeScript.status = 6;
+            
+        }
+        siegeScript.required2();
+    }
+
+    public void HIS028()
+    {
+        SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
+        siegeScript.attackerDice += 3;
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.discardById(GM1.player, 28);
+        GM1.player = siegeScript.mvmtPlayer;
+        GM2.onPlayerChange();
+        siegeScript.required2();
+    }
+
     public void HIS029()
     {
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
@@ -618,7 +648,16 @@ public class GM3
     {
         GM2.boolStates[29] = true;
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
-        GM2.intStates[0] = landMvmt.mvmtPlayer;
+        SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
+        if (landMvmt.status == 3)
+        {
+            GM2.intStates[0] = landMvmt.mvmtPlayer;
+        }
+        else
+        {
+            GM2.intStates[0] = siegeScript.mvmtPlayer;
+        }
+        
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         if (textScript.displayCP >= 1)
         {
@@ -629,16 +668,27 @@ public class GM3
         chosenCard = "";
         onChosenCard();
         DeckScript.discardById(GM1.player, 31);
-
-        GM1.player = landMvmt.mvmtPlayer;
-        GM2.onPlayerChange();
-        landMvmt.status = 4;
-        landMvmt.required2();
+        if(landMvmt.status == 3)
+        {
+            GM1.player = landMvmt.mvmtPlayer;
+            GM2.onPlayerChange();
+            landMvmt.status = 4;
+            landMvmt.required2();
+        }
+        else
+        {
+            GM1.player = siegeScript.mvmtPlayer;
+            GM2.onPlayerChange();
+            siegeScript.status = 3;
+            siegeScript.required2();
+        }
+       
     }
 
     public void HIS032()
     {
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
         landMvmt.hasLeader = false;
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         if (textScript.displayCP >= 1)
@@ -650,10 +700,20 @@ public class GM3
         chosenCard = "";
         onChosenCard();
         DeckScript.discardById(GM1.player, 32);
-        GM1.player = landMvmt.mvmtPlayer;
-        GM2.onPlayerChange();
-        landMvmt.status = 5;
-        landMvmt.required2();
+        if (landMvmt.status == 3)
+        {
+            GM1.player = landMvmt.mvmtPlayer;
+            GM2.onPlayerChange();
+            landMvmt.status = 5;
+            landMvmt.required2();
+        }
+        else
+        {
+            GM1.player = siegeScript.mvmtPlayer;
+            GM2.onPlayerChange();
+            siegeScript.status = 4;
+            siegeScript.required2();
+        }
     }
 
     public IEnumerator HIS033()
@@ -745,6 +805,29 @@ public class GM3
             landMvmt.status = 8;
             landMvmt.required2();
         }
+    }
+
+    public void HIS035()
+    {
+        SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
+        siegeScript.attackerDice += 2;
+        for (int i = 0; i < 2; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(1, 7);
+            if (randomIndex >= 2)
+            {
+                siegeScript.attackerHit++;
+            }
+        }
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.post("Attacker hit: " + siegeScript.attackerHit.ToString() + " out of " + siegeScript.attackerDice.ToString() + ".\nDefender hit: " + siegeScript.defenderHit.ToString() + " out of " + siegeScript.defenderDice.ToString() + ".");
+
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.discardById(GM1.player, 35);
+        GM1.player = siegeScript.mvmtPlayer;
+        GM2.onPlayerChange();
+        siegeScript.required2();
     }
 
     public IEnumerator HIS036()

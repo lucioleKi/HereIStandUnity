@@ -155,7 +155,7 @@ public class GraphUtils
             for (int j = 0; j < spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent.Count(); j++)
             {
 
-                if (!spacesGM.ElementAt(spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j] - 1).unrest &&!traceable[spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j] - 1] && spacesGM.ElementAt(searchIndex.ElementAt(0) - 1).controlPower == spacesGM.ElementAt(spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j] - 1).controlPower)
+                if (!spacesGM.ElementAt(spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j] - 1).unrest && !traceable[spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j] - 1] && spacesGM.ElementAt(searchIndex.ElementAt(0) - 1).controlPower == spacesGM.ElementAt(spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j] - 1).controlPower)
                 {
                     searchIndex.Add(spaces.ElementAt(searchIndex.ElementAt(0) - 1).adjacent[j]);
                 }
@@ -215,18 +215,18 @@ public class GraphUtils
         for (int i = 0; i < 134; i++)
         {
             //removing unrest
-            if (spacesGM.ElementAt(i).unrest && spacesGM.ElementAt(i).regular > 0&&spacesGM.ElementAt(i).controlPower==playerIndex)
+            if (spacesGM.ElementAt(i).unrest && spacesGM.ElementAt(i).regular > 0 && spacesGM.ElementAt(i).controlPower == playerIndex)
             {
                 bool friendUnits = false;
                 bool enemyUnits = false;
-                for(int j=0; j< spaces.ElementAt(i).adjacent.Count(); j++)
+                for (int j = 0; j < spaces.ElementAt(i).adjacent.Count(); j++)
                 {
                     if (spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).regular > 0 && spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).controlPower == playerIndex)
                     {
                         friendUnits = true;
                         break;
                     }
-                    if (spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).regular>0&& spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).controlPower != playerIndex)
+                    if (spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).regular > 0 && spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).controlPower != playerIndex)
                     {
                         enemyUnits = true;
                         break;
@@ -284,9 +284,9 @@ public class GraphUtils
     public static HashSet<int> findAllPorts()
     {
         HashSet<int> ports = new HashSet<int>();
-        for(int i=0; i<seas.Count(); i++)
+        for (int i = 0; i < seas.Count(); i++)
         {
-            for(int j=0; j<seas.ElementAt(i).ports.Count(); j++)
+            for (int j = 0; j < seas.ElementAt(i).ports.Count(); j++)
             {
                 ports.Add(seas.ElementAt(i).ports[j]);
             }
@@ -296,13 +296,14 @@ public class GraphUtils
 
     public static List<int> findPorts(int playerIndex)
     {
-        
+
         List<int> trace = findTrace(playerIndex);
         trace = improveTrace(trace);
         HashSet<int> ports = findAllPorts();
-        for(int i= trace.Count()-1; i>=0; i--)
+        for (int i = trace.Count() - 1; i >= 0; i--)
         {
-            if (!ports.Contains(trace[i]+1)) {
+            if (!ports.Contains(trace[i] + 1))
+            {
                 trace.RemoveAt(i);
 
             }
@@ -316,9 +317,9 @@ public class GraphUtils
     public static List<int> findClearFormation(int playerIndex)
     {
         List<int> trace = new List<int>();
-        for(int i=0; i<134; i++)
+        for (int i = 0; i < 134; i++)
         {
-            if(DeckScript.spacesGM.ElementAt(i).regularPower ==playerIndex&&(DeckScript.spacesGM.ElementAt(i).regular>0|| DeckScript.spacesGM.ElementAt(i).merc>0))
+            if (DeckScript.spacesGM.ElementAt(i).regularPower == playerIndex && (DeckScript.spacesGM.ElementAt(i).regular > 0 || DeckScript.spacesGM.ElementAt(i).merc > 0) && (!DeckScript.spacesGM.ElementAt(i).sieged))
             {
                 trace.Add(i);
             }
@@ -331,7 +332,7 @@ public class GraphUtils
         List<int> trace = new List<int>();
         for (int i = 0; i < 134; i++)
         {
-            if (DeckScript.spacesGM.ElementAt(i).regularPower == playerIndex && (DeckScript.spacesGM.ElementAt(i).regular > 0 || DeckScript.spacesGM.ElementAt(i).merc > 0)&&spaces.ElementAt(i).pass.Count()>0)
+            if (DeckScript.spacesGM.ElementAt(i).regularPower == playerIndex && (DeckScript.spacesGM.ElementAt(i).regular > 0 || DeckScript.spacesGM.ElementAt(i).merc > 0) && spaces.ElementAt(i).pass.Count() > 0)
             {
                 trace.Add(i);
             }
@@ -343,16 +344,16 @@ public class GraphUtils
     public static List<int> findClearDest(List<int> trace)
     {
         HashSet<int> adjacents = new HashSet<int>();
-        for(int i=0; i<trace.Count(); i++)
+        for (int i = 0; i < trace.Count(); i++)
         {
-            for(int j=0; j < spaces.ElementAt(trace[i]-1).adjacent.Count; j++)
+            for (int j = 0; j < spaces.ElementAt(trace[i] - 1).adjacent.Count; j++)
             {
                 adjacents.Add(spaces.ElementAt(trace[i] - 1).adjacent[j]);
 
             }
-            
+
         }
-       return adjacents.ToList();
+        return adjacents.ToList();
 
     }
 
@@ -371,5 +372,41 @@ public class GraphUtils
         return adjacents.ToList();
     }
 
-
+    public static List<int> checkSiege(int playerIndex)
+    {
+        List<int> siegedSpaces = new List<int>();
+        for (int i = 0; i < 134; i++)
+        {
+            if (DeckScript.spacesGM.ElementAt(i).sieged)
+            {
+                siegedSpaces.Add(i);
+                UnityEngine.Debug.Log("sieged " + i.ToString());
+            }
+        }
+        if (siegedSpaces.Count() == 0) { return siegedSpaces; }
+        for(int i=0; i < siegedSpaces.Count(); i++)
+        {
+            int siegedPower = spacesGM.ElementAt(siegedSpaces.ElementAt(i)).controlPower;
+            
+            if (GM1.diplomacyState[GM1.player, siegedPower] != 1 && GM1.diplomacyState[siegedPower, GM1.player] != 1)
+            {
+                siegedSpaces.Remove(siegedSpaces.ElementAt(i));
+                continue;
+            }
+            bool canSiege = false;
+            for (int j = 0; j < spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent.Count; j++)
+            {
+                if(spacesGM.ElementAt(spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent[j]).regularPower == playerIndex)
+                {
+                    UnityEngine.Debug.Log("sieged power" + spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent[j].ToString());
+                    canSiege = true;
+                }
+            }
+            if (!canSiege)
+            {
+                siegedSpaces.Remove(siegedSpaces.ElementAt(i));
+            }
+        }
+        return siegedSpaces;
+    }
 }

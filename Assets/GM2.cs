@@ -91,6 +91,7 @@ public class GM2 : MonoBehaviour
     //25: 1 charted. 26: 2 charted. 27: 3 charted.
     //28: in land movement procedure (CP action)
     //29: HIS031 has effect
+    //30: in siege procedure (CP action)
     //0: which power has HIS031 effect
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
@@ -227,6 +228,12 @@ public class GM2 : MonoBehaviour
             case 26:
                 gm3.HIS026();
                 break;
+            case 27:
+                gm3.HIS027();
+                break;
+            case 28:
+                gm3.HIS028();
+                break;
             case 29:
                 gm3.HIS029();
                 break;
@@ -241,6 +248,9 @@ public class GM2 : MonoBehaviour
                 break;
             case 33:
                 StartCoroutine(gm3.HIS033());
+                break;
+            case 35:
+                gm3.HIS035();
                 break;
             case 36:
                 StartCoroutine(gm3.HIS036());

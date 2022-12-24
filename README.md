@@ -118,3 +118,7 @@ Finished land movements step 1-4.
 12/22/2022
 
 Finished interception and field battle.
+
+12/24/2022
+
+Finished land movement and siege except for step 10-11.

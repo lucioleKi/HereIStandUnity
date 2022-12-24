@@ -79,6 +79,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if there are sieged space
+                        if (checkSiege(0).Count() == 0&&i==5)
+                        {
+                            continue;
+                        }
                         //check if HIS031 has effect
                         if (GM2.boolStates[29] && GM2.intStates[0]==0)
                         {
@@ -114,6 +119,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         }
                         //check if there are unfortified space
                         if (findUnfortified(1).Count() == 0 && i == 7)
+                        {
+                            continue;
+                        }
+                        //check if there are sieged space
+                        if (checkSiege(1).Count() == 0 && i == 6)
                         {
                             continue;
                         }
@@ -170,6 +180,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if there are sieged space
+                        if (checkSiege(2).Count() == 0 && i == 6)
+                        {
+                            continue;
+                        }
                         //check if can colonize
                         if ((GM2.boolStates[17] || GM2.boolStates[10]) && i == 9)
                         {
@@ -215,6 +230,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                     {
                         //check if there are units that can move over a pass
                         if (findPassFormation(3).Count() == 0 && i == 1)
+                        {
+                            continue;
+                        }
+                        //check if there are sieged space
+                        if (checkSiege(3).Count() == 0 && i == 6)
                         {
                             continue;
                         }
@@ -264,6 +284,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if there are sieged space
+                        if (checkSiege(4).Count() == 0 && i == 6)
+                        {
+                            continue;
+                        }
                         //check if can build jesuit university
                         if (GM1.turn < 5&&i==10)
                         {
@@ -304,6 +329,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                     {
                         //check if there are units that can move over a pass
                         if (findPassFormation(5).Count() == 0 && i == 1)
+                        {
+                            continue;
+                        }
+                        //check if there are sieged space
+                        if (checkSiege(5).Count() == 0 && i == 4)
                         {
                             continue;
                         }

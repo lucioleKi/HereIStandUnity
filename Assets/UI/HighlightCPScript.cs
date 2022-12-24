@@ -41,19 +41,17 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         }
         removeHighlight();
         LandMvmt movementScript = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
         switch (actionIndex)
         {
             case 0:
                 //move formation in clear
                 cost = 1;
                 movementScript.post();
-                StartCoroutine(moveInClear());
                 break;
             case 1:
                 //move formation over pass
                 cost = 2;
-                movementScript.post();
-                StartCoroutine(moveOverPass());
                 break;
             case 2:
                 if (GM1.player == 5)
@@ -98,6 +96,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //assault
                     cost = 1;
+                    siegeScript.post();
                 }
                 else
                 {
@@ -111,6 +110,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //assault/fight foreign war
                     cost = 1;
+                    siegeScript.post();
                 }
                 else if (GM1.player == 5)
                 {
@@ -142,6 +142,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //assault/fight foreign war
                     cost = 1;
+                    siegeScript.post();
                 }
                 break;
             case 7:
@@ -268,28 +269,6 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
     }
 
-    public IEnumerator moveInClear()
-    {
-        //CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        //List<int> trace = findClearFormation(GM1.player);
-        //GM2.highlightSelected = -1;
-        //GM2.onNoLayer();
-
-        ////declare formation and starting space for moving
-
-        ////declare destination
-
-
-
-
-        //GM2.onHighlight(trace);
-        while (GM2.boolStates[28])
-        {
-            yield return null;
-        }
-        //GM2.highlightSelected = -1;
-        
-    }
 
     
 

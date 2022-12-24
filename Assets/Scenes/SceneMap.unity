@@ -9446,7 +9446,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 870, y: 40}
-  m_SizeDelta: {x: 100, y: 57}
+  m_SizeDelta: {x: 110, y: 57}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &606297962
 MonoBehaviour:
@@ -9462,6 +9462,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   cardIndex: 0
+  forIntercept: 0
+  forAvoid: 0
+  forWithdraw: 0
 --- !u!114 &606297963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19798,6 +19801,7 @@ GameObject:
   - component: {fileID: 1228796885}
   - component: {fileID: 1228796884}
   - component: {fileID: 1228796888}
+  - component: {fileID: 1228796889}
   m_Layer: 5
   m_Name: ProcedureButton
   m_TagString: Untagged
@@ -19846,6 +19850,17 @@ MonoBehaviour:
   destination: 0
   hasLeader: 0
   lockExcept: 0
+  alreadyIntercepted: 
+  tempTrace: 
+  fieldPlayer: 0
+  attackerDice: 0
+  defenderDice: 0
+  has29: 0
+  has30: 0
+  attackerHit: 0
+  defenderHit: 0
+  attackerElim: 0
+  defenderElim: 0
 --- !u!114 &1228796885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19940,6 +19955,33 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1228796889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1228796882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eea12a2e88c06e42a3c8b929da08ba9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  btn: {fileID: 0}
+  mvmtPlayer: 0
+  status: 0
+  btnStatus: 0
+  initial: 0
+  destination: 0
+  hasLeader: 0
+  siegedPlayer: 0
+  attackerDice: 0
+  defenderDice: 0
+  attackerHit: 0
+  defenderHit: 0
+  attackerElim: 0
+  defenderElim: 0
+  tempTrace: 
 --- !u!1 &1244449179
 GameObject:
   m_ObjectHideFlags: 0

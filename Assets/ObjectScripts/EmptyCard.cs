@@ -42,6 +42,9 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         {
             ConfirmScript.cardSelected = eventData.pointerCurrentRaycast.gameObject.name;
             ConfirmScript.btn.interactable = true;
+        }else if(!playAsEvent(index))
+        {
+            ConfirmScript.btn.interactable = false;
         }
 
 
@@ -55,6 +58,11 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             CPButtonScript.btn.interactable = true;
         }
         else
+        {
+            CPButtonScript.btn.interactable = false;
+        }
+        //in land mvmt procedure
+        if (GM2.boolStates[28] || GM2.boolStates[30])
         {
             CPButtonScript.btn.interactable = false;
         }
@@ -79,6 +87,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
     bool playAsEvent(int index)
     {
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
         //combat cards
         if ((int)cardsLib.ElementAt(index).cardType == 3) { 
             if (landMvmt.status!=11&&landMvmt.status!=10)
@@ -122,6 +131,10 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 return false;
             }
         }
+        if(index == 27||index==28)
+        {
+            return false;
+        }
         if (index == 29)
         {
             if (landMvmt.status >= 10 && landMvmt.status <= 11)
@@ -137,7 +150,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         {
             if (landMvmt.status >= 10 && landMvmt.status <= 11)
             {
-                if (landMvmt.mvmtPlayer == 0 || landMvmt.fieldPlayer == 0)
+                if (landMvmt.mvmtPlayer == 1 || landMvmt.fieldPlayer == 1)
                 {
                     return true;
                 }
@@ -145,6 +158,17 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 {
                     return false;
                 }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (siegeScript.status == 4)
+        {
+            if (index == 33||index==36)
+            {
+                return true;
             }
             else
             {
