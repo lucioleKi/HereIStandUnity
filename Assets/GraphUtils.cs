@@ -384,10 +384,10 @@ public class GraphUtils
             }
         }
         if (siegedSpaces.Count() == 0) { return siegedSpaces; }
-        for(int i=0; i < siegedSpaces.Count(); i++)
+        for (int i = 0; i < siegedSpaces.Count(); i++)
         {
             int siegedPower = spacesGM.ElementAt(siegedSpaces.ElementAt(i)).controlPower;
-            
+
             if (GM1.diplomacyState[GM1.player, siegedPower] != 1 && GM1.diplomacyState[siegedPower, GM1.player] != 1)
             {
                 siegedSpaces.Remove(siegedSpaces.ElementAt(i));
@@ -396,7 +396,8 @@ public class GraphUtils
             bool canSiege = false;
             for (int j = 0; j < spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent.Count; j++)
             {
-                if(spacesGM.ElementAt(spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent[j]).regularPower == playerIndex)
+                UnityEngine.Debug.Log("regular power at " + spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent[j].ToString() + " is " + spacesGM.ElementAt(spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent[j]).regularPower.ToString());
+                if (spacesGM.ElementAt(spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent[j] - 1).regularPower == playerIndex)
                 {
                     UnityEngine.Debug.Log("sieged power" + spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent[j].ToString());
                     canSiege = true;
@@ -408,5 +409,51 @@ public class GraphUtils
             }
         }
         return siegedSpaces;
+    }
+
+    public static List<int> checkSiegeFrom(int playerIndex)
+    {
+        List<int> siegedSpaces = checkSiege(playerIndex);
+        List<int> trace = findClearFormation(playerIndex);
+        List<int> valid = new List<int>();
+        for (int i = 0; i < siegedSpaces.Count(); i++)
+        {
+            for (int j = 0; j < spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent.Count; j++)
+            {
+                if (trace.Contains(spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent[j] - 1))
+                {
+                    UnityEngine.Debug.Log("sieged power" + spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent[j].ToString());
+                    valid.Add(spaces.ElementAt(siegedSpaces.ElementAt(i)).adjacent[j] - 1);
+                }
+            }
+        }
+        return valid;
+    }
+
+    public static List<int> findLanguage(int index)
+    {
+        List<int> trace = new List<int>();
+        for (int i = 0; i < 134; i++)
+        {
+            if (spaces.ElementAt(i).language == (Language)index)
+            {
+                trace.Add(i);
+            }
+        }
+        return trace;
+    }
+
+    public static List<int> findUnoccupied(List<int> input)
+    {
+        List<int> trace = new List<int>();
+        for (int i = 0; i < input.Count; i++)
+        {
+            if (regulars[input.ElementAt(i)] == 0 && !spacesGM.ElementAt(input.ElementAt(i)).unrest)
+            {
+
+                trace.Add(input.ElementAt(i));
+            }
+        }
+        return trace;
     }
 }

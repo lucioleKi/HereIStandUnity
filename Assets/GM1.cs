@@ -127,8 +127,10 @@ public class GM1 : MonoBehaviour
     {
         VPs[0] = status0.setVP(cardTracks[0]) + status0.piracy[piracyC] + bonusVPs[0];
         VPs[1] = status1.setVP(cardTracks[1]) + bonusVPs[1];
+        UnityEngine.Debug.Log(VPs[1]);
         VPs[2] = status2.setVP(cardTracks[2]) + bonusVPs[2];
         VPs[3] = status3.setVP(cardTracks[3]) + status3.chateaux[chateauxC]+bonusVPs[3];
+        UnityEngine.Debug.Log(VPs[3]);
         VPs[4] = status4.setVP(cardTracks[4])+15- status5.setVP(protestantSpaces) + bonusVPs[4] + StPeters[1];
         VPs[5] = status5.setVP(protestantSpaces) + bonusVPs[5];
     }

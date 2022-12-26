@@ -301,6 +301,50 @@ public class DeckScript : MonoBehaviour
         }
     }
 
+    public static void removeCard(int player, int id)
+    {
+        List<CardObject> temp = new List<CardObject>();
+        switch (player)
+        {
+            case 0:
+                temp = hand0;
+                break;
+
+            case 1:
+                temp = hand1;
+                break;
+            case 2:
+                temp = hand2;
+                break;
+            case 3:
+                temp = hand3;
+                break;
+            case 4:
+                temp = hand4;
+                break;
+            case 5:
+                temp = hand5;
+                break;
+        }
+        foreach (CardObject c in cards)
+        {
+            if (c.id == id)
+            {
+                cards.Remove(c);
+                break;
+            }
+        }
+        for (int i = 0; i < temp.Count(); i++)
+        {
+            if (temp.ElementAt(i).id == id)
+            {
+                temp.RemoveAt(i);
+                
+                break;
+            }
+        }
+    }
+
     string[] getAction1d()
     {
         string[] action1 = new string[21];

@@ -76,6 +76,8 @@ public class GM2 : MonoBehaviour
     public static Int1Handler onMandatory;
     public static Int1Handler onChangeCorsair;
     public static Int1Handler onHighlightRectangles;
+    public static Int1Handler onSkipCard;
+    public static Int1Handler onChangeUnrest;
     public delegate void List1Handler(List<int> index);
     public static List1Handler onHighlight;
 
@@ -257,6 +259,33 @@ public class GM2 : MonoBehaviour
                 break;
             case 65:
                 StartCoroutine(gm3.HIS065());
+                break;
+            case 78:
+                StartCoroutine(gm3.HIS078());
+                break;
+            case 80:
+                StartCoroutine(gm3.HIS080());
+                break;
+            case 81:
+                StartCoroutine(gm3.HIS081());
+                break;
+            case 82:
+                StartCoroutine(gm3.HIS082());
+                break;
+            case 83:
+                gm3.HIS083();
+                break;
+            case 85:
+                StartCoroutine(gm3.HIS085());
+                break;
+            case 88:
+                StartCoroutine(gm3.HIS088());
+                break;
+            case 94:
+                StartCoroutine(gm3.HIS094());
+                break;
+            case 109:
+                gm3.HIS109();
                 break;
             default:
                 break;
@@ -974,7 +1003,7 @@ public class GM2 : MonoBehaviour
 
     }
 
-    IEnumerator waitDeployment()
+    public IEnumerator waitDeployment()
     {
         GM1.deq1(2);
         player = 0;
@@ -1032,17 +1061,66 @@ public class GM2 : MonoBehaviour
 
     void phase5()
     {
-        //spring deployment
-        GM1.enq1("Complete deployment - (Ottoman)");
-        GM1.enq2("Complete deployment - (Hapsburgs)");
-        GM1.toDo.Enqueue("Complete deployment - (England)");
-        GM1.toDo.Enqueue("Complete deployment - (France)");
-        GM1.toDo.Enqueue("Complete deployment - (Papacy)");
-        StartCoroutine(waitDeployment());
+        
+        //check HIS-109
+        int has109 = -1;
+        for (int i = 0; i < 6; i++)
+        {
+            List<CardObject> temp = null;
+            switch (i)
+            {
+                case 0:
+                    temp = hand0;
+                    break;
+                case 1:
+                    temp = hand1;
+                    break;
+                case 2:
+                    temp = hand2;
+                    break;
+                case 3:
+                    temp = hand3;
+                    break;
+                case 4:
+                    temp = hand4;
+                    break;
+                case 5:
+                    temp = hand5;
+                    break;
+            }
+            for (int j = 0; j < temp.Count(); j++)
+            {
+
+                if (temp.ElementAt(j).id == 109)
+                {
+                    has109 = i;
+                }
+            }
+        }
+        if (has109 != -1)
+        {
+            GM1.player = has109;
+            onPlayerChange();
+            chosenCard = "HIS-109";
+            onChosenCard();
+            onSkipCard(109);
+        }
+        else
+        {
+            //spring deployment
+            GM1.enq1("Complete deployment - (Ottoman)");
+            GM1.enq2("Complete deployment - (Hapsburgs)");
+            GM1.toDo.Enqueue("Complete deployment - (England)");
+            GM1.toDo.Enqueue("Complete deployment - (France)");
+            GM1.toDo.Enqueue("Complete deployment - (Papacy)");
+
+            StartCoroutine(waitDeployment());
+        }
+        
 
     }
 
-
+    
 
 
 

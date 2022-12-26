@@ -38,11 +38,11 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             ConfirmScript.btn.interactable = false;
 
         }
-        else if (playAsEvent(index))
+        else if (playAsEvent(index+1))
         {
             ConfirmScript.cardSelected = eventData.pointerCurrentRaycast.gameObject.name;
             ConfirmScript.btn.interactable = true;
-        }else if(!playAsEvent(index))
+        }else if(!playAsEvent(index+1))
         {
             ConfirmScript.btn.interactable = false;
         }
@@ -187,6 +187,65 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 return false;
             }
         }
+        if (index == 83)
+        {
+            //buda not under siege
+            if (!spacesGM.ElementAt(115).sieged)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 84)
+        {
+            //HIS-009 has been played as an event
+            if (GM2.boolStates[3])
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 85)
+        {
+            if(DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 89)
+        {
+            //HIS-009 has been played as an event
+            if (GM2.boolStates[3])
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 109)
+        {
+            if (GM1.phase != 5)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
         return true;
     }
 

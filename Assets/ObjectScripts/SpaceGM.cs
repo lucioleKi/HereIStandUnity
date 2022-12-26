@@ -19,7 +19,7 @@ public class SpaceGM
     public int squadron;
     public int corsair;
     public int controlPower;
-    public int controlMarker;//0 = empty, 1 = HCM, 2 = hcm, 3 = SCM, 4 = merc
+    public int controlMarker;//0 = empty, 1 = HCM, 2 = hcm, 3 = SCM, 4 = scm
     public int leader1;
     public int leader2;
     public bool unrest;

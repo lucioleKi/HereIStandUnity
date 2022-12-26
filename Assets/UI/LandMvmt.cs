@@ -59,7 +59,10 @@ public class LandMvmt : MonoBehaviour
 
     void buttonCallBack()
     {
-        btn.interactable = false;
+        if (btnStatus != -1)
+        {
+            btn.interactable = false;
+        }
         StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
 
         switch (btnStatus)
@@ -401,13 +404,44 @@ public class LandMvmt : MonoBehaviour
         }
 
 
-        spacesGM.ElementAt(destination).regular = spacesGM.ElementAt(destination).regular + command;
-        spacesGM.ElementAt(initial).regular = spacesGM.ElementAt(initial).regular - command;
+        spacesGM.ElementAt(destination).regularPower = mvmtPlayer;
+        UnityEngine.Debug.Log("regular power changed " + destination.ToString());
         regulars[destination] = regulars[destination] + command;
         regulars[initial] = regulars[initial] - command;
-        onChangeReg(destination, GM1.player);
-        onChangeReg(initial, GM1.player);
+        if (spacesGM.ElementAt(initial).merc > command)
+        {
+            spacesGM.ElementAt(destination).merc = spacesGM.ElementAt(destination).merc + command;
+
+            spacesGM.ElementAt(initial).merc = spacesGM.ElementAt(initial).merc - command;
+            onChangeMerc(destination, GM1.player);
+            onChangeMerc(initial, GM1.player);
+            command = 0;
+        }
+        else if (spacesGM.ElementAt(initial).merc > 0)
+        {
+            spacesGM.ElementAt(destination).merc = spacesGM.ElementAt(destination).merc + spacesGM.ElementAt(initial).merc;
+            command -= spacesGM.ElementAt(initial).merc;
+            spacesGM.ElementAt(initial).merc = 0;
+            onChangeMerc(destination, GM1.player);
+            onChangeMerc(initial, GM1.player);
+        }
+        if (spacesGM.ElementAt(initial).regular == 0 && spacesGM.ElementAt(initial).merc == 0 && spacesGM.ElementAt(initial).cavalry == 0 && spaces.ElementAt(initial).spaceType == 0)
+        {
+            spacesGM.ElementAt(initial).regularPower = -1;
+            return;
+        }
         
+            spacesGM.ElementAt(destination).regular = spacesGM.ElementAt(destination).regular + command;
+            
+            spacesGM.ElementAt(initial).regular = spacesGM.ElementAt(initial).regular - command;
+            onChangeReg(destination, GM1.player);
+            onChangeReg(initial, GM1.player);
+       
+        if (spacesGM.ElementAt(initial).regular == 0 && spacesGM.ElementAt(initial).merc == 0 && spacesGM.ElementAt(initial).cavalry == 0 && spaces.ElementAt(initial).spaceType == 0)
+        {
+            spacesGM.ElementAt(initial).regularPower = -1;
+        }
+
     }
 
     void check13141()
@@ -565,11 +599,11 @@ public class LandMvmt : MonoBehaviour
         {
             GM1.player = canIntercept;
             GM2.onPlayerChange();
-            btn.interactable = true;
-            btnStatus = 2;
             GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Intercept";
             StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
             startButton.startOther(1);
+            btn.interactable = true;
+            btnStatus = 2;
         }
         else
         {
@@ -1085,7 +1119,7 @@ public class LandMvmt : MonoBehaviour
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         GM2.onCPChange(textScript.displayCP - 1);
-        HighlightCPScript highlightCPObject = GameObject.Find("HighlightCPDisplay").GetComponent("CurrentTextScript") as HighlightCPScript;
+        HighlightCPScript highlightCPObject = GameObject.Find("HighlightCPDisplay").GetComponent("HighlightCPScript") as HighlightCPScript;
         highlightCPObject.removeHighlight();
         if (textScript.displayCP >= 1)
         {

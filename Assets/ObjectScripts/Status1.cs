@@ -12,7 +12,7 @@ public class Status1 : StatusObject
 
     public override int setVP(int index)
     {
-        return VPKey[cardTrack];
+        return VPKey[index];
     }
 
     public override void setUp()

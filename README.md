@@ -122,3 +122,7 @@ Finished interception and field battle.
 12/24/2022
 
 Finished land movement and siege except for step 10-11.
+
+12/26/2022
+
+Finished siege. Coded event cards in the 80 range.
