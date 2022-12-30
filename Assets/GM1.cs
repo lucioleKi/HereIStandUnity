@@ -94,7 +94,7 @@ public class GM1 : MonoBehaviour
         {
             VPs[i] = scenario.VPs[i];
             RulerObject tempRuler = Resources.Load("Objects/Ruler6/Ruler"+i.ToString()) as RulerObject;
-            rulers[i] = new RulerClass(tempRuler.name, tempRuler.adminRating, tempRuler.cardBonus);
+            rulers[i] = new RulerClass(tempRuler.index, tempRuler.name, tempRuler.adminRating, tempRuler.cardBonus);
             bonusVPs[i] = 0;
         }
 
@@ -138,7 +138,7 @@ public class GM1 : MonoBehaviour
     public static void updateRuler(int power, int index)
     {
         RulerObject tempRuler = Resources.Load("Objects/Ruler6/Ruler" + index.ToString()) as RulerObject;
-        rulers[power] = new RulerClass(tempRuler.name, tempRuler.adminRating, tempRuler.cardBonus);
+        rulers[power] = new RulerClass(tempRuler.index, tempRuler.name, tempRuler.adminRating, tempRuler.cardBonus);
         rulers[power].toString();
     }
 

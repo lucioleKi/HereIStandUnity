@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a090bbbd6b0534cb95c8bd8a07671f, type: 3}
   m_Name: Ruler16
   m_EditorClassIdentifier: 
+  index: 16
   name: Calvin
-  action: {fileID: 0}
   adminRating: 1
   cardBonus: 0

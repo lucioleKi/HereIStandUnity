@@ -32,8 +32,9 @@ public class NextButton : MonoBehaviour
         GM2.onPhaseEnd -= buttonSwitch;
     }
 
-    void buttonCallBack()
+    public void buttonCallBack()
     {
+        SaveSystem.SaveState();
         buttonSwitch();
         //UnityEngine.Debug.Log("You have clicked the button!");
         if (phase == 1)
@@ -107,7 +108,7 @@ public class NextButton : MonoBehaviour
 
     }
 
-    void buttonSwitch()
+    public void buttonSwitch()
     {
         if (btn.interactable)
         {

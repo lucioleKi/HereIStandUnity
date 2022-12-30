@@ -314,6 +314,91 @@ public class GraphUtils
         }
         return trace;
     }
+
+    public static List<int> findAllSquadrons(int playerIndex)
+    {
+        //find all squadrons (that can move)
+        List<int> trace = new List<int>();
+        for (int i = 0; i <134; i++)
+        {
+            if (spacesGM.ElementAt(i).squadron > 0&& spacesGM.ElementAt(i).controlPower==playerIndex)
+            {
+                if(findNavalDestination(playerIndex, i).Count()>0)
+                    trace.Add(i);
+            }
+
+        }
+        return trace;
+    }
+
+    public static List<int> findNavalDestination(int playerIndex, int initial)
+    {
+        List<int> doublePort = new List<int> { 61, 58, 89, 88, 97, 132, 94, 126, 131, 73, 125, 129, 109, 128, 133 };
+        HashSet<int> trace = new HashSet<int>();
+        for (int i = 0; i < seas.Count(); i++)
+        {
+
+            if (seas.ElementAt(i).ports.Contains(initial + 1))
+            {
+                for (int j = 0; j < seas.ElementAt(i).ports.Count(); j++)
+                {
+                    //move to self or enemy ports
+                    if (spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).controlPower == -1 || spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).controlPower == GM1.player)
+                    {
+                        if (seas.ElementAt(i).ports[j] - 1 != initial)
+                        {
+
+                            trace.Add(seas.ElementAt(i).ports[j] - 1);
+                            UnityEngine.Debug.Log(seas.ElementAt(i).ports[j] - 1);
+                        }
+
+
+                    }
+                    if (GM1.diplomacyState[GM1.player, spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).controlPower] == 1 || (spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).controlPower < 6 && GM1.diplomacyState[spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).controlPower, GM1.player] == 1))
+                    {
+                        if(spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).squadron > 0)
+                        {
+                            trace.Add(seas.ElementAt(i).ports[j] - 1);
+                            UnityEngine.Debug.Log(seas.ElementAt(i).ports[j] - 1);
+                        }
+                    }
+
+                }
+
+            }
+        }
+        return trace.ToList();
+    }
+
+    public static List<int> findNavalAvoidD(int playerIndex, int initial)
+    {
+        List<int> doublePort = new List<int> { 61, 58, 89, 88, 97, 132, 94, 126, 131, 73, 125, 129, 109, 128, 133 };
+        HashSet<int> trace = new HashSet<int>();
+        for (int i = 0; i < seas.Count(); i++)
+        {
+
+            if (seas.ElementAt(i).ports.Contains(initial + 1))
+            {
+                for (int j = 0; j < seas.ElementAt(i).ports.Count(); j++)
+                {
+                    //move to self or enemy ports
+                    if (spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).controlPower == -1 || spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).controlPower == playerIndex)
+                    {
+                        if (seas.ElementAt(i).ports[j] - 1 != initial)
+                        {
+                            trace.Add(seas.ElementAt(i).ports[j] - 1);
+                            UnityEngine.Debug.Log(seas.ElementAt(i).ports[j] - 1);
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+        return trace.ToList();
+    }
+
     public static List<int> findClearFormation(int playerIndex)
     {
         List<int> trace = new List<int>();

@@ -4,13 +4,13 @@ using UnityEngine;
 using System;
 using static EnumSpaceScript;
 
+[System.Serializable]
 public class CardObject
 {
     public int id;
     public string name;
     public string description;
     public CardType cardType;
-    public Sprite art;
     public bool canRandomDraw;
     public int CP;
     public bool canActionPhase;

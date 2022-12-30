@@ -5,7 +5,6 @@ using System.Linq;
 using System;
 using UnityEngine;
 using static EnumSpaceScript;
-using static System.Net.Mime.MediaTypeNames;
 
 public class DeckScript : MonoBehaviour
 {

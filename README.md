@@ -126,3 +126,7 @@ Finished land movement and siege except for step 10-11.
 12/26/2022
 
 Finished siege. Coded event cards in the 80 range.
+
+12/30/2022
+
+Finished naval movement and combat. Started Declaration of war procedure.

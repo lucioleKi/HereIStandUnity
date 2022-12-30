@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a090bbbd6b0534cb95c8bd8a07671f, type: 3}
   m_Name: Ruler2
   m_EditorClassIdentifier: 
+  index: 2
   name: Henry VIII
-  action: {fileID: 21300000, guid: ba52e67e25ed42f4780d8c72fb7a0d9d, type: 3}
   adminRating: 1
   cardBonus: 1

@@ -32,7 +32,8 @@ public class LayerScript : MonoBehaviour
         GM2.onLeaderLayer += highlightLeader;
         GM2.onNoLayer += highlightDark;
         GM2.onMercLayer += highlightMerc;
-    }
+        GM2.onNavalLayer+=highlightNaval;
+}
 
     void OnDisable()
     {
@@ -42,6 +43,7 @@ public class LayerScript : MonoBehaviour
         GM2.onLeaderLayer -= highlightLeader;
         GM2.onNoLayer -= highlightDark;
         GM2.onMercLayer -= highlightMerc;
+        GM2.onNavalLayer -= highlightNaval;
     }
 
     public int getMax()

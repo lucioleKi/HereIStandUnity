@@ -11,27 +11,13 @@ using static GM2;
 
 public class ControlMarkerDisplay : MonoBehaviour
 {
-    List<Vector3> positions0;
-    List<Vector3> positions1;
-    List<Vector3> positions2;
-    List<Vector3> positions3;
-    List<Vector3> positions4;
-    List<Vector3> positions6;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        positions0 = new List<Vector3>();
-        positions1 = new List<Vector3>();
-        positions2 = new List<Vector3>();
-        positions3 = new List<Vector3>();
-        positions4 = new List<Vector3>();
-        positions6 = new List<Vector3>();
-        GameObject canvas = GameObject.Find("CanvasBoard");
         for (int i = 0; i < spaces.Count(); i++)
         {
-            updateList(i, (int)spaces.ElementAt(i).homePower);
             initXY(i);
         }
 
@@ -61,35 +47,27 @@ public class ControlMarkerDisplay : MonoBehaviour
 
     }
 
-    void updateList(int i, int power)
+    public void initSpaces()
     {
-        switch (power)
+        GM2.resetMap();
+        foreach (Transform child in gameObject.transform)
         {
-            case 0:
-                positions0.Add(new Vector3(spaces.ElementAt(i).posX, spaces.ElementAt(i).posY, 0));
-                break;
-            case 1:
-                positions1.Add(new Vector3(spaces.ElementAt(i).posX, spaces.ElementAt(i).posY, 0));
-                break;
-            case 2:
-                positions2.Add(new Vector3(spaces.ElementAt(i).posX, spaces.ElementAt(i).posY, 0));
-                break;
-            case 3:
-                positions3.Add(new Vector3(spaces.ElementAt(i).posX, spaces.ElementAt(i).posY, 0));
-                break;
-            case 4:
-                positions4.Add(new Vector3(spaces.ElementAt(i).posX, spaces.ElementAt(i).posY, 0));
-                break;
-            default:
-                positions6.Add(new Vector3(spaces.ElementAt(i).posX, spaces.ElementAt(i).posY, 0));
-                break;
+            
+                GameObject.Destroy(child.gameObject);
+            
+
+        }
+        for (int i = 0; i < spaces.Count(); i++)
+        {
+
+            initXY(i);
         }
     }
 
     void initXY(int i)
     {
-        CitySetup temp = Resources.Load("Objects/1517/" + (i+1).ToString()) as CitySetup;
-        if (temp != null && temp.regular != 0 || temp != null && temp.controlMarker!=0)
+        SpaceGM temp = spacesGM.ElementAt(i);
+        if (temp.regular != 0 || temp.controlMarker!=0)
         {
             //UnityEngine.Debug.Log(spaces.ElementAt(i - 1).name);
             
@@ -122,7 +100,7 @@ public class ControlMarkerDisplay : MonoBehaviour
         tempObject.transform.SetParent(GameObject.Find("SpacesDisplay").transform);
         tempObject.name = spaces.ElementAt(index).name;
         tempObject.SetActive(true);
-        updateList(index, power);
+        
     }
 
     void removeControlMarker(int index)
@@ -134,13 +112,6 @@ public class ControlMarkerDisplay : MonoBehaviour
             GameObject tempObject = GameObject.Find(spaces.ElementAt(index).name);
             Destroy(tempObject.gameObject);
         }
-        positions0.Remove(new Vector3(spaces.ElementAt(index).posX, spaces.ElementAt(index).posY, 0));
-        positions1.Remove(new Vector3(spaces.ElementAt(index).posX, spaces.ElementAt(index).posY, 0));
-        positions2.Remove(new Vector3(spaces.ElementAt(index).posX, spaces.ElementAt(index).posY, 0));
-        positions3.Remove(new Vector3(spaces.ElementAt(index).posX, spaces.ElementAt(index).posY, 0));
-        positions4.Remove(new Vector3(spaces.ElementAt(index).posX, spaces.ElementAt(index).posY, 0));
-        positions6.Remove(new Vector3(spaces.ElementAt(index).posX, spaces.ElementAt(index).posY, 0));
-        
         
     }
 

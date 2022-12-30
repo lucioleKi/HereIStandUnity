@@ -62,7 +62,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             CPButtonScript.btn.interactable = false;
         }
         //in land mvmt procedure
-        if (GM2.boolStates[28] || GM2.boolStates[30])
+        if (GM2.boolStates[28] || GM2.boolStates[30] || GM2.boolStates[31])
         {
             CPButtonScript.btn.interactable = false;
         }
@@ -163,6 +163,11 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             {
                 return false;
             }
+        }
+        if (index == 34)
+        {
+            //automatically played in naval combat
+            return false;
         }
         if (siegeScript.status == 4)
         {

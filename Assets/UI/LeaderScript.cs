@@ -35,9 +35,17 @@ public class LeaderScript : MonoBehaviour
 
     }
 
-    void initLeaders()
+    public void initLeaders()
     {
         GM2.resetMap();
+        foreach (Transform child in gameObject.transform)
+        {
+            foreach(Transform c in child.transform)
+            {
+                GameObject.Destroy(c.gameObject);
+            }
+            
+        }
         for (int i = 0; i < spaces.Count(); i++)
         {
 

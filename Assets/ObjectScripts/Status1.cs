@@ -4,6 +4,7 @@ using UnityEngine;
 using static GM1;
 
 [CreateAssetMenu]
+[System.Serializable]
 public class Status1 : StatusObject
 {
     public int cardTrack;

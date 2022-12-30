@@ -42,6 +42,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         removeHighlight();
         LandMvmt movementScript = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
         SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
+        NavalMvmt navalMvmt = GameObject.Find("ProcedureButton").GetComponent("NavalMvmt") as NavalMvmt;
         switch (actionIndex)
         {
             case 0:
@@ -64,6 +65,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 {
                     //naval move
                     cost = 1;
+                    navalMvmt.post();
                 }
                 break;
             case 3:

@@ -29,6 +29,16 @@ public class SkipCard : MonoBehaviour
         }
         switch(btnStatus)
         {
+            case 3:
+                GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
+                GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
+                DeckScript.hand2.RemoveAt(0);
+                GM2.chosenCard = "";
+                GM2.onChosenCard();
+                GM1.player = 2;
+                GM2.onPlayerChange();
+                GM2.onCPChange(5);
+                break;
             case 109:
                 GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
                 GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;

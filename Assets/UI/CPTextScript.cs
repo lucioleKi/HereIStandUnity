@@ -38,6 +38,8 @@ public class CPTextScript : MonoBehaviour
     {
         if (value>0)//GM1.phase == 6)
         {
+            GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+            GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
             GM2.onRemoveHighlight();
             string temp = "CP : " + value.ToString();
             TextMeshProUGUI mtext = gameObject.GetComponent<TextMeshProUGUI>();

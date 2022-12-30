@@ -15,7 +15,9 @@ public class StartButton : MonoBehaviour
     public int cardIndex;
     public bool forIntercept;
     public bool forAvoid;
+    public bool forAvoidNaval;
     public bool forWithdraw;
+    public bool forIntervene;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,7 +56,13 @@ public class StartButton : MonoBehaviour
         }else if (forWithdraw)
         {
             withdraw();
+        }else if (forAvoidNaval)
+        {
+            StartCoroutine(wait165());
         }
+        else if (forIntervene) {
+            //section 22
+        } 
         else
         {
             string tempName = GameObject.Find("CardDisplay").GetComponent<Image>().sprite.name;
@@ -94,6 +102,11 @@ public class StartButton : MonoBehaviour
             case 3:
                 btn.interactable = true;
                 forWithdraw = true;
+                break;
+            case 4:
+                btn.interactable = true;
+                forAvoidNaval = true;
+
                 break;
         }
 
@@ -260,6 +273,58 @@ public class StartButton : MonoBehaviour
         //try to withdraw into fortifications
         landMvmt.status = 17;
         landMvmt.required2();
+    }
+
+    IEnumerator wait165()
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.post("Choose Destination");
+        
+        NavalMvmt navalMvmt = GameObject.Find("ProcedureButton").GetComponent("NavalMvmt") as NavalMvmt;
+        navalMvmt.btn.interactable = false;
+        List<int> trace = navalMvmt.tempTrace;
+        GM2.highlightSelected = -1;
+        GM2.leaderSelected = -1;
+        GM2.onNavalLayer();
+        GM2.onHighlight(trace);
+        while (GM2.highlightSelected == -1)
+        {
+            yield return null;
+        }
+        UnityEngine.Debug.Log("highlight " + GM2.highlightSelected.ToString());
+        bool hasLeader = false;
+        if (GM2.leaderSelected == spacesGM.ElementAt(navalMvmt.destination[navalMvmt.avoidBattle]).leader1 || GM2.leaderSelected == spacesGM.ElementAt(navalMvmt.destination[navalMvmt.avoidBattle]).leader2)
+        {
+            hasLeader = true;
+
+        }
+        int command = 0;
+        
+        int randomIndex = UnityEngine.Random.Range(1, 7) + UnityEngine.Random.Range(1, 7);
+        if (hasLeader)
+        {
+            randomIndex = randomIndex + leaders.ElementAt(GM2.leaderSelected).battle;
+        }
+        UnityEngine.Debug.Log("avoid dice " + randomIndex.ToString());
+        if (randomIndex >= 9 && command > 0)
+        {
+            spacesGM.ElementAt(navalMvmt.destination[navalMvmt.avoidBattle]).squadron = spacesGM.ElementAt(navalMvmt.destination[navalMvmt.avoidBattle]).squadron - command;
+            spacesGM.ElementAt(GM2.highlightSelected).squadron = spacesGM.ElementAt(GM2.highlightSelected).squadron + command;
+            
+            GM2.onChangeSquadron(navalMvmt.destination[navalMvmt.avoidBattle], GM1.player);
+            GM2.onChangeSquadron(GM2.highlightSelected, GM1.player);
+            //successful avoid
+            navalMvmt.status = 17;
+        }
+        forAvoidNaval = false;
+        GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
+        startOther(0);
+        GM2.highlightSelected = -1;
+
+        GM1.player = navalMvmt.mvmtPlayer;
+        GM2.onPlayerChange();
+        //go to next avoid battle
+        navalMvmt.avoidBattle++;
     }
 
     public void withdraw()

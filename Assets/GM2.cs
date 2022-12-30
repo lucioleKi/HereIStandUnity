@@ -49,6 +49,7 @@ public class GM2 : MonoBehaviour
     public static SimpleHandler onRegLayer;
     public static SimpleHandler onMercLayer;
     public static SimpleHandler onLeaderLayer;
+    public static SimpleHandler onNavalLayer;
     public static SimpleHandler onNoLayer;
     public static SimpleHandler onLeaderULayer;
     public static SimpleHandler onRemoveHighlight;
@@ -80,6 +81,7 @@ public class GM2 : MonoBehaviour
     public static Int1Handler onChangeUnrest;
     public delegate void List1Handler(List<int> index);
     public static List1Handler onHighlight;
+    public static List1Handler onHighlightDip;
 
 
     public static bool[] boolStates;
@@ -94,6 +96,7 @@ public class GM2 : MonoBehaviour
     //28: in land movement procedure (CP action)
     //29: HIS031 has effect
     //30: in siege procedure (CP action)
+    //31: in naval movement procedure (CP action)
     //0: which power has HIS031 effect
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
@@ -170,7 +173,7 @@ public class GM2 : MonoBehaviour
         switch (index)
         {
             case 1:
-                if (boolStates[28])
+                if (boolStates[28] || boolStates[31])
                 {
                     gm3.HIS001A();
                 }
@@ -181,6 +184,9 @@ public class GM2 : MonoBehaviour
                 break;
             case 2:
                 StartCoroutine(gm3.HIS002());
+                break;
+            case 3:
+                StartCoroutine(gm3.HIS003());
                 break;
             case 4:
                 StartCoroutine(gm3.HIS004());
@@ -250,6 +256,9 @@ public class GM2 : MonoBehaviour
                 break;
             case 33:
                 StartCoroutine(gm3.HIS033());
+                break;
+            case 34:
+                StartCoroutine(gm3.HIS034());
                 break;
             case 35:
                 gm3.HIS035();

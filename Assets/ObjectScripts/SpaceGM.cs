@@ -4,7 +4,7 @@ using UnityEngine;
 using static EnumSpaceScript;
 
 
-
+[System.Serializable]
 public class SpaceGM
 {
     public string name;

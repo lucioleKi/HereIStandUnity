@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using static EnumSpaceScript;
 using static DeckScript;
 using static GM1;
@@ -28,45 +29,78 @@ public class GM3
     public void HIS001A()
     {
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
-        for(int i=0; i<5; i++)
+        NavalMvmt navalMvmt = GameObject.Find("ProcedureButton").GetComponent("NavalMvmt") as NavalMvmt;
+        for (int i = 0; i < 5; i++)
         {
             int randomIndex = UnityEngine.Random.Range(1, 7);
             if (randomIndex >= 5)
             {
-                if (landMvmt.mvmtPlayer == 0)
+                if (GM2.boolStates[28])
                 {
-                    landMvmt.attackerHit++;
+                    if (landMvmt.mvmtPlayer == 0)
+                    {
+                        landMvmt.attackerHit++;
+                    }
+                    else
+                    {
+                        landMvmt.defenderHit++;
+                    }
                 }
                 else
                 {
-                    landMvmt.defenderHit++;
+                    if (navalMvmt.mvmtPlayer == 0)
+                    {
+                        navalMvmt.attackerHit++;
+                    }
+                    else
+                    {
+                        navalMvmt.defenderHit++;
+                    }
                 }
+
             }
         }
         hand0.RemoveAt(0);
-        GM1.player = landMvmt.mvmtPlayer;
+        if (GM2.boolStates[28])
+        {
+            GM1.player = landMvmt.mvmtPlayer;
+        }
+        else
+        {
+            GM1.player = navalMvmt.mvmtPlayer;
+        }
+
         GM2.onPlayerChange();
-        landMvmt.status = 14;
-        landMvmt.required2();
+        if (GM2.boolStates[28])
+        {
+            landMvmt.status = 14;
+            landMvmt.required2();
+        }
+        else
+        {
+            navalMvmt.status = 9;
+            navalMvmt.required2();
+        }
+
     }
 
     public IEnumerator HIS001B()
     {
         List<int> trace = new List<int>();
-        
+
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         for (int i = 0; i < spacesGM.Count(); i++)
         {
-            if (spacesGM.ElementAt(i).controlPower == 0&i!=111)
+            if (spacesGM.ElementAt(i).controlPower == 0 & i != 111)
             {
                 trace.Add(i);
-                
+
             }
         }
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             currentTextObject.pauseColor();
-            currentTextObject.post("Pick "+(4-i).ToString()+ " highlighted target spaces to add 1 regular.");
+            currentTextObject.post("Pick " + (4 - i).ToString() + " highlighted target spaces to add 1 regular.");
             highlightSelected = -1;
             onRegLayer();
             onHighlight(trace);
@@ -128,7 +162,7 @@ public class GM3
                 currentTextObject.restartColor();
                 spacesGM.ElementAt(CharlesPos).removeLeader(4);
             }
-            
+
             spacesGM.ElementAt(highlightSelected).addLeader(2);
             UnityEngine.Debug.Log(highlightSelected.ToString());
             onChangeLeader(highlightSelected, 2);
@@ -151,10 +185,42 @@ public class GM3
     {
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.pauseColor();
-        while (false){
+        List<int> powers = new List<int> { 1, 3, 8 };
+        highlightSelected = -1;
+        onHighlightDip(powers);
+        while (highlightSelected==-1)
+        {
             yield return null;
         }
-        hand2.RemoveAt(0);
+        if(highlightSelected==8)
+        {
+            GM1.player = 3;
+            GM2.onPlayerChange();
+            StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+            GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Intervene";
+            GM2.onSkipCard(3);
+        }
+        else if (highlightSelected == 1)
+        {
+            hand2.RemoveAt(0);
+            chosenCard = "";
+            onChosenCard();
+            diplomacyState[1, 2] = 1;
+            GM2.onChangeDip();
+            GM2.onCPChange(5);
+        }
+        else
+        {
+            hand2.RemoveAt(0);
+            chosenCard = "";
+            onChosenCard();
+            diplomacyState[2, 3] = 1;
+            GM2.onChangeDip();
+            GM2.onCPChange(5);
+        }
+        highlightSelected = -1;
+        currentTextObject.reset();
+        
     }
 
     public IEnumerator HIS004()
@@ -165,7 +231,7 @@ public class GM3
         int bonus = 0;
         if (spacesGM.ElementAt(76).controlPower == 2)
         {
-            bonus = bonus+2;
+            bonus = bonus + 2;
         }
         if (spacesGM.ElementAt(77).controlPower == 2)
         {
@@ -174,31 +240,32 @@ public class GM3
         int italian = 0;
         bool frenchHome = false;
         bool foreignReg = false;
-        for(int i=0; i < spacesGM.Count(); i++)
+        for (int i = 0; i < spacesGM.Count(); i++)
         {
-            if(spacesGM.ElementAt(i).controlPower==2&&spaces.ElementAt(i).language == (Language)3)
+            if (spacesGM.ElementAt(i).controlPower == 2 && spaces.ElementAt(i).language == (Language)3)
             {
                 italian++;
             }
-            if(spacesGM.ElementAt(i).controlPower != 3 && spaces.ElementAt(i).homePower == (PowerType2)3&&(spaces.ElementAt(i).spaceType == (SpaceType)2 ||spaces.ElementAt(i).spaceType == (SpaceType)3))
+            if (spacesGM.ElementAt(i).controlPower != 3 && spaces.ElementAt(i).homePower == (PowerType2)3 && (spaces.ElementAt(i).spaceType == (SpaceType)2 || spaces.ElementAt(i).spaceType == (SpaceType)3))
             {
                 frenchHome = true;
             }
-            if(spacesGM.ElementAt(i).controlPower != 3 && spaces.ElementAt(i).homePower == (PowerType2)3 && (spaces.ElementAt(i).spaceType == (SpaceType)2 || spaces.ElementAt(i).spaceType == (SpaceType)3) && spacesGM.ElementAt(i).regular > 0)
+            if (spacesGM.ElementAt(i).controlPower != 3 && spaces.ElementAt(i).homePower == (PowerType2)3 && (spaces.ElementAt(i).spaceType == (SpaceType)2 || spaces.ElementAt(i).spaceType == (SpaceType)3) && spacesGM.ElementAt(i).regular > 0)
             {
                 foreignReg = true;
             }
         }
         if (italian >= 3)
         {
-            bonus = bonus+2;
+            bonus = bonus + 2;
         }
         //no touranament scenario for now
         if (frenchHome)
         {
             bonus--;
         }
-        if (foreignReg) {
+        if (foreignReg)
+        {
             bonus = bonus - 2;
         }
         int total = randomIndex + bonus;
@@ -215,8 +282,8 @@ public class GM3
         {
             if (total < 3 || total > 7)
             {
-                currentTextObject.post("Modified roll: " + randomIndex.ToString() + bonus.ToString() + "=" + total.ToString()+"\nDraw 2 cards, then discard 1.");
-                
+                currentTextObject.post("Modified roll: " + randomIndex.ToString() + bonus.ToString() + "=" + total.ToString() + "\nDraw 2 cards, then discard 1.");
+
                 hand3.AddRange(activeCards.GetRange(0, 2));
                 activeCards.RemoveRange(0, 2);
                 GM2.boolStates[0] = true;
@@ -228,19 +295,19 @@ public class GM3
                 hand3.AddRange(activeCards.GetRange(0, 1));
                 activeCards.RemoveRange(0, 1);
             }
-            else if(total >5)
+            else if (total > 5)
             {
                 currentTextObject.post("Modified roll: " + randomIndex.ToString() + bonus.ToString() + "=" + total.ToString() + "\nDraw 1 card.");
                 hand3.AddRange(activeCards.GetRange(0, 1));
                 activeCards.RemoveRange(0, 1);
             }
-            
+
         }
         else
         {
             if (total < 3 || total > 7)
             {
-                currentTextObject.post("Modified roll: " + randomIndex.ToString() +"+"+ bonus.ToString() + "=" + total.ToString() + "\nDraw 2 cards, then discard 1.");
+                currentTextObject.post("Modified roll: " + randomIndex.ToString() + "+" + bonus.ToString() + "=" + total.ToString() + "\nDraw 2 cards, then discard 1.");
                 hand3.AddRange(activeCards.GetRange(0, 2));
                 activeCards.RemoveRange(0, 2);
                 GM2.boolStates[0] = true;
@@ -283,7 +350,7 @@ public class GM3
         inputNumberObject.post();
         DebateNScript debateNScript = GameObject.Find("DebateNext").GetComponent("DebateNScript") as DebateNScript;
         debateNScript.post();
-        while (debateNScript.btn.interactable==true)
+        while (debateNScript.btn.interactable == true)
         {
             yield return null;
         }
@@ -310,8 +377,9 @@ public class GM3
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.pauseColor();
         currentTextObject.post("Pick 5 highlighted target spaces");
-        for (int i = 0; i < 5; i++) { 
-        
+        for (int i = 0; i < 5; i++)
+        {
+
 
 
             List<int> pickSpaces = highlightReformation();
@@ -357,7 +425,7 @@ public class GM3
         onChangeCorsair(111);
         onChangeLeader(111, 17);
         //mandatory event by turn 3
-        GM2.boolStates[3]=true;
+        GM2.boolStates[3] = true;
     }
 
     public void HIS010()
@@ -365,7 +433,7 @@ public class GM3
         GM1.updateRuler(4, 10);
         onChangeRuler(4, 10);
         //mandatory event by turn 2
-        GM2.boolStates[5]=true;
+        GM2.boolStates[5] = true;
     }
 
     public void HIS014()
@@ -373,7 +441,7 @@ public class GM3
         GM1.updateRuler(4, 14);
         onChangeRuler(4, 14);
         //mandatory event by turn 4
-        GM2.boolStates[7]=true;
+        GM2.boolStates[7] = true;
     }
 
     public void HIS016()
@@ -386,7 +454,7 @@ public class GM3
     {
 
         int pos = -1;
-        for(int i = 0; i < spacesGM.Count(); i++)
+        for (int i = 0; i < spacesGM.Count(); i++)
         {
             if (spacesGM.ElementAt(i).leader1 == 17 || spacesGM.ElementAt(i).leader2 == 17)
             {
@@ -478,7 +546,7 @@ public class GM3
             {
                 onChangeLeader(-1, 8);
                 onChangeLeader(pos, 3);
-               
+
             }
             else
             {
@@ -507,19 +575,46 @@ public class GM3
 
     public void HIS024()
     {
+
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
-        if (GM1.player == landMvmt.mvmtPlayer)
+        NavalMvmt navalMvmt = GameObject.Find("ProcedureButton").GetComponent("NavalMvmt") as NavalMvmt;
+        if (GM2.boolStates[28])
         {
-            landMvmt.attackerDice += 2;
+            if (GM1.player == landMvmt.mvmtPlayer)
+            {
+                landMvmt.attackerDice += 2;
+            }
+            else
+            {
+                landMvmt.defenderDice += 2;
+            }
         }
-        else
+        else if (GM2.boolStates[31])
         {
-            landMvmt.defenderDice += 2;
+            if (GM1.player == navalMvmt.mvmtPlayer)
+            {
+                navalMvmt.attackerDice[0] += 2;
+            }
+            else
+            {
+                navalMvmt.defenderDice[0] += 2;
+            }
         }
+
         chosenCard = "";
         onChosenCard();
         DeckScript.discardById(GM1.player, 24);
-        landMvmt.required2();
+        if (GM2.boolStates[28])
+        {
+            landMvmt.required2();
+        }
+        else if (GM2.boolStates[31])
+        {
+            navalMvmt.status = 7;
+            navalMvmt.btn.interactable = false;
+            navalMvmt.required2();
+        }
+
     }
 
     public void HIS025()
@@ -527,7 +622,7 @@ public class GM3
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
         if (GM1.player == landMvmt.mvmtPlayer)
         {
-            if (GM1.player==0||GM1.player==3)
+            if (GM1.player == 0 || GM1.player == 3)
             {
                 landMvmt.attackerDice += 3;
             }
@@ -535,7 +630,7 @@ public class GM3
             {
                 landMvmt.attackerDice += 2;
             }
-            
+
         }
         else
         {
@@ -560,8 +655,8 @@ public class GM3
         int changeNumber = 0;
         if (GM1.player == landMvmt.mvmtPlayer)
         {
-            changeNumber = (spacesGM.ElementAt(landMvmt.destination).merc+1)/ 2;
-            spacesGM.ElementAt(landMvmt.destination).merc-= changeNumber;
+            changeNumber = (spacesGM.ElementAt(landMvmt.destination).merc + 1) / 2;
+            spacesGM.ElementAt(landMvmt.destination).merc -= changeNumber;
             spacesGM.ElementAt(landMvmt.initial).merc += changeNumber;
         }
         else
@@ -588,10 +683,10 @@ public class GM3
         DeckScript.discardById(GM1.player, 27);
         GM1.player = siegeScript.mvmtPlayer;
         GM2.onPlayerChange();
-        if (spacesGM.ElementAt(siegeScript.initial).regular+ spacesGM.ElementAt(siegeScript.initial).cavalry<= spacesGM.ElementAt(siegeScript.initial).regular+ spacesGM.ElementAt(siegeScript.initial).merc)
+        if (spacesGM.ElementAt(siegeScript.initial).regular + spacesGM.ElementAt(siegeScript.initial).cavalry <= spacesGM.ElementAt(siegeScript.initial).regular + spacesGM.ElementAt(siegeScript.initial).merc)
         {
             siegeScript.status = 6;
-            
+
         }
         siegeScript.required2();
     }
@@ -622,9 +717,9 @@ public class GM3
     {
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
         landMvmt.has29 = GM1.player;
-        if(GM1.player!=1)
+        if (GM1.player != 1)
         {
-            if(GM1.player == landMvmt.mvmtPlayer)
+            if (GM1.player == landMvmt.mvmtPlayer)
             {
                 landMvmt.defenderDice = Math.Max(0, landMvmt.defenderDice - 3);
             }
@@ -636,7 +731,7 @@ public class GM3
         else
         {
             landMvmt.has30 = true;
-            
+
         }
         chosenCard = "";
         onChosenCard();
@@ -649,15 +744,20 @@ public class GM3
         GM2.boolStates[29] = true;
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
         SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
+        NavalMvmt navalMvmt = GameObject.Find("ProcedureButton").GetComponent("NavalMvmt") as NavalMvmt;
         if (landMvmt.status == 3)
         {
             GM2.intStates[0] = landMvmt.mvmtPlayer;
         }
-        else
+        else if (GM2.boolStates[30])
         {
             GM2.intStates[0] = siegeScript.mvmtPlayer;
         }
-        
+        else
+        {
+            GM2.intStates[0] = navalMvmt.mvmtPlayer;
+        }
+
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         if (textScript.displayCP >= 1)
         {
@@ -668,21 +768,28 @@ public class GM3
         chosenCard = "";
         onChosenCard();
         DeckScript.discardById(GM1.player, 31);
-        if(landMvmt.status == 3)
+        if (landMvmt.status == 3)
         {
             GM1.player = landMvmt.mvmtPlayer;
             GM2.onPlayerChange();
             landMvmt.status = 4;
             landMvmt.required2();
         }
-        else
+        else if (GM2.boolStates[30])
         {
             GM1.player = siegeScript.mvmtPlayer;
             GM2.onPlayerChange();
             siegeScript.status = 3;
             siegeScript.required2();
         }
-       
+        else
+        {
+            GM1.player = navalMvmt.mvmtPlayer;
+            GM2.onPlayerChange();
+            navalMvmt.status = 3;
+            navalMvmt.required2();
+        }
+
     }
 
     public void HIS032()
@@ -723,9 +830,9 @@ public class GM3
         SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
         if (GM1.player == 1)
         {
-            
+
             currentTextObject.post("Add 4 mercenaries");
-            for (int i = 0; i<4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 List<int> pickSpaces = findClearFormation(GM1.player);
                 highlightSelected = -1;
@@ -738,18 +845,19 @@ public class GM3
                 }
                 spacesGM.ElementAt(highlightSelected).merc++;
                 onChangeMerc(highlightSelected, GM1.player);
-                if (siegeScript.status == 4&&highlightSelected==siegeScript.initial)
+                if (siegeScript.status == 4 && highlightSelected == siegeScript.initial)
                 {
                     siegeScript.attackerDice++;
                 }
             }
-            
+
             highlightSelected = -1;
         }
-        else if(GM1.player==0)
+        else if (GM1.player == 0)
         {
             currentTextObject.post("Add 2 mercenaries");
-            for (int i = 0; i < 2; i++){
+            for (int i = 0; i < 2; i++)
+            {
                 List<int> pickSpaces = new List<int>();
                 for (int j = 0; j < 134; i++)
                 {
@@ -780,7 +888,7 @@ public class GM3
                     siegeScript.attackerDice++;
                 }
             }
-            
+
             highlightSelected = -1;
         }
         else
@@ -804,7 +912,7 @@ public class GM3
                     siegeScript.attackerDice++;
                 }
             }
-                
+
             highlightSelected = -1;
         }
         currentTextObject.reset();
@@ -813,12 +921,52 @@ public class GM3
         chosenCard = "";
         onChosenCard();
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
-        
+
         if (landMvmt.status == 7)
         {
             landMvmt.status = 8;
             landMvmt.required2();
         }
+    }
+
+    public IEnumerator HIS034()
+    {
+        //todo: first option
+        NavalMvmt navalMvmt = GameObject.Find("ProcedureButton").GetComponent("NavalMvmt") as NavalMvmt;
+        List<int> trace = new List<int> { navalMvmt.initial[0], navalMvmt.destination[0] };
+        highlightSelected = -1;
+        onNavalLayer();
+        onHighlight(trace);
+        while (highlightSelected == -1)
+        {
+            //UnityEngine.Debug.Log("here");
+            yield return null;
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(1, 7);
+            if (randomIndex >= 5)
+            {
+                if (highlightSelected == navalMvmt.initial[0])
+                {
+                    navalMvmt.attackerHit++;
+                }
+                else
+                {
+                    navalMvmt.defenderHit++;
+
+
+                }
+            }
+        }
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.discardById(GM1.player, 34);
+        GM1.player = navalMvmt.mvmtPlayer;
+        GM2.onPlayerChange();
+        navalMvmt.status = 10;
+        navalMvmt.required2();
     }
 
     public void HIS035()
@@ -849,7 +997,7 @@ public class GM3
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.pauseColor();
         SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
-        if (GM1.player == 0||GM1.player==3)
+        if (GM1.player == 0 || GM1.player == 3)
         {
             currentTextObject.post("Add 4 mercenaries");
             for (int i = 0; i < 4; i++)
@@ -887,9 +1035,9 @@ public class GM3
                     //UnityEngine.Debug.Log("here");
                     yield return null;
                 }
-                
+
                 spacesGM.ElementAt(highlightSelected).merc++;
-                
+
                 onChangeMerc(highlightSelected, GM1.player);
                 if (siegeScript.status == 4 && highlightSelected == siegeScript.initial)
                 {
@@ -905,7 +1053,7 @@ public class GM3
         chosenCard = "";
         onChosenCard();
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
-        
+
         if (landMvmt.status == 8)
         {
             landMvmt.status = 9;
@@ -915,7 +1063,8 @@ public class GM3
 
     public IEnumerator HIS065()
     {
-        if (DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1) {
+        if (DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1)
+        {
             DeckScript.debaters.ElementAt(12).status = (DebaterStatus)2;
             CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
             currentTextObject.pauseColor();
@@ -951,7 +1100,7 @@ public class GM3
 
     public IEnumerator HIS078()
     {
-        for(int i=0; i<2; i++)
+        for (int i = 0; i < 2; i++)
         {
             HashSet<int> searchIndex = new HashSet<int>();
             HashSet<int> pickSpaces = new HashSet<int>();
@@ -993,7 +1142,7 @@ public class GM3
         }
         highlightSelected = -1;
         DeckScript.discardById(GM1.player, 78);
-        foreach(CardObject card in DeckScript.discardCards)
+        foreach (CardObject card in DeckScript.discardCards)
         {
             if (card.id == 37)
             {
@@ -1043,7 +1192,7 @@ public class GM3
         }
         CP = DeckScript.hand5.ElementAt(randomIndex).CP;
         DeckScript.discardById(5, DeckScript.hand5.ElementAt(randomIndex).id);
-        GM1.StPeters[0]+=CP;
+        GM1.StPeters[0] += CP;
         if (GM1.StPeters[0] >= 5)
         {
             GM1.StPeters[1]++;
@@ -1060,7 +1209,7 @@ public class GM3
     public IEnumerator HIS082()
     {
         int index = 2;
-        if(GM1.diplomacyState[0, 1]!=1&& GM1.diplomacyState[0, 2] != 1 && GM1.diplomacyState[0, 3] != 1 && GM1.diplomacyState[0, 4] != 1)
+        if (GM1.diplomacyState[0, 1] != 1 && GM1.diplomacyState[0, 2] != 1 && GM1.diplomacyState[0, 3] != 1 && GM1.diplomacyState[0, 4] != 1)
         {
             index = 4;
         }
@@ -1090,8 +1239,8 @@ public class GM3
 
     public void HIS083()
     {
-        regulars[115]+=4;
-        spacesGM.ElementAt(115).regular+=4;
+        regulars[115] += 4;
+        spacesGM.ElementAt(115).regular += 4;
         onChangeReg(115, spacesGM.ElementAt(115).controlPower);
         DeckScript.removeCard(GM1.player, 83);
 
@@ -1132,7 +1281,7 @@ public class GM3
         currentTextObject.reset();
         currentTextObject.restartColor();
         DeckScript.removeCard(GM1.player, 85);
-        
+
         chosenCard = "";
         onChosenCard();
     }

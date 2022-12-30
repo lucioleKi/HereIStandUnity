@@ -780,6 +780,8 @@ public class LandMvmt : MonoBehaviour
     {
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.post("Play Combat Cards");
+        StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+        startButton.btn.interactable = false;
         btn.interactable = true;
         btnStatus = 5;
     }
@@ -788,6 +790,8 @@ public class LandMvmt : MonoBehaviour
     {
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.post("Play Combat Cards");
+        StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+        startButton.btn.interactable = false;
         btn.interactable = true;
         btnStatus = 6;
     }
@@ -930,7 +934,7 @@ public class LandMvmt : MonoBehaviour
             {
                 spacesGM.ElementAt(initial).regular++;
                 regulars[initial]++;
-                spacesGM.ElementAt(initial).regularPower = fieldPlayer;
+                spacesGM.ElementAt(initial).regularPower = mvmtPlayer;
                 GM2.onChangeReg(initial, mvmtPlayer);
                 attackerElim = false;
             }
@@ -1125,7 +1129,7 @@ public class LandMvmt : MonoBehaviour
         {
             //active player retreat because no siege
             currentTextObject.post("Defender is not under siege.");
-
+            UnityEngine.Debug.Log("defender not under siege");
             reset();
             post();
             required2();

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a090bbbd6b0534cb95c8bd8a07671f, type: 3}
   m_Name: Ruler4
   m_EditorClassIdentifier: Assembly-CSharp::Ruler
+  index: 4
   name: Leo X
-  action: {fileID: 21300000, guid: 8b4541248d947e748a23e4eda025e999, type: 3}
   adminRating: 0
   cardBonus: 0

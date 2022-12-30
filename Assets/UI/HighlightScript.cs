@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -29,6 +30,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         onHighlight += highlight;
         onHighlightRectangles += highlightCP;
         onRemoveHighlight += removeHighlight;
+        onHighlightDip += highlightDiplomacy;
     }
 
     void OnDisable()
@@ -36,6 +38,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         onHighlight -= highlight;
         onHighlightRectangles -= highlightCP;
         onRemoveHighlight -= removeHighlight;
+        onHighlightDip -= highlightDiplomacy;
     }
 
     void highlight(List<int> highlightSpaces)
@@ -50,6 +53,21 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
             tempObject.name = "highlight_" + highlightSpaces.ElementAt(i).ToString();
         }
         highlights = highlightSpaces;
+    }
+
+    void highlightDiplomacy(List<int> highlightPowers)
+    {
+        GM2.resetMap();
+        for(int i=0; i<highlightPowers.Count; i++)
+        {
+            int min = Math.Min(GM1.player, highlightPowers[i]);
+            int max = Math.Max(GM1.player, highlightPowers[i]);
+            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/square"), new Vector3(0, 0, 0), Quaternion.identity);
+            tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(312f + 27.25f * max + 932.75f, 363f - 27.2f * min + 540f);
+            tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+            tempObject.name = "diphighlight_" + highlightPowers.ElementAt(i).ToString();
+        }
+        
     }
 
     void highlightCP(int currentCP)
@@ -71,6 +89,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         }
                         //check if piracy is possible
                         if (!GM2.boolStates[3]&&(i==4||i==8))
+                        {
+                            continue;
+                        }
+                        //check if naval movement can happen
+                        if(findAllSquadrons(0).Count() == 0 && i == 2)
                         {
                             continue;
                         }
@@ -119,6 +142,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         }
                         //check if there are unfortified space
                         if (findUnfortified(1).Count() == 0 && i == 7)
+                        {
+                            continue;
+                        }
+                        //check if naval movement can happen
+                        if (findAllSquadrons(1).Count() == 0 && i == 2)
                         {
                             continue;
                         }
@@ -180,6 +208,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if naval movement can happen
+                        if (findAllSquadrons(2).Count() == 0 && i == 2)
+                        {
+                            continue;
+                        }
                         //check if there are sieged space
                         if (checkSiege(2).Count() == 0 && i == 6)
                         {
@@ -233,6 +266,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         {
                             continue;
                         }
+                        //check if naval movement can happen
+                        if (findAllSquadrons(3).Count() == 0 && i == 2)
+                        {
+                            continue;
+                        }
                         //check if there are sieged space
                         if (checkSiege(3).Count() == 0 && i == 6)
                         {
@@ -281,6 +319,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                     {
                         //check if there are units that can move over a pass
                         if (findPassFormation(4).Count() == 0 && i == 1)
+                        {
+                            continue;
+                        }
+                        //check if naval movement can happen
+                        if (findAllSquadrons(4).Count() == 0 && i == 2)
                         {
                             continue;
                         }
@@ -408,6 +451,9 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         if (eventData.pointerCurrentRaycast.gameObject.name[9] == '_')
         {
             highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(10));
+        }else if (eventData.pointerCurrentRaycast.gameObject.name[12] == '_')
+        {
+            highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(13));
         }
         else
         {
