@@ -34,6 +34,7 @@ public class NextButton : MonoBehaviour
 
     public void buttonCallBack()
     {
+        GM3 gm3 = new GM3();
         SaveSystem.SaveState();
         buttonSwitch();
         //UnityEngine.Debug.Log("You have clicked the button!");
@@ -87,6 +88,39 @@ public class NextButton : MonoBehaviour
             GM2.onPhase7();
         }else if (phase == 7)
         {
+            switch (turn)
+            {
+                case 2:
+                    if (!GM2.boolStates[5])
+                    {
+                        gm3.HIS009();
+                    }
+                    break;
+                case 3:
+                    if (!GM2.boolStates[3])
+                    {
+                        gm3.HIS010();
+                    }
+                    break;
+                case 4:
+                    if (!GM2.boolStates[6])
+                    {
+                        //gm3.HIS013();
+                    }
+                    if (!GM2.boolStates[7])
+                    {
+                        gm3.HIS014();
+                    }
+                    break;
+                case 6:
+                    if (!GM2.boolStates[8])
+                    {
+                        //gm3.HIS015();
+                    }
+                    break;
+                default:
+                    break;
+            }
             phase++;
             GM2.onChangePhase();
             GM2.onPhase8(); 

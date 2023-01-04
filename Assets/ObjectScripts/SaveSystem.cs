@@ -2,10 +2,15 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-public static class SaveSystem 
+public static class SaveSystem
 {
     public static void SaveState()
     {
+        //var allObjects = GameObject.Find("GM").ObjectsOfType<MonoBehaviour>();
+        //foreach (var obj in allObjects)
+        //{
+        //    obj.StopAllCoroutines();
+        //}
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/saveState";
         FileStream stream = new FileStream(path, FileMode.Create);
@@ -19,7 +24,7 @@ public static class SaveSystem
     public static SaveData LoadState()
     {
         string path = Application.persistentDataPath + "/saveState";
-        if(File.Exists(path))
+        if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
@@ -29,7 +34,7 @@ public static class SaveSystem
         }
         else
         {
-            UnityEngine.Debug.Log("save file not found in "+path);
+            UnityEngine.Debug.Log("save file not found in " + path);
             return null;
         }
     }

@@ -61,5 +61,7 @@ public class CPTextScript : MonoBehaviour
     {
         TextMeshProUGUI mtext = gameObject.GetComponent<TextMeshProUGUI>();
         mtext.text = "";
+        //can only build units end
+        GM2.boolStates[32] = false;
     }
 }

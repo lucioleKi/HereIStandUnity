@@ -16,6 +16,8 @@ public class GM1 : MonoBehaviour
     public static int turn;
     public static int phase;
     public static int segment;
+    public static int impulse;
+    public static bool[] skipped= new bool[6];
     public static int englishSpaces;
     public static int protestantSpaces;
     public static RulerClass[] rulers;
@@ -201,5 +203,90 @@ public class GM1 : MonoBehaviour
         {
             //win!
         }
+    }
+
+    public static void nextImpulse()
+    {
+        checkPass(player);
+        GM2.onDeactivateSkip();
+        bool allSkipped = skipped.Any(x => true);
+        if (allSkipped)
+        {
+            GM2.onPhaseEnd();
+            impulse = -1;
+            return;
+        }
+        for(int i=0; i < 6; i++)
+        {
+            if (impulse == 5)
+            {
+                impulse = 0;
+            }
+            else
+            {
+                impulse++;
+            }
+            if (!skipped[impulse])
+            {
+                break;
+            }
+        }
+
+        if (checkPass(impulse))
+        {
+            GM2.onSkipCard(6);
+        }
+
+    }
+
+    public static bool checkPass(int playerIndex)
+    {
+        List<CardObject> temp = hand0;
+        switch (playerIndex)
+        {
+            case 0:
+                temp = hand0;
+                break;
+            case 1:
+                temp = hand1;
+                break;
+            case 2:
+                temp = hand2;
+                break;
+            case 3:
+                temp = hand3;
+                break;
+            case 4:
+                temp = hand4;
+                break;
+            case 5:
+                temp = hand5;
+                break;
+        }
+        //force pass
+        if (temp.Count == 0)
+        {
+            skipped[playerIndex] = true;
+            return true;
+        }
+        //unplayed home card
+        if (temp.ElementAt(0).id > 8)
+        {
+            return false;
+        }
+        //unplayed mandatory event
+        for (int i = 0; i < temp.Count; i++)
+        {
+            if (temp.ElementAt(i).cardType == (CardType)1)
+            {
+                return false;
+            }
+        }
+        //more cards in hand than leader's admin rating
+        if (temp.Count > rulers[playerIndex].adminRating)
+        {
+            return false;
+        }
+        return true;
     }
 }

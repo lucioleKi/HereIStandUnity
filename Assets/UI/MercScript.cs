@@ -42,7 +42,7 @@ public class MercScript : MonoBehaviour
     {
         GM2.resetMap();
         SpaceGM temp = spacesGM.ElementAt(index);
-        UnityEngine.Debug.Log(index);
+        //UnityEngine.Debug.Log(index);
 
         if (gameObject.transform.Find(spaces.ElementAt(index).name + "_2") != null)
         {

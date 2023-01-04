@@ -13,6 +13,7 @@ public class LeaderObject
     public int turn;
     public int type;//0=land, 1=naval
     public string matching;
+    public int power;
 
     public LeaderObject leader;
 

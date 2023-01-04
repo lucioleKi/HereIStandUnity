@@ -181,7 +181,7 @@ public class GM3
         hand1.RemoveAt(0);
     }
 
-    public IEnumerator HIS003()
+    public IEnumerator HIS003A()
     {
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.pauseColor();
@@ -198,6 +198,8 @@ public class GM3
             GM2.onPlayerChange();
             StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
             GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Intervene";
+            startButton.status = 5;
+            startButton.btn.interactable = true;
             GM2.onSkipCard(3);
         }
         else if (highlightSelected == 1)
@@ -207,7 +209,8 @@ public class GM3
             onChosenCard();
             diplomacyState[1, 2] = 1;
             GM2.onChangeDip();
-            GM2.onCPChange(5);
+            GM2.currentCP = 5;
+            GM2.onCPChange(GM2.currentCP);
         }
         else
         {
@@ -216,7 +219,8 @@ public class GM3
             onChosenCard();
             diplomacyState[2, 3] = 1;
             GM2.onChangeDip();
-            GM2.onCPChange(5);
+            GM2.currentCP = 5;
+            GM2.onCPChange(GM2.currentCP);
         }
         highlightSelected = -1;
         currentTextObject.reset();
@@ -1061,6 +1065,41 @@ public class GM3
         }
     }
 
+    public IEnumerator HIS040()
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.pauseColor();
+        DipForm dipForm = GameObject.Find("CanvasDiplomacy").GetComponent("DipForm") as DipForm;
+        List<int> powers = dipForm.DOW(GM1.player);
+        foreach(int p in powers)
+        {
+            if (p > 5) { powers.Remove(p); }
+        }
+        highlightSelected = -1;
+        onHighlightDip(powers);
+        while (highlightSelected == -1)
+        {
+            yield return null;
+        }
+        if (GM1.player < highlightSelected)
+        {
+            diplomacyState[GM1.player, highlightSelected] = 1;
+        }
+        else
+        {
+            diplomacyState[highlightSelected, GM1.player] = 1;
+        }
+        
+        GM2.onChangeDip();
+        GM2.currentCP = 2;
+        GM2.onCPChange(GM2.currentCP);
+        highlightSelected = -1;
+        currentTextObject.reset();
+        DeckScript.discardById(GM1.player, 40);
+        chosenCard = "";
+        onChosenCard();
+    }
+
     public IEnumerator HIS065()
     {
         if (DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1)
@@ -1096,6 +1135,79 @@ public class GM3
             chosenCard = "";
             onChosenCard();
         }
+    }
+
+    public IEnumerator HIS075()
+    {
+        int temp = GM1.player;
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.post("Pick 6 highlighted target spaces");
+        if (GM1.turn < 3)
+        {
+            GM1.player = 5;
+            GM2.onPlayerChange();
+            for (int i = 0; i < 4; i++)
+            {
+
+
+                List<int> pickSpaces = highlightReformation();
+                highlightSelected = -1;
+                onSpaceLayer();
+                onHighlight(pickSpaces);
+
+                onHighlightSelected += reformAttempt;
+                while (highlightSelected == -1)
+                {
+                    //UnityEngine.Debug.Log("here");
+                    yield return null;
+                }
+
+                UnityEngine.Debug.Log("end");
+                //onRemoveHighlight(converted);
+            }
+        }
+        else
+        {
+            GM1.player = 4;
+            GM2.onPlayerChange();
+            for (int i = 0; i < 4; i++)
+            {
+
+
+                List<int> pickSpaces = highlightReformation();
+                highlightSelected = -1;
+                onSpaceLayer();
+                onHighlight(pickSpaces);
+
+                onHighlightSelected += reformCAttempt;
+                while (highlightSelected == -1)
+                {
+                    //UnityEngine.Debug.Log("here");
+                    yield return null;
+                }
+
+                UnityEngine.Debug.Log("end");
+                //onRemoveHighlight(converted);
+            }
+        }
+        yield return new WaitForSeconds(3);
+        GM1.player = temp;
+        GM2.onPlayerChange();
+        DeckScript.discardById(GM1.player, 65);
+        currentTextObject.reset();
+        highlightSelected = -1;
+        chosenCard = "";
+        onChosenCard();
+    }
+
+    public void HIS076()
+    {
+        GM2.boolStates[32] = true;
+        GM2.currentCP = 4;
+        GM2.onCPChange(GM2.currentCP);
+        DeckScript.discardById(GM1.player, 76);
+        chosenCard = "";
+        onChosenCard();
     }
 
     public IEnumerator HIS078()

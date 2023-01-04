@@ -21,7 +21,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
     {
         UnityEngine.Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
         int index = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(4)) - 1;
-        if (GM1.phase != 1 && GM1.phase != 4 && GM1.phase != 6 && GM1.phase != 2)
+        if (GM1.phase == 3 && GM1.segment != 6 || GM1.phase == 5 || (GM1.phase == 6 && GM1.impulse != GM1.player || GM1.skipped[GM1.player]))
         {
             return;
         }
@@ -38,11 +38,11 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             ConfirmScript.btn.interactable = false;
 
         }
-        else if (playAsEvent(index+1))
+        else if (playAsEvent(index+1)&&GM1.phase != 5)
         {
             ConfirmScript.cardSelected = eventData.pointerCurrentRaycast.gameObject.name;
             ConfirmScript.btn.interactable = true;
-        }else if(!playAsEvent(index+1))
+        }else if(!playAsEvent(index+1)|| GM1.segment == 6 && GM1.phase == 5)
         {
             ConfirmScript.btn.interactable = false;
         }
@@ -164,6 +164,10 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 return false;
             }
         }
+        if (index == 31 || index == 32)
+        {
+            return false;
+        }
         if (index == 34)
         {
             //automatically played in naval combat
@@ -190,6 +194,18 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             else
             {
                 return false;
+            }
+        }
+        if (index == 73)
+        {
+            //not playable by 0 or 5
+            if (GM1.player == 0 || GM1.player == 5)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
         if (index == 83)

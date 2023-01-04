@@ -464,7 +464,7 @@ public class DeckScript : MonoBehaviour
 
                 temp.matching = values[5];
                 temp.turn = int.Parse(values[6]);
-
+                temp.power = int.Parse(values[7]);
                 leaders.Add(temp);
             }
         }

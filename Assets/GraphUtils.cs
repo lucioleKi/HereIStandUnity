@@ -349,7 +349,7 @@ public class GraphUtils
                         {
 
                             trace.Add(seas.ElementAt(i).ports[j] - 1);
-                            UnityEngine.Debug.Log(seas.ElementAt(i).ports[j] - 1);
+                            //UnityEngine.Debug.Log(seas.ElementAt(i).ports[j] - 1);
                         }
 
 
@@ -359,7 +359,7 @@ public class GraphUtils
                         if(spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).squadron > 0)
                         {
                             trace.Add(seas.ElementAt(i).ports[j] - 1);
-                            UnityEngine.Debug.Log(seas.ElementAt(i).ports[j] - 1);
+                            //UnityEngine.Debug.Log(seas.ElementAt(i).ports[j] - 1);
                         }
                     }
 

@@ -54,6 +54,7 @@ public class GM2 : MonoBehaviour
     public static SimpleHandler onLeaderULayer;
     public static SimpleHandler onRemoveHighlight;
     public static SimpleHandler onChangeSegment;
+    public static SimpleHandler onDeactivateSkip;
 
     public delegate void Int2Handler(int index1, int index2);
 
@@ -97,6 +98,8 @@ public class GM2 : MonoBehaviour
     //29: HIS031 has effect
     //30: in siege procedure (CP action)
     //31: in naval movement procedure (CP action)
+    //32: HIS076 has effect
+    //33: in DOW procedure (segment 5)
     //0: which power has HIS031 effect
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
@@ -164,7 +167,7 @@ public class GM2 : MonoBehaviour
     }
 
 
-    void mandatory(int index)
+    public void mandatory(int index)
     {
         if (index > 8)
         {
@@ -186,13 +189,15 @@ public class GM2 : MonoBehaviour
                 StartCoroutine(gm3.HIS002());
                 break;
             case 3:
-                StartCoroutine(gm3.HIS003());
+                StartCoroutine(gm3.HIS003A());
                 break;
             case 4:
                 StartCoroutine(gm3.HIS004());
                 break;
             case 6:
                 StartCoroutine(gm3.HIS006());
+                break;
+            case 7:
                 break;
             case 8:
                 StartCoroutine(gm3.HIS008());
@@ -266,8 +271,17 @@ public class GM2 : MonoBehaviour
             case 36:
                 StartCoroutine(gm3.HIS036());
                 break;
+            case 40:
+                StartCoroutine(gm3.HIS040());
+                break;
             case 65:
                 StartCoroutine(gm3.HIS065());
+                break;
+            case 75:
+                StartCoroutine(gm3.HIS075());
+                break;
+            case 76:
+                gm3.HIS076();
                 break;
             case 78:
                 StartCoroutine(gm3.HIS078());
@@ -819,21 +833,146 @@ public class GM2 : MonoBehaviour
             //onRemoveHighlight(converted);
         }
         segment++;
-        onChangeSegment();
+        phase3();
         GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
         GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
-        onPhaseEnd();
+        //onPhaseEnd();
         //automatic: 2, 3
         //4: highlight 2 units to remove them from map
         //5, 7: highlight, choose to regain home keys and other spaces
         //
     }
 
+    IEnumerator waitDOW()
+    {
+        DipForm tempForm = GameObject.Find("CanvasDiplomacy").GetComponent("DipForm") as DipForm;
+        GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+        GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+        GM1.player = 0;
+        onPlayerChange();
+        
+        for (int i = 0; i < 6; i++)
+        {
+            onNoLayer();
+            onSkipCard(5);
+            int pointer = 0;
+            boolStates[33] = true;
+            List<int> trace = tempForm.DOW(GM1.player);
+            highlightSelected = -1;
+            onHighlightDip(trace);
+            while (boolStates[33]&&trace.Count>0)
+            {
+                if (highlightSelected != -1)
+                {
+                    tempForm.war[i, pointer] = highlightSelected;
+                    trace.Remove(highlightSelected);
+                    onSkipCard(5);
+                    onHighlightDip(trace);
+                    onNoLayer();
+                    highlightSelected = -1;
+                    pointer++;
+                }
+                yield return null;
+            }
+            onRemoveHighlight();
+            if (i < 5)
+            {
+                GM1.player++;
+                onPlayerChange();
+
+            }
+            else
+            {
+                GM1.player = 0;
+                onPlayerChange();
+
+            }
+        }
+        LayerScript layerObject = GameObject.Find("Layers").GetComponent("LayerScript") as LayerScript;
+        layerObject.changeLayer();
+        segment++;
+        phase3();
+        GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
+        GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
+        //onPhaseEnd();
+    }
+
+    IEnumerator waitDOWCP()
+    {
+        DipForm tempForm = GameObject.Find("CanvasDiplomacy").GetComponent("DipForm") as DipForm;
+        GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+        GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        GM1.player = 0;
+        onPlayerChange();
+        List<int> required = tempForm.getDOWCP();
+        currentTextObject.post("Play at least " + required[0] + "CP to declare war(s)");
+        currentCP = 0;
+        for (int i = 0; i < 6; i++)
+        {
+            currentTextObject.post("Play at least " + required[i] + "CP to declare war(s)");
+            
+            while (required[i]>0)
+            {
+
+                if (currentCP>0)
+                {
+                    required[i] -= currentCP;
+                    currentCP = 0;
+                    currentTextObject.post("Play at least " + required[i] + "CP to declare war(s)");
+                }
+                yield return null;
+            }
+            currentCP = 0;
+            for (int j= 0; j < 8;j++)
+            {
+                if (tempForm.war[i,j] != 10)
+                {
+                    if (i < tempForm.war[i, j])
+                    {
+                        GM1.diplomacyState[i, tempForm.war[i,j]] = 1;
+                    }
+                    else
+                    {
+                        GM1.diplomacyState[tempForm.war[i, j], i] = 1;
+                    }
+                    onChangeDip();
+                }
+            }
+            if (i < 5)
+            {
+                GM1.player++;
+                onPlayerChange();
+
+            }
+            else
+            {
+                GM1.player = 0;
+                onPlayerChange();
+
+            }
+        }
+        currentTextObject.reset();
+        onDeactivateSkip();
+        tempForm.reset();
+        segment++;
+        
+        GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
+        GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
+        onPhaseEnd();
+    }
+
     void phase3()
     {
+
+        HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+        DipForm tempForm = GameObject.Find("CanvasDiplomacy").GetComponent("DipForm") as DipForm;
         switch (segment)
         {
             case 1:
+                GameObject.Find("DiplomacyButton").GetComponent<Button>().interactable = true;
                 GM1.enq1("Complete diplomacy form - (Ottoman)");
                 GM1.toDo.Enqueue("Complete diplomacy form - (Hapsburgs)");
                 GM1.toDo.Enqueue("Complete diplomacy form - (England)");
@@ -850,8 +989,67 @@ public class GM2 : MonoBehaviour
                 GM1.toDo.Enqueue("Complete peace form - (Papacy)");
                 GM1.toDo.Enqueue("Complete peace form - (Protestant)");
                 StartCoroutine(waitPeaceForm());
+                handMarkerScript.leadersCaptured();
+                break;
+            case 3:
+
+                
+                if (handMarkerScript.canRansom.Count > 0)
+                {
+
+                    currentTextObject.post("Choose whether to return the captured leader to gain a random card draw.");
+                    GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+                    GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+                    GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Ransom";
+
+                    startButton.startOther(6);
+                    onSkipCard(1);
+                    GM1.player = handMarkerScript.canRansom.ElementAt(0);
+                    onPlayerChange();
+                }
+                else
+                {
+                    GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
+                    GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
+                    currentTextObject.reset();
+                    segment++;
+                    handMarkerScript.canRemoveExcom();
+                    phase3();
+                }
+
+                break;
+            case 4:
+                UnityEngine.Debug.Log(handMarkerScript.excom.Count);
+                if (handMarkerScript.excom.Count > 0)
+                {
+                    currentTextObject.post("Choose whether to remove excommunication.");
+                    GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+                    GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+                    GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Remove";
+                    startButton.startOther(8);
+                    onSkipCard(4);
+                    GM1.player = handMarkerScript.excom.ElementAt(0);
+                    onPlayerChange();
+                }
+                else
+                {
+                    GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
+                    GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
+                    currentTextObject.reset();
+                    segment++;
+                    phase3();
+                }
+                break;
+            case 5:
+                onSkipCard(5);
+                StartCoroutine(waitDOW());
+                
+                break;
+            case 6:
+                StartCoroutine(waitDOWCP());
                 break;
             default:
+
                 break;
         }
 
@@ -1070,7 +1268,7 @@ public class GM2 : MonoBehaviour
 
     void phase5()
     {
-        
+
         //check HIS-109
         int has109 = -1;
         for (int i = 0; i < 6; i++)
@@ -1125,17 +1323,17 @@ public class GM2 : MonoBehaviour
 
             StartCoroutine(waitDeployment());
         }
-        
+
 
     }
 
-    
+
 
 
 
     void springDeploy()
     {
-        GM2.onHighlightSelected -= springDeploy;
+        onHighlightSelected -= springDeploy;
         int capital = 0;
         switch (player)
         {
@@ -1205,7 +1403,8 @@ public class GM2 : MonoBehaviour
 
     void phase6()
     {
-        onPhaseEnd();
+        GM1.impulse = 0;
+        //onPhaseEnd();
     }
 
     void phase7()

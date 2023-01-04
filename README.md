@@ -130,3 +130,7 @@ Finished siege. Coded event cards in the 80 range.
 12/30/2022
 
 Finished naval movement and combat. Started Declaration of war procedure.
+
+1/4/2023
+
+Finished diplomacy phase and action phase. 

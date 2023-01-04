@@ -47,6 +47,14 @@ public class SaveData
     public bool[] boolStates;
     public int[] intStates;
 
+    //HandMarkerScript
+    public List<string> bonus0;
+    public List<string> bonus1;
+    public List<string> bonus2;
+    public List<string> bonus3;
+    public List<string> bonus4;
+    public List<string> bonus5;
+
     public SaveData()
     {
         //DeckScript
@@ -88,10 +96,24 @@ public class SaveData
         //GM2
         boolStates = GM2.boolStates;
         intStates = GM2.intStates;
+
+        //HandMarkerScript
+        HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        bonus0 = handMarkerScript.bonus0;
+        bonus1 = handMarkerScript.bonus1;
+        bonus2 = handMarkerScript.bonus2;
+        bonus3 = handMarkerScript.bonus3;
+        bonus4 = handMarkerScript.bonus4;
+        bonus5 = handMarkerScript.bonus5;
     }
 
     public void loadData(SaveData data)
     {
+        if (GM1.phase == 3)
+        {
+            //stop running coroutines
+
+        }
         //DeckScript
         DeckScript.cards = data.cards;
         DeckScript.activeCards = data.activeCards;
@@ -156,5 +178,13 @@ public class SaveData
         LeaderScript leaderScript = GameObject.Find("LeaderDisplay").GetComponent("LeaderScript") as LeaderScript;
         leaderScript.initLeaders();
 
+        //HandMarkerScript
+        HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        handMarkerScript.bonus0 = bonus0;
+        handMarkerScript.bonus1 = bonus1;
+        handMarkerScript.bonus2 = bonus2;
+        handMarkerScript.bonus3 = bonus3;
+        handMarkerScript.bonus4 = bonus4;
+        handMarkerScript.bonus5 = bonus5;
     }
 }

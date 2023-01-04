@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.IO;
 using UnityEngine.SceneManagement;
 using static GM2;
 using static GM1;
@@ -15,6 +17,8 @@ public class DipForm : MonoBehaviour
     public int[,] loanSquadron = new int[6, 6];
     public int[,] randomDraw = new int[6, 6];
     public int[,] giveMerc = new int[6, 6];
+    public List<int> turnData = new List<int>();
+    public int[,] war = new int[6, 8];
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +27,13 @@ public class DipForm : MonoBehaviour
         Array.Clear(loanSquadron, 0, 36);
         Array.Clear(randomDraw, 0, 36);
         Array.Clear(giveMerc, 0, 36);
-
+        for(int i=0; i<6; i++)
+        {
+            for(int j=0; j<8; j++)
+            {
+                war[i, j] = 10;
+            }
+        }
     }
 
     void OnEnable()
@@ -51,7 +61,15 @@ public class DipForm : MonoBehaviour
 
     }
 
-
+    public void reset()
+    {
+        Array.Clear(completed, 0, 6);
+        Array.Clear(dipStatus, 0, 36);
+        Array.Clear(loanSquadron, 0, 36);
+        Array.Clear(randomDraw, 0, 36);
+        Array.Clear(giveMerc, 0, 36);
+        Array.Fill(war.OfType<int>().ToArray(), 10);
+    }
 
     public void confirmDip(int playerIndex)
     {
@@ -266,8 +284,10 @@ public class DipForm : MonoBehaviour
         {
             dipStatus[playerIndex, 0] = 1;
             GameObject.Find("PeaceRequest_0").GetComponent<Toggle>().isOn = false;
-            if (GM1.diplomacyState[playerIndex, 0] == 1)
+            if (GM1.diplomacyState[playerIndex, 0] == 1|| GM1.diplomacyState[0, playerIndex] == 1)
             {
+                turnData.Add(playerIndex);
+                turnData.Add(0);
                 GM1.diplomacyState[playerIndex, 0] = 0;
                 GM1.diplomacyState[0, playerIndex] = 0;
                 GM2.onChangeDip();
@@ -279,8 +299,10 @@ public class DipForm : MonoBehaviour
         {
             dipStatus[playerIndex, 1] = 1;
             GameObject.Find("PeaceRequest_1").GetComponent<Toggle>().isOn = false;
-            if (GM1.diplomacyState[playerIndex, 1] == 1)
+            if (GM1.diplomacyState[playerIndex, 1] == 1|| GM1.diplomacyState[1, playerIndex] == 1)
             {
+                turnData.Add(playerIndex);
+                turnData.Add(1);
                 GM1.diplomacyState[playerIndex, 1] = 0;
                 GM1.diplomacyState[1, playerIndex] = 0;
                 GM2.onChangeDip();
@@ -301,8 +323,10 @@ public class DipForm : MonoBehaviour
         {
             dipStatus[playerIndex, 2] = 1;
             GameObject.Find("PeaceRequest_2").GetComponent<Toggle>().isOn = false;
-            if (GM1.diplomacyState[playerIndex, 2] == 1)
+            if (GM1.diplomacyState[playerIndex, 2] == 1 || GM1.diplomacyState[2, playerIndex] == 1)
             {
+                turnData.Add(playerIndex);
+                turnData.Add(2);
                 GM1.diplomacyState[playerIndex, 2] = 0;
                 GM1.diplomacyState[2, playerIndex] = 0;
                 GM2.onChangeDip();
@@ -322,8 +346,10 @@ public class DipForm : MonoBehaviour
         {
             dipStatus[playerIndex, 3] = 1;
             GameObject.Find("PeaceRequest_3").GetComponent<Toggle>().isOn = false;
-            if (GM1.diplomacyState[playerIndex, 3] == 1)
+            if (GM1.diplomacyState[playerIndex, 3] == 1 || GM1.diplomacyState[3, playerIndex] == 1)
             {
+                turnData.Add(playerIndex);
+                turnData.Add(3);
                 GM1.diplomacyState[playerIndex, 3] = 0;
                 GM1.diplomacyState[3, playerIndex] = 0;
                 GM2.onChangeDip();
@@ -343,8 +369,10 @@ public class DipForm : MonoBehaviour
         {
             dipStatus[playerIndex, 4] = 1;
             GameObject.Find("PeaceRequest_4").GetComponent<Toggle>().isOn = false;
-            if (GM1.diplomacyState[playerIndex, 4] == 1)
+            if (GM1.diplomacyState[playerIndex, 4] == 1 || GM1.diplomacyState[4, playerIndex] == 1)
             {
+                turnData.Add(playerIndex);
+                turnData.Add(4);
                 GM1.diplomacyState[playerIndex, 4] = 0;
                 GM1.diplomacyState[4, playerIndex] = 0;
                 GM2.onChangeDip();
@@ -364,8 +392,10 @@ public class DipForm : MonoBehaviour
         {
             dipStatus[playerIndex, 5] = 1;
             GameObject.Find("PeaceRequest_5").GetComponent<Toggle>().isOn = false;
-            if (GM1.diplomacyState[playerIndex, 5] == 1)
+            if (GM1.diplomacyState[playerIndex, 5] == 1 || GM1.diplomacyState[5, playerIndex] == 1)
             {
+                turnData.Add(playerIndex);
+                turnData.Add(5);
                 GM1.diplomacyState[playerIndex, 5] = 0;
                 GM1.diplomacyState[5, playerIndex] = 0;
                 GM2.onChangeDip();
@@ -383,5 +413,98 @@ public class DipForm : MonoBehaviour
         }
         GM1.updateVP();
         GM2.onVP();
+    }
+
+    public List<int> DOW(int playerindex)
+    {
+        List<int> trace = new List<int>();
+        for(int i=0; i<10; i++)
+        {
+            if(i!=playerindex&&canDOW(playerindex, i))
+            {
+                trace.Add(i);
+            }
+        }
+        return trace;
+    }
+
+    public bool canDOW(int playerindex, int index)
+    {
+        //cannot DOW on at war powers
+        if (diplomacyState[playerindex, index]==1|| (index < 5 && diplomacyState[index, playerindex] == 1))
+        {
+            return false;
+        }
+        //cannot DOW on Hungary-Bohemia
+        if(index==7)
+        {
+            return false;
+        }
+        //cannot DOW on scotland
+        if (index == 8)
+        {
+            if(playerindex== 0||playerindex==4||playerindex==5) { return false; }
+            if (diplomacyState[playerindex,3] == 2|| diplomacyState[3,playerindex] == 2) { return false; }
+        }
+        //cannot DOW on venice if 2
+        if (index == 9 && playerindex == 2) { return false; }
+        //cannot DOW on allied minor power
+        if (index > 5)
+        {
+            for(int i=0; i<5; i++)
+            {
+                if (diplomacyState[i, index] == 2) { return false; }
+            }
+        }
+        //cannot DOW on allies
+        if (diplomacyState[playerindex, index]==2||(index<5&& diplomacyState[index, playerindex] == 2)) { return false; }
+        //cannot DOW on 5 if HIS013 is not played
+        if ((playerindex==5||index == 5) && !boolStates[13]) { return false; }
+        //cannot DOW on a power that just got peace
+        for(int i=0; i < turnData.Count; i += 2)
+        {
+            if (turnData[i] == playerindex && turnData[i+1]==index|| turnData[i] == index && turnData[i + 1] == playerindex)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<int> getDOWCP()
+    {
+        UnityEngine.Debug.Log(String.Join(" ", war.Cast<int>()));
+        int[,] warCP = new int[6, 10]; 
+        using (var reader = new StreamReader("Assets/Input/war.csv"))
+        {
+            int counter = 0;
+            while (!reader.EndOfStream)
+            {
+                
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+                for (int i = 0; i < 10; i++)
+                {
+                    warCP[counter, i] = int.Parse(values[i]);
+
+                }
+
+                counter++;
+            }
+
+
+        }
+        List<int> trace = new List<int>();
+        for(int i=0;i<6;i++)
+        {
+            int temp = 0;
+            for(int j=0; j<8; j++)
+            {
+                if (war[i,j]!=10) { temp += warCP[i, war[i, j]]; }
+                UnityEngine.Debug.Log(i + ", " + j + ", " + warCP[i, j]);
+            }
+            trace.Add(temp);
+        }
+        return trace;
     }
 }

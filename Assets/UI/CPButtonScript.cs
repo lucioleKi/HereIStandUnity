@@ -34,6 +34,9 @@ public class CPButtonScript : MonoBehaviour
             
             setSecretCP();
             
+        }else if(GM1.phase == 3 && GM1.segment == 6)
+        {
+            setDOWCP();
         }
         else
         {
@@ -136,5 +139,37 @@ public class CPButtonScript : MonoBehaviour
                 GM1.deq1(2);
                 break;
         }
+    }
+
+    void setDOWCP()
+    {
+        switch (int.Parse(cardTag.Substring(0, 1)))
+        {
+            case 0:
+                GM2.currentCP = hand0.ElementAt(int.Parse(cardTag.Substring(1))).CP;
+                hand0.RemoveAt(int.Parse(cardTag.Substring(1)));
+                break;
+            case 1:
+                GM2.currentCP = hand1.ElementAt(int.Parse(cardTag.Substring(1))).CP;
+                hand1.RemoveAt(int.Parse(cardTag.Substring(1)));
+                break;
+            case 2:
+                GM2.currentCP = hand2.ElementAt(int.Parse(cardTag.Substring(1))).CP;
+                hand2.RemoveAt(int.Parse(cardTag.Substring(1)));
+                break;
+            case 3:
+                GM2.currentCP = hand3.ElementAt(int.Parse(cardTag.Substring(1))).CP;
+                hand3.RemoveAt(int.Parse(cardTag.Substring(1)));
+                break;
+            case 4:
+                GM2.currentCP = hand4.ElementAt(int.Parse(cardTag.Substring(1))).CP;
+                hand4.RemoveAt(int.Parse(cardTag.Substring(1)));
+                break;
+            case 5:
+                GM2.currentCP = hand5.ElementAt(int.Parse(cardTag.Substring(1))).CP;
+                hand5.RemoveAt(int.Parse(cardTag.Substring(1)));
+                break;
+        }
+        
     }
 }

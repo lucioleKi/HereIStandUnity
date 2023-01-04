@@ -138,7 +138,7 @@ public class LandMvmt : MonoBehaviour
                 GM1.player = mvmtPlayer;
                 GM2.onPlayerChange();
                 startButton.btn.interactable = false;
-                startButton.forAvoid = false;
+                startButton.status = 2;
                 required2();
                 break;
             case 9:
@@ -147,7 +147,7 @@ public class LandMvmt : MonoBehaviour
                 GM1.player = mvmtPlayer;
                 GM2.onPlayerChange();
                 startButton.btn.interactable = false;
-                startButton.forWithdraw = false;
+                startButton.status = 4;
                 required2();
                 break;
         }
@@ -609,8 +609,8 @@ public class LandMvmt : MonoBehaviour
         {
             GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
             StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
-            startButton.startOther(0);
-            startButton.forIntercept = false;
+            startButton.btn.interactable=true;
+            startButton.status = 1;
             status = 16;
             required2();
         }
@@ -1075,7 +1075,7 @@ public class LandMvmt : MonoBehaviour
             GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
             StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
             startButton.btn.interactable = false;
-            startButton.forAvoid = false;
+            startButton.status = -1;
             status = 6;
             required2();
         }
@@ -1102,7 +1102,7 @@ public class LandMvmt : MonoBehaviour
             GM1.player = mvmtPlayer;
             GM2.onPlayerChange();
             startButton.btn.interactable = false;
-            startButton.forWithdraw = false;
+            startButton.status = -1;
             required2();
         }
         else
@@ -1112,7 +1112,7 @@ public class LandMvmt : MonoBehaviour
             GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
             
             startButton.btn.interactable = false;
-            startButton.forAvoid = false;
+            startButton.status=-1;
             status = 6;
             required2();
         }

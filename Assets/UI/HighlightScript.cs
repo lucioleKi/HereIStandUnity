@@ -82,6 +82,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status0.CPcost[i])
                     {
+                        //check if can only build units
+                        if (GM2.boolStates[32] && i < 6)
+                        {
+                            continue;
+                        }
                         //check if there are units that can move over a pass
                         if (findPassFormation(0).Count() == 0&&i==1)
                         {
@@ -135,6 +140,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status1.CPcost[i])
                     {
+                        //check if can only build units
+                        if (GM2.boolStates[32] && (i < 3||i>5))
+                        {
+                            continue;
+                        }
                         //check if there are units that can move over a pass
                         if (findPassFormation(1).Count() == 0 && i == 1)
                         {
@@ -198,6 +208,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status2.CPcost[i])
                     {
+                        //check if can only build units
+                        if (GM2.boolStates[32] && (i < 3 || i > 5))
+                        {
+                            continue;
+                        }
                         //check if there are units that can move over a pass
                         if (findPassFormation(2).Count() == 0 && i == 1)
                         {
@@ -261,6 +276,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status3.CPcost[i])
                     {
+                        //check if can only build units
+                        if (GM2.boolStates[32] && (i < 3 || i > 5))
+                        {
+                            continue;
+                        }
                         //check if there are units that can move over a pass
                         if (findPassFormation(3).Count() == 0 && i == 1)
                         {
@@ -317,6 +337,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status4.CPcost[i])
                     {
+                        //check if can only build units
+                        if (GM2.boolStates[32] && (i < 3 || i > 5))
+                        {
+                            continue;
+                        }
                         //check if there are units that can move over a pass
                         if (findPassFormation(4).Count() == 0 && i == 1)
                         {
@@ -370,6 +395,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 {
                     if (currentCP >= GM1.status5.CPcost[i])
                     {
+                        //check if can only build units
+                        if (GM2.boolStates[32] && (i < 2 || i > 3))
+                        {
+                            continue;
+                        }
                         //check if there are units that can move over a pass
                         if (findPassFormation(5).Count() == 0 && i == 1)
                         {

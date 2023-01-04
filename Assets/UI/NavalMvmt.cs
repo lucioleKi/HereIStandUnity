@@ -68,11 +68,13 @@ public class NavalMvmt : MonoBehaviour
             btn.interactable = false;
         }
         StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+        //HighlightCPScript highlightCPScript = GameObject.Find("HighlightCPDisplay").GetComponent("HighlightCPScript") as HighlightCPScript;
         switch (btnStatus)
         {
             case 0:
                 StopCoroutine("wait1611");
                 GM2.onRemoveHighlight();
+                //highlightCPScript.removeHighlight();
                 LayerScript layerScript = GameObject.Find("Layers").GetComponent("LayerScript") as LayerScript;
                 layerScript.changeLayer();
                 status = 2;
@@ -104,7 +106,7 @@ public class NavalMvmt : MonoBehaviour
                 GM1.player = mvmtPlayer;
                 GM2.onPlayerChange();
                 GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
-                startButton.forIntercept = false;
+                startButton.status = 1;
                 status = 4;
                 required2();
                 break;
@@ -113,7 +115,7 @@ public class NavalMvmt : MonoBehaviour
                 GM1.player = mvmtPlayer;
                 GM2.onPlayerChange();
                 GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
-                startButton.forAvoidNaval = false;
+                startButton.status = 3;
                 avoidBattle++;
                 break;
             case 4:
@@ -433,8 +435,8 @@ public class NavalMvmt : MonoBehaviour
 
         GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
 
-        startButton.startOther(0);
-        startButton.forIntercept = false;
+        startButton.btn.interactable = false;
+        startButton.status=-1;
         status = 4;
         required2();
 
@@ -474,8 +476,8 @@ public class NavalMvmt : MonoBehaviour
 
         GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
 
-        startButton.startOther(0);
-        startButton.forAvoidNaval = false;
+        startButton.btn.interactable = false;
+        startButton.status=-1;
         status = 5;
         required2();
     }
@@ -484,6 +486,7 @@ public class NavalMvmt : MonoBehaviour
     {
         for (int i = 0; i < initial.Count(); i++)
         {
+            UnityEngine.Debug.Log(initial[i]+" " + destination[i]);
             int permitted = 0;
             attackerDice.Add(0);
             defenderDice.Add(0);

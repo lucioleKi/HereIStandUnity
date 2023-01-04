@@ -15,6 +15,10 @@ public class HandMarkerScript : MonoBehaviour
     public List<string> bonus3;
     public List<string> bonus4;
     public List<string> bonus5;
+    public List<int> canRansom;
+    public List<int> ransomedPower;
+    public List<int> ransomedLeader;
+    public List<int> excom;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +29,11 @@ public class HandMarkerScript : MonoBehaviour
         bonus3 = new List<string>();
         bonus4 = new List<string>();
         bonus5 = new List<string>();
+        bonus1.Add("Sprites/jpg/negative1Card");
+        canRansom = new List<int>();
+        ransomedPower = new List<int>();
+        ransomedLeader = new List<int>();
+        excom = new List<int>();
     }
 
     void OnEnable()
@@ -109,8 +118,97 @@ public class HandMarkerScript : MonoBehaviour
             GameObject newObject = new GameObject("bonus_"+i.ToString(), typeof(RectTransform), typeof(Image));
             newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>(names.ElementAt(i));
             newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(27, 27);
-            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(810 + i * 36+990, 30);
+            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(810 + i * 36+990, 45);
             newObject.transform.SetParent(gameObject.transform);
+        }
+    }
+
+    public void leadersCaptured()
+    {
+        canRansom.Clear();
+        ransomedLeader.Clear();
+        ransomedPower.Clear();
+        foreach(string s in bonus0)
+        {
+            if (s.Contains("Sprites/jpg/Leader/"))
+            {
+                canRansom.Add(0);
+                ransomedLeader.Add(int.Parse(s.Substring(19)));
+                ransomedPower.Add(DeckScript.leaders.ElementAt(ransomedLeader.Last()).power);
+            }
+        }
+        foreach (string s in bonus1)
+        {
+            if (s.Contains("Sprites/jpg/Leader/"))
+            {
+                canRansom.Add(1);
+                ransomedLeader.Add(int.Parse(s.Substring(19)));
+                ransomedPower.Add(DeckScript.leaders.ElementAt(ransomedLeader.Last()).power);
+            }
+        }
+        foreach (string s in bonus2)
+        {
+            if (s.Contains("Sprites/jpg/Leader/"))
+            {
+                canRansom.Add(2);
+                ransomedLeader.Add(int.Parse(s.Substring(19)));
+                ransomedPower.Add(DeckScript.leaders.ElementAt(ransomedLeader.Last()).power);
+            }
+        }
+        foreach (string s in bonus3)
+        {
+            if (s.Contains("Sprites/jpg/Leader/"))
+            {
+                canRansom.Add(3);
+                ransomedLeader.Add(int.Parse(s.Substring(19)));
+                ransomedPower.Add(DeckScript.leaders.ElementAt(ransomedLeader.Last()).power);
+            }
+        }
+        foreach (string s in bonus4)
+        {
+            if (s.Contains("Sprites/jpg/Leader/"))
+            {
+                canRansom.Add(4);
+                ransomedLeader.Add(int.Parse(s.Substring(19)));
+                ransomedPower.Add(DeckScript.leaders.ElementAt(ransomedLeader.Last()).power);
+            }
+        }
+        foreach (string s in bonus5)
+        {
+            if (s.Contains("Sprites/jpg/Leader/"))
+            {
+                canRansom.Add(5);
+                ransomedLeader.Add(int.Parse(s.Substring(19)));
+                ransomedPower.Add(DeckScript.leaders.ElementAt(ransomedLeader.Last()).power);
+            }
+        }
+        
+    }
+
+    public void canRemoveExcom()
+    {
+        excom.Clear();
+        
+        foreach (string s in bonus1)
+        {
+            if (s.Contains("Sprites/jpg/negative1Card"))
+            {
+                excom.Add(1);
+            }
+        }
+        foreach (string s in bonus2)
+        {
+            if (s.Contains("Sprites/jpg/negative1Card"))
+            {
+                excom.Add(2);
+            }
+        }
+        foreach (string s in bonus3)
+        {
+            if (s.Contains("Sprites/jpg/negative1Card"))
+            {
+                excom.Add(3);
+            }
         }
     }
 }

@@ -2510,7 +2510,6 @@ GameObject:
   - component: {fileID: 154901068}
   - component: {fileID: 154901067}
   - component: {fileID: 154901066}
-  - component: {fileID: 154901065}
   - component: {fileID: 154901070}
   m_Layer: 5
   m_Name: CanvasCards
@@ -2519,18 +2518,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &154901065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 154901064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d2a8c3149c51144dae4e524632faf90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &154901066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9463,11 +9450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   cardIndex: 0
-  forIntercept: 0
-  forAvoid: 0
-  forAvoidNaval: 0
-  forWithdraw: 0
-  forIntervene: 0
+  status: 0
 --- !u!114 &606297963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13140,7 +13123,7 @@ GameObject:
   - component: {fileID: 818447752}
   - component: {fileID: 818447751}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Skip (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14063,6 +14046,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   completed: 000000000000
+  turnData: 
 --- !u!1 &846801617
 GameObject:
   m_ObjectHideFlags: 0
@@ -30981,6 +30965,10 @@ MonoBehaviour:
   bonus3: []
   bonus4: []
   bonus5: []
+  canRansom: 
+  ransomedPower: 
+  ransomedLeader: 
+  excom: 
 --- !u!1 &1853834709
 GameObject:
   m_ObjectHideFlags: 0
