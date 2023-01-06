@@ -13,6 +13,7 @@ using static GraphUtils;
 
 public class DebateNScript : MonoBehaviour
 {
+    public int tempPlayer;
     public Button btn;
     public int step;
     public int area;
@@ -72,6 +73,10 @@ public class DebateNScript : MonoBehaviour
                 if (!string.IsNullOrEmpty(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text))
                 {
                     area = int.Parse(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text);
+                    if (area == 2 || GM2.boolStates[34])
+                    {
+                        area = 0;
+                    }
                     if (area < 0 || area > 2)
                     {
                         area = 0;
@@ -283,6 +288,19 @@ public class DebateNScript : MonoBehaviour
         gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
         gameObject.GetComponent<CanvasGroup>().interactable = true;
 
+        //debate called by HIS112
+        if (GM2.chosenCard == "HIS-112")
+        {
+            tempPlayer = GM1.player;
+            chosenCard = "";
+            onChosenCard();
+            GM1.player = 4;
+            GM2.onPlayerChange();
+        }
+        else
+        {
+            tempPlayer = -1;
+        }
     }
 
     void reset()
@@ -292,6 +310,17 @@ public class DebateNScript : MonoBehaviour
         gameObject.GetComponent<CanvasGroup>().alpha = 0;
         gameObject.GetComponent<CanvasGroup>().blocksRaycasts = false;
         gameObject.GetComponent<CanvasGroup>().interactable = false;
+
+        if (tempPlayer != -1)
+        {
+            GM1.player = tempPlayer;
+            GM2.onPlayerChange();
+            tempPlayer= -1;
+            if (GM1.phase == 6)
+            {
+                GM1.nextImpulse();
+            }
+        }
     }
 
     void countDebaters(int area)
@@ -328,7 +357,15 @@ public class DebateNScript : MonoBehaviour
     {
         //add up debater dice
         int reformerDice = 0;
+
         int papalDice = 0;
+        if (tempPlayer != -1&&area==2)
+        {
+            papalDice+=3;
+        }else if (tempPlayer != -1)
+        {
+            papalDice++;
+        }
         hit4 = 0;
         hit5 = 0;
 

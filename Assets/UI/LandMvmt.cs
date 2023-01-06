@@ -12,6 +12,7 @@ using static GM2;
 public class LandMvmt : MonoBehaviour
 {
     public Button btn;
+    public bool overPass;
     public int mvmtPlayer;
     public int status;
     public int btnStatus;
@@ -164,8 +165,9 @@ public class LandMvmt : MonoBehaviour
     }
 
 
-    public void post()
+    public void post(bool pass)
     {
+        overPass= pass;
         GM2.boolStates[28] = true;
         btn.interactable = false;
         gameObject.GetComponent<CanvasGroup>().alpha = 1;
@@ -204,7 +206,15 @@ public class LandMvmt : MonoBehaviour
         Array.Clear(alreadyIntercepted, 0, 6);
         tempTrace.Clear();
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        GM2.onCPChange(textScript.displayCP - 1);
+        if(overPass)
+        {
+            GM2.onCPChange(textScript.displayCP - 2);
+        }
+        else
+        {
+            GM2.onCPChange(textScript.displayCP - 1);
+        }
+        
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.reset();
         GM2.boolStates[28] = false;
@@ -314,6 +324,10 @@ public class LandMvmt : MonoBehaviour
         InputNumberObject inputNumberObject = GameObject.Find("InputNumber").GetComponent("InputNumberObject") as InputNumberObject;
         inputNumberObject.post();
         List<int> trace = findClearFormation(GM1.player);
+        if (overPass)
+        {
+            trace = findPassFormation(GM1.player);
+        }
         GM2.highlightSelected = -1;
         leaderSelected = -1;
         GM2.onRegLayer();
@@ -551,13 +565,29 @@ public class LandMvmt : MonoBehaviour
             }
             else
             {
-                status = 5;
+                if (overPass)
+                {
+                    status = 16;
+                }
+                else
+                {
+                    status = 5;
+                }
+                
                 required2();
             }
         }
         else
         {
-            status = 5;
+
+            if (overPass)
+            {
+                status = 16;
+            }
+            else
+            {
+                status = 5;
+            }
             required2();
         }
 
@@ -1131,7 +1161,7 @@ public class LandMvmt : MonoBehaviour
             currentTextObject.post("Defender is not under siege.");
             UnityEngine.Debug.Log("defender not under siege");
             reset();
-            post();
+            post(overPass);
             required2();
         }
         else
@@ -1223,7 +1253,7 @@ public class LandMvmt : MonoBehaviour
         }
     }
 
-    void casualties(int player, int place, int hit)
+    public void casualties(int player, int place, int hit)
     {
 
         if (spacesGM.ElementAt(place).merc >= hit)

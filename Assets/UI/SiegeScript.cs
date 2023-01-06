@@ -156,6 +156,18 @@ public class SiegeScript : MonoBehaviour
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.reset();
         GM2.boolStates[30] = false;
+        //HIS105 treachery
+        if (GM2.boolStates[35])
+        {
+            GM2.boolStates[35] = false;
+            chosenCard = "";
+            onChosenCard();
+            if (GM1.phase == 6)
+            {
+                GM1.nextImpulse();
+            }
+        }
+        
     }
 
     public void required2()
@@ -847,6 +859,62 @@ public class SiegeScript : MonoBehaviour
         }
         if (defenderElim && attackerHit > 0 && !attackerElim)
         {
+            currentTextObject.post("Successful Assault");
+            spacesGM.ElementAt(destination).sieged = false;
+            int marker = 1;
+            //if(spaces.ElementAt(destination).spaceType==3|| spaces.ElementAt(destination).spaceType == 5)
+            //{
+            spacesGM.ElementAt(destination).controlPower = mvmtPlayer;
+            if (GM1.religiousInfluence[destination] == 0)
+            {
+                marker = 3;
+            }
+            else
+            {
+                marker = 4;
+            }
+            //}
+            GM2.onRemoveSpace(destination);
+            GM2.onAddSpace(destination, mvmtPlayer, marker);
+            GM1.cardTracks[mvmtPlayer]++;
+            GM1.cardTracks[siegedPlayer]--;
+            GM1.updateVP();
+            GM2.onVP();
+
+            status = 6;
+            required2();
+        }
+        else if (GM2.boolStates[35] && (spacesGM.ElementAt(initial).regular + spacesGM.ElementAt(initial).merc + spacesGM.ElementAt(initial).cavalry > spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc + spacesGM.ElementAt(destination).cavalry))
+
+        {
+            casualties(siegedPlayer, destination, spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc + spacesGM.ElementAt(destination).cavalry);
+            //all leaders are captured
+            if (defenderElim && spacesGM.ElementAt(destination).leader1 > 0 && spacesGM.ElementAt(destination).leader2 > 0)
+            {
+                switch (mvmtPlayer)
+                {
+                    case 0:
+                        handMarkerScript.bonus0.Add("Sprites/jpg/Leader/" + spacesGM.ElementAt(destination).leader1);
+                        break;
+                    case 1:
+                        handMarkerScript.bonus1.Add("Sprites/jpg/Leader/" + spacesGM.ElementAt(destination).leader1);
+                        break;
+                    case 2:
+                        handMarkerScript.bonus2.Add("Sprites/jpg/Leader/" + spacesGM.ElementAt(destination).leader1);
+                        break;
+                    case 3:
+                        handMarkerScript.bonus3.Add("Sprites/jpg/Leader/" + spacesGM.ElementAt(destination).leader1);
+                        break;
+                    case 4:
+                        handMarkerScript.bonus4.Add("Sprites/jpg/Leader/" + spacesGM.ElementAt(destination).leader1);
+                        break;
+                    case 5:
+                        handMarkerScript.bonus5.Add("Sprites/jpg/Leader/" + spacesGM.ElementAt(destination).leader1);
+                        break;
+                }
+                spacesGM.ElementAt(destination).removeLeader(spacesGM.ElementAt(destination).leader1);
+                onChangeLeader(destination, spacesGM.ElementAt(destination).leader1);
+            }
             currentTextObject.post("Successful Assault");
             spacesGM.ElementAt(destination).sieged = false;
             int marker = 1;

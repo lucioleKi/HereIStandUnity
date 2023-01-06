@@ -29,7 +29,7 @@ public class HandMarkerScript : MonoBehaviour
         bonus3 = new List<string>();
         bonus4 = new List<string>();
         bonus5 = new List<string>();
-        bonus1.Add("Sprites/jpg/negative1Card");
+        //bonus1.Add("Sprites/jpg/negative1Card");
         canRansom = new List<int>();
         ransomedPower = new List<int>();
         ransomedLeader = new List<int>();

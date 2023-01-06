@@ -265,6 +265,7 @@ public class DeckScript : MonoBehaviour
         cardsLib = cards;
     }
 
+    //discard a card and put it in the discard pile
     public static void discardById(int player, int id)
     {
         List<CardObject> temp = new List<CardObject>();
@@ -300,6 +301,7 @@ public class DeckScript : MonoBehaviour
         }
     }
 
+    //remove a card from deck after playing
     public static void removeCard(int player, int id)
     {
         List<CardObject> temp = new List<CardObject>();

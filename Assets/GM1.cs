@@ -23,6 +23,7 @@ public class GM1 : MonoBehaviour
     public static RulerClass[] rulers;
     public static int[] cardTracks;
     public static int[] VPs;
+    public static bool[] maritalStatus;
     public static int[] translations = new int[6];
     public static bool[] excommunicated;
     public static int[] StPeters;
@@ -69,6 +70,7 @@ public class GM1 : MonoBehaviour
         cardTracks[4] = status4.cardTrack;
         cardTracks[5] = status5.protestantSpaces;
         piracyC = status0.piracyTrack;
+        maritalStatus = status2.maritalStatus;
         excommunicated = status4.excommunicated;
         translations = status5.translationInit;
         StPeters = new int[2];
@@ -209,9 +211,10 @@ public class GM1 : MonoBehaviour
     {
         checkPass(player);
         GM2.onDeactivateSkip();
-        bool allSkipped = skipped.Any(x => true);
-        if (allSkipped)
+        bool allSkipped = skipped.Any(x => x == false);
+        if (!allSkipped)
         {
+            UnityEngine.Debug.Log("all skipped");
             GM2.onPhaseEnd();
             impulse = -1;
             return;
@@ -231,7 +234,29 @@ public class GM1 : MonoBehaviour
                 break;
             }
         }
-
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        
+        switch (impulse)
+        {
+            case 0:
+                currentTextObject.post("Active power: Ottoman");
+                break;
+            case 1:
+                currentTextObject.post("Active power: Hapsburg");
+                break;
+            case 2:
+                currentTextObject.post("Active power: England");
+                break;
+            case 3:
+                currentTextObject.post("Active power: France");
+                break;
+            case 4:
+                currentTextObject.post("Active power: Papacy");
+                break;
+            case 5:
+                currentTextObject.post("Active power: Protestant");
+                break;
+        }
         if (checkPass(impulse))
         {
             GM2.onSkipCard(6);
@@ -266,6 +291,7 @@ public class GM1 : MonoBehaviour
         //force pass
         if (temp.Count == 0)
         {
+            UnityEngine.Debug.Log("no cards left");
             skipped[playerIndex] = true;
             return true;
         }

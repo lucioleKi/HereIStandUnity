@@ -134,3 +134,7 @@ Finished naval movement and combat. Started Declaration of war procedure.
 1/4/2023
 
 Finished diplomacy phase and action phase. 
+
+1/6/2023
+
+Refactored other button. Coded event cards in the 100 range.

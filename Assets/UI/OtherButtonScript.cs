@@ -10,6 +10,7 @@ using static GM2;
 public class OtherButtonScript : MonoBehaviour
 {
     public Button btn;
+    public int btnStatus;
     public int playerIndex;
     public string cardSelected;
     public string cardTag;
@@ -18,7 +19,8 @@ public class OtherButtonScript : MonoBehaviour
     {
         btn = gameObject.GetComponent<Button>();
         btn.interactable = false;
-        btn.onClick.AddListener(() => toCanvasBoard());
+        btn.onClick.AddListener(() => buttonCallback());
+        btnStatus = -1;
     }
 
     // Update is called once per frame
@@ -26,12 +28,38 @@ public class OtherButtonScript : MonoBehaviour
     {
 
     }
-
-    void toCanvasBoard()
+    void OnEnable()
     {
-        GM2.boolStates[0] = false;
-        discardCards.Add(hand2.ElementAt(int.Parse(cardTag.Substring(1))));
-        hand3.RemoveAt(int.Parse(cardTag.Substring(1)));
+        GM2.onOtherBtn += activateOther;
+        GM2.onDeactivateOther += deactivateOther;
+    }
+
+    void OnDisable()
+    {
+        GM2.onOtherBtn -= activateOther;
+        GM2.onDeactivateOther -= deactivateOther;
+    }
+
+    void buttonCallback()
+    {
+        switch (btnStatus)
+        {
+            case 1:
+                //HIS-003
+                GM2.boolStates[0] = false;
+                discardCards.Add(hand3.ElementAt(int.Parse(cardTag.Substring(1))));
+                hand3.RemoveAt(int.Parse(cardTag.Substring(1)));
+                break;
+            case 2:
+                discardCards.Add(hand2.ElementAt(int.Parse(cardTag.Substring(1))));
+                hand2.RemoveAt(int.Parse(cardTag.Substring(1)));
+                break;
+        }
+        if (btnStatus != -1)
+        {
+            btnStatus = -1;
+            btn.interactable = false;
+        }
 
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().alpha = 1;
         GameObject.Find("CanvasBoard").GetComponent<CanvasGroup>().blocksRaycasts = true;
@@ -44,5 +72,24 @@ public class OtherButtonScript : MonoBehaviour
         {
             GameObject.Destroy(child.gameObject);
         }
+    }
+
+    void activateOther(int index)
+    {
+        UnityEngine.Debug.Log("other activated");
+        btnStatus = index;
+        //gameObject.GetComponent<CanvasGroup>().alpha = 1;
+        //gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        //gameObject.GetComponent<CanvasGroup>().interactable = true;
+        //btn.interactable = true;
+    }
+
+    void deactivateOther() {
+        UnityEngine.Debug.Log("other deactivated");
+        //gameObject.GetComponent<CanvasGroup>().alpha = 0;
+        //gameObject.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        //gameObject.GetComponent<CanvasGroup>().interactable = false;
+        btnStatus = -1;
+        btn.interactable = false;
     }
 }

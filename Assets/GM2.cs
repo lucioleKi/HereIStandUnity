@@ -55,6 +55,7 @@ public class GM2 : MonoBehaviour
     public static SimpleHandler onRemoveHighlight;
     public static SimpleHandler onChangeSegment;
     public static SimpleHandler onDeactivateSkip;
+    public static SimpleHandler onDeactivateOther;
 
     public delegate void Int2Handler(int index1, int index2);
 
@@ -80,6 +81,7 @@ public class GM2 : MonoBehaviour
     public static Int1Handler onHighlightRectangles;
     public static Int1Handler onSkipCard;
     public static Int1Handler onChangeUnrest;
+    public static Int1Handler onOtherBtn;
     public delegate void List1Handler(List<int> index);
     public static List1Handler onHighlight;
     public static List1Handler onHighlightDip;
@@ -100,6 +102,8 @@ public class GM2 : MonoBehaviour
     //31: in naval movement procedure (CP action)
     //32: HIS076 has effect
     //33: in DOW procedure (segment 5)
+    //34: HIS112 Thomas More, no debate in England this turn 
+    //35: HIS105 treachery for siege procedure
     //0: which power has HIS031 effect
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
@@ -277,6 +281,9 @@ public class GM2 : MonoBehaviour
             case 65:
                 StartCoroutine(gm3.HIS065());
                 break;
+            case 67:
+                StartCoroutine(gm3.HIS067());
+                break;
             case 75:
                 StartCoroutine(gm3.HIS075());
                 break;
@@ -307,8 +314,30 @@ public class GM2 : MonoBehaviour
             case 94:
                 StartCoroutine(gm3.HIS094());
                 break;
+            case 104:
+                StartCoroutine(gm3.HIS104());
+                break;
+            case 105:
+                gm3.HIS105();
+                break;
+            case 106:
+                StartCoroutine(gm3.HIS106());
+                break;
+            case 107:
+                StartCoroutine(gm3.HIS107());
+                break;
             case 109:
                 gm3.HIS109();
+                break;
+            case 112:
+                if (GM1.player == 2 || GM1.player == 5)
+                {
+                    StartCoroutine(gm3.HIS112A());
+                }
+                else
+                {
+                    gm3.HIS112B();
+                }
                 break;
             default:
                 break;
@@ -739,7 +768,15 @@ public class GM2 : MonoBehaviour
         tempForm.verifyDip();
         negotiationSegment(tempForm);
         onChangeDip();
-        segment++;
+        if (turn != 1)
+        {
+            segment++;
+        }
+        else
+        {
+            segment = 7;
+        }
+        
         onChangeSegment();
         phase3();
         yield break;
@@ -1046,10 +1083,18 @@ public class GM2 : MonoBehaviour
                 
                 break;
             case 6:
+                onDeactivateSkip();
                 StartCoroutine(waitDOWCP());
                 break;
             default:
-
+                GameObject.Find("DiplomacyButton").GetComponent<Button>().interactable = false;
+                currentTextObject.reset();
+                onDeactivateSkip();
+                tempForm.reset();
+                GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
+                GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
+                onPhaseEnd();
+                GM1.enq2("Go to phase 4 - (Any player)");
                 break;
         }
 
@@ -1403,6 +1448,8 @@ public class GM2 : MonoBehaviour
 
     void phase6()
     {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.post("Active power: Ottoman");
         GM1.impulse = 0;
         //onPhaseEnd();
     }

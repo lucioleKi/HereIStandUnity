@@ -63,5 +63,9 @@ public class CPTextScript : MonoBehaviour
         mtext.text = "";
         //can only build units end
         GM2.boolStates[32] = false;
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
     }
 }

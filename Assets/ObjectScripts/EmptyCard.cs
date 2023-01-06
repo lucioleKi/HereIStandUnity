@@ -67,22 +67,51 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             CPButtonScript.btn.interactable = false;
         }
 
-        if (GM2.chosenCard == "HIS-004" && GM1.player == 3 && GM2.boolStates[0])
+        //other button
+        OtherButtonScript otherButtonScript = GameObject.Find("OtherButton").GetComponent("OtherButtonScript") as OtherButtonScript;
+        switch (otherButtonScript.btnStatus)
         {
-            CPButtonScript.btn.interactable = false;
-            ConfirmScript.btn.interactable = false;
-            OtherButtonScript otherButtonScript = GameObject.Find("OtherButton").GetComponent("OtherButtonScript") as OtherButtonScript;
-            otherButtonScript.cardTag = eventData.pointerCurrentRaycast.gameObject.tag;
-            otherButtonScript.btn.interactable = true;
+            case -1:
+
+                otherButtonScript.btn.interactable = false;
+                break;
+            case 1:
+                if (GM2.chosenCard == "HIS-004" && GM1.player == 3 && GM2.boolStates[0])
+                {
+                    CPButtonScript.btn.interactable = false;
+                    ConfirmScript.btn.interactable = false;
+
+                    otherButtonScript.cardTag = eventData.pointerCurrentRaycast.gameObject.tag;
+                    otherButtonScript.btn.interactable = true;
+                }
+                else
+                {
+
+                    otherButtonScript.btn.interactable = false;
+                }
+                break;
+            case 2:
+                if (GM2.chosenCard == "HIS-112" && (GM1.player == 2 || GM1.player == 5))
+                {
+                    CPButtonScript.btn.interactable = false;
+                    ConfirmScript.btn.interactable = false;
+
+                    otherButtonScript.cardTag = eventData.pointerCurrentRaycast.gameObject.tag;
+                    otherButtonScript.btn.interactable = true;
+                }
+                else
+                {
+
+                    otherButtonScript.btn.interactable = false;
+                }
+                break;
         }
-        else
-        {
-            OtherButtonScript otherButtonScript = GameObject.Find("OtherButton").GetComponent("OtherButtonScript") as OtherButtonScript;
-            otherButtonScript.btn.interactable = false;
-        }
+
 
 
     }
+
+    
 
     bool playAsEvent(int index)
     {
@@ -173,6 +202,10 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             //automatically played in naval combat
             return false;
         }
+        if (index == 35)
+        {
+            return false;
+        }
         if (siegeScript.status == 4)
         {
             if (index == 33||index==36)
@@ -247,6 +280,58 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         {
             //HIS-009 has been played as an event
             if (GM2.boolStates[3])
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 102)
+        {
+            //not playable by 5
+            if (GM1.player == 5)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        if (index == 105)
+        {
+            //if there're sieged spaces
+            List<int> pickSpaces = new List<int>();
+            for (int i = 0; i < 134; i++)
+            {
+                if (spacesGM.ElementAt(i).sieged)
+                {
+                    pickSpaces.Add(i);
+                }
+            }
+            if (pickSpaces.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 106)
+        {
+            //if there're merc on map
+            List<int> pickSpaces = new List<int>();
+            for (int i = 0; i < 134; i++)
+            {
+                if (spacesGM.ElementAt(i).merc > 0 && spacesGM.ElementAt(i).regularPower != GM1.player)
+                {
+                    pickSpaces.Add(i);
+                }
+            }
+            if(pickSpaces.Count > 0)
             {
                 return true;
             }

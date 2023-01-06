@@ -48,11 +48,12 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             case 0:
                 //move formation in clear
                 cost = 1;
-                movementScript.post();
+                movementScript.post(false);
                 break;
             case 1:
                 //move formation over pass
                 cost = 2;
+                movementScript.post(true);
                 break;
             case 2:
                 if (GM1.player == 5)
