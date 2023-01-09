@@ -138,3 +138,7 @@ Finished diplomacy phase and action phase.
 1/6/2023
 
 Refactored other button. Coded event cards in the 100 range.
+
+1/9/2023
+
+Finished resolving explorations in new world phase.

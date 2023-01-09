@@ -105,6 +105,11 @@ public class GM2 : MonoBehaviour
     //34: HIS112 Thomas More, no debate in England this turn 
     //35: HIS105 treachery for siege procedure
     //0: which power has HIS031 effect
+    //1: which explorer for 1
+    //2: which explorer for 2
+    //3: which explorer for 3
+    //4: which conquest for 1
+
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
@@ -121,6 +126,7 @@ public class GM2 : MonoBehaviour
         onMandatory += mandatory;
         onPhase2 += phase2;
         onPhase3 += phase3;
+        onPhase3 += phase8;
         onPhase4 += phase4;
         onPhase5 += phase5;
         onPhase6 += phase6;
@@ -776,7 +782,7 @@ public class GM2 : MonoBehaviour
         {
             segment = 7;
         }
-        
+
         onChangeSegment();
         phase3();
         yield break;
@@ -887,7 +893,7 @@ public class GM2 : MonoBehaviour
         GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
         GM1.player = 0;
         onPlayerChange();
-        
+
         for (int i = 0; i < 6; i++)
         {
             onNoLayer();
@@ -897,7 +903,7 @@ public class GM2 : MonoBehaviour
             List<int> trace = tempForm.DOW(GM1.player);
             highlightSelected = -1;
             onHighlightDip(trace);
-            while (boolStates[33]&&trace.Count>0)
+            while (boolStates[33] && trace.Count > 0)
             {
                 if (highlightSelected != -1)
                 {
@@ -948,11 +954,11 @@ public class GM2 : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             currentTextObject.post("Play at least " + required[i] + "CP to declare war(s)");
-            
-            while (required[i]>0)
+
+            while (required[i] > 0)
             {
 
-                if (currentCP>0)
+                if (currentCP > 0)
                 {
                     required[i] -= currentCP;
                     currentCP = 0;
@@ -961,13 +967,13 @@ public class GM2 : MonoBehaviour
                 yield return null;
             }
             currentCP = 0;
-            for (int j= 0; j < 8;j++)
+            for (int j = 0; j < 8; j++)
             {
-                if (tempForm.war[i,j] != 10)
+                if (tempForm.war[i, j] != 10)
                 {
                     if (i < tempForm.war[i, j])
                     {
-                        GM1.diplomacyState[i, tempForm.war[i,j]] = 1;
+                        GM1.diplomacyState[i, tempForm.war[i, j]] = 1;
                     }
                     else
                     {
@@ -993,7 +999,7 @@ public class GM2 : MonoBehaviour
         onDeactivateSkip();
         tempForm.reset();
         segment++;
-        
+
         GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
         GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
         onPhaseEnd();
@@ -1030,7 +1036,7 @@ public class GM2 : MonoBehaviour
                 break;
             case 3:
 
-                
+
                 if (handMarkerScript.canRansom.Count > 0)
                 {
 
@@ -1080,7 +1086,7 @@ public class GM2 : MonoBehaviour
             case 5:
                 onSkipCard(5);
                 StartCoroutine(waitDOW());
-                
+
                 break;
             case 6:
                 onDeactivateSkip();
@@ -1539,24 +1545,391 @@ public class GM2 : MonoBehaviour
 
     void phase8()
     {
-
+        int count = 0;
+        int randomIndex = 0;
         //resolve exploration
-        for (int i = 19; i < 22; i++)
+        for (int i = 19; i < 25; i++)
         {
             if (boolStates[i])
             {
-
+                count++;
             }
         }
+        if (count == 0)
+        {
+            onPhaseEnd();
+            return;
+        }
+        resetMap();
+        resolveExploration();
+        //onPhaseEnd();
+    }
+
+    void resolveExploration()
+    {
+        List<int> order = new List<int>();
+        int[] modifier = new int[4];
+        for (int i = 1; i < 4; i++)
+        {
+            if (boolStates[i + 18])
+            {
+                order.Add(i);
+                float pos;
+                if (GameObject.Find("charted_" + i.ToString()) != null)
+                {
+
+                    pos = GameObject.Find("charted_" + i.ToString()).transform.position.x - 960;
+                }
+                else
+                {
+                    modifier[i - 1]--;
+                    pos = GameObject.Find("uncharted_" + i.ToString()).transform.position.x - 960;
+                }
+
+                GameObject newObject = new GameObject("explorer_" + i.ToString(), typeof(RectTransform), typeof(Image));
+                switch (i)
+                {
+                    case 1:
+                        intStates[1] = UnityEngine.Random.Range(0, explorers1.Count);
+                        modifier[0] += explorers1.ElementAt(intStates[1]).value;
+
+                        UnityEngine.Debug.Log(explorers1.ElementAt(intStates[1]).name);
+                        newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + explorers1.ElementAt(intStates[1]).name);
+                        break;
+                    case 2:
+                        intStates[2] = UnityEngine.Random.Range(0, explorers2.Count);
+                        modifier[1] += explorers2.ElementAt(intStates[2]).value;
+
+                        UnityEngine.Debug.Log(explorers2.ElementAt(intStates[2]).name);
+                        newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + explorers2.ElementAt(intStates[2]).name);
+                        break;
+                    case 3:
+                        intStates[3] = UnityEngine.Random.Range(0, explorers3.Count);
+                        modifier[2] += explorers3.ElementAt(intStates[3]).value;
+
+                        UnityEngine.Debug.Log(explorers3.ElementAt(intStates[3]).name);
+                        newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + explorers3.ElementAt(intStates[3]).name);
+                        break;
+                }
+                newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(pos, -197);
+            }
+        }
+        order.Sort((x, y) =>
+        {
+            if (modifier[x] < modifier[y])
+            {
+                return -1;
+            }
+            else if (modifier[x] == modifier[y])
+            {
+                if (x == 2)
+                {
+                    return -1;
+                }
+                else if (x == 3)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+            else
+            {
+                return 1;
+            }
+        });
+        StartCoroutine(highlightEmpty(order, modifier));
         //resolve conquest
-        for (int i = 22; i < 25; i++)
+        if (boolStates[22])
         {
-            if (boolStates[i])
+            intStates[4] = UnityEngine.Random.Range(0, conquests.Count);
+            GameObject.Find("conquest_1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + conquests.ElementAt(intStates[4]).name);
+        }
+
+
+
+    }
+
+    IEnumerator highlightEmpty(List<int> order, int[] modifier)
+    {
+        HighlightScript highlightScript = GameObject.Find("HighlightDisplay").GetComponent("HighlightScript") as HighlightScript;
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        foreach (int i in order)
+        {
+            highlightSelected = -1;
+            onNoLayer();
+            highlightScript.highlightNewWorld(i);
+
+            int randomIndex;
+            while (highlightSelected == -1)
+            {
+                yield return null;
+            }
+            if (GameObject.Find("charted_" + i.ToString()) != null)
             {
 
+                GameObject.Destroy(GameObject.Find("charted_" + i.ToString()));
+            }
+            else
+            {
+                GameObject.Destroy(GameObject.Find("uncharted_" + i.ToString()));
+            }
+            randomIndex = UnityEngine.Random.Range(1, 7) + UnityEngine.Random.Range(1, 7) + modifier[i];
+
+            UnityEngine.Debug.Log(randomIndex);
+            if (randomIndex < 5)
+            {
+                currentTextObject.post("The explorer is lost at sea. He is removed from the game.");
+            }
+            else if (randomIndex < 7)
+            {
+                currentTextObject.post("No discovery is made; the explorer is returned to the pool. ");
+            }
+            else if (randomIndex < 10)
+            {
+                currentTextObject.post("A discovery has been made. ");
+            }
+            else
+            {
+                currentTextObject.post("The explorer has penetrated deep into South America, and has a choice how to proceed.");
+            }
+            yield return new WaitForSeconds(3);
+
+            HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+            switch (i)
+            {
+                case 1:
+                    if (randomIndex < 5)
+                    {
+                        GameObject.Destroy(GameObject.Find("explorer_1"));
+                        explorers1.RemoveAt(intStates[1]);
+                    }
+                    else if (randomIndex > 6 && randomIndex < 10)
+                    {
+                        if (GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        {
+                            GameObject.Destroy(GameObject.Find("MississippiRiver"));
+                            GameObject.Find("explorer_1").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/MississippiRiver1VP");
+
+                        }
+                        else if (GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        {
+                            GameObject.Destroy(GameObject.Find("GreatLakes"));
+                            GameObject.Find("explorer_1").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-847, -164);
+                            handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/GreatLakes1VP");
+                        }
+                        else
+                        {
+                            GameObject.Destroy(GameObject.Find("StLawrenceRiver"));
+                            GameObject.Find("explorer_1").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/StLawrenceRiver1VP");
+
+                        }
+                        GM1.bonusVPs[1]++;
+                        GM1.updateVP();
+                        onVP();
+                    }
+                    else if (randomIndex > 9)
+                    {
+                        yield return StartCoroutine(discovery10(modifier[i], i));
+                    }
+                    break;
+                case 2:
+                    if (randomIndex < 5)
+                    {
+                        GameObject.Destroy(GameObject.Find("explorer_2"));
+                        explorers2.RemoveAt(intStates[2]);
+                    }
+                    else if (randomIndex > 6 && randomIndex < 10)
+                    {
+                        if (GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        {
+                            GameObject.Destroy(GameObject.Find("MississippiRiver"));
+                            GameObject.Find("explorer_2").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            handMarkerScript.bonus2.Add("Sprites/jpg/NewWorld/MississippiRiver1VP");
+
+                        }
+                        else if (GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        {
+                            GameObject.Destroy(GameObject.Find("GreatLakes"));
+                            GameObject.Find("explorer_2").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-847, -164);
+                            handMarkerScript.bonus2.Add("Sprites/jpg/NewWorld/GreatLakes1VP");
+                        }
+                        else
+                        {
+                            GameObject.Destroy(GameObject.Find("StLawrenceRiver"));
+                            GameObject.Find("explorer_2").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            handMarkerScript.bonus2.Add("Sprites/jpg/NewWorld/StLawrenceRiver1VP");
+
+                        }
+                        GM1.bonusVPs[2]++;
+                        GM1.updateVP();
+                        onVP();
+                    }
+                    else if (randomIndex > 9)
+                    {
+                        yield return StartCoroutine(discovery10(modifier[i], i));
+                    }
+                    break;
+                case 3:
+                    if (randomIndex < 5)
+                    {
+                        GameObject.Destroy(GameObject.Find("explorer_3"));
+                        explorers3.RemoveAt(intStates[3]);
+                    }
+                    else if (randomIndex > 6 && randomIndex < 10)
+                    {
+                        if (GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        {
+                            GameObject.Destroy(GameObject.Find("MississippiRiver"));
+                            GameObject.Find("explorer_3").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            handMarkerScript.bonus3.Add("Sprites/jpg/NewWorld/MississippiRiver1VP");
+
+                        }
+                        else if (GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        {
+                            GameObject.Destroy(GameObject.Find("GreatLakes"));
+                            GameObject.Find("explorer_3").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-847, -164);
+                            handMarkerScript.bonus3.Add("Sprites/jpg/NewWorld/GreatLakes1VP");
+                        }
+                        else
+                        {
+                            GameObject.Destroy(GameObject.Find("StLawrenceRiver"));
+                            GameObject.Find("explorer_3").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            handMarkerScript.bonus3.Add("Sprites/jpg/NewWorld/StLawrenceRiver1VP");
+
+                        }
+                        GM1.bonusVPs[3]++;
+                        GM1.updateVP();
+                        onVP();
+                    }
+                    else if (randomIndex > 9)
+                    {
+                        yield return StartCoroutine(discovery10(modifier[i], i));
+                    }
+                    break;
+            }
+
+        }
+
+    }
+
+
+    IEnumerator discovery10(int modifier, int power)
+    {
+        HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        HighlightScript highlightScript = GameObject.Find("HighlightDisplay").GetComponent("HighlightScript") as HighlightScript;
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        string[] names = new string[] { "PacificStrait", "AmazonRiver", "GreatLakes", "StLawrenceRiver", "MississippiRiver" };
+        for (int i = 0; i < 5; i++)
+        {
+            if (GameObject.Find(names[i]) != null||(i==0&&GameObject.Find("Circumnavigation")!=null))
+            {
+                highlightScript.highlightCoordinate(GameObject.Find(names[i]).transform.position.x, GameObject.Find(names[i]).transform.position.y, i);
+                UnityEngine.Debug.Log(GameObject.Find(names[i]).transform.position.x);
+                UnityEngine.Debug.Log(GameObject.Find(names[i]).transform.position.y);
             }
         }
-        onPhaseEnd();
+        highlightSelected = -1;
+        onNoLayer();
+        while (highlightSelected == -1)
+        {
+            yield return null;
+        }
+        List<string> temp = new List<string>();
+
+        switch (power)
+        {
+            case 1:
+                temp = handMarkerScript.bonus1;
+                break;
+            case 2:
+                temp = handMarkerScript.bonus2;
+                break;
+            case 3:
+                temp = handMarkerScript.bonus3;
+                break;
+        }
+        if (highlightSelected != 0||(highlightSelected==0&& GameObject.Find("PacificStrait")!=null))
+        {
+
+            GameObject.Find("explorer_" + power.ToString()).transform.SetParent(GameObject.Find("NewWorld").transform);
+            GameObject.Find("explorer_" + power.ToString()).GetComponent<RectTransform>().anchoredPosition = new Vector2(GameObject.Find(names[highlightSelected]).transform.position.x-940, GameObject.Find(names[highlightSelected]).transform.position.y-215);
+            GameObject.Destroy(GameObject.Find(names[highlightSelected]));
+            switch (highlightSelected)
+            {
+                case 0:
+                    temp.Add("Sprites/jpg/NewWorld/PacificStrait1VP");
+                    break;
+                case 1:
+                    temp.Add("Sprites/jpg/NewWorld/AmazonRiver2VP");
+                    GM1.bonusVPs[power]++;
+                    break;
+                case 2:
+                    temp.Add("Sprites/jpg/NewWorld/GreatLakes1VP");
+                    break;
+                case 3:
+                    temp.Add("Sprites/jpg/NewWorld/StLawrenceRiver1VP");
+                    break;
+                case 4:
+                    temp.Add("Sprites/jpg/NewWorld/MississippiRiver1VP");
+                    break;
+            }
+            GM1.bonusVPs[power]++;
+            GM1.updateVP();
+            onVP();
+        }
+        if(highlightSelected==0)
+        {
+
+            int randomIndex = UnityEngine.Random.Range(1, 7) + UnityEngine.Random.Range(1, 7) + modifier;
+            if (randomIndex < 10)
+            {
+                currentTextObject.post("Circumnavagation failed. The explorer is removed from the game.");
+                //remove the explorer
+                switch (power)
+                {
+                    case 1:
+                        GameObject.Destroy(GameObject.Find("explorer_1"));
+                        explorers1.RemoveAt(intStates[1]);
+                        break;
+                    case 2:
+                        GameObject.Destroy(GameObject.Find("explorer_2"));
+                        explorers2.RemoveAt(intStates[2]);
+                        break;
+                    case 3:
+                        GameObject.Destroy(GameObject.Find("explorer_3"));
+                        explorers3.RemoveAt(intStates[3]);
+                        break;
+                }
+                yield return new WaitForSeconds(3);
+            }
+            else
+            {
+                GameObject.Destroy(GameObject.Find("Circumnavigation"));
+                GameObject.Find("explorer_" + power.ToString()).transform.SetParent(GameObject.Find("NewWorld").transform);
+                GameObject.Find("explorer_" + power.ToString()).GetComponent<RectTransform>().anchoredPosition = new Vector2(-893, -402);
+                handMarkerScript.bonus3.Add("Sprites/jpg/NewWorld/Circumnavigation3VP");
+                GM1.bonusVPs[power]++;
+                GM1.updateVP();
+                onVP();
+            }
+
+        }
     }
 
     void Awake()

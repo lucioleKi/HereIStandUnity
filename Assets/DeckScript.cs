@@ -21,6 +21,10 @@ public class DeckScript : MonoBehaviour
     public static List<LeaderObject> activeLeaders;
     public static List<ReformerObject> reformers;
     public static List<ReformerObject> activeReformers;
+    public static List<ExplorerObject> explorers1;
+    public static List<ExplorerObject> explorers2;
+    public static List<ExplorerObject> explorers3;
+    public static List<ExplorerObject> conquests;
     public static List<CardObject> hand0;
     public static List<CardObject> hand1;
     public static List<CardObject> hand2;
@@ -57,7 +61,7 @@ public class DeckScript : MonoBehaviour
         importDebaters();
         importLeaders();
         importReformers();
-        
+        importExplorers();
         
         hand0 = new List<CardObject>();
         hand1 = new List<CardObject>();
@@ -482,5 +486,54 @@ public class DeckScript : MonoBehaviour
         reformers.Add(Resources.Load("Objects/Reformer4/Cranmer") as ReformerObject);
     }
 
-    
+    void importExplorers()
+    {
+        
+        explorers1 = new List<ExplorerObject>();
+        explorers2 = new List<ExplorerObject>();
+        explorers3 = new List<ExplorerObject>();
+        conquests = new List<ExplorerObject>();
+        using (var reader = new StreamReader("Assets/Input/explorers.csv"))
+        {
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+                ExplorerObject temp = new ExplorerObject();
+                temp.name = values[1];
+                temp.id = int.Parse(values[0]);
+                temp.value = int.Parse(values[2]);
+                temp.power = int.Parse(values[3]);
+                switch (temp.power)
+                {
+                    case 1:
+                        explorers1.Add(temp);
+                        break;
+                    case 2:
+                        explorers2.Add(temp);
+                        break;
+                    case 3:
+                        explorers3.Add(temp);
+                        break;
+                }
+                
+            }
+        }
+
+        using (var reader = new StreamReader("Assets/Input/conquests.csv"))
+        {
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+                ExplorerObject temp = new ExplorerObject();
+                temp.name = values[1];
+                temp.id = int.Parse(values[0]);
+                temp.value = int.Parse(values[2]);
+                temp.power = 1;
+                conquests.Add(temp);
+
+            }
+        }
+    }
 }

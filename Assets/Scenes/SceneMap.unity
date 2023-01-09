@@ -16000,6 +16000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1df53b7d968a0124c9602a0b776a98ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tempPlayer: 0
   btn: {fileID: 0}
   step: 0
   area: 0
@@ -19881,6 +19882,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
+  overPass: 0
   mvmtPlayer: 0
   status: 0
   btnStatus: 0
@@ -22045,6 +22047,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba5625c8c9f0ba43a17dbb83a905812, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  turnMarker: []
 --- !u!114 &1337243552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27568,7 +27571,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -750, y: -227}
+  m_AnchoredPosition: {x: -660, y: -227}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1680764361
@@ -32736,6 +32739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
+  btnStatus: 0
   playerIndex: 0
   cardSelected: 
   cardTag: 

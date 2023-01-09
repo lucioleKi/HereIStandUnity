@@ -643,6 +643,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
     public void explore()
     {
+        GM2.resetMap();
         int currentCount = 0;
         for (int i = 19; i < 25; i++)
         {
@@ -660,7 +661,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/Hapsburg_Exploration");
                     newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
                     newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 0 * 30, -227);
                     GM2.boolStates[13] = true;
                 }
                 else
@@ -669,9 +670,8 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/Hapsburg_ExplorationCharted");
                     newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
                     newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 0 * 30, -227);
                 }
-
                 GM2.boolStates[19] = true;
                 break;
             case 2:
@@ -681,7 +681,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/English_Exploration");
                     newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
                     newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 1 * 30, -227);
                     GM2.boolStates[9] = true;
                 }
                 else
@@ -690,7 +690,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/English_ExplorationCharted");
                     newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
                     newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 1 * 30, -227);
                 }
                 GM2.boolStates[20] = true;
                 break;
@@ -701,7 +701,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/French_Exploration");
                     newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
                     newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 2 * 30, -227);
                     GM2.boolStates[27] = true;
                 }
                 else
@@ -710,7 +710,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                     newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/French_ExplorationCharted");
                     newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
                     newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 2 * 30, -227);
                 }
                 GM2.boolStates[21] = true;
                 break;
@@ -719,6 +719,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
 
     public void conquest()
     {
+        GM2.resetMap();
         int currentCount = 0;
         for (int i = 19; i < 25; i++)
         {
@@ -735,7 +736,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/Hapsburg_Conquest");
                 newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
                 newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
-                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 3 * 30, -227);
                 GM2.boolStates[22] = true;
                 break;
             case 2:
@@ -744,7 +745,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 newObject1.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/English_Conquest");
                 newObject1.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
                 newObject1.transform.SetParent(GameObject.Find("Atlantic").transform);
-                newObject1.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                newObject1.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 4 * 30, -227);
                 GM2.boolStates[23] = true;
                 break;
             case 3:
@@ -753,7 +754,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
                 newObject2.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/French_Conquest");
                 newObject2.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
                 newObject2.transform.SetParent(GameObject.Find("Atlantic").transform);
-                newObject2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + currentCount * 30, -227);
+                newObject2.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 5 * 30, -227);
                 GM2.boolStates[24] = true;
                 break;
         }

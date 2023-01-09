@@ -70,6 +70,25 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         
     }
 
+    public void highlightNewWorld(int index)
+    {
+        GM2.resetMap();
+        GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/square"), new Vector3(0, 0, 0), Quaternion.identity);
+        tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(180 + index * 30, 310);
+        tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+        tempObject.name = "exploreHighlight";
+        
+    }
+
+    public void highlightCoordinate(float x, float y, int index)
+    {
+        GM2.resetMap();
+        GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/square"), new Vector3(0, 0, 0), Quaternion.identity);
+        tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(x, y);
+        tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+        tempObject.name = "nwhighlight_"+index.ToString();
+    }
+
     void highlightCP(int currentCP)
     {
         GM2.resetPower();
@@ -484,6 +503,13 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         }else if (eventData.pointerCurrentRaycast.gameObject.name[12] == '_')
         {
             highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(13));
+        }else if (eventData.pointerCurrentRaycast.gameObject.name[0] == 'e')
+        {
+            highlightSelected = 0;
+        }else if(eventData.pointerCurrentRaycast.gameObject.name[0] == 'n')
+        {
+            //nwhighlight
+            highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(12));
         }
         else
         {
