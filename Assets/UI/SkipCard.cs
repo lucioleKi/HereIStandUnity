@@ -53,7 +53,8 @@ public class SkipCard : MonoBehaviour
             case 3:
                 //GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
                 //GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
-                
+                GM1.diplomacyState[2, 8] = 1;
+                GM2.onChangeDip();
                 GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
                 startButton.status = -1;
                 startButton.btn.interactable = false;
@@ -84,6 +85,10 @@ public class SkipCard : MonoBehaviour
             case 109:
                 GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
                 GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+                startButton.status = -1;
+                startButton.btn.interactable = false;
+                GM2.chosenCard = "";
+                GM2.onChosenCard();
                 deactivateSkip();
                 GM2.onPhase5();
                 break;

@@ -38,7 +38,7 @@ public class RulerScript : MonoBehaviour
         if (gameObject.transform.Find("ruler_" + (power).ToString()) == null)
         {
             GameObject newObject = new GameObject("ruler_" + (power).ToString(), typeof(RectTransform), typeof(Image), typeof(CanvasGroup));
-            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(864+961, -375+540);
+            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(870+961, -370+540);
             newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Mandatory/HIS-0" + index.ToString());
             newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(113.4f, 159);
             newObject.transform.SetParent(gameObject.transform);

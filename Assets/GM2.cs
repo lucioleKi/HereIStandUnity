@@ -39,6 +39,7 @@ public class GM2 : MonoBehaviour
     public static SimpleHandler onPhase6;
     public static SimpleHandler onPhase7;
     public static SimpleHandler onPhase8;
+    public static SimpleHandler onPhase9;
     public static SimpleHandler onHighlightSelected;
     public static SimpleHandler onChangeDip;
     public static SimpleHandler onChangePhase;
@@ -104,34 +105,41 @@ public class GM2 : MonoBehaviour
     //33: in DOW procedure (segment 5)
     //34: HIS112 Thomas More, no debate in England this turn 
     //35: HIS105 treachery for siege procedure
+    //39-44: conquered index
+    //45-47: Cabot used
+    //48: Cabot dead
     //0: which power has HIS031 effect
     //1: which explorer for 1
     //2: which explorer for 2
     //3: which explorer for 3
     //4: which conquest for 1
-
+    //5: which power has inca
+    //6: which power has aztecs
+    //7: which power has maya
+    //8: which power has smallpox effect for conquest
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
     public static int currentCP = 0;
-    public static int[] secretCP = new int[6];
+    public static int[] secretCP = new int[10];
 
     GM3 gm3;
 
     //
     void OnEnable()
     {
-        boolStates = new bool[40];
+        boolStates = new bool[50];
         intStates = new int[10];
+        Array.Clear(intStates, 0, 10);
         onMandatory += mandatory;
         onPhase2 += phase2;
         onPhase3 += phase3;
-        onPhase3 += phase8;
         onPhase4 += phase4;
         onPhase5 += phase5;
         onPhase6 += phase6;
         onPhase7 += phase7;
         onPhase8 += phase8;
+        onPhase9 += phase9;
     }
 
 
@@ -145,6 +153,7 @@ public class GM2 : MonoBehaviour
         onPhase6 -= phase6;
         onPhase7 -= phase7;
         onPhase8 -= phase8;
+        onPhase9 -= phase9;
     }
 
     /*if (onMoveHome25 != null)
@@ -217,6 +226,9 @@ public class GM2 : MonoBehaviour
                 break;
             case 10:
                 gm3.HIS010();
+                break;
+            case 13:
+                gm3.HIS013();
                 break;
             case 14:
                 gm3.HIS014();
@@ -319,6 +331,15 @@ public class GM2 : MonoBehaviour
                 break;
             case 94:
                 StartCoroutine(gm3.HIS094());
+                break;
+            case 99:
+                gm3.HIS099();
+                break;
+            case 100:
+                StartCoroutine(gm3.HIS100());
+                break;
+            case 101:
+                gm3.HIS101();
                 break;
             case 104:
                 StartCoroutine(gm3.HIS104());
@@ -649,32 +670,37 @@ public class GM2 : MonoBehaviour
             switch (i)
             {
                 case 0:
-                    hand0.Add(cards.ElementAt(0));
+                    hand0.Add(cardsLib.ElementAt(0));
                     hand0.AddRange(activeCards.GetRange(0, temp));
-
+                    
                     break;
                 case 1:
-                    hand1.Add(cards.ElementAt(1));
+                    hand1.Add(cardsLib.ElementAt(1));
                     hand1.AddRange(activeCards.GetRange(0, temp));
                     break;
                 case 2:
-                    hand2.Add(cards.ElementAt(2));
+                    hand2.Add(cardsLib.ElementAt(2));
                     hand2.AddRange(activeCards.GetRange(0, temp));
                     break;
                 case 3:
-                    hand3.Add(cards.ElementAt(3));
+                    hand3.Add(cardsLib.ElementAt(3));
                     hand3.AddRange(activeCards.GetRange(0, temp));
                     break;
                 case 4:
-                    hand4.Add(cards.ElementAt(4));
-                    hand4.Add(cards.ElementAt(5));
+                    hand4.Add(cardsLib.ElementAt(4));
+                    hand4.Add(cardsLib.ElementAt(5));
                     hand4.AddRange(activeCards.GetRange(0, temp));
                     break;
                 case 5:
-                    hand5.Add(cards.ElementAt(6));
+                    hand5.Add(cardsLib.ElementAt(6));
                     hand5.AddRange(activeCards.GetRange(0, temp));
                     break;
             }
+            //for(int j=0; j<temp; j++)
+            //{
+            //    UnityEngine.Debug.Log(activeCards[j].id);
+            //}
+            //UnityEngine.Debug.Log("power"+i.ToString());
             activeCards.RemoveRange(0, temp);
         }
         onPhaseEnd();
@@ -1547,28 +1573,55 @@ public class GM2 : MonoBehaviour
     {
         int count = 0;
         int randomIndex = 0;
-        //resolve exploration
-        for (int i = 19; i < 25; i++)
+        switch (segment)
         {
-            if (boolStates[i])
-            {
-                count++;
-            }
+            case 1:
+                //exploration
+                for (int i = 19; i < 22; i++)
+                {
+                    if (boolStates[i])
+                    {
+                        count++;
+                    }
+                }
+                if (count == 0)
+                {
+
+                    segment++;
+                    phase8();
+                }
+                resetMap();
+                resolveExploration();
+                break;
+            case 2:
+                //conquest
+                Array.Clear(boolStates, 19, 3);
+                for (int i = 22; i < 25; i++)
+                {
+                    if (boolStates[i])
+                    {
+                        count++;
+                    }
+                }
+                if (count == 0)
+                {
+                    onPhaseEnd();
+                    return;
+                }
+                resetMap();
+                resolveConquest();
+                break;
+            default:
+                Array.Clear(boolStates, 22, 3);
+                onPhaseEnd();
+                break;
         }
-        if (count == 0)
-        {
-            onPhaseEnd();
-            return;
-        }
-        resetMap();
-        resolveExploration();
-        //onPhaseEnd();
     }
 
     void resolveExploration()
     {
         List<int> order = new List<int>();
-        int[] modifier = new int[4];
+        List<int> modifier = new List<int>();
         for (int i = 1; i < 4; i++)
         {
             if (boolStates[i + 18])
@@ -1577,12 +1630,12 @@ public class GM2 : MonoBehaviour
                 float pos;
                 if (GameObject.Find("charted_" + i.ToString()) != null)
                 {
-
+                    modifier.Add(0);
                     pos = GameObject.Find("charted_" + i.ToString()).transform.position.x - 960;
                 }
                 else
                 {
-                    modifier[i - 1]--;
+                    modifier.Add(-1);
                     pos = GameObject.Find("uncharted_" + i.ToString()).transform.position.x - 960;
                 }
 
@@ -1590,23 +1643,46 @@ public class GM2 : MonoBehaviour
                 switch (i)
                 {
                     case 1:
-                        intStates[1] = UnityEngine.Random.Range(0, explorers1.Count);
-                        modifier[0] += explorers1.ElementAt(intStates[1]).value;
+                        if (boolStates[45])
+                        {
+                            intStates[1] = 0;
+                            modifier[modifier.Count - 1] = 0;
+                        }
+                        else
+                        {
+                            intStates[1] = UnityEngine.Random.Range(1, explorers1.Count);
+                        }
+                        modifier[modifier.Count-1] += explorers1.ElementAt(intStates[1]).value;
 
                         UnityEngine.Debug.Log(explorers1.ElementAt(intStates[1]).name);
                         newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + explorers1.ElementAt(intStates[1]).name);
                         break;
                     case 2:
-                        intStates[2] = UnityEngine.Random.Range(0, explorers2.Count);
-                        modifier[1] += explorers2.ElementAt(intStates[2]).value;
+                        if (boolStates[46])
+                        {
+                            intStates[2] = 0;
+                            modifier[modifier.Count - 1] = 0;
+                        }
+                        else
+                        {
+                            intStates[2] = UnityEngine.Random.Range(1, explorers2.Count);
+                        }
+                        modifier[modifier.Count - 1] += explorers2.ElementAt(intStates[2]).value;
 
                         UnityEngine.Debug.Log(explorers2.ElementAt(intStates[2]).name);
                         newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + explorers2.ElementAt(intStates[2]).name);
                         break;
                     case 3:
-                        intStates[3] = UnityEngine.Random.Range(0, explorers3.Count);
-                        modifier[2] += explorers3.ElementAt(intStates[3]).value;
-
+                        if (boolStates[47])
+                        {
+                            intStates[3] = 0;
+                            modifier[modifier.Count - 1] = 0;
+                        }
+                        else
+                        {
+                            intStates[3] = UnityEngine.Random.Range(1, explorers3.Count);
+                        }
+                        modifier[modifier.Count - 1] += explorers3.ElementAt(intStates[3]).value;
                         UnityEngine.Debug.Log(explorers3.ElementAt(intStates[3]).name);
                         newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + explorers3.ElementAt(intStates[3]).name);
                         break;
@@ -1618,11 +1694,12 @@ public class GM2 : MonoBehaviour
         }
         order.Sort((x, y) =>
         {
-            if (modifier[x] < modifier[y])
+            if (modifier[order.IndexOf(x)] > modifier[order.IndexOf(y)])
             {
+                UnityEngine.Debug.Log(x.ToString() + " before " + y.ToString());
                 return -1;
             }
-            else if (modifier[x] == modifier[y])
+            else if (modifier[order.IndexOf(x)] == modifier[order.IndexOf(y)])
             {
                 if (x == 2)
                 {
@@ -1639,22 +1716,14 @@ public class GM2 : MonoBehaviour
             }
             else
             {
+                UnityEngine.Debug.Log(y.ToString() + " before " + x.ToString());
                 return 1;
             }
         });
         StartCoroutine(highlightEmpty(order, modifier));
-        //resolve conquest
-        if (boolStates[22])
-        {
-            intStates[4] = UnityEngine.Random.Range(0, conquests.Count);
-            GameObject.Find("conquest_1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + conquests.ElementAt(intStates[4]).name);
-        }
-
-
-
     }
 
-    IEnumerator highlightEmpty(List<int> order, int[] modifier)
+    IEnumerator highlightEmpty(List<int> order, List<int> modifier)
     {
         HighlightScript highlightScript = GameObject.Find("HighlightDisplay").GetComponent("HighlightScript") as HighlightScript;
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
@@ -1678,12 +1747,25 @@ public class GM2 : MonoBehaviour
             {
                 GameObject.Destroy(GameObject.Find("uncharted_" + i.ToString()));
             }
-            randomIndex = UnityEngine.Random.Range(1, 7) + UnityEngine.Random.Range(1, 7) + modifier[i];
+            randomIndex = UnityEngine.Random.Range(1, 7) + UnityEngine.Random.Range(1, 7) + modifier[order.IndexOf(i)];
 
             UnityEngine.Debug.Log(randomIndex);
             if (randomIndex < 5)
             {
                 currentTextObject.post("The explorer is lost at sea. He is removed from the game.");
+                //remove cabot
+                if (intStates[i] == 0)
+                {
+                    boolStates[48] = true;
+                    foreach (CardObject c in DeckScript.cards)
+                    {
+                        if (c.id == 99)
+                        {
+                            cards.Remove(c);
+                            break;
+                        }
+                    }
+                }
             }
             else if (randomIndex < 7)
             {
@@ -1707,10 +1789,13 @@ public class GM2 : MonoBehaviour
                     {
                         GameObject.Destroy(GameObject.Find("explorer_1"));
                         explorers1.RemoveAt(intStates[1]);
-                    }
-                    else if (randomIndex > 6 && randomIndex < 10)
+                    }else if (randomIndex < 7)
                     {
-                        if (GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        GameObject.Destroy(GameObject.Find("explorer_1"));
+                    }
+                    else if (randomIndex < 10)
+                    {
+                        if (GameObject.Find("MississippiRiver") != null && GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("MississippiRiver"));
                             GameObject.Find("explorer_1").transform.SetParent(GameObject.Find("NewWorld").transform);
@@ -1718,7 +1803,7 @@ public class GM2 : MonoBehaviour
                             handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/MississippiRiver1VP");
 
                         }
-                        else if (GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        else if (GameObject.Find("GreatLakes") != null && GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("GreatLakes"));
                             GameObject.Find("explorer_1").transform.SetParent(GameObject.Find("NewWorld").transform);
@@ -1739,7 +1824,7 @@ public class GM2 : MonoBehaviour
                     }
                     else if (randomIndex > 9)
                     {
-                        yield return StartCoroutine(discovery10(modifier[i], i));
+                        yield return StartCoroutine(discovery10(modifier[order.IndexOf(i)], i));
                     }
                     break;
                 case 2:
@@ -1748,9 +1833,13 @@ public class GM2 : MonoBehaviour
                         GameObject.Destroy(GameObject.Find("explorer_2"));
                         explorers2.RemoveAt(intStates[2]);
                     }
-                    else if (randomIndex > 6 && randomIndex < 10)
+                    else if (randomIndex < 7)
                     {
-                        if (GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        GameObject.Destroy(GameObject.Find("explorer_2"));
+                    }
+                    else if (randomIndex < 10)
+                    {
+                        if (GameObject.Find("MississippiRiver") !=null&&GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("MississippiRiver"));
                             GameObject.Find("explorer_2").transform.SetParent(GameObject.Find("NewWorld").transform);
@@ -1758,7 +1847,7 @@ public class GM2 : MonoBehaviour
                             handMarkerScript.bonus2.Add("Sprites/jpg/NewWorld/MississippiRiver1VP");
 
                         }
-                        else if (GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        else if (GameObject.Find("GreatLakes") != null && GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("GreatLakes"));
                             GameObject.Find("explorer_2").transform.SetParent(GameObject.Find("NewWorld").transform);
@@ -1779,7 +1868,7 @@ public class GM2 : MonoBehaviour
                     }
                     else if (randomIndex > 9)
                     {
-                        yield return StartCoroutine(discovery10(modifier[i], i));
+                        yield return StartCoroutine(discovery10(modifier[order.IndexOf(i)], i));
                     }
                     break;
                 case 3:
@@ -1788,9 +1877,13 @@ public class GM2 : MonoBehaviour
                         GameObject.Destroy(GameObject.Find("explorer_3"));
                         explorers3.RemoveAt(intStates[3]);
                     }
-                    else if (randomIndex > 6 && randomIndex < 10)
+                    else if (randomIndex < 7)
                     {
-                        if (GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        GameObject.Destroy(GameObject.Find("explorer_3"));
+                    }
+                    else if (randomIndex < 10)
+                    {
+                        if (GameObject.Find("MississippiRiver") != null && GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("MississippiRiver"));
                             GameObject.Find("explorer_3").transform.SetParent(GameObject.Find("NewWorld").transform);
@@ -1798,7 +1891,7 @@ public class GM2 : MonoBehaviour
                             handMarkerScript.bonus3.Add("Sprites/jpg/NewWorld/MississippiRiver1VP");
 
                         }
-                        else if (GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        else if (GameObject.Find("GreatLakes") != null && GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("GreatLakes"));
                             GameObject.Find("explorer_3").transform.SetParent(GameObject.Find("NewWorld").transform);
@@ -1819,12 +1912,15 @@ public class GM2 : MonoBehaviour
                     }
                     else if (randomIndex > 9)
                     {
-                        yield return StartCoroutine(discovery10(modifier[i], i));
+                        yield return StartCoroutine(discovery10(modifier[order.IndexOf(i)], i));
                     }
                     break;
             }
 
         }
+        currentTextObject.reset();
+        segment++;
+        phase8();
 
     }
 
@@ -1868,7 +1964,7 @@ public class GM2 : MonoBehaviour
         {
 
             GameObject.Find("explorer_" + power.ToString()).transform.SetParent(GameObject.Find("NewWorld").transform);
-            GameObject.Find("explorer_" + power.ToString()).GetComponent<RectTransform>().anchoredPosition = new Vector2(GameObject.Find(names[highlightSelected]).transform.position.x-940, GameObject.Find(names[highlightSelected]).transform.position.y-215);
+            GameObject.Find("explorer_" + power.ToString()).GetComponent<RectTransform>().anchoredPosition = new Vector2(GameObject.Find(names[highlightSelected]).transform.position.x-990, GameObject.Find(names[highlightSelected]).transform.position.y-223);
             GameObject.Destroy(GameObject.Find(names[highlightSelected]));
             switch (highlightSelected)
             {
@@ -1899,7 +1995,7 @@ public class GM2 : MonoBehaviour
             int randomIndex = UnityEngine.Random.Range(1, 7) + UnityEngine.Random.Range(1, 7) + modifier;
             if (randomIndex < 10)
             {
-                currentTextObject.post("Circumnavagation failed. The explorer is removed from the game.");
+                currentTextObject.post("Circumnavigation failed. The explorer is removed from the game.");
                 //remove the explorer
                 switch (power)
                 {
@@ -1920,6 +2016,7 @@ public class GM2 : MonoBehaviour
             }
             else
             {
+                currentTextObject.post("Circumnavigation success. ");
                 GameObject.Destroy(GameObject.Find("Circumnavigation"));
                 GameObject.Find("explorer_" + power.ToString()).transform.SetParent(GameObject.Find("NewWorld").transform);
                 GameObject.Find("explorer_" + power.ToString()).GetComponent<RectTransform>().anchoredPosition = new Vector2(-893, -402);
@@ -1930,6 +2027,285 @@ public class GM2 : MonoBehaviour
             }
 
         }
+    }
+
+    void resolveConquest()
+    {
+        List<int> order = new List<int>();
+        List<int> modifier = new List<int>();
+        
+        if (boolStates[22])
+        {
+            order.Add(1);
+            
+            intStates[4] = UnityEngine.Random.Range(0, conquests.Count);
+            modifier.Add(intStates[4]);
+            GameObject.Find("conquest_1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + conquests.ElementAt(intStates[4]).name);
+        }
+        if (boolStates[23])
+        {
+            order.Add(2);
+            modifier.Add(0);
+        }
+        if (boolStates[24])
+        {
+            order.Add(3);
+            modifier.Add(0);
+        }
+        StartCoroutine(highlightConquest(order, modifier));
+    }
+
+    IEnumerator highlightConquest(List<int> order, List<int> modifier)
+    {
+        HighlightScript highlightScript = GameObject.Find("HighlightDisplay").GetComponent("HighlightScript") as HighlightScript;
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        foreach (int i in order)
+        {
+            highlightSelected = -1;
+            onNoLayer();
+            highlightScript.highlightNewWorld(i+3);
+
+            int randomIndex;
+            while (highlightSelected == -1)
+            {
+                yield return null;
+            }
+            //if (GameObject.Find("charted_" + i.ToString()) != null)
+            //{
+
+            //    GameObject.Destroy(GameObject.Find("charted_" + i.ToString()));
+            //}
+            //else
+            //{
+            //    GameObject.Destroy(GameObject.Find("uncharted_" + i.ToString()));
+            //}
+            randomIndex = UnityEngine.Random.Range(1, 7) + UnityEngine.Random.Range(1, 7) + modifier[order.IndexOf(i)];
+            //smallpox effect
+            if (intStates[8] == i)
+            {
+                randomIndex += 2;
+                intStates[8] = -1;
+            }
+            UnityEngine.Debug.Log(randomIndex);
+            if (randomIndex < 7)
+            {
+                currentTextObject.post("The conquistador is killed by natives. He is removed from the game.");
+            }
+            else if (randomIndex < 9)
+            {
+                currentTextObject.post("No conquest is completed; the conquistador is returned to the pool. ");
+            }
+            else
+            {
+                currentTextObject.post("A conquest has been made.");
+            }
+            yield return new WaitForSeconds(3);
+
+            HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+            switch (i)
+            {
+                case 1:
+                    if (randomIndex < 7)
+                    {
+                        GameObject.Destroy(GameObject.Find("conquest_1"));
+                        conquests.RemoveAt(intStates[4]);
+                    }
+                    else if (randomIndex < 9)
+                    {
+                        GameObject.Destroy(GameObject.Find("conquest_1"));
+                    }
+                    else
+                    {
+                        int index = -1;
+                        for(int j=4; j<7; j++)
+                        {
+                            if (!boolStates[39 + j])
+                            {
+                                boolStates[39 + j] = true;
+                                index = j;
+                                break;
+                            }
+                        }
+                        if (intStates[5]==0)
+                        {
+                            intStates[5] = 1;
+                            GameObject.Find("Inca").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107-34*index);
+                            GameObject.Find("conquest_1").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("conquest_1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-774, -391);
+                            //handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/Inca2VP");
+
+                        }
+                        else if (intStates[6]==0)
+                        {
+                            intStates[6] = 1;
+                            GameObject.Find("Aztecs").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107 - 34 * index);
+                            GameObject.Find("conquest_1").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("conquest_1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-880, -271);
+                            //handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/Aztecs2VP");
+                        }
+                        else
+                        {
+                            intStates[7] = 1;
+                            GameObject.Find("Maya").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107 - 34 * index);
+                            GameObject.Find("conquest_1").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("conquest_1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-840, -282);
+                            //handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/Maya2VP");
+
+                        }
+                        GM1.bonusVPs[1]++;
+                        GM1.updateVP();
+                        onVP();
+                    }
+                    break;
+                case 2:
+                    if (randomIndex < 7)
+                    {
+                        GameObject.Destroy(GameObject.Find("conquest_2"));
+                        conquests.RemoveAt(intStates[4]);
+                    }else if (randomIndex < 9)
+                    {
+                        GameObject.Destroy(GameObject.Find("conquest_2"));
+                    }
+                    else
+                    {
+                        int index = -1;
+                        for (int j = 0; j < 2; j++)
+                        {
+                            if (!boolStates[39 + j])
+                            {
+                                boolStates[39 + j] = true;
+                                index = j;
+                                break;
+                            }
+                        }
+                        if (intStates[5] == 0)
+                        {
+                            intStates[5] = 2;
+                            GameObject.Find("Inca").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107 - 34 * index);
+                            GameObject.Find("conquest_2").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("conquest_2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-774, -391);
+                            //handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/Inca2VP");
+
+                        }
+                        else if (intStates[6] == 0)
+                        {
+                            intStates[6] = 2;
+                            GameObject.Find("Aztecs").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107 - 34 * index);
+                            GameObject.Find("conquest_2").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("conquest_2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-880, -271);
+                            //handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/Aztecs2VP");
+                        }
+                        else
+                        {
+                            intStates[7] = 2;
+                            GameObject.Find("Maya").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107 - 34 * index);
+                            GameObject.Find("conquest_2").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("conquest_2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-840, -282);
+                            //handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/Maya2VP");
+
+                        }
+                        GM1.bonusVPs[2]++;
+                        GM1.updateVP();
+                        onVP();
+                    }
+                    break;
+                case 3:
+                    if (randomIndex < 7)
+                    {
+                        GameObject.Destroy(GameObject.Find("conquest_3"));
+                        conquests.RemoveAt(intStates[4]);
+                    }
+                    else if (randomIndex < 9)
+                    {
+                        GameObject.Destroy(GameObject.Find("conquest_3"));
+                    }
+                    else
+                    {
+                        int index = -1;
+                        for (int j = 2; j < 4; j++)
+                        {
+                            if (!boolStates[39 + j])
+                            {
+                                boolStates[39 + j] = true;
+                                index = j;
+                                break;
+                            }
+                        }
+                        if (intStates[5] == 0)
+                        {
+                            intStates[5] = 3;
+                            GameObject.Find("Inca").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107 - 34 * index);
+                            GameObject.Find("conquest_3").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("conquest_3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-774, -391);
+                            //handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/Inca2VP");
+
+                        }
+                        else if (intStates[6] == 0)
+                        {
+                            intStates[6] = 3;
+                            GameObject.Find("Aztecs").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107 - 34 * index);
+                            GameObject.Find("conquest_3").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("conquest_3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-880, -271);
+                            //handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/Aztecs2VP");
+                        }
+                        else
+                        {
+                            intStates[7] = 3;
+                            GameObject.Find("Maya").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107 - 34 * index);
+                            GameObject.Find("conquest_3").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("conquest_3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-840, -282);
+                            //handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/Maya2VP");
+
+                        }
+                        GM1.bonusVPs[3]++;
+                        GM1.updateVP();
+                        onVP();
+                    }
+                    break;
+            }
+
+        }
+        currentTextObject.reset();
+        segment++;
+        phase8();
+    }
+
+    void phase9()
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        if (GM1.VPs.Max() >= 25)
+        {
+            int winner = Array.IndexOf(GM1.VPs, GM1.VPs.Max());
+            GM1.player = winner;
+            onPlayerChange();
+            currentTextObject.post("You won the game via a standard victory!");
+            return;
+        }
+        if (GM1.turn > 3) { 
+            int leader = Array.IndexOf(GM1.VPs, GM1.VPs.Max());
+            bool canVictory = true;
+            for(int i=0; i<6; i++)
+            {
+                if (i != leader && GM1.VPs[leader] - GM1.VPs[i] < 5)
+                {
+                    canVictory = false;
+                }
+            }
+            if (canVictory)
+            {
+                GM1.player = leader;
+                onPlayerChange();
+                currentTextObject.post("You won the game via a domination victory!");
+            }
+        }
+        if (GM1.turn == 9)
+        {
+            int winner = Array.IndexOf(GM1.VPs, GM1.VPs.Max());
+            GM1.player = winner;
+            onPlayerChange();
+            currentTextObject.post("You won the game via a time limit victory!");
+        }
+        onPhaseEnd();
     }
 
     void Awake()

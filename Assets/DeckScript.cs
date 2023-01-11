@@ -395,6 +395,7 @@ public class DeckScript : MonoBehaviour
             if(card.turn <= turn&&card.turn!=0&&card.id>7)
             {
                 activeCards.Add(card);
+                UnityEngine.Debug.Log(card.id);
             }
         }
         foreach(var debater in debaters)

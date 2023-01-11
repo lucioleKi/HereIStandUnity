@@ -75,6 +75,13 @@ public class Home25Script : MonoBehaviour
                 pos.anchoredPosition = new Vector2(-165 + (place5 - 39) * 27.5f, -121);
             }
         }
+        if (GM1.protestantSpaces >= 50)
+        {
+            CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+            currentTextObject.post("You won the game via a religious victory!");
+            GM1.player = 5;
+            onPlayerChange();
+        }
         
     }
 

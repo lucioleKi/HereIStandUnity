@@ -288,7 +288,36 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 return false;
             }
         }
-        if (index == 102)
+        if (index == 99)
+        {
+            if (!GM2.boolStates[48]&&(GM1.player == 1 && !GM2.boolStates[45] || GM1.player == 2 && !GM2.boolStates[46]|| GM1.player == 3 && !GM2.boolStates[47]))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 101)
+        {
+            //playable by 1, 2, 3 if they haven't conquered
+            if (GM1.player == 1 && !GM2.boolStates[22])
+            {
+                return true;
+            }else if(GM1.player == 2 && !GM2.boolStates[23])
+            {
+                return true;
+            }else if(GM1.player == 3 && !GM2.boolStates[24])
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 100||index == 102)
         {
             //not playable by 5
             if (GM1.player == 5)

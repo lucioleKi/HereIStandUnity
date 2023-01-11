@@ -87,6 +87,7 @@ public class StartButton : MonoBehaviour
                         GM2.onCPChange(GM2.currentCP);
                         break;
                 }
+                GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
                 break;
             case 6:
                 GM1.player = handMarkerScript.ransomedPower[0];

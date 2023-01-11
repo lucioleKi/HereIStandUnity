@@ -33,10 +33,25 @@ public class VPScript : MonoBehaviour
 
     void changeVP()
     {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         GM2.resetMap();
         int index = gameObject.name[2] - '0';
         displayVP = VPs[index];
         position();
+        int[] win = new int[5] { 10, 13, 8, 10, 6 };
+        if (GM1.phase == 6)
+        {
+            for(int i=0; i<5; i++)
+            {
+                if (GM1.cardTracks[i] >= win[i])
+                {
+                    GM1.player = i;
+                    onPlayerChange();
+                    currentTextObject.post("You won the game via a military victory!");
+                    break;
+                }
+            }
+        }
         
     }
 

@@ -113,6 +113,7 @@ public class GM3
             spacesGM.ElementAt(highlightSelected).regular++;
             onChangeReg(highlightSelected, 0);
         }
+        currentTextObject.restartColor();
         highlightSelected = -1;
         yield return new WaitForSeconds(3);
         chosenCard = "";
@@ -457,10 +458,33 @@ public class GM3
         onChangeRuler(4, 10);
         //mandatory event by turn 2
         GM2.boolStates[5] = true;
+        chosenCard = "";
+        onChosenCard();
         if (GM1.phase == 6)
         {
             GM1.nextImpulse();
         }
+    }
+
+    public void HIS013()
+    {
+        if (turn >= 2 && GM1.protestantSpaces >= 12 || turn == 4 && phase == 7)
+        {
+            removeCard(GM1.player, 13);
+        }
+        else
+        {
+            discardById(GM1.player, 13);
+        }
+        GM2.currentCP = 2;
+        GM2.onCPChange(GM2.currentCP);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+
     }
 
     public void HIS014()
@@ -1324,10 +1348,6 @@ public class GM3
         DeckScript.discardById(GM1.player, 76);
         chosenCard = "";
         onChosenCard();
-        if (GM1.phase == 6)
-        {
-            GM1.nextImpulse();
-        }
     }
 
     public IEnumerator HIS078()
@@ -1430,6 +1450,7 @@ public class GM3
         {
             randomIndex = UnityEngine.Random.Range(0, randomUpper);
         }
+        UnityEngine.Debug.Log(randomIndex);
         CP = DeckScript.hand5.ElementAt(randomIndex).CP;
         DeckScript.discardById(5, DeckScript.hand5.ElementAt(randomIndex).id);
         GM1.StPeters[0] += CP;
@@ -1466,13 +1487,17 @@ public class GM3
             onSpaceLayer();
             onHighlight(pickSpaces);
 
-            while (highlightSelected == -1)
+            while (highlightSelected == -1||pickSpaces.Count==0)
             {
                 //UnityEngine.Debug.Log("here");
                 yield return null;
             }
-            spacesGM.ElementAt(highlightSelected).unrest = true;
-            GM2.onChangeUnrest(highlightSelected);
+            if (highlightSelected != -1)
+            {
+                spacesGM.ElementAt(highlightSelected).unrest = true;
+                GM2.onChangeUnrest(highlightSelected);
+            }
+            
         }
         highlightSelected = -1;
         DeckScript.discardById(GM1.player, 82);
@@ -1592,6 +1617,95 @@ public class GM3
         }
         highlightSelected = -1;
         DeckScript.discardById(GM1.player, 94);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public void HIS096()
+    {
+        HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        if (GameObject.Find("Circumnavigation") == null)
+        {
+            if (handMarkerScript.bonus1.Contains("Sprites/jpg/NewWorld/Circumnavigation3VP")){
+                hand1.AddRange(activeCards.GetRange(0, 2));
+                activeCards.RemoveRange(0, 2);
+            }
+            else if(handMarkerScript.bonus2.Contains("Sprites/jpg/NewWorld/Circumnavigation3VP"))
+            {
+                hand2.AddRange(activeCards.GetRange(0, 2));
+                activeCards.RemoveRange(0, 2);
+            }
+            else if (handMarkerScript.bonus3.Contains("Sprites/jpg/NewWorld/Circumnavigation3VP")){
+                hand3.AddRange(activeCards.GetRange(0, 2));
+                activeCards.RemoveRange(0, 2);
+            }
+        }
+        DeckScript.removeCard(GM1.player, 96);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public void HIS099()
+    {
+        GM2.boolStates[44+GM1.player] = true;
+        DeckScript.discardById(GM1.player, 99);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS100()
+    {
+        int temp = GM1.player;
+        List<int> trace = findPorts(GM1.player);
+        
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        
+        for (int i = 0; i < 2; i++)
+        {
+            currentTextObject.post("Pick " + (2 - i).ToString() + " highlighted target spaces to add 1 squadron.");
+            highlightSelected = -1;
+            onNavalLayer();
+            onHighlight(trace);
+            while (GM1.player != temp || highlightSelected == -1)//if player is not 1 this wouldn't work
+            {
+                yield return null;
+            }
+            
+            spacesGM.ElementAt(highlightSelected).squadron++;
+            onChangeReg(highlightSelected, temp);
+        }
+        highlightSelected = -1;
+        yield return new WaitForSeconds(3);
+        chosenCard = "";
+        onChosenCard();
+        GM1.player = temp;
+        GM2.onPlayerChange();
+        DeckScript.discardById(GM1.player, 100);
+        currentTextObject.reset();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public void HIS101()
+    {
+        HighlightCPScript highlightCPScript = GameObject.Find("HighlightCPDisplay").GetComponent("HighlightCPScript") as HighlightCPScript;
+        highlightCPScript.conquest();
+        GM2.intStates[8] = GM1.player;
+        DeckScript.discardById(GM1.player, 101);
         chosenCard = "";
         onChosenCard();
         if (GM1.phase == 6)

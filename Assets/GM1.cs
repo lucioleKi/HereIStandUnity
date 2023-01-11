@@ -199,13 +199,6 @@ public class GM1 : MonoBehaviour
         }
     }
 
-    void checkWin()
-    {
-        if (false)
-        {
-            //win!
-        }
-    }
 
     public static void nextImpulse()
     {
@@ -235,7 +228,7 @@ public class GM1 : MonoBehaviour
             }
         }
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        
+        UnityEngine.Debug.Log("Active power: " + impulse.ToString());
         switch (impulse)
         {
             case 0:

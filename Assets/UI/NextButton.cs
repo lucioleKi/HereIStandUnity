@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -122,6 +123,7 @@ public class NextButton : MonoBehaviour
                     break;
             }
             phase++;
+            segment = 1;
             GM2.onChangePhase();
             GM2.onPhase8(); 
         }
@@ -129,16 +131,26 @@ public class NextButton : MonoBehaviour
         {
             phase++;
             GM2.onChangePhase();
+            GM2.onPhase9();
         }
-        /*else if (phase == 9)
+        else if (phase == 9)
         {
             turn++;
             phase=2;
-            GM2.onChangePhase();
+            segment = 1;
+            int[] resetBool = new int[12] {16, 17, 18, 19, 20, 21, 22, 23, 24, 29, 34, 35};
+            foreach(int r in resetBool)
+            {
+                GM2.boolStates[r] = false;
+            }
+            Array.Clear(GM2.intStates, 0, 5);
             GM2.onChangePhase();
             GM2.onPhase2();
+            GM1.enq1("Draw cards - (Automatic)");
+            GM1.deq1(1);
+            GM1.enq2("Go to phase 3 - (Any player)");
         }
-        */
+        
 
     }
 
