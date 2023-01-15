@@ -138,6 +138,7 @@ public class LandMvmt : MonoBehaviour
                 status = 17;
                 GM1.player = mvmtPlayer;
                 GM2.onPlayerChange();
+                GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
                 startButton.btn.interactable = false;
                 startButton.status = 2;
                 required2();
@@ -147,6 +148,7 @@ public class LandMvmt : MonoBehaviour
                 status = 7;
                 GM1.player = mvmtPlayer;
                 GM2.onPlayerChange();
+                GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
                 startButton.btn.interactable = false;
                 startButton.status = 4;
                 required2();
@@ -167,13 +169,14 @@ public class LandMvmt : MonoBehaviour
 
     public void post(bool pass)
     {
-        overPass= pass;
+        overPass = pass;
         GM2.boolStates[28] = true;
         btn.interactable = false;
         gameObject.GetComponent<CanvasGroup>().alpha = 1;
         gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
         gameObject.GetComponent<CanvasGroup>().interactable = true;
         status = 0;
+        btnStatus = -1;
         initial = -1;
         destination = -1;
         hasLeader = false;
@@ -199,6 +202,7 @@ public class LandMvmt : MonoBehaviour
         gameObject.GetComponent<CanvasGroup>().blocksRaycasts = false;
         gameObject.GetComponent<CanvasGroup>().interactable = false;
         status = -1;
+        btnStatus = -1;
         initial = -1;
         destination = -1;
         hasLeader = false;
@@ -206,7 +210,7 @@ public class LandMvmt : MonoBehaviour
         Array.Clear(alreadyIntercepted, 0, 6);
         tempTrace.Clear();
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        if(overPass)
+        if (overPass)
         {
             GM2.onCPChange(textScript.displayCP - 2);
         }
@@ -214,7 +218,7 @@ public class LandMvmt : MonoBehaviour
         {
             GM2.onCPChange(textScript.displayCP - 1);
         }
-        
+
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.reset();
         GM2.boolStates[28] = false;
@@ -223,6 +227,7 @@ public class LandMvmt : MonoBehaviour
 
     public void required2()
     {
+        UnityEngine.Debug.Log(status);
         switch (status)
         {
             case 0:
@@ -233,7 +238,7 @@ public class LandMvmt : MonoBehaviour
                 break;
             case 2:
                 //check empty siege
-                if (spaces.ElementAt(destination).spaceType != 0 && (spacesGM.ElementAt(destination).regularPower!=mvmtPlayer)&&(spacesGM.ElementAt(destination).regular ==0 && spacesGM.ElementAt(destination).merc ==0))
+                if (spaces.ElementAt(destination).spaceType != 0 && (spacesGM.ElementAt(destination).regularPower != mvmtPlayer) && (spacesGM.ElementAt(destination).regular == 0 && spacesGM.ElementAt(destination).merc == 0))
                 {
                     spacesGM.ElementAt(destination).sieged = true;
                     reset();
@@ -332,8 +337,14 @@ public class LandMvmt : MonoBehaviour
         leaderSelected = -1;
         GM2.onRegLayer();
         GM2.onHighlight(trace);
-        while (GM2.highlightSelected == -1)
+        while (GM2.highlightSelected == -1 || string.IsNullOrEmpty(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text) || GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text == "0")
         {
+            if (string.IsNullOrEmpty(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text) && GM2.highlightSelected != -1)
+            {
+                GM2.highlightSelected = -1;
+                GM2.onRegLayer();
+                GM2.onHighlight(trace);
+            }
             yield return null;
         }
 
@@ -444,15 +455,16 @@ public class LandMvmt : MonoBehaviour
             spacesGM.ElementAt(initial).regularPower = -1;
             return;
         }
+
+        spacesGM.ElementAt(destination).regular = spacesGM.ElementAt(destination).regular + command;
+
+        spacesGM.ElementAt(initial).regular = spacesGM.ElementAt(initial).regular - command;
         
-            spacesGM.ElementAt(destination).regular = spacesGM.ElementAt(destination).regular + command;
-            
-            spacesGM.ElementAt(initial).regular = spacesGM.ElementAt(initial).regular - command;
-            onChangeReg(destination, GM1.player);
-            onChangeReg(initial, GM1.player);
-       
+        onChangeReg(initial, GM1.player);
+        onChangeReg(destination, GM1.player);
         if (spacesGM.ElementAt(initial).regular == 0 && spacesGM.ElementAt(initial).merc == 0 && spacesGM.ElementAt(initial).cavalry == 0 && spaces.ElementAt(initial).spaceType == 0)
         {
+            UnityEngine.Debug.Log("regular power reset " + initial.ToString());
             spacesGM.ElementAt(initial).regularPower = -1;
         }
 
@@ -573,7 +585,7 @@ public class LandMvmt : MonoBehaviour
                 {
                     status = 5;
                 }
-                
+
                 required2();
             }
         }
@@ -639,7 +651,7 @@ public class LandMvmt : MonoBehaviour
         {
             GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
             StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
-            startButton.btn.interactable=true;
+            startButton.btn.interactable = true;
             startButton.status = 1;
             status = 16;
             required2();
@@ -800,7 +812,7 @@ public class LandMvmt : MonoBehaviour
         {
             defenderDice += leaders.ElementAt(spacesGM.ElementAt(destination).leader2 - 1).battle;
         }
-        defenderDice += spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc+1;
+        defenderDice += spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc + 1;
 
         status = 10;
         required2();
@@ -818,12 +830,20 @@ public class LandMvmt : MonoBehaviour
 
     void defenderCombatCards()
     {
-        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        currentTextObject.post("Play Combat Cards");
-        StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
-        startButton.btn.interactable = false;
-        btn.interactable = true;
-        btnStatus = 6;
+        if (fieldPlayer < 6)
+        {
+            CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+            currentTextObject.post("Play Combat Cards");
+            StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+            startButton.btn.interactable = false;
+            btn.interactable = true;
+            btnStatus = 6;
+        }
+        else {
+            status = 12;
+            required2();
+        }
+        
     }
 
     IEnumerator roll146()
@@ -917,7 +937,7 @@ public class LandMvmt : MonoBehaviour
                 }
             }
 
-            currentTextObject.post("Attacker hit: " + attackerHit.ToString() + " out of " + attackerDice.ToString() + ".\nDefender hit: " + defenderHit.ToString() + " out of " + defenderDice.ToString()+".");
+            currentTextObject.post("Attacker hit: " + attackerHit.ToString() + " out of " + attackerDice.ToString() + ".\nDefender hit: " + defenderHit.ToString() + " out of " + defenderDice.ToString() + ".");
         }
         yield return new WaitForSeconds(3);
         if ((mvmtPlayer == 0 || fieldPlayer == 0) && hand0.ElementAt(0).cardType != 0)
@@ -1078,7 +1098,7 @@ public class LandMvmt : MonoBehaviour
         tempTrace.Clear();
 
 
-        if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0))
+        if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0) && spacesGM.ElementAt(destination).regularPower < 6)
         {
             fieldPlayer = spacesGM.ElementAt(destination).regularPower;
             for (int j = 0; j < spaces.ElementAt(destination).adjacent.Count(); j++)
@@ -1099,6 +1119,14 @@ public class LandMvmt : MonoBehaviour
             StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
             startButton.startOther(2);
         }
+        else if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0) && spacesGM.ElementAt(destination).regularPower > 5) {
+            status = 17;
+            GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
+            StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+            startButton.btn.interactable = false;
+            startButton.status = -1;
+            required2();
+        }
         else
         {
             UnityEngine.Debug.Log("no avoid battle");
@@ -1114,9 +1142,9 @@ public class LandMvmt : MonoBehaviour
     public void check134()
     {
         StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
-        if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0) && (spaces.ElementAt(destination).spaceType != 0 && (spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc <= 4)))
+        if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0) && (spaces.ElementAt(destination).spaceType != 0 && (spacesGM.ElementAt(destination).regular + spacesGM.ElementAt(destination).merc <= 4)) && spacesGM.ElementAt(destination).regularPower < 6)
         {
-            //can withdraw
+            //can withdraw as a major power
             fieldPlayer = spacesGM.ElementAt(destination).regularPower;
             GM1.player = spacesGM.ElementAt(destination).regularPower;
             GM2.onPlayerChange();
@@ -1125,7 +1153,26 @@ public class LandMvmt : MonoBehaviour
             GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Withdraw";
             startButton.startOther(3);
         }
-        else if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0)&&spaces.ElementAt(destination).spaceType != 0) {
+        else if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0) && spacesGM.ElementAt(destination).regularPower > 5)
+        {
+            //minor power auto withdraw if <=4 or fight if >4
+            if (spacesGM.ElementAt(destination).regular <= 4)
+            {
+                spacesGM.ElementAt(destination).sieged = true;
+                status = 18;
+                required2();
+            }
+            else
+            {
+                fieldPlayer = spacesGM.ElementAt(destination).regularPower;
+                status = 7;
+                startButton.btn.interactable = false;
+                startButton.status = -1;
+                required2();
+            }
+        }
+        else if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0) && spaces.ElementAt(destination).spaceType != 0)
+        {
             //cannot withdraw because not fortified, go to field battle
             fieldPlayer = spacesGM.ElementAt(destination).regularPower;
             status = 7;
@@ -1140,9 +1187,9 @@ public class LandMvmt : MonoBehaviour
             //no enemy units, move clear
             UnityEngine.Debug.Log("no enemy units left");
             GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
-            
+
             startButton.btn.interactable = false;
-            startButton.status=-1;
+            startButton.status = -1;
             status = 6;
             required2();
         }
@@ -1155,21 +1202,10 @@ public class LandMvmt : MonoBehaviour
         GM2.onCPChange(textScript.displayCP - 1);
         HighlightCPScript highlightCPObject = GameObject.Find("HighlightCPDisplay").GetComponent("HighlightCPScript") as HighlightCPScript;
         highlightCPObject.removeHighlight();
-        if (textScript.displayCP >= 1)
-        {
-            //active player retreat because no siege
-            currentTextObject.post("Defender is not under siege.");
-            UnityEngine.Debug.Log("defender not under siege");
-            reset();
-            post(overPass);
-            required2();
-        }
-        else
-        {
-            //active player retreat because no siege
-            GM2.boolStates[28] = false;
-            reset();
-        }
+        
+        GM2.boolStates[28] = false;
+        reset();
+        
 
     }
 
@@ -1195,7 +1231,7 @@ public class LandMvmt : MonoBehaviour
                 continue;
             }
             //cannot retreat into space containing enemy units
-            if (spacesGM.ElementAt(spaces.ElementAt(destination).adjacent.ElementAt(i)).regularPower == mvmtPlayer)
+            if (spacesGM.ElementAt(spaces.ElementAt(destination).adjacent.ElementAt(i)).regularPower != GM1.player)
             {
                 continue;
             }

@@ -197,18 +197,21 @@ public class DipForm : MonoBehaviour
         {
             verifyTurn1();
         }
+        UnityEngine.Debug.Log(dipStatus[1, 3]);
+        UnityEngine.Debug.Log(dipStatus[3, 1]);
+
         for (int i = 0; i < 6; i++)
         {
             for (int j = 0; j < 6; j++)
             {
-                if (i != j && dipStatus[i, j] != dipStatus[j, i])
+                if (i != j && dipStatus[i, j] != dipStatus[j, i]||i==j)
                 {
                     dipStatus[i, j] = 0;
                     dipStatus[j, i] = 0;
                     UnityEngine.Debug.Log(i.ToString() + " and " + j.ToString() + " did not reach an agreement");
 
                 }
-                if (i < j && diplomacyState[i, j] == 1 && dipStatus[i, j] == 2)
+                if (i < j && diplomacyState[i, j] == 1 && dipStatus[i, j] != 1)
                 {
                     dipStatus[i, j] = 0;
                     dipStatus[j, i] = 0;
@@ -254,7 +257,7 @@ public class DipForm : MonoBehaviour
         {
             for (int j = 0; j < 6; j++)
             {
-                if (i != 2 && j != 2)
+                if ((i >3||i<1)||(j>3||j<1))
                 {
                     dipStatus[i, j] = 0;
                     dipStatus[j, i] = 0;

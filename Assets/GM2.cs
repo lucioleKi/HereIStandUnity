@@ -800,14 +800,14 @@ public class GM2 : MonoBehaviour
         tempForm.verifyDip();
         negotiationSegment(tempForm);
         onChangeDip();
-        if (turn != 1)
-        {
+        //if (turn != 1)
+        //{
             segment++;
-        }
-        else
-        {
-            segment = 7;
-        }
+        //}
+        //else
+        //{
+        //    segment = 7;
+        //}
 
         onChangeSegment();
         phase3();
@@ -824,7 +824,15 @@ public class GM2 : MonoBehaviour
             {
                 if (tempForm.dipStatus[i, j] != 0)
                 {
-                    diplomacyState[i, j] = tempForm.dipStatus[i, j];
+                    if (tempForm.dipStatus[i, j] == 1 && diplomacyState[i, j] == 1)
+                    {
+                        diplomacyState[i, j] = 0;
+                    }
+                    else
+                    {
+                        diplomacyState[i, j] = tempForm.dipStatus[i, j];
+                    }
+                    
                 }
 
 
@@ -936,6 +944,7 @@ public class GM2 : MonoBehaviour
                     tempForm.war[i, pointer] = highlightSelected;
                     trace.Remove(highlightSelected);
                     onSkipCard(5);
+                    resetMap();
                     onHighlightDip(trace);
                     onNoLayer();
                     highlightSelected = -1;
@@ -1233,7 +1242,16 @@ public class GM2 : MonoBehaviour
         else if (hit1 < hit2)
         {
             currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + ". Catholic hit: " + hit2.ToString() + "\nCatholic victory. Flip " + (hit2 - hit1).ToString() + " space(s).");
-            return hit2 - hit1;
+            
+            if (hit2 - hit1 > GM1.protestantSpaces)
+            {
+                //boundary case where not enough spaces can be converted
+                return GM1.protestantSpaces;
+            }
+            else
+            {
+                return hit2 - hit1;
+            }
         }
         else
         {

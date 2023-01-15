@@ -21,9 +21,15 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
     {
         UnityEngine.Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);
         int index = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(4)) - 1;
+        LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
+        SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
         if (GM1.phase == 3 && GM1.segment != 6 || GM1.phase == 5 || (GM1.phase == 6 && GM1.impulse != GM1.player || GM1.skipped[GM1.player]))
         {
-            return;
+            UnityEngine.Debug.Log(landMvmt.status+", "+siegeScript.status);
+            if(landMvmt.status == -1 && siegeScript.status == -1)
+            {
+                return;
+            }
         }
         if (GM1.phase == 4)//non-participates of Diet of Worms
         {
@@ -37,12 +43,19 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             }
             ConfirmScript.btn.interactable = false;
 
+        }else if ((landMvmt.status == 11 || landMvmt.status == 10|| siegeScript.status == 4) &&playAsEvent(index+1))
+        {
+            ConfirmScript.btn.interactable = true;
+        }
+        else if (GM1.segment == 6 && GM1.phase == 3)
+        {
+            ConfirmScript.btn.interactable = false;
         }
         else if (playAsEvent(index+1)&&GM1.phase != 5)
         {
             ConfirmScript.cardSelected = eventData.pointerCurrentRaycast.gameObject.name;
             ConfirmScript.btn.interactable = true;
-        }else if(!playAsEvent(index+1)|| GM1.segment == 6 && GM1.phase == 5)
+        }else if(!playAsEvent(index + 1))
         {
             ConfirmScript.btn.interactable = false;
         }
@@ -111,7 +124,6 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
     }
 
-    
 
     bool playAsEvent(int index)
     {

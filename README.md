@@ -146,3 +146,7 @@ Finished resolving explorations in new world phase.
 1/11/2023
 
 Finished new world phase and victory phase.
+
+1/15/2023
+
+Debugging. 

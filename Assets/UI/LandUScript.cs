@@ -177,11 +177,11 @@ public class LandUScript : MonoBehaviour
             }
         }
 
-        if (gameObject.transform.Find(spaces.ElementAt(index).name + "_0") != null)
+        if (gameObject.transform.Find(spaces.ElementAt(index).name + "_0") != null&&gameObject.transform.Find((index + 1).ToString() + "_0")!=null)
         {
             //destroy if changed to 0
             //UnityEngine.Debug.Log(regulars[index]);
-            if (regulars[index] == 0&&index<134)
+            if (DeckScript.spacesGM.ElementAt(index).regular == 0&&index<134)
             {
                 GameObject tempObject = GameObject.Find(spaces.ElementAt(index).name + "_0");
                 Destroy(tempObject.gameObject);
@@ -197,7 +197,7 @@ public class LandUScript : MonoBehaviour
 
         }
         //make new marker and #
-        else if (regulars[index]!=0)
+        else if (DeckScript.spacesGM.ElementAt(index).regular != 0)
         {
             DeckScript.spacesGM.ElementAt(index).regularPower = power;
             string tempName = power.ToString();

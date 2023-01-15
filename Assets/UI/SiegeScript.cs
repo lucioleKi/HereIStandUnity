@@ -127,6 +127,7 @@ public class SiegeScript : MonoBehaviour
         gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
         gameObject.GetComponent<CanvasGroup>().interactable = true;
         status = 0;
+        btnStatus = -1;
         initial = -1;
         destination = -1;
         hasLeader = false;
@@ -196,8 +197,8 @@ public class SiegeScript : MonoBehaviour
                 break;
             case 6:
                 //end state
-                moveClear();
-                reset();
+                StartCoroutine(moveClear());
+                
                 break;
             case 7:
                 attackerCombatCards();
@@ -232,8 +233,14 @@ public class SiegeScript : MonoBehaviour
         leaderSelected = -1;
         GM2.onRegLayer();
         GM2.onHighlight(trace);
-        while (GM2.highlightSelected == -1)
+        while (GM2.highlightSelected == -1 || string.IsNullOrEmpty(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text) || GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text == "0")
         {
+            if (string.IsNullOrEmpty(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text) && GM2.highlightSelected != -1)
+            {
+                GM2.highlightSelected = -1;
+                GM2.onRegLayer();
+                GM2.onHighlight(trace);
+            }
             yield return null;
         }
 
@@ -428,9 +435,9 @@ public class SiegeScript : MonoBehaviour
                     attackerDice = permitted;
                 }
 
-                if (attackerDice > regulars[initial])
+                if (attackerDice > spacesGM.ElementAt(initial).regular + spacesGM.ElementAt(initial).merc)
                 {
-                    attackerDice = regulars[initial];
+                    attackerDice = spacesGM.ElementAt(initial).regular + spacesGM.ElementAt(initial).merc;
                 }
             }
 
@@ -456,9 +463,9 @@ public class SiegeScript : MonoBehaviour
                     attackerDice = permitted;
                 }
 
-                if (attackerDice > regulars[initial])
+                if (attackerDice > spacesGM.ElementAt(initial).regular + spacesGM.ElementAt(initial).merc)
                 {
-                    attackerDice = regulars[initial];
+                    attackerDice = spacesGM.ElementAt(initial).regular + spacesGM.ElementAt(initial).merc;
                 }
                 attackerDice = (attackerDice+1) / 2;
             }
@@ -524,8 +531,12 @@ public class SiegeScript : MonoBehaviour
         }
         else
         {
-            GM1.player = siegedPlayer;
-            GM2.onPlayerChange();
+            if (siegedPlayer < 6)
+            {
+                GM1.player = siegedPlayer;
+                GM2.onPlayerChange();
+            }
+            
             status = 8;
             required2();
         }
@@ -537,7 +548,7 @@ public class SiegeScript : MonoBehaviour
         bool has27 = false;
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.post("Play Combat Cards");
-        List<CardObject> temp = null;
+        List<CardObject> temp = new List<CardObject>();
         switch (siegedPlayer)
         {
             case 0:
@@ -584,8 +595,9 @@ public class SiegeScript : MonoBehaviour
         }
     }
 
-    void moveClear()
+    IEnumerator moveClear()
     {
+        yield return new WaitForEndOfFrame();
         int permitted = 0;
 
         int command = 0;
@@ -614,13 +626,14 @@ public class SiegeScript : MonoBehaviour
             {
                 command = permitted;
             }
-
-            if (command > regulars[initial])
+            UnityEngine.Debug.Log(spacesGM.ElementAt(initial).regular);
+            UnityEngine.Debug.Log(spacesGM.ElementAt(initial).merc);
+            if (command > spacesGM.ElementAt(initial).regular+ spacesGM.ElementAt(initial).merc)
             {
-                command = regulars[initial];
+                command = spacesGM.ElementAt(initial).regular + spacesGM.ElementAt(initial).merc;
             }
         }
-
+        UnityEngine.Debug.Log(command);
 
         spacesGM.ElementAt(destination).regularPower = mvmtPlayer;
         UnityEngine.Debug.Log("regular power changed " + destination.ToString());
@@ -646,11 +659,11 @@ public class SiegeScript : MonoBehaviour
         if (spacesGM.ElementAt(initial).regular == 0 && spacesGM.ElementAt(initial).merc == 0 && spacesGM.ElementAt(initial).cavalry == 0 && spaces.ElementAt(initial).spaceType == 0)
         {
             spacesGM.ElementAt(initial).regularPower = -1;
-            return;
+            yield break;
         }
-
+        
         spacesGM.ElementAt(destination).regular = spacesGM.ElementAt(destination).regular + command;
-
+        UnityEngine.Debug.Log(spacesGM.ElementAt(destination).regular);
         spacesGM.ElementAt(initial).regular = spacesGM.ElementAt(initial).regular - command;
         onChangeReg(destination, GM1.player);
         onChangeReg(initial, GM1.player);
@@ -659,7 +672,7 @@ public class SiegeScript : MonoBehaviour
         {
             spacesGM.ElementAt(initial).regularPower = -1;
         }
-
+        reset();
     }
 
     IEnumerator roll153()
@@ -859,12 +872,14 @@ public class SiegeScript : MonoBehaviour
         }
         if (defenderElim && attackerHit > 0 && !attackerElim)
         {
+            UnityEngine.Debug.Log("Successful Assault");
             currentTextObject.post("Successful Assault");
             spacesGM.ElementAt(destination).sieged = false;
             int marker = 1;
             //if(spaces.ElementAt(destination).spaceType==3|| spaces.ElementAt(destination).spaceType == 5)
             //{
             spacesGM.ElementAt(destination).controlPower = mvmtPlayer;
+
             if (GM1.religiousInfluence[destination] == 0)
             {
                 marker = 3;
@@ -877,7 +892,10 @@ public class SiegeScript : MonoBehaviour
             GM2.onRemoveSpace(destination);
             GM2.onAddSpace(destination, mvmtPlayer, marker);
             GM1.cardTracks[mvmtPlayer]++;
-            GM1.cardTracks[siegedPlayer]--;
+            if (siegedPlayer < 6)
+            {
+                GM1.cardTracks[siegedPlayer]--;
+            }
             GM1.updateVP();
             GM2.onVP();
 
@@ -933,7 +951,11 @@ public class SiegeScript : MonoBehaviour
             GM2.onRemoveSpace(destination);
             GM2.onAddSpace(destination, mvmtPlayer, marker);
             GM1.cardTracks[mvmtPlayer]++;
-            GM1.cardTracks[siegedPlayer]--;
+            if (siegedPlayer < 6)
+            {
+                GM1.cardTracks[siegedPlayer]--;
+            }
+            
             GM1.updateVP();
             GM2.onVP();
 

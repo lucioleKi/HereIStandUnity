@@ -26,6 +26,12 @@ public class SkipCard : MonoBehaviour
     {
         StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
         HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        LandMvmt landMvmt = gameObject.GetComponent("LandMvmt") as LandMvmt;
+        SiegeScript siegeScript = gameObject.GetComponent("SiegeScript") as SiegeScript;
+        if (landMvmt.status != -1 || siegeScript.status != -1)
+        {
+            return;
+        }
         switch (btnStatus)
         {
             case 1:
