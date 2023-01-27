@@ -270,7 +270,7 @@ public class GraphUtils
                 continue;
             }
             //not occupied by land units from another power, unless allies
-            if (spacesGM.ElementAt(i).regular > 0 && diplomacyState[playerIndex, spacesGM.ElementAt(i).controlPower] != 2)
+            if ((spacesGM.ElementAt(i).regular > 0 ||spacesGM.ElementAt(i).merc>0||spacesGM.ElementAt(i).squadron>0)&& diplomacyState[playerIndex, spacesGM.ElementAt(i).controlPower] != 2)
             {
                 //UnityEngine.Debug.Log("land units " + i.ToString());
                 continue;

@@ -73,8 +73,44 @@ public class MinorPower : MonoBehaviour
 
     }
 
-    public void deactivate(int minor)
+    public void deactivate(int major, int minor)
     {
+        GM2.resetMap();
+        GM1.diplomacyState[major, minor] = 0;
+        for (int i = 0; i < 134; i++)
+        {
+            if (spaces.ElementAt(i).homePower == (PowerType2)minor)
+            {
+                GM2.onRemoveSpace(i);
+                spacesGM.ElementAt(i).controlPower = minor;
+                if (spaces.ElementAt(i).spaceType == (SpaceType)0 || spaces.ElementAt(i).spaceType == (SpaceType)1)
+                {
+                    if (GM1.religiousInfluence[i] == 0)
+                    {
+                        spacesGM.ElementAt(i).controlMarker = 1;
+                    }
+                    else
+                    {
+                        spacesGM.ElementAt(i).controlMarker = 2;
+                    }
 
+                }
+                else
+                {
+                    if (GM1.religiousInfluence[i] == 0)
+                    {
+                        spacesGM.ElementAt(i).controlMarker = 3;
+                    }
+                    else
+                    {
+                        spacesGM.ElementAt(i).controlMarker = 4;
+                    }
+                    GM1.cardTracks[major]--;
+                    GM1.updateVP();
+                    GM2.onVP();
+                }
+                GM2.onAddSpace(i, minor, spacesGM.ElementAt(i).controlMarker);
+            }
+        }
     }
 }

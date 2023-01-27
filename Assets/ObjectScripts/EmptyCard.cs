@@ -129,6 +129,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
     {
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
         SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
+        HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
         //combat cards
         if ((int)cardsLib.ElementAt(index).cardType == 3) { 
             if (landMvmt.status!=11&&landMvmt.status!=10)
@@ -290,14 +291,111 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         }
         if (index == 89)
         {
-            //HIS-009 has been played as an event
-            if (GM2.boolStates[3])
+            //HIS-009 has been played as an event, Oran's or Tripoli's control power at war with Ottoman
+            if (GM2.boolStates[3] && (GM1.diplomacyState[0, spacesGM.ElementAt(112).controlPower]==1|| GM1.diplomacyState[0, spacesGM.ElementAt(113).controlPower] == 1))
+            {
+                int power = -1;
+                //Oran satisfies all requirements
+                if (GM1.diplomacyState[0, spacesGM.ElementAt(112).controlPower] == 1&&(spacesGM.ElementAt(112).regular == 0 && spacesGM.ElementAt(112).merc == 0&& spacesGM.ElementAt(112).squadron == 0)&&(spacesGM.ElementAt(111).controlPower==0|| spacesGM.ElementAt(131).controlPower==0))
+                {
+                    return true;
+                }
+                //tripoli satisfies all requirements
+                else if(GM1.diplomacyState[0, spacesGM.ElementAt(113).controlPower] == 1 && (spacesGM.ElementAt(113).regular == 0 && spacesGM.ElementAt(113).merc == 0 && spacesGM.ElementAt(113).squadron == 0) )
+                {
+                    return true;
+                }
+                
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 91)
+        {
+            //any leader is captured
+            if(handMarkerScript.bonus0.FirstOrDefault(s=>s.Contains("Sprites/jpg/Leader/"))!=null|| handMarkerScript.bonus1.FirstOrDefault(s => s.Contains("Sprites/jpg/Leader/")) != null || handMarkerScript.bonus2.FirstOrDefault(s => s.Contains("Sprites/jpg/Leader/")) != null || handMarkerScript.bonus3.FirstOrDefault(s => s.Contains("Sprites/jpg/Leader/")) != null || handMarkerScript.bonus4.FirstOrDefault(s => s.Contains("Sprites/jpg/Leader/")) != null || handMarkerScript.bonus5.FirstOrDefault(s => s.Contains("Sprites/jpg/Leader/")) != null)
             {
                 return true;
             }
             else
             {
                 return false;
+            }
+        }
+        if (index == 95)
+        {
+            for(int i=0;i<134; i++)
+            {
+                if(spaces.ElementAt(i).language==(Language)3)
+                {
+                    if (spacesGM.ElementAt(i).merc > spacesGM.ElementAt(65).regular)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        if (index == 96)
+        {
+            //any power completed circumnavigation
+            if(GameObject.Find("Circumnavigation")==null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 98)
+        {
+            //if there's any exploration or conquest
+            if (GM1.player == 1)
+            {
+                if (!GM2.boolStates[20]&& !GM2.boolStates[21] && !GM2.boolStates[23] && !GM2.boolStates[24])
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }else if (GM1.player == 2)
+            {
+                if (!GM2.boolStates[19] && !GM2.boolStates[21] && !GM2.boolStates[22] && !GM2.boolStates[24])
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }else if(GM1.player == 3)
+            {
+                if (!GM2.boolStates[19] && !GM2.boolStates[20] && !GM2.boolStates[22] && !GM2.boolStates[23])
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (!GM2.boolStates[19] && !GM2.boolStates[20] && !GM2.boolStates[21] && !GM2.boolStates[22] && !GM2.boolStates[23] && !GM2.boolStates[24])
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
         if (index == 99)
@@ -309,6 +407,18 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             else
             {
                 return false;
+            }
+        }
+        if (index == 100)
+        {
+            //not playable by 5
+            if (GM1.player == 5)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
         if (index == 101)
@@ -329,17 +439,10 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 return false;
             }
         }
-        if (index == 100||index == 102)
+        if (index == 102)
         {
-            //not playable by 5
-            if (GM1.player == 5)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            //can only play during spring deployment
+            return false;
         }
         if (index == 105)
         {
@@ -373,6 +476,20 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 }
             }
             if(pickSpaces.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 108)
+        {
+            if (GM1.player == 5)
+            {
+                return true;
+            }else if (GM1.player == 0 && GM1.diplomacyState[4, 9] == 2)
             {
                 return true;
             }

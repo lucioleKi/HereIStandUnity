@@ -97,9 +97,6 @@ public class DeckScript : MonoBehaviour
                 temp1.name = spaces.ElementAt(i - 1).name;
                 temp1.id = i;
                 temp1.controlPower = (int)spaces.ElementAt(i - 1).homePower;
-                temp1.regularPower = (int)spaces.ElementAt(i - 1).homePower;
-                temp1.mercPower = (int)spaces.ElementAt(i - 1).homePower;
-                temp1.squadronPower = (int)spaces.ElementAt(i - 1).homePower;
                 regularsPower[i - 1] = (int)spaces.ElementAt(i - 1).homePower;
                 spacesGM.Add(temp1);
             }

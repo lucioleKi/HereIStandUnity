@@ -108,6 +108,7 @@ public class GM2 : MonoBehaviour
     //39-44: conquered index
     //45-47: Cabot used
     //48: Cabot dead
+    //49: HIS090 has effect
     //0: which power has HIS031 effect
     //1: which explorer for 1
     //2: which explorer for 2
@@ -117,6 +118,8 @@ public class GM2 : MonoBehaviour
     //6: which power has aztecs
     //7: which power has maya
     //8: which power has smallpox effect for conquest
+    //9: which power can't start another exploration
+    //10: which power can't start another conquest
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
@@ -129,7 +132,7 @@ public class GM2 : MonoBehaviour
     void OnEnable()
     {
         boolStates = new bool[50];
-        intStates = new int[10];
+        intStates = new int[20];
         Array.Clear(intStates, 0, 10);
         onMandatory += mandatory;
         onPhase2 += phase2;
@@ -329,8 +332,14 @@ public class GM2 : MonoBehaviour
             case 88:
                 StartCoroutine(gm3.HIS088());
                 break;
+            case 89:
+                StartCoroutine(gm3.HIS089());
+                break;
             case 94:
                 StartCoroutine(gm3.HIS094());
+                break;
+            case 98:
+                StartCoroutine(gm3.HIS098());
                 break;
             case 99:
                 gm3.HIS099();
@@ -340,6 +349,12 @@ public class GM2 : MonoBehaviour
                 break;
             case 101:
                 gm3.HIS101();
+                break;
+            case 102:
+                gm3.HIS102();
+                break;
+            case 103:
+                StartCoroutine(gm3.HIS103());
                 break;
             case 104:
                 StartCoroutine(gm3.HIS104());
@@ -352,6 +367,9 @@ public class GM2 : MonoBehaviour
                 break;
             case 107:
                 StartCoroutine(gm3.HIS107());
+                break;
+            case 108:
+                gm3.HIS108();
                 break;
             case 109:
                 gm3.HIS109();
@@ -457,7 +475,11 @@ public class GM2 : MonoBehaviour
 
 
         //3. add bonus dice
-        //todo: printing press event and debater bonus
+        //todo: debater bonus
+        if (boolStates[49])
+        {
+            reformerDice++;
+        }
         if (turn == 1 && phase == 1)
         {
             reformerDice++;
@@ -800,14 +822,14 @@ public class GM2 : MonoBehaviour
         tempForm.verifyDip();
         negotiationSegment(tempForm);
         onChangeDip();
-        //if (turn != 1)
-        //{
+        if (turn != 1)
+       {
             segment++;
-        //}
-        //else
-        //{
-        //    segment = 7;
-        //}
+        }
+        else
+        {
+            segment = 7;
+        }
 
         onChangeSegment();
         phase3();
@@ -1305,7 +1327,7 @@ public class GM2 : MonoBehaviour
 
     }
 
-    public IEnumerator waitDeployment()
+    public IEnumerator waitDeployment(int has102)
     {
         GM1.deq1(2);
         player = 0;
@@ -1316,8 +1338,23 @@ public class GM2 : MonoBehaviour
         currentTextObject.post("Click a leader.\nEnter number of units:");
         InputNumberObject inputNumberObject = GameObject.Find("InputNumber").GetComponent("InputNumberObject") as InputNumberObject;
         LayerScript layerObject = GameObject.Find("Layers").GetComponent("LayerScript") as LayerScript;
+        StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
         for (int i = 0; i < 5; i++)
         {
+            if (has102 == i)
+            {
+                chosenCard = "HIS-102";
+                onChosenCard();
+                onSkipCard(102);
+            }
+            else
+            {
+                startButton.status = -1;
+                startButton.btn.interactable = false;
+                chosenCard = "";
+                onChosenCard();
+                onDeactivateSkip();
+            }
             UnityEngine.Debug.Log("spring deployment: " + i.ToString());
             UnityEngine.Debug.Log("click commander ");
             //todo: reset click after one valid choice
@@ -1366,6 +1403,7 @@ public class GM2 : MonoBehaviour
 
         //check HIS-109
         int has109 = -1;
+        int has102 = -1;
         for (int i = 0; i < 6; i++)
         {
             List<CardObject> temp = null;
@@ -1397,15 +1435,37 @@ public class GM2 : MonoBehaviour
                 {
                     has109 = i;
                 }
+                if (temp.ElementAt(j).id == 102&&i!=5)
+                {
+                    has102 = i;
+                }
             }
         }
-        if (has109 != -1)
+
+        StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
+        if (has109 != -1&& !startButton.btn.interactable)
         {
+
             GM1.player = has109;
             onPlayerChange();
             chosenCard = "HIS-109";
             onChosenCard();
             onSkipCard(109);
+        }
+        else if(has109 != -1 && startButton.btn.interactable)
+        {
+            //spring deployment
+            startButton.status = -1;
+            startButton.btn.interactable = false;
+            chosenCard = "";
+            onChosenCard();
+            GM1.enq1("Complete deployment - (Ottoman)");
+            GM1.enq2("Complete deployment - (Hapsburgs)");
+            GM1.toDo.Enqueue("Complete deployment - (England)");
+            GM1.toDo.Enqueue("Complete deployment - (France)");
+            GM1.toDo.Enqueue("Complete deployment - (Papacy)");
+
+            StartCoroutine(waitDeployment(has102));
         }
         else
         {
@@ -1416,7 +1476,7 @@ public class GM2 : MonoBehaviour
             GM1.toDo.Enqueue("Complete deployment - (France)");
             GM1.toDo.Enqueue("Complete deployment - (Papacy)");
 
-            StartCoroutine(waitDeployment());
+            StartCoroutine(waitDeployment(has102));
         }
 
 

@@ -138,12 +138,17 @@ public class NextButton : MonoBehaviour
             turn++;
             phase=2;
             segment = 1;
-            int[] resetBool = new int[12] {16, 17, 18, 19, 20, 21, 22, 23, 24, 29, 34, 35};
+            //reset the following bool in boolStates
+            int[] resetBool = new int[13] {16, 17, 18, 19, 20, 21, 22, 23, 24, 29, 34, 35, 49};
+            int[] resetInt = new int[8] { 0, 1, 2, 3, 4, 8, 9, 10 };
             foreach(int r in resetBool)
             {
                 GM2.boolStates[r] = false;
             }
-            Array.Clear(GM2.intStates, 0, 5);
+            foreach(int r in resetInt)
+            {
+                GM2.intStates[r] = -1;
+            }
             GM2.onChangePhase();
             GM2.onPhase2();
             GM1.enq1("Draw cards - (Automatic)");

@@ -80,6 +80,21 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         
     }
 
+    public void highlightNewWordlAll()
+    {
+        GM2.resetMap();
+        for(int i=1; i<7; i++) {
+            if (GM2.boolStates[i+18])
+            {
+                GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/square"), new Vector3(0, 0, 0), Quaternion.identity);
+                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(180 + i * 30, 310);
+                tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                tempObject.name = "exploreHighlight_"+i.ToString();
+            }
+        }
+        
+    }
+
     public void highlightCoordinate(float x, float y, int index)
     {
         GM2.resetMap();
@@ -190,12 +205,12 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                             continue;
                         }
                         //check if can explore
-                        if (GM2.boolStates[19] && i == 8)
+                        if (GM2.boolStates[19] && i == 8 && GM2.intStates[9]!=1)
                         {
                             continue;
                         }
                         //check if can conquer
-                        if (GM2.boolStates[22] && i == 10)
+                        if (GM2.boolStates[22] && i == 10 && GM2.intStates[10] != 1)
                         {
                             continue;
                         }
@@ -258,12 +273,12 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                             continue;
                         }
                         //check if can explore
-                        if (GM2.boolStates[20] && i == 8)
+                        if (GM2.boolStates[20] && i == 8 && GM2.intStates[9] != 2)
                         {
                             continue;
                         }
                         //check if can conquer
-                        if (GM2.boolStates[23] && i == 10)
+                        if (GM2.boolStates[23] && i == 10 && GM2.intStates[10] != 2)
                         {
                             continue;
                         }
@@ -321,12 +336,12 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                             continue;
                         }
                         //check if can explore
-                        if (GM2.boolStates[21]&&i==8)
+                        if (GM2.boolStates[21]&&i== 8 && GM2.intStates[9] != 3)
                         {
                             continue;
                         }
                         //check if can conquer
-                        if (GM2.boolStates[24]&&i==10)
+                        if (GM2.boolStates[24]&&i== 10 && GM2.intStates[10] != 3)
                         {
                             continue;
                         }
@@ -499,13 +514,26 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         layerScript.changeLayer();
         if (eventData.pointerCurrentRaycast.gameObject.name[9] == '_')
         {
+            //highlight_
             highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(10));
         }else if (eventData.pointerCurrentRaycast.gameObject.name[12] == '_')
         {
+            //highlightRect_
             highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(13));
         }else if (eventData.pointerCurrentRaycast.gameObject.name[0] == 'e')
         {
-            highlightSelected = 0;
+            if (eventData.pointerCurrentRaycast.gameObject.name.Length > 16)
+            {
+                //exploreHighlight_
+                highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(17));
+            }
+            else
+            {
+                //exploreHighlight
+                highlightSelected = 0;
+            }
+            
+
         }else if(eventData.pointerCurrentRaycast.gameObject.name[0] == 'n')
         {
             //nwhighlight

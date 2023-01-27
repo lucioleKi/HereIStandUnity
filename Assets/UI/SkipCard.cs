@@ -88,13 +88,20 @@ public class SkipCard : MonoBehaviour
                 //action phase pass
                 GM1.skipped[GM1.player] = true;
                 break;
-            case 109:
-                GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
-                GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+            case 102:
                 startButton.status = -1;
                 startButton.btn.interactable = false;
                 GM2.chosenCard = "";
                 GM2.onChosenCard();
+                deactivateSkip();
+                break;
+            case 109:
+                GameObject.Find("KeyLeft").GetComponent<Button>().interactable = false;
+                GameObject.Find("KeyRight").GetComponent<Button>().interactable = false;
+                //startButton.status = -1;
+                //startButton.btn.interactable = false;
+                //GM2.chosenCard = "";
+                //GM2.onChosenCard();
                 deactivateSkip();
                 GM2.onPhase5();
                 break;

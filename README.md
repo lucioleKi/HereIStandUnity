@@ -150,3 +150,26 @@ Finished new world phase and victory phase.
 1/15/2023
 
 Debugging. 
+
+1/27/2023
+
+Coded event cards in the 90 range. Added the table for tracking coded cards.
+
+### Coding plan and progress for cards
+
+#### All play conditions and options coded:
+
+Home cards: 1, 2, 4, 6
+
+Mandatory cards: 8-14, 16, 18-23
+
+Combat cards: 24-30
+
+Response cards: 31-36
+
+Event cards: 40, 65, 67, 75, 76, 78, 80-83, 85, 88-90, 94, 96, 98-109, 112
+
+#### Due to limited time, I don't plan to code all conditions or options in these cards: 
+
+Event cards: 91, 95
+

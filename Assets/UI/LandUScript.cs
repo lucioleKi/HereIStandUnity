@@ -192,7 +192,7 @@ public class LandUScript : MonoBehaviour
             //update if not 0
             {
                 GameObject tempObject = GameObject.Find((index + 1).ToString() + "_0");
-                tempObject.GetComponent<TextMeshProUGUI>().text = regulars[index].ToString();
+                tempObject.GetComponent<TextMeshProUGUI>().text = DeckScript.spacesGM.ElementAt(index).regular.ToString();
             }
 
         }
@@ -207,7 +207,7 @@ public class LandUScript : MonoBehaviour
             tempObject.SetActive(true);
             GameObject number0 = Instantiate((GameObject)Resources.Load("Objects/Number"), new Vector3(spaces.ElementAt(index).posX + 970 + 22, spaces.ElementAt(index).posY + 547 - 4, 0), Quaternion.identity);
             number0.transform.SetParent(GameObject.Find("LandUDisplay").transform);
-            number0.GetComponent<TextMeshProUGUI>().text = regulars[index].ToString();
+            number0.GetComponent<TextMeshProUGUI>().text = DeckScript.spacesGM.ElementAt(index).regular.ToString();
             number0.name = (index + 1).ToString() + "_0";
         }
     }

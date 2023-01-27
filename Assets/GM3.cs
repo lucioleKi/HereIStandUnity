@@ -1632,6 +1632,9 @@ public class GM3
 
     public IEnumerator HIS085()
     {
+        int temp = GM1.player;
+        GM1.player = 5;
+        GM2.onPlayerChange();
         DeckScript.debaters.ElementAt(12).status = (DebaterStatus)2;
         DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
         debatersScript.updateDebater();
@@ -1662,6 +1665,8 @@ public class GM3
         yield return new WaitForSeconds(3);
         currentTextObject.reset();
         currentTextObject.restartColor();
+        GM1.player = temp;
+        GM2.onPlayerChange();
         DeckScript.removeCard(GM1.player, 85);
 
         chosenCard = "";
@@ -1693,6 +1698,80 @@ public class GM3
         }
         highlightSelected = -1;
         DeckScript.discardById(GM1.player, 88);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS089()
+    {
+        List<int> pickSpaces = new List<int> { 113 };
+        if(GM1.diplomacyState[0, spacesGM.ElementAt(112).controlPower] == 1 && (spacesGM.ElementAt(112).regular == 0 && spacesGM.ElementAt(112).merc == 0 && spacesGM.ElementAt(112).squadron == 0) && (spacesGM.ElementAt(111).controlPower == 0 || spacesGM.ElementAt(131).controlPower == 0))
+        {
+            pickSpaces.Add(112);
+        }
+        highlightSelected = -1;
+        onNoLayer();
+        onHighlight(pickSpaces);
+        while (highlightSelected == -1)
+        {
+            yield return null;
+        }
+        spacesGM.ElementAt(highlightSelected).controlPower = 0;
+        spacesGM.ElementAt(highlightSelected).controlMarker = 1;
+        GM2.onAddSpace(highlightSelected, 0, 1);
+        spacesGM.ElementAt(highlightSelected).regular = 1;
+        GM2.onChangeReg(highlightSelected, 0);
+        spacesGM.ElementAt(highlightSelected).corsair = 2;
+        GM2.onChangeCorsair(highlightSelected);
+        highlightSelected = -1;
+        yield return new WaitForSeconds(3);
+        
+        DeckScript.discardById(GM1.player, 89);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS090()
+    {
+        GM2.boolStates[49] = true;
+        int temp = GM1.player;
+        GM1.player = 5;
+        GM2.onPlayerChange();
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.pauseColor();
+        currentTextObject.post("Pick 3 highlighted target spaces");
+        for (int i = 0; i < 3; i++)
+        {
+            List<int> pickSpaces = highlightReformation();
+            highlightSelected = -1;
+            onNoLayer();
+            onHighlight(pickSpaces);
+
+            onHighlightSelected += reformAttempt;
+            while (highlightSelected == -1)
+            {
+                //UnityEngine.Debug.Log("here");
+                yield return null;
+            }
+
+            UnityEngine.Debug.Log("end");
+            //onRemoveHighlight(converted);
+        }
+        highlightSelected = -1;
+        yield return new WaitForSeconds(3);
+        currentTextObject.reset();
+        currentTextObject.restartColor();
+        GM1.player = temp;
+        GM2.onPlayerChange();
+        DeckScript.discardById(GM1.player, 90);
         chosenCard = "";
         onChosenCard();
         if (GM1.phase == 6)
@@ -1765,6 +1844,39 @@ public class GM3
         }
     }
 
+    public IEnumerator HIS098()
+    {
+        HighlightScript highlightScript = GameObject.Find("HighlightDisplay").GetComponent("HighlightScript") as HighlightScript;
+        highlightSelected = -1;
+        onNoLayer();
+        highlightScript.highlightNewWordlAll();
+        while (highlightSelected == -1)
+        {
+            yield return null;
+        }
+        if (highlightSelected<4)
+        {
+
+            GameObject.Destroy(GameObject.Find("exploration_" + highlightSelected.ToString()));
+            GM2.boolStates[highlightSelected + 18] = false;
+            GM2.intStates[9] = highlightSelected;
+        }
+        else
+        {
+            GameObject.Destroy(GameObject.Find("conquest_" + (highlightSelected - 3).ToString()));
+            GM2.boolStates[highlightSelected + 21] = false;
+            GM2.intStates[10] = highlightSelected;
+        }
+        yield return new WaitForSeconds(3);
+        DeckScript.discardById(GM1.player, 98);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
     public void HIS099()
     {
         GM2.boolStates[44 + GM1.player] = true;
@@ -1818,6 +1930,83 @@ public class GM3
         highlightCPScript.conquest();
         GM2.intStates[8] = GM1.player;
         DeckScript.discardById(GM1.player, 101);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public void HIS102()
+    {
+        switch (GM1.player)
+        {
+            case 0:
+                spacesGM.ElementAt(97).regular++;
+                onChangeReg(97, GM1.player);
+                
+                break;
+            case 1:
+                spacesGM.ElementAt(21).regular++;
+                onChangeReg(21, GM1.player);
+                spacesGM.ElementAt(83).regular++;
+                onChangeReg(83, GM1.player);
+                break;
+            case 2:
+                spacesGM.ElementAt(27).regular++;
+                onChangeReg(27, GM1.player);
+                break;
+            case 3:
+                spacesGM.ElementAt(41).regular++;
+                onChangeReg(41, GM1.player);
+                break;
+            case 4:
+                spacesGM.ElementAt(65).regular++;
+                onChangeReg(65, GM1.player);
+                break;
+        }
+        
+        DeckScript.discardById(GM1.player, 102);
+        chosenCard = "";
+        onChosenCard();
+        onDeactivateSkip();
+    }
+
+    public IEnumerator HIS103()
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        LayerScript layerObject = GameObject.Find("Layers").GetComponent("LayerScript") as LayerScript;
+        GM2.onLeaderLayer();
+        currentTextObject.post("Select a minor army leader.");
+        while (leaderSelected != 1&& leaderSelected != 4 && leaderSelected != 9 && leaderSelected != 12)
+        {
+            yield return null;
+        }
+        layerObject.changeLayer();
+        int randomIndex = UnityEngine.Random.Range(1, 7);
+        int position = -1;
+        for(int i=0; i<134; i++)
+        {
+            if (spacesGM.ElementAt(i).leader1 == leaderSelected|| spacesGM.ElementAt(i).leader2 == leaderSelected)
+            {
+                position = i;
+                break;
+            }
+        }
+        if (randomIndex > 3)
+        {
+            currentTextObject.post(DeckScript.leaders.ElementAt(leaderSelected-1).name+" is removed for the rest of the current turn.");
+            spacesGM.ElementAt(position).removeLeader(leaderSelected - 1);
+        }
+        else
+        {
+            currentTextObject.post(DeckScript.leaders.ElementAt(leaderSelected - 1).name + " is removed for the rest of the game.");
+            spacesGM.ElementAt(position).removeLeader(leaderSelected - 1);
+            DeckScript.leaders.RemoveAt(leaderSelected - 1);
+        }
+        yield return new WaitForSeconds(3);
+        DeckScript.discardById(GM1.player, 103);
         chosenCard = "";
         onChosenCard();
         if (GM1.phase == 6)
@@ -1942,6 +2131,28 @@ public class GM3
         landMvmt.casualties(spacesGM.ElementAt(highlightSelected).regularPower, highlightSelected, eliminated);
         highlightSelected = -1;
         yield return new WaitForSeconds(3);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public void HIS108()
+    {
+        MinorPower minorPower = new MinorPower();
+        if (GM1.player == 4 && GM1.diplomacyState[4, 9] == 0)
+        {
+            
+            minorPower.activate(4, 9);
+            GM2.onChangeDip();
+        }
+        else if ((GM1.player == 4 || GM1.player == 0) && GM1.diplomacyState[4, 9] == 2)
+        {
+            minorPower.deactivate(4, 9);
+            GM2.onChangeDip();
+        }
         chosenCard = "";
         onChosenCard();
         if (GM1.phase == 6)
