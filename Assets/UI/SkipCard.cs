@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -87,6 +88,22 @@ public class SkipCard : MonoBehaviour
             case 6:
                 //action phase pass
                 GM1.skipped[GM1.player] = true;
+                break;
+            case 87:
+                //lose all merc
+                for(int i=0; i < 134; i++)
+                {
+                    if (DeckScript.spacesGM.ElementAt(i).controlPower == GM1.player && DeckScript.spacesGM.ElementAt(i).merc > 0)
+                    {
+                        DeckScript.spacesGM.ElementAt(i).merc = 0;
+                        if(DeckScript.spacesGM.ElementAt(i).regular==0&& DeckScript.spacesGM.ElementAt(i).cavalry == 0)
+                        {
+                            DeckScript.spacesGM.ElementAt(i).regularPower = -1;
+                        }
+                    }
+                }
+                GM2.onDeactivateOther();
+                GM2.boolStates[50]= false;
                 break;
             case 102:
                 startButton.status = -1;

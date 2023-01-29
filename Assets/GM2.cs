@@ -109,6 +109,9 @@ public class GM2 : MonoBehaviour
     //45-47: Cabot used
     //48: Cabot dead
     //49: HIS090 has effect
+    //50: waiting for HIS087
+    //51: Knights of St. John on map
+    //51: waiting for HIS074
     //0: which power has HIS031 effect
     //1: which explorer for 1
     //2: which explorer for 2
@@ -120,6 +123,8 @@ public class GM2 : MonoBehaviour
     //8: which power has smallpox effect for conquest
     //9: which power can't start another exploration
     //10: which power can't start another conquest
+    //11: where is Knights of St. John
+    //12: which power has negative1Card
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
@@ -131,9 +136,12 @@ public class GM2 : MonoBehaviour
     //
     void OnEnable()
     {
-        boolStates = new bool[50];
+        boolStates = new bool[60];
         intStates = new int[20];
-        Array.Clear(intStates, 0, 10);
+        for(int i=0; i<20; i++)
+        {
+            intStates[i] = -1;
+        }
         onMandatory += mandatory;
         onPhase2 += phase2;
         onPhase3 += phase3;
@@ -230,6 +238,12 @@ public class GM2 : MonoBehaviour
             case 10:
                 gm3.HIS010();
                 break;
+            case 11:
+                StartCoroutine(gm3.HIS011());
+                break;
+            case 12:
+                gm3.HIS012();
+                break;
             case 13:
                 gm3.HIS013();
                 break;
@@ -305,14 +319,26 @@ public class GM2 : MonoBehaviour
             case 67:
                 StartCoroutine(gm3.HIS067());
                 break;
+            case 72:
+                StartCoroutine(gm3.HIS072());
+                break;
+            case 74:
+                StartCoroutine(gm3.HIS074());
+                break;
             case 75:
                 StartCoroutine(gm3.HIS075());
                 break;
             case 76:
                 gm3.HIS076();
                 break;
+            case 77:
+                StartCoroutine(gm3.HIS077());
+                break;
             case 78:
                 StartCoroutine(gm3.HIS078());
+                break;
+            case 79:
+                gm3.HIS079();
                 break;
             case 80:
                 StartCoroutine(gm3.HIS080());
@@ -326,14 +352,26 @@ public class GM2 : MonoBehaviour
             case 83:
                 gm3.HIS083();
                 break;
+            case 84:
+                gm3.HIS084();
+                break;
             case 85:
                 StartCoroutine(gm3.HIS085());
+                break;
+            case 86:
+                StartCoroutine(gm3.HIS086());
+                break;
+            case 87:
+                StartCoroutine(gm3.HIS087());
                 break;
             case 88:
                 StartCoroutine(gm3.HIS088());
                 break;
             case 89:
                 StartCoroutine(gm3.HIS089());
+                break;
+            case 90:
+                StartCoroutine(gm3.HIS090());
                 break;
             case 94:
                 StartCoroutine(gm3.HIS094());
@@ -381,7 +419,7 @@ public class GM2 : MonoBehaviour
                 }
                 else
                 {
-                    gm3.HIS112B();
+                    StartCoroutine(gm3.HIS112B());
                 }
                 break;
             default:
@@ -681,6 +719,7 @@ public class GM2 : MonoBehaviour
 
     void phase2()
     {
+        HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
         instanceDeck.addActive(turn);
         activeCards.AddRange(discardCards);
         discardCards.Clear();
@@ -689,33 +728,44 @@ public class GM2 : MonoBehaviour
         {
             List<CardObject> tempHand = new List<CardObject>();
             int temp = drawNumber(i);
+            //reset negative1Card
+            if (intStates[11]==i)
+            {
+                temp--;
+                intStates[11] = -1;
+            }
             switch (i)
             {
                 case 0:
                     hand0.Add(cardsLib.ElementAt(0));
                     hand0.AddRange(activeCards.GetRange(0, temp));
-                    
+                    handMarkerScript.bonus0.Remove("Sprites/jpg/negative1Card");
                     break;
                 case 1:
                     hand1.Add(cardsLib.ElementAt(1));
                     hand1.AddRange(activeCards.GetRange(0, temp));
+                    handMarkerScript.bonus1.Remove("Sprites/jpg/negative1Card");
                     break;
                 case 2:
                     hand2.Add(cardsLib.ElementAt(2));
                     hand2.AddRange(activeCards.GetRange(0, temp));
+                    handMarkerScript.bonus2.Remove("Sprites/jpg/negative1Card");
                     break;
                 case 3:
                     hand3.Add(cardsLib.ElementAt(3));
                     hand3.AddRange(activeCards.GetRange(0, temp));
+                    handMarkerScript.bonus3.Remove("Sprites/jpg/negative1Card");
                     break;
                 case 4:
                     hand4.Add(cardsLib.ElementAt(4));
                     hand4.Add(cardsLib.ElementAt(5));
                     hand4.AddRange(activeCards.GetRange(0, temp));
+                    handMarkerScript.bonus4.Remove("Sprites/jpg/negative1Card");
                     break;
                 case 5:
                     hand5.Add(cardsLib.ElementAt(6));
                     hand5.AddRange(activeCards.GetRange(0, temp));
+                    handMarkerScript.bonus5.Remove("Sprites/jpg/negative1Card");
                     break;
             }
             //for(int j=0; j<temp; j++)

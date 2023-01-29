@@ -65,6 +65,7 @@ public class CPTextScript : MonoBehaviour
         GM2.boolStates[32] = false;
         if (GM1.phase == 6)
         {
+            UnityEngine.Debug.Log("next impulse");
             GM1.nextImpulse();
         }
     }

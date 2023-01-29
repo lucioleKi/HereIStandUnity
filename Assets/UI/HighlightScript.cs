@@ -80,10 +80,10 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         
     }
 
-    public void highlightNewWordlAll()
+    public void highlightNewWordlAll(int max)
     {
         GM2.resetMap();
-        for(int i=1; i<7; i++) {
+        for(int i=1; i<max; i++) {
             if (GM2.boolStates[i+18])
             {
                 GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/square"), new Vector3(0, 0, 0), Quaternion.identity);

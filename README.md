@@ -153,7 +153,11 @@ Debugging.
 
 1/27/2023
 
-Coded event cards in the 90 range. Added the table for tracking coded cards.
+Coded event cards in the 90 range. Added the list for tracking coded cards.
+
+1/29/2023
+
+Coded more event cards and debugged in the 70-80 range.
 
 ### Coding plan and progress for cards
 
@@ -167,9 +171,9 @@ Combat cards: 24-30
 
 Response cards: 31-36
 
-Event cards: 40, 65, 67, 75, 76, 78, 80-83, 85, 88-90, 94, 96, 98-109, 112
+Event cards: 40, 65, 67, 72, 74-83, 85-90, 94, 96, 98-109, 112
 
 #### Due to limited time, I don't plan to code all conditions or options in these cards: 
 
-Event cards: 91, 95
+Event cards: 84, 91, 92, 93, 95, 110
 
