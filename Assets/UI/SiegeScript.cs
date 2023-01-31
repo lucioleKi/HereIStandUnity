@@ -151,12 +151,12 @@ public class SiegeScript : MonoBehaviour
         initial = -1;
         destination = -1;
         hasLeader = false;
-
+        GM2.boolStates[30] = false;
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         GM2.onCPChange(textScript.displayCP - 1);
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.reset();
-        GM2.boolStates[30] = false;
+        
         //HIS105 treachery
         if (GM2.boolStates[35])
         {

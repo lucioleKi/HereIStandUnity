@@ -191,21 +191,21 @@ public class HandMarkerScript : MonoBehaviour
         
         foreach (string s in bonus1)
         {
-            if (s.Contains("Sprites/jpg/negative1Card"))
+            if (s.Contains("Sprites/jpg/negative1Card") && GM2.intStates[12]!=1)
             {
                 excom.Add(1);
             }
         }
         foreach (string s in bonus2)
         {
-            if (s.Contains("Sprites/jpg/negative1Card"))
+            if (s.Contains("Sprites/jpg/negative1Card") && GM2.intStates[12] != 2)
             {
                 excom.Add(2);
             }
         }
         foreach (string s in bonus3)
         {
-            if (s.Contains("Sprites/jpg/negative1Card"))
+            if (s.Contains("Sprites/jpg/negative1Card") && GM2.intStates[12] != 3)
             {
                 excom.Add(3);
             }

@@ -214,6 +214,7 @@ public class DeckScript : MonoBehaviour
         activeCards = new List<CardObject>();
         discardCards = new List<CardObject>();
         cards = new List<CardObject>();
+        cardsLib = new List<CardObject>();
         using (var reader = new StreamReader("Assets/Input/cards.csv"))
         {
             while (!reader.EndOfStream)
@@ -259,11 +260,11 @@ public class DeckScript : MonoBehaviour
                     temp.options = 1;
                 }
                 temp.matching = values[2];
-
+                cardsLib.Add(temp);
                 cards.Add(temp);
             }
         }
-        cardsLib = cards;
+        //cardsLib = cards;
     }
 
     //discard a card and put it in the discard pile
@@ -294,9 +295,9 @@ public class DeckScript : MonoBehaviour
         }
         for(int i=0; i<temp.Count(); i++)
         {
-            if (temp.ElementAt(i).id==id) { 
-                temp.RemoveAt(i);
+            if (temp.ElementAt(i).id==id) {
                 discardCards.Add(temp.ElementAt(i));
+                temp.RemoveAt(i);
                 break;
             }
         }

@@ -210,6 +210,7 @@ public class LandMvmt : MonoBehaviour
         Array.Clear(alreadyIntercepted, 0, 6);
         tempTrace.Clear();
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
+        GM2.boolStates[28] = false;
         if (overPass)
         {
             GM2.onCPChange(textScript.displayCP - 2);
@@ -221,7 +222,7 @@ public class LandMvmt : MonoBehaviour
 
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.reset();
-        GM2.boolStates[28] = false;
+        
 
     }
 

@@ -100,6 +100,7 @@ public class SkipCard : MonoBehaviour
                         {
                             DeckScript.spacesGM.ElementAt(i).regularPower = -1;
                         }
+                        GM2.onChangeMerc(i, GM1.player);
                     }
                 }
                 GM2.onDeactivateOther();

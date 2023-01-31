@@ -23,6 +23,10 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         int index = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(4)) - 1;
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
         SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
+
+        //other button
+        OtherButtonScript otherButtonScript = GameObject.Find("OtherButton").GetComponent("OtherButtonScript") as OtherButtonScript;
+
         if (GM1.phase == 3 && GM1.segment != 6 || GM1.phase == 5 || (GM1.phase == 6 && GM1.impulse != GM1.player || GM1.skipped[GM1.player]))
         {
             UnityEngine.Debug.Log(landMvmt.status + ", " + siegeScript.status);
@@ -48,7 +52,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         {
             ConfirmScript.btn.interactable = true;
         }
-        else if (GM1.segment == 6 && GM1.phase == 3)
+        else if ((GM1.segment == 6 && GM1.phase == 3)|| otherButtonScript.btnStatus!=-1)
         {
             ConfirmScript.btn.interactable = false;
         }
@@ -77,13 +81,12 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             CPButtonScript.btn.interactable = false;
         }
         //in land mvmt procedure
-        if (GM2.boolStates[28] || GM2.boolStates[30] || GM2.boolStates[31])
+        if (GM2.boolStates[28] || GM2.boolStates[30] || GM2.boolStates[31] || GM2.boolStates[51])
         {
             CPButtonScript.btn.interactable = false;
         }
 
-        //other button
-        OtherButtonScript otherButtonScript = GameObject.Find("OtherButton").GetComponent("OtherButtonScript") as OtherButtonScript;
+        
         switch (otherButtonScript.btnStatus)
         {
             case -1:
@@ -124,6 +127,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 //can't give home cards
                 if (index > 7 && GM2.highlightSelected != -1)
                 {
+                    otherButtonScript.cardTag = eventData.pointerCurrentRaycast.gameObject.tag;
                     otherButtonScript.btn.interactable = true;
                 }
                 else
@@ -156,6 +160,17 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         if ((int)cardsLib.ElementAt(index).cardType != 3 && (landMvmt.status == 10 || landMvmt.status == 11))
         {
             return false;
+        }
+        if(index==7)
+        {
+            if (GM1.rulers[5].index==5)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         if (index == 24 && index == 25)
         {
@@ -223,6 +238,17 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         if (index == 31 || index == 32)
         {
             return false;
+        }
+        if (index == 33)
+        {
+            if (GM1.player == 5 && !GM2.boolStates[6])
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         if (index == 34)
         {

@@ -63,7 +63,10 @@ public class CPTextScript : MonoBehaviour
         mtext.text = "";
         //can only build units end
         GM2.boolStates[32] = false;
-        if (GM1.phase == 6)
+        if (GM2.boolStates[28]) { UnityEngine.Debug.Log("landmvmt"); }
+        if (GM2.boolStates[30]) { UnityEngine.Debug.Log("siege"); }
+        if (GM2.boolStates[31]) { UnityEngine.Debug.Log("navalmvmt"); }
+        if (GM1.phase == 6&& !GM2.boolStates[28]&& !GM2.boolStates[30]&&!GM2.boolStates[31])
         {
             UnityEngine.Debug.Log("next impulse");
             GM1.nextImpulse();

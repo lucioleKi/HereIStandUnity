@@ -134,6 +134,7 @@ public class OtherButtonScript : MonoBehaviour
                         hand5.RemoveAt(int.Parse(cardTag.Substring(1)));
                         break;
                 }
+                UnityEngine.Debug.Log(GM2.highlightSelected);
                 switch (GM2.highlightSelected)
                 {
                     case 0:
@@ -155,7 +156,7 @@ public class OtherButtonScript : MonoBehaviour
                         hand5.Add(temp);
                         break;
                 }
-                GM2.boolStates[74] = false;
+                GM2.boolStates[51] = false;
                 break;
         }
         if (btnStatus != -1)

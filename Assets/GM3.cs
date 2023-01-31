@@ -358,6 +358,12 @@ public class GM3
         GM1.nextImpulse();
     }
 
+    public IEnumerator HIS005()
+    {
+        List<int> canExcom = new List<int>();
+        yield break;
+    }
+
     public IEnumerator HIS006()
     {
         InputToggleObject inputToggleObject = GameObject.Find("InputToggle").GetComponent("InputToggleObject") as InputToggleObject;
@@ -383,6 +389,7 @@ public class GM3
         hand4.RemoveAt(0);
         GM1.nextImpulse();
     }
+
 
     public IEnumerator HIS008()
     {
@@ -1046,7 +1053,7 @@ public class GM3
         }
         else if (GM1.player == 0)
         {
-            currentTextObject.post("Add 2 mercenaries");
+            currentTextObject.post("Remove 2 mercenaries");
             for (int i = 0; i < 2; i++)
             {
                 List<int> pickSpaces = new List<int>();
@@ -1057,26 +1064,29 @@ public class GM3
                         pickSpaces.Add(j);
                     }
                 }
-                highlightSelected = -1;
-                onMercLayer();
-                onHighlight(pickSpaces);
-                while (highlightSelected == -1)
+                if(pickSpaces.Count > 0)
                 {
-                    //UnityEngine.Debug.Log("here");
-                    yield return null;
-                }
-                if (spacesGM.ElementAt(highlightSelected).merc == 1)
-                {
-                    spacesGM.ElementAt(highlightSelected).merc = 0;
-                }
-                else
-                {
-                    spacesGM.ElementAt(highlightSelected).merc--;
-                }
-                onChangeMerc(highlightSelected, spacesGM.ElementAt(highlightSelected).regularPower);
-                if (siegeScript.status == 4 && highlightSelected == siegeScript.initial)
-                {
-                    siegeScript.attackerDice++;
+                    highlightSelected = -1;
+                    onMercLayer();
+                    onHighlight(pickSpaces);
+                    while (highlightSelected == -1)
+                    {
+                        //UnityEngine.Debug.Log("here");
+                        yield return null;
+                    }
+                    if (spacesGM.ElementAt(highlightSelected).merc == 1)
+                    {
+                        spacesGM.ElementAt(highlightSelected).merc = 0;
+                    }
+                    else
+                    {
+                        spacesGM.ElementAt(highlightSelected).merc--;
+                    }
+                    onChangeMerc(highlightSelected, spacesGM.ElementAt(highlightSelected).regularPower);
+                    if (siegeScript.status == 4 && highlightSelected == siegeScript.initial)
+                    {
+                        siegeScript.attackerDice++;
+                    }
                 }
             }
 
@@ -1513,7 +1523,7 @@ public class GM3
         highlightSelected = -1;
         onNoLayer();
         onHighlight(pickSpaces);
-        while (GM2.boolStates[74])
+        while (GM2.boolStates[51])
         {
             yield return null;
         }
@@ -1616,7 +1626,7 @@ public class GM3
             yield return null;
         }
         
-            GameObject.Destroy(GameObject.Find("exploration_" + highlightSelected.ToString()));
+            GameObject.Destroy(GameObject.Find("exploration_" + highlightSelected.ToString()).gameObject);
             GM2.boolStates[highlightSelected + 18] = false;
             GM2.intStates[9] = highlightSelected;
 
@@ -1668,7 +1678,7 @@ public class GM3
             while (pickSpaces.Count == 0)
             {
                 HashSet<int> temp = searchIndex;
-                searchIndex.Clear();
+                int len = searchIndex.Count;
                 for (int k = 0; k < searchIndex.Count(); k++)
                 {
                     for (int j = 0; j < spaces.ElementAt(searchIndex.ElementAt(k)).adjacent.Count(); j++)
@@ -1683,10 +1693,9 @@ public class GM3
                             searchIndex.Add(spaces.ElementAt(searchIndex.ElementAt(k)).adjacent[j] - 1);
                         }
 
-
                     }
                 }
-
+                
 
             }
             highlightSelected = -1;
@@ -2242,16 +2251,23 @@ public class GM3
         {
             yield return null;
         }
+        UnityEngine.Debug.Log("HIS098 " + highlightSelected.ToString());
         if (highlightSelected<4)
         {
-
-            GameObject.Destroy(GameObject.Find("exploration_" + highlightSelected.ToString()));
+            if (GM2.boolStates[24 + highlightSelected])
+            {
+                GameObject.Destroy(GameObject.Find("charted_" + highlightSelected.ToString()).gameObject);
+            }
+            else
+            {
+                GameObject.Destroy(GameObject.Find("uncharted_" + highlightSelected.ToString()).gameObject);
+            }
             GM2.boolStates[highlightSelected + 18] = false;
             GM2.intStates[9] = highlightSelected;
         }
         else
         {
-            GameObject.Destroy(GameObject.Find("conquest_" + (highlightSelected - 3).ToString()));
+            GameObject.Destroy(GameObject.Find("conquest_" + (highlightSelected - 3).ToString()).gameObject);
             GM2.boolStates[highlightSelected + 21] = false;
             GM2.intStates[10] = highlightSelected;
         }
@@ -2600,6 +2616,8 @@ public class GM3
             yield return null;
         }
         yield return new WaitForSeconds(3);
+        GameObject.Find("KeyLeft").GetComponent<Button>().interactable = true;
+        GameObject.Find("KeyRight").GetComponent<Button>().interactable = true;
         if (GM1.maritalStatus[2])
         {
             DeckScript.removeCard(GM1.player, 112);

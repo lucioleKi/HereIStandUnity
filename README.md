@@ -159,6 +159,10 @@ Coded event cards in the 90 range. Added the list for tracking coded cards.
 
 Coded more event cards and debugged in the 70-80 range.
 
+1/31/2023
+
+Debugging.
+
 ### Coding plan and progress for cards
 
 #### All play conditions and options coded:

@@ -433,7 +433,7 @@ public class GM2 : MonoBehaviour
         InputToggleObject inputToggleObject = GameObject.Find("InputToggle").GetComponent("InputToggleObject") as InputToggleObject;
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         InputNumberObject inputNumberObject = GameObject.Find("InputNumber").GetComponent("InputNumberObject") as InputNumberObject;
-        currentTextObject.pauseColor();
+        //currentTextObject.pauseColor();
         currentTextObject.post("Specify your own debater?\nSpecify language zone.");
         inputToggleObject.post();
         inputNumberObject.post();
@@ -1586,9 +1586,9 @@ public class GM2 : MonoBehaviour
                     command = leaders.ElementAt(leaderSelected - 1).command;
                 }
 
-                if (command > regulars[capital - 1])
+                if (command > spacesGM.ElementAt(capital - 1).regular)
                 {
-                    command = regulars[capital - 1];
+                    command = spacesGM.ElementAt(capital - 1).regular;
                 }
             }
 

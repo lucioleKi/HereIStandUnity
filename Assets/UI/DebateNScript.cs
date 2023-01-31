@@ -268,7 +268,7 @@ public class DebateNScript : MonoBehaviour
                 break;
             case 6:
 
-                step=5;
+                
                 inputNumberObject.reset();
                 inputToggleObject.reset();
                 currentTextObject.reset();
@@ -282,6 +282,7 @@ public class DebateNScript : MonoBehaviour
 
     public void post()
     {
+        step = 0;
         GM2.boolStates[2] = true;
         btn.interactable = true;
         gameObject.GetComponent<CanvasGroup>().alpha = 1;
@@ -305,6 +306,7 @@ public class DebateNScript : MonoBehaviour
 
     void reset()
     {
+        step = -1;
         GM2.boolStates[2] = false;
         btn.interactable = false;
         gameObject.GetComponent<CanvasGroup>().alpha = 0;
@@ -316,10 +318,7 @@ public class DebateNScript : MonoBehaviour
             GM1.player = tempPlayer;
             GM2.onPlayerChange();
             tempPlayer= -1;
-            if (GM1.phase == 6)
-            {
-                GM1.nextImpulse();
-            }
+            
         }
     }
 

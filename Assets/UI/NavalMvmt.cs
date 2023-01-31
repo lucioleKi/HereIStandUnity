@@ -186,11 +186,12 @@ public class NavalMvmt : MonoBehaviour
         number.Clear();
         hasLeader.Clear();
         canIntercept.Clear();
+        GM2.boolStates[31] = false;
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         GM2.onCPChange(textScript.displayCP - 1);
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.reset();
-        GM2.boolStates[31] = false;
+        
     }
 
     public void required2()

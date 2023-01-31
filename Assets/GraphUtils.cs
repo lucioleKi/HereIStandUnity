@@ -473,7 +473,7 @@ public class GraphUtils
         {
             int siegedPower = spacesGM.ElementAt(siegedSpaces.ElementAt(i)).controlPower;
 
-            if (GM1.diplomacyState[GM1.player, siegedPower] != 1 && GM1.diplomacyState[siegedPower, GM1.player] != 1)
+            if ((GM1.player<siegedPower&&GM1.diplomacyState[GM1.player, siegedPower] != 1) || (siegedPower<GM1.player&&GM1.diplomacyState[siegedPower, GM1.player] != 1))
             {
                 siegedSpaces.Remove(siegedSpaces.ElementAt(i));
                 continue;
