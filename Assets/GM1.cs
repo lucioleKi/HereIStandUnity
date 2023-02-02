@@ -70,12 +70,17 @@ public class GM1 : MonoBehaviour
         cardTracks[4] = status4.cardTrack;
         cardTracks[5] = status5.protestantSpaces;
         piracyC = status0.piracyTrack;
-        maritalStatus = status2.maritalStatus;
-        excommunicated = status4.excommunicated;
-        translations = status5.translationInit;
+        maritalStatus = new bool[status2.maritalStatus.Length];
+        Array.Copy(status2.maritalStatus, maritalStatus, status2.maritalStatus.Length);
+        excommunicated = new bool[status4.excommunicated.Length];
+        Array.Copy(status4.excommunicated, excommunicated, status4.excommunicated.Length);
+        translations = new int[6];
+        Array.Copy(status5.translationInit, translations, 6);
+        
         StPeters = new int[2];
         ScenarioObject scenario = Resources.Load("Objects/Scenario3/1517") as ScenarioObject;
-        turn = scenario.turnStart;
+        //turn = scenario.turnStart;
+        turn = 3;
         phase = scenario.phaseStart;
         segment = 1;
         powerObjects = new PowerObject[10];

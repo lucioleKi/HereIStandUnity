@@ -35,6 +35,16 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             actionIndex = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(14));
             UnityEngine.Debug.Log("actionIndex " + actionIndex.ToString());
         }
+        else if (eventData.pointerCurrentRaycast.gameObject.name[2] == 'c')
+        {
+            //excomHighlight
+            highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(15));
+            foreach (Transform child in GameObject.Find("HighlightCPDisplay").transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+            return;
+        }
         else
         {
             return;

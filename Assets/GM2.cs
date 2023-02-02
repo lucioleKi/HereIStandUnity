@@ -112,6 +112,7 @@ public class GM2 : MonoBehaviour
     //50: waiting for HIS087
     //51: Knights of St. John on map
     //51: waiting for HIS074
+    //52-58: once excommunicated
     //0: which power has HIS031 effect
     //1: which explorer for 1
     //2: which explorer for 2
@@ -124,7 +125,7 @@ public class GM2 : MonoBehaviour
     //9: which power can't start another exploration
     //10: which power can't start another conquest
     //11: where is Knights of St. John
-    //12: which power has negative1Card
+    //12: which power has negative1Card from HIS079 Fuggers
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
@@ -138,7 +139,7 @@ public class GM2 : MonoBehaviour
     {
         boolStates = new bool[60];
         intStates = new int[20];
-        for(int i=0; i<20; i++)
+        for (int i = 0; i < 20; i++)
         {
             intStates[i] = -1;
         }
@@ -223,6 +224,9 @@ public class GM2 : MonoBehaviour
                 break;
             case 4:
                 StartCoroutine(gm3.HIS004());
+                break;
+            case 5:
+                StartCoroutine(gm3.HIS005());
                 break;
             case 6:
                 StartCoroutine(gm3.HIS006());
@@ -729,7 +733,7 @@ public class GM2 : MonoBehaviour
             List<CardObject> tempHand = new List<CardObject>();
             int temp = drawNumber(i);
             //reset negative1Card
-            if (intStates[11]==i)
+            if (intStates[11] == i)
             {
                 temp--;
                 intStates[11] = -1;
@@ -873,7 +877,7 @@ public class GM2 : MonoBehaviour
         negotiationSegment(tempForm);
         onChangeDip();
         if (turn != 1)
-       {
+        {
             segment++;
         }
         else
@@ -904,7 +908,7 @@ public class GM2 : MonoBehaviour
                     {
                         diplomacyState[i, j] = tempForm.dipStatus[i, j];
                     }
-                    
+
                 }
 
 
@@ -1314,7 +1318,7 @@ public class GM2 : MonoBehaviour
         else if (hit1 < hit2)
         {
             currentTextObject.post("Dices: Protestant " + secretCP[5].ToString() + ". Hapsburg " + secretCP[1].ToString() + ". Papal " + secretCP[4].ToString() + "" + "\nProtestant hit: " + hit1.ToString() + ". Catholic hit: " + hit2.ToString() + "\nCatholic victory. Flip " + (hit2 - hit1).ToString() + " space(s).");
-            
+
             if (hit2 - hit1 > GM1.protestantSpaces)
             {
                 //boundary case where not enough spaces can be converted
@@ -1485,7 +1489,7 @@ public class GM2 : MonoBehaviour
                 {
                     has109 = i;
                 }
-                if (temp.ElementAt(j).id == 102&&i!=5)
+                if (temp.ElementAt(j).id == 102 && i != 5)
                 {
                     has102 = i;
                 }
@@ -1493,7 +1497,7 @@ public class GM2 : MonoBehaviour
         }
 
         StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
-        if (has109 != -1&& !startButton.btn.interactable)
+        if (has109 != -1 && !startButton.btn.interactable)
         {
 
             GM1.player = has109;
@@ -1502,7 +1506,7 @@ public class GM2 : MonoBehaviour
             onChosenCard();
             onSkipCard(109);
         }
-        else if(has109 != -1 && startButton.btn.interactable)
+        else if (has109 != -1 && startButton.btn.interactable)
         {
             //spring deployment
             startButton.status = -1;
@@ -1780,7 +1784,7 @@ public class GM2 : MonoBehaviour
                         {
                             intStates[1] = UnityEngine.Random.Range(1, explorers1.Count);
                         }
-                        modifier[modifier.Count-1] += explorers1.ElementAt(intStates[1]).value;
+                        modifier[modifier.Count - 1] += explorers1.ElementAt(intStates[1]).value;
 
                         UnityEngine.Debug.Log(explorers1.ElementAt(intStates[1]).name);
                         newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + explorers1.ElementAt(intStates[1]).name);
@@ -1917,7 +1921,8 @@ public class GM2 : MonoBehaviour
                     {
                         GameObject.Destroy(GameObject.Find("explorer_1"));
                         explorers1.RemoveAt(intStates[1]);
-                    }else if (randomIndex < 7)
+                    }
+                    else if (randomIndex < 7)
                     {
                         GameObject.Destroy(GameObject.Find("explorer_1"));
                     }
@@ -1967,7 +1972,7 @@ public class GM2 : MonoBehaviour
                     }
                     else if (randomIndex < 10)
                     {
-                        if (GameObject.Find("MississippiRiver") !=null&&GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
+                        if (GameObject.Find("MississippiRiver") != null && GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("MississippiRiver"));
                             GameObject.Find("explorer_2").transform.SetParent(GameObject.Find("NewWorld").transform);
@@ -2061,7 +2066,7 @@ public class GM2 : MonoBehaviour
         string[] names = new string[] { "PacificStrait", "AmazonRiver", "GreatLakes", "StLawrenceRiver", "MississippiRiver" };
         for (int i = 0; i < 5; i++)
         {
-            if (GameObject.Find(names[i]) != null||(i==0&&GameObject.Find("Circumnavigation")!=null))
+            if (GameObject.Find(names[i]) != null || (i == 0 && GameObject.Find("Circumnavigation") != null))
             {
                 highlightScript.highlightCoordinate(GameObject.Find(names[i]).transform.position.x, GameObject.Find(names[i]).transform.position.y, i);
                 UnityEngine.Debug.Log(GameObject.Find(names[i]).transform.position.x);
@@ -2088,11 +2093,11 @@ public class GM2 : MonoBehaviour
                 temp = handMarkerScript.bonus3;
                 break;
         }
-        if (highlightSelected != 0||(highlightSelected==0&& GameObject.Find("PacificStrait")!=null))
+        if (highlightSelected != 0 || (highlightSelected == 0 && GameObject.Find("PacificStrait") != null))
         {
 
             GameObject.Find("explorer_" + power.ToString()).transform.SetParent(GameObject.Find("NewWorld").transform);
-            GameObject.Find("explorer_" + power.ToString()).GetComponent<RectTransform>().anchoredPosition = new Vector2(GameObject.Find(names[highlightSelected]).transform.position.x-990, GameObject.Find(names[highlightSelected]).transform.position.y-223);
+            GameObject.Find("explorer_" + power.ToString()).GetComponent<RectTransform>().anchoredPosition = new Vector2(GameObject.Find(names[highlightSelected]).transform.position.x - 990, GameObject.Find(names[highlightSelected]).transform.position.y - 223);
             GameObject.Destroy(GameObject.Find(names[highlightSelected]));
             switch (highlightSelected)
             {
@@ -2117,7 +2122,7 @@ public class GM2 : MonoBehaviour
             GM1.updateVP();
             onVP();
         }
-        if(highlightSelected==0)
+        if (highlightSelected == 0)
         {
 
             int randomIndex = UnityEngine.Random.Range(1, 7) + UnityEngine.Random.Range(1, 7) + modifier;
@@ -2161,11 +2166,11 @@ public class GM2 : MonoBehaviour
     {
         List<int> order = new List<int>();
         List<int> modifier = new List<int>();
-        
+
         if (boolStates[22])
         {
             order.Add(1);
-            
+
             intStates[4] = UnityEngine.Random.Range(0, conquests.Count);
             modifier.Add(intStates[4]);
             GameObject.Find("conquest_1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + conquests.ElementAt(intStates[4]).name);
@@ -2191,7 +2196,7 @@ public class GM2 : MonoBehaviour
         {
             highlightSelected = -1;
             onNoLayer();
-            highlightScript.highlightNewWorld(i+3);
+            highlightScript.highlightNewWorld(i + 3);
 
             int randomIndex;
             while (highlightSelected == -1)
@@ -2245,7 +2250,7 @@ public class GM2 : MonoBehaviour
                     else
                     {
                         int index = -1;
-                        for(int j=4; j<7; j++)
+                        for (int j = 4; j < 7; j++)
                         {
                             if (!boolStates[39 + j])
                             {
@@ -2254,16 +2259,16 @@ public class GM2 : MonoBehaviour
                                 break;
                             }
                         }
-                        if (intStates[5]==0)
+                        if (intStates[5] == 0)
                         {
                             intStates[5] = 1;
-                            GameObject.Find("Inca").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107-34*index);
+                            GameObject.Find("Inca").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107 - 34 * index);
                             GameObject.Find("conquest_1").transform.SetParent(GameObject.Find("NewWorld").transform);
                             GameObject.Find("conquest_1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-774, -391);
                             //handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/Inca2VP");
 
                         }
-                        else if (intStates[6]==0)
+                        else if (intStates[6] == 0)
                         {
                             intStates[6] = 1;
                             GameObject.Find("Aztecs").GetComponent<RectTransform>().anchoredPosition = new Vector2(-879, 107 - 34 * index);
@@ -2290,7 +2295,8 @@ public class GM2 : MonoBehaviour
                     {
                         GameObject.Destroy(GameObject.Find("conquest_2"));
                         conquests.RemoveAt(intStates[4]);
-                    }else if (randomIndex < 9)
+                    }
+                    else if (randomIndex < 9)
                     {
                         GameObject.Destroy(GameObject.Find("conquest_2"));
                     }
@@ -2409,10 +2415,11 @@ public class GM2 : MonoBehaviour
             currentTextObject.post("You won the game via a standard victory!");
             return;
         }
-        if (GM1.turn > 3) { 
+        if (GM1.turn > 3)
+        {
             int leader = Array.IndexOf(GM1.VPs, GM1.VPs.Max());
             bool canVictory = true;
-            for(int i=0; i<6; i++)
+            for (int i = 0; i < 6; i++)
             {
                 if (i != leader && GM1.VPs[leader] - GM1.VPs[i] < 5)
                 {

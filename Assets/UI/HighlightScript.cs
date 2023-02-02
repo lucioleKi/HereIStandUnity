@@ -95,6 +95,18 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         
     }
 
+    public void highlightExcom(List<int> canExcom)
+    {
+        GM2.resetPower();
+        for(int i=0; i<canExcom.Count; i++)
+        {
+            GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/square"), new Vector3(0, 0, 0), Quaternion.identity);
+            tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(642f + 24.83f * (canExcom.ElementAt(i)+1) + 938f, -315f + 540f);
+            tempObject.transform.SetParent(GameObject.Find("HighlightCPDisplay").transform);
+            tempObject.name = "excomHighlight_" + canExcom.ElementAt(i).ToString();
+        }
+    }
+
     public void highlightCoordinate(float x, float y, int index)
     {
         GM2.resetMap();
@@ -501,7 +513,6 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         {
             GameObject.Destroy(child.gameObject);
         }
-
     }
 
     
@@ -538,8 +549,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         {
             //nwhighlight
             highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(12));
-        }
-        else
+        }else 
         {
             return;
         }

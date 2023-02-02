@@ -163,11 +163,15 @@ Coded more event cards and debugged in the 70-80 range.
 
 Debugging.
 
+2/2/2023
+
+Fixed shallow copy problem. Coded more cards.
+
 ### Coding plan and progress for cards
 
 #### All play conditions and options coded:
 
-Home cards: 1, 2, 4, 6
+Home cards: 1, 2, 4, 5, 6
 
 Mandatory cards: 8-14, 16, 18-23
 
