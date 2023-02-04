@@ -5,6 +5,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static EnumSpaceScript;
 using static GraphUtils;
 using static DeckScript;
 using static GM2;
@@ -56,7 +57,7 @@ public class SiegeScript : MonoBehaviour
         {
             btn.interactable = false;
         }
-        
+
         StartButton startButton = GameObject.Find("Start").GetComponent("StartButton") as StartButton;
 
         switch (btnStatus)
@@ -156,7 +157,7 @@ public class SiegeScript : MonoBehaviour
         GM2.onCPChange(textScript.displayCP - 1);
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.reset();
-        
+
         //HIS105 treachery
         if (GM2.boolStates[35])
         {
@@ -168,7 +169,7 @@ public class SiegeScript : MonoBehaviour
                 GM1.nextImpulse();
             }
         }
-        
+
     }
 
     public void required2()
@@ -198,7 +199,7 @@ public class SiegeScript : MonoBehaviour
             case 6:
                 //end state
                 StartCoroutine(moveClear());
-                
+
                 break;
             case 7:
                 attackerCombatCards();
@@ -228,7 +229,22 @@ public class SiegeScript : MonoBehaviour
         currentTextObject.post("Declare Formation");
         InputNumberObject inputNumberObject = GameObject.Find("InputNumber").GetComponent("InputNumberObject") as InputNumberObject;
         inputNumberObject.post();
-        List<int> trace = checkSiegeFrom(GM1.player);
+        List<int> trace = new List<int>();
+        if (GM2.chosenCard == "HIS-042")
+        {
+            for (int i = 0; i < 134; i++)
+            {
+                if (spacesGM.ElementAt(i).leader1 == 15 || spacesGM.ElementAt(i).leader2 == 15)
+                {
+                    trace.Add(i);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            trace = checkSiegeFrom(GM1.player);
+        }
         GM2.highlightSelected = -1;
         leaderSelected = -1;
         GM2.onRegLayer();
@@ -262,8 +278,24 @@ public class SiegeScript : MonoBehaviour
         currentTextObject.post("Declare siege destination");
         //InputNumberObject inputNumberObject = GameObject.Find("InputNumber").GetComponent("InputNumberObject") as InputNumberObject;
         //inputNumberObject.post();
-        List<int> trace = checkSiege(GM1.player);
+        List<int> trace = new List<int>();
 
+        //HIS042 in effect
+        if (GM2.chosenCard == "HIS-042")
+        {
+            for (int j = 0; j < spaces.ElementAt(initial).adjacent.Count(); j++)
+            {
+
+                if (spaces.ElementAt(spaces.ElementAt(initial).adjacent[j]).spaceType != (SpaceType)0 && spacesGM.ElementAt(spaces.ElementAt(initial).adjacent[j]).controlPower != 0)
+                {
+                    trace.Add(spaces.ElementAt(initial).adjacent[j]);
+                }
+            }
+        }
+        else
+        {
+            trace = checkSiege(GM1.player);
+        }
         GM2.highlightSelected = -1;
         //leaderSelected = -1;
         GM2.onRegLayer();
@@ -271,6 +303,10 @@ public class SiegeScript : MonoBehaviour
         while (GM2.highlightSelected == -1)
         {
             yield return null;
+        }
+        if (!spacesGM.ElementAt(highlightSelected).sieged)
+        {
+            spacesGM.ElementAt(highlightSelected).sieged = true;
         }
         currentTextObject.reset();
         destination = GM2.highlightSelected;
@@ -467,7 +503,7 @@ public class SiegeScript : MonoBehaviour
                 {
                     attackerDice = spacesGM.ElementAt(initial).regular + spacesGM.ElementAt(initial).merc;
                 }
-                attackerDice = (attackerDice+1) / 2;
+                attackerDice = (attackerDice + 1) / 2;
             }
         }
         if (hasLeader)
@@ -536,7 +572,7 @@ public class SiegeScript : MonoBehaviour
                 GM1.player = siegedPlayer;
                 GM2.onPlayerChange();
             }
-            
+
             status = 8;
             required2();
         }
@@ -628,7 +664,7 @@ public class SiegeScript : MonoBehaviour
             }
             UnityEngine.Debug.Log(spacesGM.ElementAt(initial).regular);
             UnityEngine.Debug.Log(spacesGM.ElementAt(initial).merc);
-            if (command > spacesGM.ElementAt(initial).regular+ spacesGM.ElementAt(initial).merc)
+            if (command > spacesGM.ElementAt(initial).regular + spacesGM.ElementAt(initial).merc)
             {
                 command = spacesGM.ElementAt(initial).regular + spacesGM.ElementAt(initial).merc;
             }
@@ -661,7 +697,7 @@ public class SiegeScript : MonoBehaviour
             spacesGM.ElementAt(initial).regularPower = -1;
             yield break;
         }
-        
+
         spacesGM.ElementAt(destination).regular = spacesGM.ElementAt(destination).regular + command;
         UnityEngine.Debug.Log(spacesGM.ElementAt(destination).regular);
         spacesGM.ElementAt(initial).regular = spacesGM.ElementAt(initial).regular - command;
@@ -955,7 +991,7 @@ public class SiegeScript : MonoBehaviour
             {
                 GM1.cardTracks[siegedPlayer]--;
             }
-            
+
             GM1.updateVP();
             GM2.onVP();
 

@@ -393,7 +393,13 @@ public class DeckScript : MonoBehaviour
             if(card.turn <= turn&&card.turn!=0&&card.id>7)
             {
                 activeCards.Add(card);
-                UnityEngine.Debug.Log(card.id);
+                //UnityEngine.Debug.Log(card.id);
+            }else if (card.turn == 0 && card.id > 61)
+            {
+                if (GM2.boolStates[4])
+                {
+                    activeCards.Add(card);
+                }
             }
         }
         foreach(var debater in debaters)

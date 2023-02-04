@@ -113,6 +113,9 @@ public class GM2 : MonoBehaviour
     //51: Knights of St. John on map
     //51: waiting for HIS074
     //52-58: once excommunicated
+    //59: HIS039 has effect
+    //60-62: Galleons for 123
+    //63-65: Plantations for 123
     //0: which power has HIS031 effect
     //1: which explorer for 1
     //2: which explorer for 2
@@ -126,6 +129,7 @@ public class GM2 : MonoBehaviour
     //10: which power can't start another conquest
     //11: where is Knights of St. John
     //12: which power has negative1Card from HIS079 Fuggers
+    //13: which power has mercator's map
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
@@ -137,7 +141,7 @@ public class GM2 : MonoBehaviour
     //
     void OnEnable()
     {
-        boolStates = new bool[60];
+        boolStates = new bool[70];
         intStates = new int[20];
         for (int i = 0; i < 20; i++)
         {
@@ -314,14 +318,56 @@ public class GM2 : MonoBehaviour
             case 36:
                 StartCoroutine(gm3.HIS036());
                 break;
+            case 39:
+                gm3.HIS039();
+                break;
             case 40:
                 StartCoroutine(gm3.HIS040());
+                break;
+            case 41:
+                StartCoroutine(gm3.HIS041());
+                break;
+            case 42:
+                StartCoroutine(gm3.HIS042());
+                break;
+            case 43:
+                StartCoroutine(gm3.HIS043());
+                break;
+            case 44:
+                StartCoroutine(gm3.HIS044());
+                break;
+            case 45:
+                gm3.HIS045();
+                break;
+            case 46:
+                StartCoroutine(gm3.HIS046());
+                break;
+            case 48:
+                StartCoroutine(gm3.HIS048());
+                break;
+            case 50:
+                StartCoroutine(gm3.HIS050());
+                break;
+            case 51:
+                gm3.HIS051();
+                break;
+            case 52:
+                StartCoroutine(gm3.HIS052());
+                break;
+            case 53:
+                StartCoroutine(gm3.HIS053());
                 break;
             case 65:
                 StartCoroutine(gm3.HIS065());
                 break;
+            case 66:
+                StartCoroutine(gm3.HIS066());
+                break;
             case 67:
                 StartCoroutine(gm3.HIS067());
+                break;
+            case 70:
+                StartCoroutine(gm3.HIS070());
                 break;
             case 72:
                 StartCoroutine(gm3.HIS072());
@@ -526,6 +572,10 @@ public class GM2 : MonoBehaviour
         {
             reformerDice++;
         }
+        if(chosenCard == "HIS-046")
+        {
+            reformerDice++;
+        }
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
 
 
@@ -661,6 +711,11 @@ public class GM2 : MonoBehaviour
 
 
         //3. add bonus dice
+        //HIS039 has effect
+        if (boolStates[59])
+        {
+            papalDice--;
+        }
 
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
 
@@ -723,6 +778,31 @@ public class GM2 : MonoBehaviour
 
     void phase2()
     {
+        //add reformers
+        if (turn == 2)
+        {
+            activeReformers.Add(reformers.ElementAt(1));
+            GameObject tempObject = UnityEngine.Object.Instantiate((GameObject)Resources.Load("Objects/Reformer4/Zwingli"), new Vector3(spaces.ElementAt(25).posX + 965, spaces.ElementAt(25).posY + 545, 0), Quaternion.identity);
+            tempObject.transform.SetParent(GameObject.Find("Reformers").transform);
+            tempObject.name = "Zwingli";
+            tempObject.SetActive(true);
+            highlightSelected = 25;
+            changeReligion();
+        }
+        else if (turn == 4||debaters.ElementAt(25).status==(DebaterStatus)6)
+        {
+            debaters.ElementAt(25).status=(DebaterStatus)1;
+            DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
+            debatersScript.updateDebater();
+            activeReformers.Add(reformers.ElementAt(2));
+            GameObject tempObject = UnityEngine.Object.Instantiate((GameObject)Resources.Load("Objects/Reformer4/Calvin"), new Vector3(spaces.ElementAt(63).posX + 965, spaces.ElementAt(63).posY + 545, 0), Quaternion.identity);
+            tempObject.transform.SetParent(GameObject.Find("Reformers").transform);
+            tempObject.name = "Calvin";
+            tempObject.SetActive(true);
+            highlightSelected = 63;
+            changeReligion();
+        }
+        highlightSelected = -1;
         HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
         instanceDeck.addActive(turn);
         activeCards.AddRange(discardCards);
@@ -1620,6 +1700,15 @@ public class GM2 : MonoBehaviour
 
     void phase7()
     {
+        //Remove the Renegade Leader
+        for (int i = 0; i < 134; i++)
+        {
+            if (spacesGM.ElementAt(i).leader1 == 14 || spacesGM.ElementAt(i).leader2 == 14)
+            {
+                spacesGM.ElementAt(i).removeLeader(14);
+            }
+            onChangeLeader(-1, 14);
+        }
         //return naval units
 
         //return land units
@@ -1785,7 +1874,7 @@ public class GM2 : MonoBehaviour
                             intStates[1] = UnityEngine.Random.Range(1, explorers1.Count);
                         }
                         modifier[modifier.Count - 1] += explorers1.ElementAt(intStates[1]).value;
-
+                        
                         UnityEngine.Debug.Log(explorers1.ElementAt(intStates[1]).name);
                         newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + explorers1.ElementAt(intStates[1]).name);
                         break;
@@ -1818,6 +1907,11 @@ public class GM2 : MonoBehaviour
                         UnityEngine.Debug.Log(explorers3.ElementAt(intStates[3]).name);
                         newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + explorers3.ElementAt(intStates[3]).name);
                         break;
+                }
+                if (intStates[13] == i)
+                {
+                    modifier[modifier.Count - 1] += 2;
+                    intStates[13] = -1;
                 }
                 newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
                 newObject.transform.SetParent(GameObject.Find("Atlantic").transform);

@@ -10,8 +10,9 @@ using static GM2;
 
 public class GraphUtils
 {
-    public static List<int> highlightReformation()
+    public static List<int> highlightReformation(int language)
     {
+        //language -1 = all zones, 0 = english, 1 = french, 2 = german 
         //todo: make port
         List<int> highlightReformations = new List<int>();
         for (int i = 0; i < spaces.Count(); i++)
@@ -55,6 +56,14 @@ public class GraphUtils
 
 
         }
+        foreach(int space in highlightReformations)
+        {
+            if(language!=-1&&spaces.ElementAt(space).language!=(Language) language)
+            {
+                highlightReformations.Remove(space);
+            }
+        }
+
         return highlightReformations;
     }
 
@@ -270,7 +279,7 @@ public class GraphUtils
                 continue;
             }
             //not occupied by land units from another power, unless allies
-            if ((spacesGM.ElementAt(i).regular > 0 ||spacesGM.ElementAt(i).merc>0||spacesGM.ElementAt(i).squadron>0)&& diplomacyState[playerIndex, spacesGM.ElementAt(i).controlPower] != 2)
+            if ((spacesGM.ElementAt(i).regular > 0 || spacesGM.ElementAt(i).merc > 0 || spacesGM.ElementAt(i).squadron > 0) && diplomacyState[playerIndex, spacesGM.ElementAt(i).controlPower] != 2)
             {
                 //UnityEngine.Debug.Log("land units " + i.ToString());
                 continue;
@@ -319,11 +328,11 @@ public class GraphUtils
     {
         //find all squadrons (that can move)
         List<int> trace = new List<int>();
-        for (int i = 0; i <134; i++)
+        for (int i = 0; i < 134; i++)
         {
-            if (spacesGM.ElementAt(i).squadron > 0&& spacesGM.ElementAt(i).controlPower==playerIndex)
+            if (spacesGM.ElementAt(i).squadron > 0 && spacesGM.ElementAt(i).controlPower == playerIndex)
             {
-                if(findNavalDestination(playerIndex, i).Count()>0)
+                if (findNavalDestination(playerIndex, i).Count() > 0)
                     trace.Add(i);
             }
 
@@ -356,7 +365,7 @@ public class GraphUtils
                     }
                     if (GM1.diplomacyState[GM1.player, spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).controlPower] == 1 || (spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).controlPower < 6 && GM1.diplomacyState[spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).controlPower, GM1.player] == 1))
                     {
-                        if(spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).squadron > 0)
+                        if (spacesGM.ElementAt(seas.ElementAt(i).ports[j] - 1).squadron > 0)
                         {
                             trace.Add(seas.ElementAt(i).ports[j] - 1);
                             //UnityEngine.Debug.Log(seas.ElementAt(i).ports[j] - 1);
@@ -473,7 +482,7 @@ public class GraphUtils
         {
             int siegedPower = spacesGM.ElementAt(siegedSpaces.ElementAt(i)).controlPower;
 
-            if ((GM1.player<siegedPower&&GM1.diplomacyState[GM1.player, siegedPower] != 1) || (siegedPower<GM1.player&&GM1.diplomacyState[siegedPower, GM1.player] != 1))
+            if ((GM1.player < siegedPower && GM1.diplomacyState[GM1.player, siegedPower] != 1) || (siegedPower < GM1.player && GM1.diplomacyState[siegedPower, GM1.player] != 1))
             {
                 siegedSpaces.Remove(siegedSpaces.ElementAt(i));
                 continue;

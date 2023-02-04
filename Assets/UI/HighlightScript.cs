@@ -95,6 +95,21 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         
     }
 
+    public void highlightColonies()
+    {
+        GM2.resetMap();
+        for (int i = 0; i < 7; i++)
+        {
+            if (GM2.boolStates[i + 9])
+            {
+                GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/square"), new Vector3(0, 0, 0), Quaternion.identity);
+                tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-915, 107-34*i);
+                tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+                tempObject.name = "colonyHighlight_" + i.ToString();
+            }
+        }
+    }
+
     public void highlightExcom(List<int> canExcom)
     {
         GM2.resetPower();
@@ -527,11 +542,11 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         {
             //highlight_
             highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(10));
-        }else if (eventData.pointerCurrentRaycast.gameObject.name[12] == '_')
+        } else if (eventData.pointerCurrentRaycast.gameObject.name[12] == '_')
         {
             //highlightRect_
             highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(13));
-        }else if (eventData.pointerCurrentRaycast.gameObject.name[0] == 'e')
+        } else if (eventData.pointerCurrentRaycast.gameObject.name[0] == 'e')
         {
             if (eventData.pointerCurrentRaycast.gameObject.name.Length > 16)
             {
@@ -543,13 +558,16 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                 //exploreHighlight
                 highlightSelected = 0;
             }
-            
 
-        }else if(eventData.pointerCurrentRaycast.gameObject.name[0] == 'n')
+
+        } else if (eventData.pointerCurrentRaycast.gameObject.name[0] == 'n')
         {
             //nwhighlight
             highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(12));
-        }else 
+        } else if (eventData.pointerCurrentRaycast.gameObject.name[0] == 'c') {
+            //colonyHighlight
+            highlightSelected = int.Parse(eventData.pointerCurrentRaycast.gameObject.name.Substring(16));
+        } else
         {
             return;
         }

@@ -379,6 +379,11 @@ public class DebateNScript : MonoBehaviour
                 reformerDice = debaters.ElementAt(attackerIndex).value + 1;
             }
             papalDice = debaters.ElementAt(defenderIndex).value + 3;
+            //HIS039 has effect
+            if (GM2.boolStates[59])
+            {
+                papalDice--;
+            }
         }
         else
         {
@@ -517,7 +522,7 @@ public class DebateNScript : MonoBehaviour
             for (int i = 0; i < hit5 - hit4; i++)
             {
 
-                List<int> pickSpaces = highlightReformation();
+                List<int> pickSpaces = highlightReformation(-1);
                 highlightSelected = -1;
                 currentTextObject.post("Flip a space to Protestant influence.");
                 onNoLayer();

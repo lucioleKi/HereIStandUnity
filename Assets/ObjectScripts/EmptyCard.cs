@@ -270,12 +270,183 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 return false;
             }
         }
+        if (index == 39)
+        {
+            //if Melanchthon uncommitted
+            if (DeckScript.debaters.ElementAt(13).status == (DebaterStatus)1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 41)
+        {
+            if ((DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1|| DeckScript.debaters.ElementAt(13).status == (DebaterStatus)1)&& (DeckScript.debaters.ElementAt(16).status == (DebaterStatus)1 || DeckScript.debaters.ElementAt(17).status == (DebaterStatus)1))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 42)
+        {
+            //formation with suleiman can siege
+            if (GM1.player == 0)
+            {
+                int pos = -1;
+                for(int i=0; i<134; i++)
+                {
+                    if(spacesGM.ElementAt(i).leader1 == 15 || spacesGM.ElementAt(i).leader2 == 15) {
+                        pos = i;
+                        break;
+                    }
+                }
+                for (int j = 0; j < spaces.ElementAt(pos).adjacent.Count(); j++)
+                {
+
+                    if (spaces.ElementAt(spaces.ElementAt(pos).adjacent[j]).spaceType!=(SpaceType)0&&spacesGM.ElementAt(spaces.ElementAt(pos).adjacent[j]).controlPower!=0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            else if(spacesGM.ElementAt(97).leader1 == 15 || spacesGM.ElementAt(97).leader2 == 15)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        if (index == 44)
+        {
+            //if cop is uncommitted
+            if(DeckScript.debaters.ElementAt(27).status == (DebaterStatus)1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 46)
+        {
+            //if calvin is uncommitted
+            if (DeckScript.debaters.ElementAt(25).status == (DebaterStatus)1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 48)
+        {
+            //if there exists a colony without galleons
+            for(int i=9; i<16; i++)
+            {
+                if (GM2.boolStates[i]&&!GM2.boolStates[(i+1)/2+55])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (index == 50)
+        {
+            //if can explore
+            for(int i=19; i<22; i++)
+            {
+                if (!GM2.boolStates[i])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (index == 51)
+        {
+            //5 has more than home card
+            if (hand5.Count == 0 || hand5.Count == 1 && hand5.ElementAt(0).id == 7)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        if (index == 53)
+        {
+            //if there exists a colony without plantations
+            for (int i = 9; i < 16; i++)
+            {
+                if (GM2.boolStates[i] && !GM2.boolStates[(i + 1) / 2 + 58])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         if (index == 64)
         {
             if (GM1.player == 5 && DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1)
             {
 
                 return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 65)
+        {
+            //if luther is uncommitted
+            if (DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 66)
+        {
+            if (GM1.diplomacyState[0, 1]==1|| GM1.diplomacyState[0, 2] == 1||GM1.diplomacyState[0, 3] == 1|| GM1.diplomacyState[0, 4] == 1|| GM1.diplomacyState[0, 5] == 1)
+            {
+                if(GM1.diplomacyState[0, 1] == 1 && (DeckScript.hand1.Count > 1 || (DeckScript.hand1.Count > 1&&DeckScript.hand1.ElementAt(0).id != 2)))
+                {
+                    return true;
+                }else if (GM1.diplomacyState[0, 2] == 1 && (DeckScript.hand2.Count > 1 || (DeckScript.hand2.Count > 1&&DeckScript.hand2.ElementAt(0).id != 3)))
+                {
+                    return true;
+                }else if (GM1.diplomacyState[0, 3] == 1 && (DeckScript.hand3.Count > 1 || (DeckScript.hand3.Count > 1&&DeckScript.hand3.ElementAt(0).id != 4)))
+                {
+                    return true;
+                }else if (GM1.diplomacyState[0, 4] == 1 && (DeckScript.hand4.Count > 2 || (DeckScript.hand4.Count > 0&&DeckScript.hand4.ElementAt(0).id > 6)|| (DeckScript.hand4.Count > 1&&DeckScript.hand4.ElementAt(1).id > 6)))
+                {
+                    return true;
+                }else if (GM1.diplomacyState[0, 5] == 1 && (DeckScript.hand5.Count > 1 || (DeckScript.hand5.Count > 1&&DeckScript.hand5.ElementAt(0).id != 7)))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                //todo ottoman cavalry within two spaces of the targeted power
+
             }
             else
             {

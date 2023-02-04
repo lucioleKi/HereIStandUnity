@@ -120,7 +120,10 @@ public class GM3
         onChosenCard();
         currentTextObject.reset();
         hand0.RemoveAt(0);
-        GM1.nextImpulse();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
     }
 
     public IEnumerator HIS002()
@@ -185,7 +188,10 @@ public class GM3
         GM2.onCPChange(GM2.currentCP);
         inputToggleObject.reset();
         hand1.RemoveAt(0);
-        //GM1.nextImpulse();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
     }
 
     public IEnumerator HIS003A()
@@ -355,29 +361,32 @@ public class GM3
         chosenCard = "";
         onChosenCard();
 
-        GM1.nextImpulse();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
     }
 
     public IEnumerator HIS005()
     {
-        List<int> canExcom = new List<int>() {};
+        List<int> canExcom = new List<int>() { };
 
         int[] indices = new int[3] { 6, 4, 5 };
         if (!GM2.boolStates[52])
         {
             canExcom.Add(0);
         }
-        if (turn > 1&& !GM2.boolStates[53])
+        if (turn > 1 && !GM2.boolStates[53])
         {
             canExcom.Add(1);
         }
-        if (turn > 3&& !GM2.boolStates[54])
+        if (turn > 3 && !GM2.boolStates[54])
         {
             canExcom.Add(2);
         }
         for (int i = 1; i < 4; i++)
         {
-            if (!GM2.boolStates[55+i])
+            if (!GM2.boolStates[55 + i])
             {
                 if (GM1.diplomacyState[i, 4] == 1 || GM1.diplomacyState[0, i] == 2)
                 {
@@ -388,7 +397,7 @@ public class GM3
                     canExcom.Add(4);
                 }
             }
-            
+
 
         }
         highlightSelected = -1;
@@ -399,7 +408,7 @@ public class GM3
             yield return null;
         }
         GM1.excommunicated[highlightSelected] = true;
-        GM2.boolStates[52+highlightSelected] = true;
+        GM2.boolStates[52 + highlightSelected] = true;
         if (highlightSelected < 4)
         {
             switch (highlightSelected)
@@ -446,24 +455,38 @@ public class GM3
             }
             for (int i = 0; i < 2; i++)
             {
-                List<int> pickSpaces = findUnoccupied(findTrace(Array.IndexOf(indices, temp)+1));
-                highlightSelected = -1;
-                onSpaceLayer();
-                onHighlight(pickSpaces);
-
-                while (highlightSelected == -1)
+                List<int> pickSpaces = findUnoccupied(findTrace(Array.IndexOf(indices, temp) + 1));
+                foreach (int space in pickSpaces)
                 {
-                    //UnityEngine.Debug.Log("here");
-                    yield return null;
+                    if (GM1.religiousInfluence[space] == (Religion)1)
+                    {
+                        pickSpaces.Remove(space);
+                    }
                 }
-                spacesGM.ElementAt(highlightSelected).unrest = true;
-                GM2.onChangeUnrest(highlightSelected);
+                if (pickSpaces.Count > 0)
+                {
+                    highlightSelected = -1;
+                    onSpaceLayer();
+                    onHighlight(pickSpaces);
+
+                    while (highlightSelected == -1)
+                    {
+                        //UnityEngine.Debug.Log("here");
+                        yield return null;
+                    }
+                    spacesGM.ElementAt(highlightSelected).unrest = true;
+                    GM2.onChangeUnrest(highlightSelected);
+                }
+
             }
         }
         chosenCard = "";
         onChosenCard();
         hand4.RemoveAt(0);
-        GM1.nextImpulse();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
     }
 
     public IEnumerator HIS006()
@@ -488,8 +511,18 @@ public class GM3
         currentTextObject.restartColor();
         chosenCard = "";
         onChosenCard();
-        hand4.RemoveAt(0);
-        GM1.nextImpulse();
+        if (hand4.ElementAt(0).id == 6)
+        {
+            hand4.RemoveAt(0);
+        }
+        else
+        {
+            hand4.RemoveAt(1);
+        }
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
     }
 
 
@@ -511,7 +544,7 @@ public class GM3
 
 
 
-            List<int> pickSpaces = highlightReformation();
+            List<int> pickSpaces = highlightReformation(2);
             highlightSelected = -1;
             onNoLayer();
             onHighlight(pickSpaces);
@@ -1372,6 +1405,21 @@ public class GM3
         }
     }
 
+    public void HIS039()
+    {
+        GM2.boolStates[59] = true;
+        debaters.ElementAt(13).status = (DebaterStatus)2;
+        DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
+        debatersScript.updateDebater();
+        DeckScript.removeCard(GM1.player, 39);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
     public IEnumerator HIS040()
     {
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
@@ -1411,19 +1459,193 @@ public class GM3
         //}
     }
 
-    public IEnumerator HIS065()
+    public IEnumerator HIS041()
     {
-        if (DeckScript.debaters.ElementAt(12).status == (DebaterStatus)1)
+        int temp = GM1.player;
+        GM1.player = 5;
+        GM2.onPlayerChange();
+        int value = 0;
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        currentTextObject.post("Pick 2 highlighted target spaces");
+        DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
+
+        if (DeckScript.debaters.ElementAt(12).status != (DebaterStatus)1)
+        {
+            DeckScript.debaters.ElementAt(13).status = (DebaterStatus)2;
+            value += 3;
+            debatersScript.updateDebater();
+        }
+        else if (DeckScript.debaters.ElementAt(13).status != (DebaterStatus)1)
         {
             DeckScript.debaters.ElementAt(12).status = (DebaterStatus)2;
-            CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+            value += 4;
+            debatersScript.updateDebater();
+        }
+        else
+        {
+            //todo change this
+            DeckScript.debaters.ElementAt(12).status = (DebaterStatus)2;
+            value += 4;
+            debatersScript.updateDebater();
+        }
+        if (DeckScript.debaters.ElementAt(16).status != (DebaterStatus)1)
+        {
+            DeckScript.debaters.ElementAt(17).status = (DebaterStatus)2;
+            value += 3;
+            debatersScript.updateDebater();
+        }
+        else if (DeckScript.debaters.ElementAt(17).status != (DebaterStatus)1)
+        {
+            DeckScript.debaters.ElementAt(16).status = (DebaterStatus)2;
+            value += 2;
+            debatersScript.updateDebater();
+        }
+        else
+        {
+            //todo change this
+            DeckScript.debaters.ElementAt(17).status = (DebaterStatus)2;
+            value += 3;
+            debatersScript.updateDebater();
+        }
+        for (int i = 0; i < value; i++)
+        {
 
-            currentTextObject.post("Pick 6 highlighted target spaces");
-            for (int i = 0; i < 5; i++)
+
+            List<int> pickSpaces = highlightReformation(-1);
+            highlightSelected = -1;
+            onSpaceLayer();
+            onHighlight(pickSpaces);
+
+            onHighlightSelected += reformAttempt;
+            while (highlightSelected == -1)
             {
+                //UnityEngine.Debug.Log("here");
+                yield return null;
+            }
+
+            UnityEngine.Debug.Log("end");
+            //onRemoveHighlight(converted);
+        }
+        yield return new WaitForSeconds(3);
+        GM1.player = temp;
+        GM2.onPlayerChange();
+        currentTextObject.reset();
+        DeckScript.removeCard(GM1.player, 41);
+        highlightSelected = -1;
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS042()
+    {
+        if (GM1.player == 0)
+        {
+            SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
+            siegeScript.post();
+            while (GM2.boolStates[30])
+            {
+                yield return null;
+            }
+            GM2.currentCP = 4;
+        }
+        else
+        {
+            for (int i = 0; i < 134; i++)
+            {
+                if (spacesGM.ElementAt(i).leader1 == 15 || spacesGM.ElementAt(i).leader2 == 15)
+                {
+                    spacesGM.ElementAt(i).removeLeader(15);
+                    spacesGM.ElementAt(97).addLeader(15);
+                    GM2.onChangeLeader(97, 15);
+                    break;
+                }
+            }
+            GM2.currentCP = 2;
+
+        }
+        GM2.onCPChange(GM2.currentCP);
+        DeckScript.discardById(GM1.player, 42);
+        chosenCard = "";
+        onChosenCard();
+    }
+
+    public IEnumerator HIS043()
+    {
+        int temp = GM1.player;
+        GM1.player = 5;
+        GM2.onPlayerChange();
+        List<int> pickSpaces = new List<int> { 6, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 42, 46, 47, 59, 61, 63, 75, 76, 78, 79, 80 };
+        foreach (int space in pickSpaces)
+        {
+            if (GM1.religiousInfluence[space] == (Religion)1 || spacesGM.ElementAt(space).regularPower == -1)
+            {
+                pickSpaces.Remove(space);
+            }
+        }
+        if (pickSpaces.Count > 0)
+        {
+            onRegLayer();
+            onHighlight(pickSpaces);
+            while (highlightSelected == -1)
+            {
+                yield return null;
+            }
+            if (spacesGM.ElementAt(highlightSelected).regular > 0)
+            {
+                spacesGM.ElementAt(highlightSelected).regular--;
+                GM2.onChangeReg(highlightSelected, spacesGM.ElementAt(highlightSelected).regularPower);
+            }
+            else
+            {
+                spacesGM.ElementAt(highlightSelected).merc--;
+                GM2.onChangeMerc(highlightSelected, spacesGM.ElementAt(highlightSelected).regularPower);
+            }
+            if (spacesGM.ElementAt(highlightSelected).regular == 0 && spacesGM.ElementAt(highlightSelected).merc == 0)
+            {
+                spacesGM.ElementAt(highlightSelected).regularPower = -1;
+            }
+        }
+        activeReformers.RemoveAt(1);
+        GameObject.Destroy(GameObject.Find("Zwingli"));
+        //todo: Zwingli debater status after removal
+        debaters.ElementAt(16).status = (DebaterStatus)6;
+        DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
+        debatersScript.updateDebater();
+        yield return new WaitForSeconds(3);
+        GM1.player = temp;
+        GM2.onPlayerChange();
+        DeckScript.removeCard(GM1.player, 43);
+        highlightSelected = -1;
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS044()
+    {
+        int temp = GM1.player;
+        GM1.player = 5;
+        GM2.onPlayerChange();
+        DeckScript.debaters.ElementAt(27).status = (DebaterStatus)2;
+        DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
+        debatersScript.updateDebater();
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+
+        currentTextObject.post("Pick 4 highlighted target spaces");
+        for (int i = 0; i < 4; i++)
+        {
 
 
-                List<int> pickSpaces = highlightReformation();
+            List<int> pickSpaces = highlightReformation(1);
+            if(pickSpaces.Count > 0)
+            {
                 highlightSelected = -1;
                 onSpaceLayer();
                 onHighlight(pickSpaces);
@@ -1431,21 +1653,489 @@ public class GM3
                 onHighlightSelected += reformAttempt;
                 while (highlightSelected == -1)
                 {
-                    //UnityEngine.Debug.Log("here");
                     yield return null;
                 }
-
-                UnityEngine.Debug.Log("end");
-                //onRemoveHighlight(converted);
             }
-            yield return new WaitForSeconds(3);
-            DeckScript.discardById(GM1.player, 65);
-            currentTextObject.reset();
-
-            highlightSelected = -1;
-            chosenCard = "";
-            onChosenCard();
+            
         }
+        yield return new WaitForSeconds(3);
+        GM1.player = temp;
+        GM2.onPlayerChange();
+        DeckScript.removeCard(GM1.player, 44);
+        highlightSelected = -1;
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public void HIS045()
+    {
+        foreach(ReformerObject reformer in activeReformers)
+        {
+            if (reformer.name == "Calvin")
+            {
+                activeReformers.Remove(reformer);
+            }
+        }
+        
+        GameObject.Destroy(GameObject.Find("Calvin"));
+        DeckScript.debaters.ElementAt(25).status = (DebaterStatus)6;
+        DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
+        debatersScript.updateDebater();
+        DeckScript.removeCard(GM1.player, 45);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS046()
+    {
+        int temp = GM1.player;
+        GM1.player = 5;
+        GM2.onPlayerChange();
+        DeckScript.debaters.ElementAt(25).status = (DebaterStatus)2;
+        DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
+        debatersScript.updateDebater();
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+
+        currentTextObject.post("Pick 5 highlighted target spaces");
+        for (int i = 0; i < 5; i++)
+        {
+
+
+            List<int> pickSpaces = highlightReformation(1);
+            if (pickSpaces.Count > 0)
+            {
+                highlightSelected = -1;
+                onSpaceLayer();
+                onHighlight(pickSpaces);
+
+                onHighlightSelected += reformAttempt;
+                while (highlightSelected == -1)
+                {
+                    yield return null;
+                }
+            }
+
+        }
+        yield return new WaitForSeconds(3);
+        GM1.player = temp;
+        GM2.onPlayerChange();
+        DeckScript.removeCard(GM1.player, 46);
+        highlightSelected = -1;
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS048()
+    {
+        HighlightScript highlightScript = GameObject.Find("HighlightDisplay").GetComponent("HighlightScript") as HighlightScript;
+        onNoLayer();
+        highlightScript.highlightColonies();
+        while (highlightSelected == -1)
+        {
+            yield return null;
+        }
+        if (highlightSelected < 2)
+        {
+            GM2.boolStates[60]=true;
+            if (GM2.boolStates[9])
+            {
+                GameObject.Find("Galleons_0").GetComponent<CanvasGroup>().alpha = 1;
+            }
+            if (GM2.boolStates[10])
+            {
+                GameObject.Find("Galleons_1").GetComponent<CanvasGroup>().alpha = 1;
+            }
+        }
+        else if (highlightSelected < 4)
+        {
+            GM2.boolStates[61] = true;
+            if (GM2.boolStates[11])
+            {
+                GameObject.Find("Galleons_2").GetComponent<CanvasGroup>().alpha = 1;
+            }
+            if (GM2.boolStates[12])
+            {
+                GameObject.Find("Galleons_3").GetComponent<CanvasGroup>().alpha = 1;
+            }
+        }
+        else if (highlightSelected < 7)
+        {
+            GM2.boolStates[62] = true;
+            if (GM2.boolStates[13])
+            {
+                GameObject.Find("Galleons_4").GetComponent<CanvasGroup>().alpha = 1;
+            }
+            if (GM2.boolStates[14])
+            {
+                GameObject.Find("Galleons_5").GetComponent<CanvasGroup>().alpha = 1;
+            }
+            if (GM2.boolStates[15])
+            {
+                GameObject.Find("Galleons_6").GetComponent<CanvasGroup>().alpha = 1;
+            }
+        }
+        DeckScript.discardById(GM1.player, 47);
+
+        highlightSelected = -1;
+        chosenCard = "";
+        onChosenCard();
+
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+    
+    public IEnumerator HIS050()
+    {
+        List<int> pickSpaces = new List<int>();
+        List<int> pickPowers = new List<int>();
+        int[] capitals = new int[3] { 83, 27, 41};
+        for(int i=19; i<22; i++)
+        {
+            if (!GM2.boolStates[i])
+            {
+                pickSpaces.Add(capitals[i - 19]);
+                pickPowers.Add(i);
+            }
+        }
+        highlightSelected = -1;
+        onNoLayer();
+        onHighlight(pickSpaces);
+        while (highlightSelected == -1)
+        {
+            yield return null;
+        }
+        switch (highlightSelected)
+        {
+            case 83:
+                if (!GM2.boolStates[25])
+                {
+                    GameObject newObject = new GameObject("uncharted_1", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/Hapsburg_Exploration");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 0 * 30, -227);
+                    GM2.boolStates[13] = true;
+                }
+                else
+                {
+                    GameObject newObject = new GameObject("charted_1", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/Hapsburg_ExplorationCharted");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 0 * 30, -227);
+                }
+                GM2.boolStates[19] = true;
+                GM2.intStates[13] = 1;
+                break;
+            case 27:
+                if (!GM2.boolStates[26])
+                {
+                    GameObject newObject = new GameObject("uncharted_2", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/English_Exploration");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 1 * 30, -227);
+                    GM2.boolStates[9] = true;
+                }
+                else
+                {
+                    GameObject newObject = new GameObject("charted_2", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/English_ExplorationCharted");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 1 * 30, -227);
+                }
+                GM2.boolStates[20] = true;
+                GM2.intStates[13] = 2;
+                break;
+            case 41:
+                if (!GM2.boolStates[27])
+                {
+                    GameObject newObject = new GameObject("uncharted_3", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/French_Exploration");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 2 * 30, -227);
+                    GM2.boolStates[27] = true;
+                }
+                else
+                {
+                    GameObject newObject = new GameObject("charted_3", typeof(RectTransform), typeof(Image));
+                    newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/French_ExplorationCharted");
+                    newObject.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
+                    newObject.transform.SetParent(GameObject.Find("Atlantic").transform);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-750 + 2 * 30, -227);
+                }
+                GM2.boolStates[21] = true;
+                GM2.intStates[13] = 3;
+                break;
+        }
+        DeckScript.discardById(GM1.player, 50);
+        highlightSelected = -1;
+        chosenCard = "";
+        onChosenCard();
+
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public void HIS051()
+    {
+        GM1.bonusVPs[GM1.player]++;
+        GM1.updateVP();
+        GM2.onVP();
+        int randomLower = 0;
+        if (hand5.ElementAt(0).id == 7)
+        {
+            randomLower = 1;
+        }
+        int randomIndex = UnityEngine.Random.Range(randomLower, hand5.Count);
+        hand5.RemoveAt(randomIndex);
+        DeckScript.removeCard(GM1.player, 51);
+        highlightSelected = -1;
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS052()
+    {
+        int temp = GM1.player;
+        GM1.player = 4;
+        GM2.onPlayerChange();
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        int randomIndex = UnityEngine.Random.Range(1, 7)+ UnityEngine.Random.Range(1, 7);
+        currentTextObject.post(randomIndex.ToString()+" CP are added to St.Peter's construction.");
+        GM1.StPeters[0] += randomIndex;
+        while (GM1.StPeters[0] >= 5)
+        {
+            GM1.StPeters[1]++;
+            GM1.StPeters[0] -= 5;
+        }
+        GM1.updateVP();
+        GM2.onVP();
+        yield return new WaitForSeconds(3);
+        GM1.player = temp;
+        GM2.onPlayerChange();
+        DeckScript.removeCard(GM1.player, 52);
+        currentTextObject.reset();
+
+        chosenCard = "";
+        onChosenCard();
+
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS053()
+    {
+        HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        List<int> pickSpaces = new List<int>();
+        List<int> pickPowers = new List<int>();
+        int[] capitals = new int[3] { 83, 27, 41 };
+        for (int i = 19; i < 22; i++)
+        {
+            if (!GM2.boolStates[i])
+            {
+                pickSpaces.Add(capitals[i - 19]);
+                pickPowers.Add(i);
+            }
+        }
+        highlightSelected = -1;
+        onNoLayer();
+        onHighlight(pickSpaces);
+        while (highlightSelected == -1)
+        {
+            yield return null;
+        }
+        switch (highlightSelected)
+        {
+            case 83:
+                handMarkerScript.bonus1.Add("Sprites/jpg/negative1Card");
+                GM2.boolStates[63] = true;
+                break;
+            case 27:
+                handMarkerScript.bonus2.Add("Sprites/jpg/negative1Card");
+                GM2.boolStates[64] = true;
+                break;
+            case 41:
+                handMarkerScript.bonus3.Add("Sprites/jpg/negative1Card");
+                GM2.boolStates[65] = true;
+                break;
+        }
+        DeckScript.discardById(GM1.player, 53);
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS065()
+    {
+        int temp = GM1.player;
+        GM1.player = 5;
+        GM2.onPlayerChange();
+        DeckScript.debaters.ElementAt(12).status = (DebaterStatus)2;
+        DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
+        debatersScript.updateDebater();
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+
+        currentTextObject.post("Pick 6 highlighted target spaces");
+        for (int i = 0; i < 6; i++)
+        {
+
+
+            List<int> pickSpaces = highlightReformation(2);
+            highlightSelected = -1;
+            onSpaceLayer();
+            onHighlight(pickSpaces);
+
+            onHighlightSelected += reformAttempt;
+            while (highlightSelected == -1)
+            {
+                //UnityEngine.Debug.Log("here");
+                yield return null;
+            }
+
+            UnityEngine.Debug.Log("end");
+            //onRemoveHighlight(converted);
+        }
+        yield return new WaitForSeconds(3);
+        GM1.player = temp;
+        GM2.onPlayerChange();
+        DeckScript.discardById(GM1.player, 65);
+        currentTextObject.reset();
+
+        highlightSelected = -1;
+        chosenCard = "";
+        onChosenCard();
+
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS066()
+    {
+        List<int> pickSpaces = new List<int>();
+        List<int> pickPowers = new List<int>();
+        int[] capitals = new int[5] { 83, 27, 41, 65, 0 };
+        if (GM1.diplomacyState[0, 1] == 1 && (DeckScript.hand1.Count > 1 || (DeckScript.hand1.Count > 1 && DeckScript.hand1.ElementAt(0).id != 2)))
+        {
+            pickSpaces.Add(capitals[0]);
+            pickPowers.Add(1);
+        }
+        if (GM1.diplomacyState[0, 2] == 1 && (DeckScript.hand2.Count > 1 || (DeckScript.hand2.Count > 1 && DeckScript.hand2.ElementAt(0).id != 3)))
+        {
+            pickSpaces.Add(capitals[1]);
+            pickPowers.Add(2);
+        }
+        else if (GM1.diplomacyState[0, 3] == 1 && (DeckScript.hand3.Count > 1 || (DeckScript.hand3.Count > 1 && DeckScript.hand3.ElementAt(0).id != 4)))
+        {
+            pickSpaces.Add(capitals[2]);
+            pickPowers.Add(3);
+        }
+        else if (GM1.diplomacyState[0, 4] == 1 && (DeckScript.hand4.Count > 2 || (DeckScript.hand4.Count > 0 && DeckScript.hand4.ElementAt(0).id > 6) || (DeckScript.hand4.Count > 1 && DeckScript.hand4.ElementAt(1).id > 6)))
+        {
+            pickSpaces.Add(capitals[3]);
+            pickPowers.Add(4);
+        }
+        else if (GM1.diplomacyState[0, 5] == 1 && (DeckScript.hand5.Count > 1 || (DeckScript.hand5.Count > 1 && DeckScript.hand5.ElementAt(0).id != 7)))
+        {
+            pickSpaces.Add(capitals[4]);
+            pickPowers.Add(5);
+        }
+        highlightSelected = -1;
+        onNoLayer();
+        onHighlight(pickSpaces);
+        while (highlightSelected == -1)
+        {
+            yield return null;
+        }
+        int randomIndex = 0;
+        int randomLower = 0;
+        switch (highlightSelected)
+        {
+
+            case 83:
+                if (hand1.ElementAt(0).id == 3)
+                {
+                    randomLower = 1;
+                }
+                randomIndex = UnityEngine.Random.Range(randomLower, hand1.Count);
+                hand0.Add(hand1.ElementAt(randomIndex));
+                hand1.RemoveAt(randomIndex);
+                break;
+            case 27:
+                if (hand2.ElementAt(0).id == 4)
+                {
+                    randomLower = 1;
+                }
+                randomIndex = UnityEngine.Random.Range(randomLower, hand2.Count);
+                hand0.Add(hand2.ElementAt(randomIndex));
+                hand2.RemoveAt(randomIndex);
+                break;
+            case 41:
+                if (hand3.ElementAt(0).id == 4)
+                {
+                    randomLower = 1;
+                }
+                randomIndex = UnityEngine.Random.Range(randomLower, hand3.Count);
+                hand0.Add(hand3.ElementAt(randomIndex));
+                hand3.RemoveAt(randomIndex);
+                break;
+            case 65:
+                if (DeckScript.hand4.Count > 2 && hand4.ElementAt(1).id == 6)
+                {
+                    randomLower = 2;
+                }
+                else if (DeckScript.hand4.Count > 1 && hand4.ElementAt(0).id == 5)
+                {
+                    randomLower = 1;
+                }
+                randomIndex = UnityEngine.Random.Range(randomLower, hand4.Count);
+                hand0.Add(hand4.ElementAt(randomIndex));
+                hand4.RemoveAt(randomIndex);
+                break;
+            case 0:
+                if (hand5.ElementAt(0).id == 7)
+                {
+                    randomLower = 1;
+                }
+                randomIndex = UnityEngine.Random.Range(randomLower, hand5.Count);
+                hand0.Add(hand5.ElementAt(randomIndex));
+                hand5.RemoveAt(randomIndex);
+                break;
+        }
+
+        highlightSelected = -1;
+        DeckScript.discardById(GM1.player, 66);
+        chosenCard = "";
+        onChosenCard();
         if (GM1.phase == 6)
         {
             GM1.nextImpulse();
@@ -1485,6 +2175,66 @@ public class GM3
         currentTextObject.restartColor();
         DeckScript.discardById(GM1.player, 67);
 
+        chosenCard = "";
+        onChosenCard();
+        if (GM1.phase == 6)
+        {
+            GM1.nextImpulse();
+        }
+    }
+
+    public IEnumerator HIS070()
+    {
+        List<int> pickSpaces = new List<int>();
+        int[] adjacents = new int[6] { 46, 47, 51, 52, 54, 63 };
+        for (int i = 0; i < 134; i++)
+        {
+            if (spacesGM.ElementAt(i).controlPower == GM1.player && !spacesGM.ElementAt(i).sieged)
+            {
+                pickSpaces.Add(i);
+            }
+            else if (adjacents.Contains(i) && spacesGM.ElementAt(i).regularPower == -1)
+            {
+                pickSpaces.Add(i);
+            }
+        }
+        highlightSelected = -1;
+        onMercLayer();
+        onHighlight(pickSpaces);
+        while (highlightSelected == -1)
+        {
+            //UnityEngine.Debug.Log("here");
+            yield return null;
+        }
+        spacesGM.ElementAt(highlightSelected).addLeader(14);
+        GM2.onChangeLeader(highlightSelected, 14);
+        if (spacesGM.ElementAt(highlightSelected).controlPower != GM1.player)
+        {
+            spacesGM.ElementAt(highlightSelected).controlPower = GM1.player;
+            if (GM1.religiousInfluence[highlightSelected] == (Religion)0)
+            {
+                spacesGM.ElementAt(highlightSelected).controlMarker = 1;
+            }
+            else
+            {
+                spacesGM.ElementAt(highlightSelected).controlMarker = 2;
+            }
+            GM2.onAddSpace(highlightSelected, GM1.player, spacesGM.ElementAt(highlightSelected).controlMarker);
+        }
+        spacesGM.ElementAt(highlightSelected).regularPower = GM1.player;
+        if (GM1.player == 0)
+        {
+            spacesGM.ElementAt(highlightSelected).cavalry += 3;
+            GM2.onChangeCav(highlightSelected, 0);
+
+        }
+        else
+        {
+            spacesGM.ElementAt(highlightSelected).merc += 3;
+            GM2.onChangeMerc(highlightSelected, GM1.player);
+        }
+        highlightSelected = -1;
+        DeckScript.discardById(GM1.player, 70);
         chosenCard = "";
         onChosenCard();
         if (GM1.phase == 6)
@@ -1652,7 +2402,7 @@ public class GM3
             {
 
 
-                List<int> pickSpaces = highlightReformation();
+                List<int> pickSpaces = highlightReformation(-1);
                 highlightSelected = -1;
                 onNoLayer();
                 onHighlight(pickSpaces);
@@ -1676,7 +2426,7 @@ public class GM3
             {
 
 
-                List<int> pickSpaces = highlightReformation();
+                List<int> pickSpaces = highlightReformation(-1);
                 highlightSelected = -1;
                 onNoLayer();
                 onHighlight(pickSpaces);
@@ -2024,7 +2774,7 @@ public class GM3
 
 
 
-            List<int> pickSpaces = highlightReformation();
+            List<int> pickSpaces = highlightReformation(-1);
             highlightSelected = -1;
             onNoLayer();
             onHighlight(pickSpaces);
@@ -2249,7 +2999,7 @@ public class GM3
         currentTextObject.post("Pick 3 highlighted target spaces");
         for (int i = 0; i < 3; i++)
         {
-            List<int> pickSpaces = highlightReformation();
+            List<int> pickSpaces = highlightReformation(-1);
             highlightSelected = -1;
             onNoLayer();
             onHighlight(pickSpaces);

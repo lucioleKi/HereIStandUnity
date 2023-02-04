@@ -502,7 +502,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         currentTextObject.post("Pick 2 highlighted target spaces for Reformation attempts");
         for (int i = 0; i < 2; i++)
         {
-            List<int> pickSpaces = highlightReformation();
+            List<int> pickSpaces = highlightReformation(-1);
             GM2.highlightSelected = -1;
 
             onNoLayer();
