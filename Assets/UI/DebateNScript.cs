@@ -471,7 +471,7 @@ public class DebateNScript : MonoBehaviour
             for (int i = 0; i < hit4 - hit5; i++)
             {
 
-                List<int> pickSpaces = highlightCReformation();
+                List<int> pickSpaces = highlightCReformation(-1);
                 GM2.highlightSelected = -1;
                 currentTextObject.post("Flip a space to Catholic influence.");
                 onNoLayer();

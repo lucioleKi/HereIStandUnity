@@ -78,11 +78,13 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         }
         else
         {
+            UnityEngine.Debug.Log("can't CP1");
             CPButtonScript.btn.interactable = false;
         }
         //in land mvmt procedure
         if (GM2.boolStates[28] || GM2.boolStates[30] || GM2.boolStates[31] || GM2.boolStates[51])
         {
+            UnityEngine.Debug.Log("in land mvmt, can't play for CP");
             CPButtonScript.btn.interactable = false;
         }
 
@@ -396,6 +398,53 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 }
             }
             return false;
+        }
+        if (index == 55)
+        {
+            //can jesuit uni
+            if (GM2.boolStates[8])
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 56)
+        {
+            //if caraffa is uncommitted
+            if (DeckScript.debaters.ElementAt(7).status == (DebaterStatus)1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 60)
+        {
+            if (GM1.player == 1 || GM1.player == 5)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (index == 62)
+        {
+            //if cranmer is uncommitted
+            if (DeckScript.debaters.ElementAt(20).status == (DebaterStatus)1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         if (index == 64)
         {

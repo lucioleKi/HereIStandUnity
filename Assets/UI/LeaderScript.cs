@@ -142,19 +142,19 @@ public class LeaderScript : MonoBehaviour
                 GameObject newObject = new GameObject("leader_" + (index).ToString(), typeof(RectTransform), typeof(Image));
                 if (to == 21)//vienna
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 200 + 103, spaces.ElementAt(to).posY + 50 + 63);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 103, spaces.ElementAt(to).posY + 510 + 63);
                 }
                 else if (to == 27)//london
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 200 - 217, spaces.ElementAt(to).posY + 50 + 70);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 - 217, spaces.ElementAt(to).posY + 510 + 70);
                 }
                 else if (to == 41)//paris
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 200 + 39, spaces.ElementAt(to).posY + 50 + 249);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 39, spaces.ElementAt(to).posY + 510 + 249);
                 }
                 else
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 200, spaces.ElementAt(to).posY + 50);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945, spaces.ElementAt(to).posY + 510);
                 }
 
                 newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + index.ToString());
@@ -193,19 +193,19 @@ public class LeaderScript : MonoBehaviour
                 GameObject newObject = new GameObject("leader_" + (index).ToString(), typeof(RectTransform), typeof(Image));
                 if (to == 21)//vienna
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 200 + 103, spaces.ElementAt(to).posY + 50 + 63);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 103, spaces.ElementAt(to).posY + 510 + 63);
                 }
                 else if (to == 27)//london
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 200 - 217, spaces.ElementAt(to).posY + 50 + 70);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 - 217, spaces.ElementAt(to).posY + 510 + 70);
                 }
                 else if (to == 41)//paris
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 200 + 39, spaces.ElementAt(to).posY + 50 + 249);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945 + 39, spaces.ElementAt(to).posY + 510 + 249);
                 }
                 else
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 200, spaces.ElementAt(to).posY + 50);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(spaces.ElementAt(to).posX + 945, spaces.ElementAt(to).posY + 510);
                 }
 
                 newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Leader/" + index.ToString());

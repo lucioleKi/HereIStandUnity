@@ -473,7 +473,7 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         HandMarkerScript handMarkerObject = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
         for (int i = 0; i < 2; i++)
         {
-            List<int> pickSpaces = highlightCReformation();
+            List<int> pickSpaces = highlightCReformation(-1);
             GM2.highlightSelected = -1;
             currentTextObject.post("Flip a space to Catholic influence.");
             onNoLayer();
@@ -654,14 +654,6 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     public void explore()
     {
         GM2.resetMap();
-        int currentCount = 0;
-        for (int i = 19; i < 25; i++)
-        {
-            if (GM2.boolStates[i])
-            {
-                currentCount++;
-            }
-        }
         switch (GM1.player)
         {
             case 1:
@@ -730,14 +722,6 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     public void conquest()
     {
         GM2.resetMap();
-        int currentCount = 0;
-        for (int i = 19; i < 25; i++)
-        {
-            if (GM2.boolStates[i])
-            {
-                currentCount++;
-            }
-        }
         switch (GM1.player)
         {
             case 1:

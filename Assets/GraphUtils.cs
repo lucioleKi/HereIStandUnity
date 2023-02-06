@@ -56,7 +56,7 @@ public class GraphUtils
 
 
         }
-        foreach(int space in highlightReformations)
+        foreach(int space in highlightReformations.ToList())
         {
             if(language!=-1&&spaces.ElementAt(space).language!=(Language) language)
             {
@@ -67,8 +67,9 @@ public class GraphUtils
         return highlightReformations;
     }
 
-    public static List<int> highlightCReformation()
+    public static List<int> highlightCReformation(int language)
     {
+        //language -1 = all zones, 0 = english, 1 = french, 2 = german 
         //todo: make port
         List<int> highlightCReformations = new List<int>();
         for (int i = 0; i < spaces.Count(); i++)
@@ -97,10 +98,21 @@ public class GraphUtils
                         break;
                     }
                 }
+                if (spacesGM.ElementAt(i).uni)
+                {
+                    highlightCReformations.Add(i);
+                }
             }
 
 
 
+        }
+        foreach (int space in highlightCReformations.ToList())
+        {
+            if (language != -1 && spaces.ElementAt(space).language != (Language)language)
+            {
+                highlightCReformations.Remove(space);
+            }
         }
         return highlightCReformations;
     }

@@ -171,6 +171,10 @@ Fixed shallow copy problem. Coded more cards.
 
 Finished reformers. Coded more cards in the 40 range.
 
+2/6/2023
+
+Finished coding cards for now. Debugged debaters.
+
 ### Coding plan and progress for cards
 
 #### All play conditions and options coded:
@@ -183,9 +187,9 @@ Combat cards: 24-30
 
 Response cards: 31-36
 
-Event cards: 39-46, 48, 50-52, 65, 67, 70, 72, 74-83, 85-90, 94, 96, 98-109, 112
+Event cards: 39-46, 48, 50-55, 65, 67, 70, 72, 74-83, 85-90, 94, 96, 98-109, 112-114
 
 #### Due to limited time, I don't plan to code all conditions or options in these cards: 
 
-Event cards: 84, 91, 92, 93, 95, 110
+Event cards: 17, 37, 38, 56-60, 84, 91-93, 95, 110
 

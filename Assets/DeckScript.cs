@@ -486,9 +486,9 @@ public class DeckScript : MonoBehaviour
         reformers = new List<ReformerObject>();
         activeReformers = new List<ReformerObject>();
         reformers.Add(Resources.Load("Objects/Reformer4/Luther1") as ReformerObject);
-        reformers.Add(Resources.Load("Objects/Reformer4/Zwingli") as ReformerObject);
-        reformers.Add(Resources.Load("Objects/Reformer4/Calvin") as ReformerObject);
-        reformers.Add(Resources.Load("Objects/Reformer4/Cranmer") as ReformerObject);
+        reformers.Add(Resources.Load("Objects/Reformer4/Zwingli1") as ReformerObject);
+        reformers.Add(Resources.Load("Objects/Reformer4/Calvin1") as ReformerObject);
+        reformers.Add(Resources.Load("Objects/Reformer4/Cranmer1") as ReformerObject);
     }
 
     void importExplorers()

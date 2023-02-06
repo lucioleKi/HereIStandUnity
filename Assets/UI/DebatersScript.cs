@@ -11,6 +11,8 @@ public class DebatersScript : MonoBehaviour
 {
     int index0;
     int index1;
+    int index2;
+    int index3;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +27,7 @@ public class DebatersScript : MonoBehaviour
 
     void OnEnable()
     {
-        GM2.onPhase2 += updateDebater;
+        //GM2.onPhase2 += updateDebater;
 
 
 
@@ -33,7 +35,7 @@ public class DebatersScript : MonoBehaviour
 
     void OnDisable()
     {
-        GM2.onPhase2 -= updateDebater;
+        //GM2.onPhase2 -= updateDebater;
 
     }
 
@@ -69,6 +71,15 @@ public class DebatersScript : MonoBehaviour
                 {
                     newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-164 + index1 % 2 * 27, 5 + index1 / 2 * 27);
                     index1++;
+                }else if(temp.type==2)
+                {
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-74 + index2 * 27, 5 + index2 / 2 * 27);
+                    index2++;
+                }
+                else if (temp.type == 3)
+                {
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(12 + index3 * 27, 5 + index3 / 2 * 27);
+                    index3++;
                 }
             }
         }
@@ -98,6 +109,12 @@ public class DebatersScript : MonoBehaviour
             else if (temp.type == 1)
             {
                 index1++;
+            }else if(temp.type==2)
+            {
+                index2++;
+            }else if (temp.type == 3)
+            {
+                index3++;
             }
         }
         
@@ -112,6 +129,8 @@ public class DebatersScript : MonoBehaviour
         GM2.resetReligious();
         index0 = 0;
         index1 = 0;
+        index2 = 0;
+        index3 = 0;
         for (int i = 0; i < debaters.Count(); i++)
         {
             initUnits(i);

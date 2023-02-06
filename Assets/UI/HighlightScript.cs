@@ -472,7 +472,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                             continue;
                         }
                         //check if can raise army
-                        if (GM1.turn < 2 && i < 6)
+                        if (!GM2.boolStates[6] && i < 6)
                         {
                             continue;
                         }

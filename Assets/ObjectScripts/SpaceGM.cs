@@ -21,6 +21,7 @@ public class SpaceGM
     public int leader2;
     public bool unrest;
     public bool sieged;
+    public bool uni;
 
     public SpaceGM()
     {
@@ -35,6 +36,7 @@ public class SpaceGM
         this.leader1 = 0;
         this.leader2 = 0;
         this.unrest = false;
+        this.uni = false;
     }
 
     public SpaceGM(CitySetup city)
@@ -43,7 +45,7 @@ public class SpaceGM
         this.id = city.id;
         this.regular = city.regular;
         this.merc = 0;
-        this.cavalry = city.cavalry; 
+        this.cavalry = city.cavalry;
         if (this.regular > 0 || this.merc > 0 || this.cavalry > 0)
         {
             this.regularPower = city.controlPower;
@@ -60,13 +62,13 @@ public class SpaceGM
         this.leader1 = city.leader1;
         this.leader2 = city.leader2;
         this.unrest = false;
-
+        this.uni = false;
     }
 
     public override bool Equals(System.Object obj)
     {
         var other = obj as SpaceGM;
-        if (this.id == other.id || this.name.Equals(other.name) )
+        if (this.id == other.id || this.name.Equals(other.name))
         {
             return true;
         }
@@ -81,15 +83,16 @@ public class SpaceGM
         return base.GetHashCode();
     }
 
-    
+
 
     public void removeLeader(int leaderIndex)
     {
-        if(leaderIndex == leader1)
+        if (leaderIndex == leader1)
         {
             leader1 = 0;
-        }else if (leaderIndex == leader2)
-        { 
+        }
+        else if (leaderIndex == leader2)
+        {
             leader2 = 0;
         }
     }
@@ -114,10 +117,13 @@ public class SpaceGM
     {
         switch (controlMarker)
         {
+            case 0:
+                controlMarker = 2;
+                break;
             case 1:
                 controlMarker = 2;
                 break;
-                case 2:
+            case 2:
                 controlMarker = 1;
                 break;
             case 3:

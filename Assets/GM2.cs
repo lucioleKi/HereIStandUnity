@@ -83,6 +83,7 @@ public class GM2 : MonoBehaviour
     public static Int1Handler onSkipCard;
     public static Int1Handler onChangeUnrest;
     public static Int1Handler onOtherBtn;
+    public static Int1Handler onAddUni;
     public delegate void List1Handler(List<int> index);
     public static List1Handler onHighlight;
     public static List1Handler onHighlightDip;
@@ -130,6 +131,7 @@ public class GM2 : MonoBehaviour
     //11: where is Knights of St. John
     //12: which power has negative1Card from HIS079 Fuggers
     //13: which power has mercator's map
+    //14: which power has potosi
     //public static bool waitCard = false;
     public static int highlightSelected = -1;
     public static int leaderSelected = -1;
@@ -258,6 +260,9 @@ public class GM2 : MonoBehaviour
             case 14:
                 gm3.HIS014();
                 break;
+            case 15:
+                StartCoroutine(gm3.HIS015());
+                break;
             case 16:
                 gm3.HIS016();
                 break;
@@ -356,6 +361,24 @@ public class GM2 : MonoBehaviour
                 break;
             case 53:
                 StartCoroutine(gm3.HIS053());
+                break;
+            case 54:
+                StartCoroutine(gm3.HIS054());
+                break;
+            case 55:
+                StartCoroutine(gm3.HIS055());
+                break;
+            case 61:
+                StartCoroutine(gm3.HIS061());
+                break;
+            case 62:
+                StartCoroutine(gm3.HIS062());
+                break;
+            case 63:
+                StartCoroutine(gm3.HIS063());
+                break;
+            case 64:
+                StartCoroutine(gm3.HIS064());
                 break;
             case 65:
                 StartCoroutine(gm3.HIS065());
@@ -472,6 +495,12 @@ public class GM2 : MonoBehaviour
                     StartCoroutine(gm3.HIS112B());
                 }
                 break;
+            case 113:
+                gm3.HIS113();
+                break;
+            case 114:
+                gm3.HIS114();
+                break;
             default:
                 break;
         }
@@ -538,6 +567,17 @@ public class GM2 : MonoBehaviour
             {
                 papalDice++;
             }
+            //+1 for every adjacent Jesuit university
+            if (spacesGM.ElementAt(spaces.ElementAt(target).adjacent.ElementAt(i)).uni)
+            {
+                papalDice++;
+            }
+        }
+
+        //+2 if has Jesuit university
+        if (spacesGM.ElementAt(target).uni)
+        {
+            papalDice += 2;
         }
 
         //+2 if protestant land units, +1 if land units adjacent
@@ -572,7 +612,7 @@ public class GM2 : MonoBehaviour
         {
             reformerDice++;
         }
-        if(chosenCard == "HIS-046")
+        if (chosenCard == "HIS-046")
         {
             reformerDice++;
         }
@@ -686,6 +726,17 @@ public class GM2 : MonoBehaviour
             {
                 papalDice++;
             }
+            //+1 for every adjacent Jesuit university
+            if (spacesGM.ElementAt(spaces.ElementAt(target).adjacent.ElementAt(i)).uni)
+            {
+                papalDice++;
+            }
+        }
+
+        //+2 if has Jesuit university
+        if (spacesGM.ElementAt(target).uni)
+        {
+            papalDice += 2;
         }
 
         //+2 if protestant land units, +1 if land units adjacent
@@ -778,8 +829,10 @@ public class GM2 : MonoBehaviour
 
     void phase2()
     {
+
+        DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
         //add reformers
-        if (turn == 2)
+        if (turn >= 2&&GameObject.Find("Zwingli")==null)
         {
             activeReformers.Add(reformers.ElementAt(1));
             GameObject tempObject = UnityEngine.Object.Instantiate((GameObject)Resources.Load("Objects/Reformer4/Zwingli"), new Vector3(spaces.ElementAt(25).posX + 965, spaces.ElementAt(25).posY + 545, 0), Quaternion.identity);
@@ -789,10 +842,9 @@ public class GM2 : MonoBehaviour
             highlightSelected = 25;
             changeReligion();
         }
-        else if (turn == 4||debaters.ElementAt(25).status==(DebaterStatus)6)
+        else if (turn == 4 || debaters.ElementAt(25).status == (DebaterStatus)6)
         {
-            debaters.ElementAt(25).status=(DebaterStatus)1;
-            DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
+            debaters.ElementAt(25).status = (DebaterStatus)1;
             debatersScript.updateDebater();
             activeReformers.Add(reformers.ElementAt(2));
             GameObject tempObject = UnityEngine.Object.Instantiate((GameObject)Resources.Load("Objects/Reformer4/Calvin"), new Vector3(spaces.ElementAt(63).posX + 965, spaces.ElementAt(63).posY + 545, 0), Quaternion.identity);
@@ -805,6 +857,7 @@ public class GM2 : MonoBehaviour
         highlightSelected = -1;
         HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
         instanceDeck.addActive(turn);
+        debatersScript.updateDebater();
         activeCards.AddRange(discardCards);
         discardCards.Clear();
         instanceDeck.Shuffle();
@@ -1874,7 +1927,7 @@ public class GM2 : MonoBehaviour
                             intStates[1] = UnityEngine.Random.Range(1, explorers1.Count);
                         }
                         modifier[modifier.Count - 1] += explorers1.ElementAt(intStates[1]).value;
-                        
+
                         UnityEngine.Debug.Log(explorers1.ElementAt(intStates[1]).name);
                         newObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/NewWorld/" + explorers1.ElementAt(intStates[1]).name);
                         break;
