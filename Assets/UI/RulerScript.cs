@@ -52,8 +52,8 @@ public class RulerScript : MonoBehaviour
         }
         else
         {
-            GameObject tempObject = GameObject.Find("ruler_" + (index).ToString());
-            tempObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Mandatory/0" + index.ToString());
+            GameObject tempObject = GameObject.Find("ruler_" + (power).ToString());
+            tempObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/jpg/Mandatory/HIS-0" + index.ToString());
         }
         
     }

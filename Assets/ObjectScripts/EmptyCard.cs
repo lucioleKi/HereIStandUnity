@@ -163,6 +163,11 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         {
             return false;
         }
+        int[] unimplemented = new int[25] {37, 38, 47, 49, 56, 57, 58, 59, 60, 62, 66, 68, 69, 71, 73, 84, 91, 92, 93, 95, 97, 110, 111, 115, 116 };
+        if (unimplemented.Contains(index))
+        {
+            return false;
+        }
         if(index==7)
         {
             if (GM1.rulers[5].index==5)
@@ -270,6 +275,17 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             else
             {
                 return false;
+            }
+        }
+        if (index == 36)
+        {
+            if (GM1.player == 5 && !GM2.boolStates[13])
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
         if (index == 39)

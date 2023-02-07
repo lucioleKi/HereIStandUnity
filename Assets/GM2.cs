@@ -266,6 +266,9 @@ public class GM2 : MonoBehaviour
             case 16:
                 gm3.HIS016();
                 break;
+            case 17:
+                gm3.HIS017();
+                break;
             case 18:
                 gm3.HIS018();
                 break;
@@ -448,6 +451,9 @@ public class GM2 : MonoBehaviour
                 break;
             case 94:
                 StartCoroutine(gm3.HIS094());
+                break;
+            case 97:
+                gm3.HIS097();
                 break;
             case 98:
                 StartCoroutine(gm3.HIS098());

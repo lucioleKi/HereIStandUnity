@@ -244,6 +244,27 @@ public class GM3
         //GM1.nextImpulse();
     }
 
+    public IEnumerator HIS003B()
+    {
+        int randomIndex = UnityEngine.Random.Range(1, 7);
+        switch (randomIndex)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+        }
+        yield break;
+    }
+
     public IEnumerator HIS004()
     {
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
@@ -369,6 +390,7 @@ public class GM3
 
     public IEnumerator HIS005()
     {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         List<int> canExcom = new List<int>() { };
 
         int[] indices = new int[3] { 6, 4, 5 };
@@ -806,6 +828,16 @@ public class GM3
         }
     }
 
+    public void HIS017()
+    {
+        GM2.currentCP = 2;
+        GM2.onCPChange(GM2.currentCP);
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.removeCard(GM1.player, 17);
+        
+    }
+
     public void HIS018()
     {
 
@@ -1238,19 +1270,19 @@ public class GM3
             currentTextObject.post("Remove 2 mercenaries");
             for (int i = 0; i < 2; i++)
             {
-                List<int> pickSpaces = new List<int>();
+                List<int> pickSpaces1 = new List<int>();
                 for (int j = 0; j < 134; i++)
                 {
                     if (spacesGM.ElementAt(j).merc > 0)
                     {
-                        pickSpaces.Add(j);
+                        pickSpaces1.Add(j);
                     }
                 }
-                if (pickSpaces.Count > 0)
+                if (pickSpaces1.Count > 0)
                 {
                     highlightSelected = -1;
                     onMercLayer();
-                    onHighlight(pickSpaces);
+                    onHighlight(pickSpaces1);
                     while (highlightSelected == -1)
                     {
                         //UnityEngine.Debug.Log("here");
@@ -1279,10 +1311,10 @@ public class GM3
             currentTextObject.post("Add 2 mercenaries");
             for (int i = 0; i < 2; i++)
             {
-                List<int> pickSpaces = findClearFormation(GM1.player);
+                List<int> pickSpaces2 = findClearFormation(GM1.player);
                 highlightSelected = -1;
                 onMercLayer();
-                onHighlight(pickSpaces);
+                onHighlight(pickSpaces2);
                 while (highlightSelected == -1)
                 {
                     //UnityEngine.Debug.Log("here");
@@ -1513,7 +1545,7 @@ public class GM3
         GM2.onPlayerChange();
         int value = 0;
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        currentTextObject.post("Pick 2 highlighted target spaces");
+        
         DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
 
         if (DeckScript.debaters.ElementAt(12).status != (DebaterStatus)1)
@@ -1554,6 +1586,7 @@ public class GM3
             value += 3;
             debatersScript.updateDebater();
         }
+        currentTextObject.post("Pick " +value.ToString() + " highlighted target spaces");
         for (int i = 0; i < value; i++)
         {
 
@@ -2520,14 +2553,18 @@ public class GM3
                 }
             }
             highlightSelected = -1;
-            onNoLayer();
-            onHighlight(pickSpaces);
-            while (highlightSelected == -1)
+            if (pickSpaces.Count > 0)
             {
-                //UnityEngine.Debug.Log("here");
-                yield return null;
+                onNoLayer();
+                onHighlight(pickSpaces);
+                while (highlightSelected == -1)
+                {
+                    //UnityEngine.Debug.Log("here");
+                    yield return null;
+                }
+                GM2.changeReligion();
             }
-            GM2.changeReligion();
+            
         }
         highlightSelected = -1;
         yield return new WaitForSeconds(3);
@@ -2555,7 +2592,7 @@ public class GM3
             {
                 pickSpaces.Add(i);
             }
-            else if (adjacents.Contains(i) && spacesGM.ElementAt(i).regularPower == -1)
+            else if (adjacents.Contains(i) && spacesGM.ElementAt(i).regularPower == -1 && (GM1.diplomacyState[GM1.player, 3] == 1 || GM1.diplomacyState[3, GM1.player]==1))
             {
                 pickSpaces.Add(i);
             }
@@ -2756,7 +2793,7 @@ public class GM3
     {
         int temp = GM1.player;
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        currentTextObject.post("Pick 6 highlighted target spaces");
+        currentTextObject.post("Pick 4 highlighted target spaces");
         if (GM1.turn < 3)
         {
             GM1.player = 5;
@@ -2767,18 +2804,19 @@ public class GM3
 
                 List<int> pickSpaces = highlightReformation(-1);
                 highlightSelected = -1;
-                onNoLayer();
-                onHighlight(pickSpaces);
-
-                onHighlightSelected += reformAttempt;
-                while (highlightSelected == -1)
+                if (pickSpaces.Count > 0)
                 {
-                    //UnityEngine.Debug.Log("here");
-                    yield return null;
-                }
+                    onNoLayer();
+                    onHighlight(pickSpaces);
 
-                UnityEngine.Debug.Log("end");
-                //onRemoveHighlight(converted);
+                    onHighlightSelected += reformAttempt;
+                    while (highlightSelected == -1)
+                    {
+                        yield return null;
+                    }
+                }
+                
+
             }
         }
         else
@@ -2787,22 +2825,19 @@ public class GM3
             GM2.onPlayerChange();
             for (int i = 0; i < 4; i++)
             {
-
-
-                List<int> pickSpaces = highlightReformation(-1);
+                List<int> pickSpaces = highlightCReformation(-1);
                 highlightSelected = -1;
-                onNoLayer();
-                onHighlight(pickSpaces);
-
-                onHighlightSelected += reformCAttempt;
-                while (highlightSelected == -1)
+                if (pickSpaces.Count > 0)
                 {
-                    //UnityEngine.Debug.Log("here");
-                    yield return null;
-                }
+                    onNoLayer();
+                    onHighlight(pickSpaces);
 
-                UnityEngine.Debug.Log("end");
-                //onRemoveHighlight(converted);
+                    onHighlightSelected += reformCAttempt;
+                    while (highlightSelected == -1)
+                    {
+                        yield return null;
+                    }
+                }
             }
         }
         yield return new WaitForSeconds(3);
@@ -3477,6 +3512,16 @@ public class GM3
         {
             GM1.nextImpulse();
         }
+    }
+
+    public void HIS097()
+    {
+        GM2.currentCP = 2;
+        GM2.onCPChange(GM2.currentCP);
+        chosenCard = "";
+        onChosenCard();
+        DeckScript.removeCard(GM1.player, 97);
+
     }
 
     public IEnumerator HIS098()

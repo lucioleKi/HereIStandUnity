@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using static DeckScript;
 using static GM2;
 using static GraphUtils;
 
@@ -324,8 +325,14 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     public IEnumerator buyMerc()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        List<int> trace = findTrace(GM1.player);
-        improveTrace(trace);
+        List<int> trace = new List<int>();
+        for(int i=0; i < 134; i++)
+        {
+            if (spacesGM.ElementAt(i).controlPower == GM1.player || spacesGM.ElementAt(i).regularPower == GM1.player)
+            {
+                trace.Add(i);
+            }
+        }
         GM2.highlightSelected = -1;
         GM2.onNoLayer();
 
@@ -339,8 +346,9 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         }
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).merc++;
         GM2.onChangeMerc(GM2.highlightSelected, GM1.player);
+        spacesGM.ElementAt(highlightSelected).regularPower = GM1.player;
         GM2.highlightSelected = -1;
-
+        
 
         GM2.onCPChange(textScript.displayCP - cost);
         //UnityEngine.Debug.Log(new System.Diagnostics.StackTrace().ToString());
@@ -349,8 +357,14 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     public IEnumerator buyRegular()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        List<int> trace = findTrace(GM1.player);
-        improveTrace(trace);
+        List<int> trace = new List<int>();
+        for (int i = 0; i < 134; i++)
+        {
+            if (spacesGM.ElementAt(i).controlPower == GM1.player || spacesGM.ElementAt(i).regularPower == GM1.player)
+            {
+                trace.Add(i);
+            }
+        }
         GM2.highlightSelected = -1;
         GM2.onNoLayer();
 
@@ -365,15 +379,23 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).regular++;
         DeckScript.regulars[GM2.highlightSelected]++;
         GM2.onChangeReg(GM2.highlightSelected, GM1.player);
+        spacesGM.ElementAt(highlightSelected).regularPower = GM1.player;
         GM2.highlightSelected = -1;
+
         GM2.onCPChange(textScript.displayCP - cost);
     }
 
     public IEnumerator buyCav()
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
-        List<int> trace = findTrace(GM1.player);
-        improveTrace(trace);
+        List<int> trace = new List<int>();
+        for (int i = 0; i < 134; i++)
+        {
+            if (spacesGM.ElementAt(i).controlPower == GM1.player || spacesGM.ElementAt(i).regularPower == GM1.player)
+            {
+                trace.Add(i);
+            }
+        }
         GM2.highlightSelected = -1;
         GM2.onNoLayer();
 
@@ -386,7 +408,9 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
         }
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).cavalry++;
         GM2.onChangeCav(GM2.highlightSelected, GM1.player);
+        spacesGM.ElementAt(highlightSelected).regularPower = GM1.player;
         GM2.highlightSelected = -1;
+
         GM2.onCPChange(textScript.displayCP - cost);
     }
 

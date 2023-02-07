@@ -88,6 +88,7 @@ public class SkipCard : MonoBehaviour
             case 6:
                 //action phase pass
                 GM1.skipped[GM1.player] = true;
+                GM1.nextImpulse();
                 break;
             case 87:
                 //lose all merc
