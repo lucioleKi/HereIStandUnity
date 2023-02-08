@@ -188,20 +188,26 @@ public class GM3
         GM2.onCPChange(GM2.currentCP);
         inputToggleObject.reset();
         hand1.RemoveAt(0);
-        if (GM1.phase == 6)
-        {
-            GM1.nextImpulse();
-        }
+        //if (GM1.phase == 6)
+        //{
+        //    GM1.nextImpulse();
+        //}
     }
 
     public IEnumerator HIS003A()
     {
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         currentTextObject.pauseColor();
+        HighlightScript highlightScript = GameObject.Find("HighlightDisplay").GetComponent("HighlightScript") as HighlightScript;
         List<int> powers = new List<int> { 1, 3, 8 };
         highlightSelected = -1;
         onNoLayer();
         onHighlightDip(powers);
+        if (!GM1.maritalChart[5] && GM1.turn > 1)
+        {
+
+            highlightScript.highlightChart();
+        }
         while (highlightSelected == -1)
         {
             yield return null;
@@ -228,7 +234,7 @@ public class GM3
             GM2.currentCP = 5;
             GM2.onCPChange(GM2.currentCP);
         }
-        else
+        else if (highlightSelected == 3)
         {
             hand2.RemoveAt(0);
             chosenCard = "";
@@ -238,6 +244,57 @@ public class GM3
             GM2.currentCP = 5;
             GM2.onCPChange(GM2.currentCP);
         }
+        else
+        {
+            //marriage chart
+            int index = 1;
+            while (GM1.maritalStatus[index])
+            {
+                index++;
+            }
+            UnityEngine.Debug.Log(index);
+            GM1.maritalStatus[index] = true;
+
+            int randomIndex = UnityEngine.Random.Range(1, 7);
+            while (GM1.maritalChart[randomIndex])
+            {
+                randomIndex++;
+            }
+            UnityEngine.Debug.Log(randomIndex);
+            GM1.maritalChart[randomIndex] = true;
+            GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").transform.SetParent(GameObject.Find("Marriage").transform);
+            GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").GetComponent<RectTransform>().anchoredPosition = new Vector2(295, 30 + 27 * (randomIndex - 1));
+            GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").GetComponent<RectTransform>().sizeDelta = new Vector2(28, 28);
+
+            if (randomIndex == 3)
+            {
+                index++;
+                GM1.maritalStatus[index] = true;
+                randomIndex = UnityEngine.Random.Range(1, 7);
+                while (GM1.maritalChart[randomIndex])
+                {
+                    randomIndex++;
+                }
+                GM1.maritalChart[randomIndex] = true;
+                GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").transform.SetParent(GameObject.Find("Marriage").transform);
+                GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").GetComponent<RectTransform>().anchoredPosition = new Vector2(295, 30 + 27 * (randomIndex - 1));
+                GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").GetComponent<RectTransform>().sizeDelta = new Vector2(28, 28);
+            }else if (randomIndex > 4)
+            {
+                GM1.bonusVPs[2]+=5;
+                GM1.updateVP();
+                GM2.onVP();
+            }
+                
+            GM2.onVP();
+            hand2.RemoveAt(0);
+            chosenCard = "";
+            onChosenCard();
+            if (GM1.phase == 6)
+            {
+                GM1.nextImpulse();
+            }
+        }
         highlightSelected = -1;
         currentTextObject.reset();
         currentTextObject.restartColor();
@@ -246,22 +303,7 @@ public class GM3
 
     public IEnumerator HIS003B()
     {
-        int randomIndex = UnityEngine.Random.Range(1, 7);
-        switch (randomIndex)
-        {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-        }
+
         yield break;
     }
 
@@ -725,6 +767,8 @@ public class GM3
                 activeCards.RemoveRange(0, 1);
             }
         }
+        GM1.updateVP();
+        GM2.onVP();
         discardById(GM1.player, 12);
 
         GM2.currentCP = 2;
@@ -835,7 +879,7 @@ public class GM3
         chosenCard = "";
         onChosenCard();
         DeckScript.removeCard(GM1.player, 17);
-        
+
     }
 
     public void HIS018()
@@ -1545,7 +1589,7 @@ public class GM3
         GM2.onPlayerChange();
         int value = 0;
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        
+
         DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
 
         if (DeckScript.debaters.ElementAt(12).status != (DebaterStatus)1)
@@ -1586,7 +1630,7 @@ public class GM3
             value += 3;
             debatersScript.updateDebater();
         }
-        currentTextObject.post("Pick " +value.ToString() + " highlighted target spaces");
+        currentTextObject.post("Pick " + value.ToString() + " highlighted target spaces");
         for (int i = 0; i < value; i++)
         {
 
@@ -2287,7 +2331,7 @@ public class GM3
             }
         }
         yield return new WaitForSeconds(3);
-        
+
         DeckScript.discardById(GM1.player, 62);
         currentTextObject.reset();
 
@@ -2335,7 +2379,7 @@ public class GM3
             }
 
         }
-        
+
         yield return new WaitForSeconds(3);
         GM1.player = temp;
         GM2.onPlayerChange();
@@ -2564,7 +2608,7 @@ public class GM3
                 }
                 GM2.changeReligion();
             }
-            
+
         }
         highlightSelected = -1;
         yield return new WaitForSeconds(3);
@@ -2592,7 +2636,7 @@ public class GM3
             {
                 pickSpaces.Add(i);
             }
-            else if (adjacents.Contains(i) && spacesGM.ElementAt(i).regularPower == -1 && (GM1.diplomacyState[GM1.player, 3] == 1 || GM1.diplomacyState[3, GM1.player]==1))
+            else if (adjacents.Contains(i) && spacesGM.ElementAt(i).regularPower == -1 && (GM1.diplomacyState[GM1.player, 3] == 1 || GM1.diplomacyState[3, GM1.player] == 1))
             {
                 pickSpaces.Add(i);
             }
@@ -2605,7 +2649,7 @@ public class GM3
             //UnityEngine.Debug.Log("here");
             yield return null;
         }
-        
+
         if (spacesGM.ElementAt(highlightSelected).controlPower != GM1.player)
         {
             spacesGM.ElementAt(highlightSelected).controlPower = GM1.player;
@@ -2815,7 +2859,7 @@ public class GM3
                         yield return null;
                     }
                 }
-                
+
 
             }
         }
@@ -3922,15 +3966,16 @@ public class GM3
     public void HIS113()
     {
         bool e = false;
-        for(int i=0; i<134; i++){
-            if(spaces.ElementAt(i).language == (Language)3 && (spacesGM.ElementAt(i).leader1 == 2 || spacesGM.ElementAt(i).leader2 == 2))
+        for (int i = 0; i < 134; i++)
+        {
+            if (spaces.ElementAt(i).language == (Language)3 && (spacesGM.ElementAt(i).leader1 == 2 || spacesGM.ElementAt(i).leader2 == 2))
             {
                 e = true;
                 break;
             }
         }
         if (e)
-        { 
+        {
             hand1.AddRange(activeCards.GetRange(0, 1));
             activeCards.RemoveRange(0, 1);
             if (GM1.player != 1)
@@ -3957,7 +4002,7 @@ public class GM3
 
     public void HIS114()
     {
-        if (GM1.diplomacyState[0, 3]==2)
+        if (GM1.diplomacyState[0, 3] == 2)
         {
             hand0.AddRange(activeCards.GetRange(0, 1));
             activeCards.RemoveRange(0, 1);

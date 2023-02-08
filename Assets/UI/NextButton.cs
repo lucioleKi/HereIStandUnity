@@ -141,6 +141,7 @@ public class NextButton : MonoBehaviour
             //reset the following bool in boolStates
             int[] resetBool = new int[14] {16, 17, 18, 19, 20, 21, 22, 23, 24, 29, 34, 35, 49, 59};
             int[] resetInt = new int[8] { 0, 1, 2, 3, 4, 8, 9, 10 };
+            Array.Clear(GM1.skipped, 0, 6);
             foreach(int r in resetBool)
             {
                 GM2.boolStates[r] = false;

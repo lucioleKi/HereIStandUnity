@@ -400,6 +400,14 @@ public class DeckScript : MonoBehaviour
                 {
                     activeCards.Add(card);
                 }
+            }else if (GM1.rulers[2].index == 21 && card.id == 23)
+            {
+                //add elizabeth I the first turn Mary I rules England
+                activeCards.Add(card);
+            }else if (GM1.rulers[2].index == 19 && !GM1.maritalChart[5] && card.id == 21)
+            {
+                //add Mary I if Edward is unhealthy
+                activeCards.Add(card);
             }
         }
         foreach(var debater in debaters)

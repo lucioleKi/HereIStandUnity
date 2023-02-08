@@ -70,6 +70,16 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
         
     }
 
+    public void highlightChart()
+    {
+        GM2.resetMap();
+        GameObject tempObject = Instantiate((GameObject)Resources.Load("Objects/Highlight/square"), new Vector3(0, 0, 0), Quaternion.identity);
+        tempObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(442f + 932.75f,200f + 540f);
+        tempObject.GetComponent<RectTransform>().sizeDelta = new Vector2(260, 24);
+        tempObject.transform.SetParent(GameObject.Find("HighlightDisplay").transform);
+        tempObject.name = "diphighlight_4";
+    }
+
     public void highlightNewWorld(int index)
     {
         GM2.resetMap();

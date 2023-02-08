@@ -73,12 +73,12 @@ public class DebatersScript : MonoBehaviour
                     index1++;
                 }else if(temp.type==2)
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-74 + index2 * 27, 5 + index2 / 2 * 27);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(-74 + index2%2 * 27, 5 + index2 / 2 * 27);
                     index2++;
                 }
                 else if (temp.type == 3)
                 {
-                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(12 + index3 * 27, 5 + index3 / 2 * 27);
+                    newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(12 + index3%2 * 27, 5 + index3 / 2 * 27);
                     index3++;
                 }
             }

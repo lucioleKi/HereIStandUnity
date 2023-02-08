@@ -440,6 +440,7 @@ public class GraphUtils
         {
             if (DeckScript.spacesGM.ElementAt(i).regularPower == playerIndex && (DeckScript.spacesGM.ElementAt(i).regular > 0 || DeckScript.spacesGM.ElementAt(i).merc > 0) && spaces.ElementAt(i).pass.Count() > 0)
             {
+                UnityEngine.Debug.Log("Pass " + i.ToString());
                 trace.Add(i);
             }
         }

@@ -1893,6 +1893,7 @@ public class GM2 : MonoBehaviour
                 break;
             default:
                 Array.Clear(boolStates, 22, 3);
+                segment = 1;
                 onPhaseEnd();
                 break;
         }

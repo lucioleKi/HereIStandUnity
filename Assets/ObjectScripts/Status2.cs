@@ -21,7 +21,7 @@ public class Status2 : StatusObject
 
     public override void setUp()
     {
-        if (cardTracks[2] < 5)
+        if (GM1.cardTracks[2] < 5)
         {
             for (int i = cardTrack + 1; i < 5; i++)
             {
@@ -45,15 +45,9 @@ public class Status2 : StatusObject
                 newObject.transform.SetParent(GameObject.Find("HandMarkerDisplay").transform);
             }
         }
-        if (maritalStatus[0])
-        {
-            GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_8"), new Vector3(0, 0, 0), Quaternion.identity);
-            newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[1] + 2 * offsetX[1] + 962, posY[1] + 530);
-            newObject.transform.SetParent(GameObject.Find("HandMarkerDisplay").transform);
-        }
         for (int i = 5; i >= 0; i--)
         {
-            if (!maritalStatus[i])
+            if (!GM1.maritalStatus[i])
             {
                 GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_" + (i + 8).ToString()), new Vector3(0, 0, 0), Quaternion.identity);
                 newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[1] + (i + 1) * offsetX[1] + 960, posY[1] + 540);
@@ -64,6 +58,7 @@ public class Status2 : StatusObject
                 GameObject newObject = Instantiate((GameObject)Resources.Load("Objects/HandMarker/Hand_7"), new Vector3(0, 0, 0), Quaternion.identity);
                 newObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(posX[1] + (i + 1) * offsetX[1] + 960, posY[1] + 540);
                 newObject.transform.SetParent(GameObject.Find("HandMarkerDisplay").transform);
+                break;
             }
         }
     }

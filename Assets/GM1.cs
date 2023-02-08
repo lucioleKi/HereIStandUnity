@@ -24,6 +24,7 @@ public class GM1 : MonoBehaviour
     public static int[] cardTracks;
     public static int[] VPs;
     public static bool[] maritalStatus;
+    public static bool[] maritalChart;
     public static int[] translations = new int[6];
     public static bool[] excommunicated;
     public static int[] StPeters;
@@ -72,6 +73,8 @@ public class GM1 : MonoBehaviour
         piracyC = status0.piracyTrack;
         maritalStatus = new bool[status2.maritalStatus.Length];
         Array.Copy(status2.maritalStatus, maritalStatus, status2.maritalStatus.Length);
+        maritalChart = new bool[6];
+        Array.Clear(maritalChart, 0, 6);
         excommunicated = new bool[status4.excommunicated.Length];
         Array.Copy(status4.excommunicated, excommunicated, status4.excommunicated.Length);
         translations = new int[6];
@@ -80,7 +83,7 @@ public class GM1 : MonoBehaviour
         StPeters = new int[2];
         ScenarioObject scenario = Resources.Load("Objects/Scenario3/1517") as ScenarioObject;
         //turn = scenario.turnStart;
-        turn = 3;
+        turn = 1;
         phase = scenario.phaseStart;
         segment = 1;
         powerObjects = new PowerObject[10];
@@ -217,7 +220,7 @@ public class GM1 : MonoBehaviour
             impulse = -1;
             return;
         }
-        for(int i=0; i < 6; i++)
+        while (!skipped[impulse])
         {
             if (impulse == 5)
             {
@@ -227,10 +230,7 @@ public class GM1 : MonoBehaviour
             {
                 impulse++;
             }
-            if (!skipped[impulse])
-            {
-                break;
-            }
+            
         }
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         UnityEngine.Debug.Log("Active power: " + impulse.ToString());
@@ -255,7 +255,7 @@ public class GM1 : MonoBehaviour
                 currentTextObject.post("Active power: Protestant");
                 break;
         }
-        if (checkPass(impulse))
+        if (checkPass(impulse)&& !skipped[impulse])
         {
             GM2.onSkipCard(6);
         }

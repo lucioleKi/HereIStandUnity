@@ -140,7 +140,7 @@ public class LandMvmt : MonoBehaviour
                 GM2.onPlayerChange();
                 GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
                 startButton.btn.interactable = false;
-                startButton.status = 2;
+                startButton.status = -1;
                 required2();
                 break;
             case 9:
@@ -150,7 +150,7 @@ public class LandMvmt : MonoBehaviour
                 GM2.onPlayerChange();
                 GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
                 startButton.btn.interactable = false;
-                startButton.status = 4;
+                startButton.status = -1;
                 required2();
                 break;
         }
@@ -370,7 +370,37 @@ public class LandMvmt : MonoBehaviour
         List<int> trace = new List<int>();
         for (int i = 0; i < spaces.ElementAt(initial).adjacent.Count(); i++)
         {
-            trace.Add(spaces.ElementAt(initial).adjacent[i] - 1);
+            if (overPass) {
+                if (spaces.ElementAt(initial).pass.Contains(spaces.ElementAt(initial).adjacent[i] - 1))
+                {
+                    if (spacesGM.ElementAt(spaces.ElementAt(initial).adjacent[i] - 1).controlPower == GM1.player)
+                    {
+                        trace.Add(spaces.ElementAt(initial).adjacent[i] - 1);
+                    }
+                    else if (spacesGM.ElementAt(spaces.ElementAt(initial).adjacent[i] - 1).controlPower > GM1.player && GM1.diplomacyState[GM1.player, spacesGM.ElementAt(spaces.ElementAt(initial).adjacent[i] - 1).controlPower] == 1)
+                    {
+                        trace.Add(spaces.ElementAt(initial).adjacent[i] - 1);
+                    }
+                    else if (spacesGM.ElementAt(spaces.ElementAt(initial).adjacent[i] - 1).controlPower < GM1.player && GM1.diplomacyState[spacesGM.ElementAt(spaces.ElementAt(initial).adjacent[i] - 1).controlPower, GM1.player] == 1)
+                    {
+                        trace.Add(spaces.ElementAt(initial).adjacent[i] - 1);
+                    }
+                }
+            }
+            else
+            {
+                //power is self or at war
+                if(spacesGM.ElementAt(spaces.ElementAt(initial).adjacent[i] - 1).controlPower == GM1.player)
+                {
+                    trace.Add(spaces.ElementAt(initial).adjacent[i] - 1);
+                }else if(spacesGM.ElementAt(spaces.ElementAt(initial).adjacent[i] - 1).controlPower > GM1.player && GM1.diplomacyState[GM1.player, spacesGM.ElementAt(spaces.ElementAt(initial).adjacent[i] - 1).controlPower] == 1)
+                {
+                    trace.Add(spaces.ElementAt(initial).adjacent[i] - 1);
+                }else if(spacesGM.ElementAt(spaces.ElementAt(initial).adjacent[i] - 1).controlPower < GM1.player && GM1.diplomacyState[spacesGM.ElementAt(spaces.ElementAt(initial).adjacent[i] - 1).controlPower, GM1.player] == 1)
+                {
+                    trace.Add(spaces.ElementAt(initial).adjacent[i] - 1);
+                }
+            }
             UnityEngine.Debug.Log(spaces.ElementAt(initial).adjacent[i] - 1);
         }
 
