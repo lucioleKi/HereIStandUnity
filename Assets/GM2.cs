@@ -111,12 +111,13 @@ public class GM2 : MonoBehaviour
     //48: Cabot dead
     //49: HIS090 has effect
     //50: waiting for HIS087
-    //51: Knights of St. John on map
+    
     //51: waiting for HIS074
     //52-58: once excommunicated
     //59: HIS039 has effect
     //60-62: Galleons for 123
     //63-65: Plantations for 123
+    //66: Knights of St.John on map
     //0: which power has HIS031 effect
     //1: which explorer for 1
     //2: which explorer for 2
@@ -206,6 +207,11 @@ public class GM2 : MonoBehaviour
 
     public void mandatory(int index)
     {
+        if(GM1.phase == 6 && GM1.impulse == GM1.player)
+        {
+            onDeactivateSkip();
+        }
+        
         if (index > 8)
         {
             discardCard(index);
@@ -476,9 +482,9 @@ public class GM2 : MonoBehaviour
             case 104:
                 StartCoroutine(gm3.HIS104());
                 break;
-            case 105:
-                gm3.HIS105();
-                break;
+            //case 105:
+            //    gm3.HIS105();
+            //    break;
             case 106:
                 StartCoroutine(gm3.HIS106());
                 break;
@@ -565,16 +571,16 @@ public class GM2 : MonoBehaviour
         //+1 for every adjacent under protestant/catholic religious influence 
         for (int i = 0; i < spaces.ElementAt(target).adjacent.Count; i++)
         {
-            if (religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)] == (Religion)1)
+            if (religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)-1] == (Religion)1)
             {
                 reformerDice++;
             }
-            else if (religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)] == (Religion)0)
+            else if (religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)-1] == (Religion)0)
             {
                 papalDice++;
             }
             //+1 for every adjacent Jesuit university
-            if (spacesGM.ElementAt(spaces.ElementAt(target).adjacent.ElementAt(i)).uni)
+            if (spacesGM.ElementAt(spaces.ElementAt(target).adjacent.ElementAt(i)-1).uni)
             {
                 papalDice++;
             }
@@ -587,21 +593,21 @@ public class GM2 : MonoBehaviour
         }
 
         //+2 if protestant land units, +1 if land units adjacent
-        if (regulars[target] > 0 && spacesGM.ElementAt(target).controlPower == 5)
+        if (spacesGM.ElementAt(target).regularPower ==5 && spacesGM.ElementAt(target).controlPower == 5)
         {
             reformerDice = reformerDice + 2;
         }
-        else if (regulars[target] > 0 && spacesGM.ElementAt(target).controlPower == 4)
+        else if (spacesGM.ElementAt(target).regularPower == 4 && spacesGM.ElementAt(target).controlPower == 4)
         {
             papalDice = papalDice + 2;
         }
         for (int i = 0; i < targetSpace.adjacent.Count(); i++)
         {
-            if (regulars[targetSpace.adjacent.ElementAt(i)] > 0 && regularsPower[targetSpace.adjacent.ElementAt(i)] == 5)
+            if (spacesGM.ElementAt(targetSpace.adjacent.ElementAt(i)-1).regularPower == 5 && regularsPower[targetSpace.adjacent.ElementAt(i)] == 5)
             {
                 reformerDice++;
             }
-            else if (regulars[targetSpace.adjacent.ElementAt(i)] > 0 && regularsPower[targetSpace.adjacent.ElementAt(i)] == 4)
+            else if (spacesGM.ElementAt(targetSpace.adjacent.ElementAt(i) - 1).regularPower == 4 && regularsPower[targetSpace.adjacent.ElementAt(i)] == 4)
             {
                 papalDice++;
             }
@@ -724,16 +730,16 @@ public class GM2 : MonoBehaviour
         //+1 for every adjacent under protestant/catholic religious influence 
         for (int i = 0; i < spaces.ElementAt(target).adjacent.Count; i++)
         {
-            if (religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)] == (Religion)1)
+            if (religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)-1] == (Religion)1)
             {
                 reformerDice++;
             }
-            else if (religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)] == (Religion)0)
+            else if (religiousInfluence[spaces.ElementAt(target).adjacent.ElementAt(i)-1] == (Religion)0)
             {
                 papalDice++;
             }
             //+1 for every adjacent Jesuit university
-            if (spacesGM.ElementAt(spaces.ElementAt(target).adjacent.ElementAt(i)).uni)
+            if (spacesGM.ElementAt(spaces.ElementAt(target).adjacent.ElementAt(i)-1).uni)
             {
                 papalDice++;
             }
@@ -746,21 +752,21 @@ public class GM2 : MonoBehaviour
         }
 
         //+2 if protestant land units, +1 if land units adjacent
-        if (regulars[target] > 0 && spacesGM.ElementAt(target).controlPower == 5)
+        if (spacesGM.ElementAt(target).regularPower == 5 && spacesGM.ElementAt(target).controlPower == 5)
         {
             reformerDice = reformerDice + 2;
         }
-        else if (regulars[target] > 0 && spacesGM.ElementAt(target).controlPower == 4)
+        else if (spacesGM.ElementAt(target).regularPower == 4 && spacesGM.ElementAt(target).controlPower == 4)
         {
             papalDice = papalDice + 2;
         }
         for (int i = 0; i < targetSpace.adjacent.Count(); i++)
         {
-            if (regulars[targetSpace.adjacent.ElementAt(i)] > 0 && regularsPower[targetSpace.adjacent.ElementAt(i)] == 5)
+            if (spacesGM.ElementAt(targetSpace.adjacent.ElementAt(i) - 1).regularPower == 5 && regularsPower[targetSpace.adjacent.ElementAt(i)] == 5)
             {
                 reformerDice++;
             }
-            else if (regulars[targetSpace.adjacent.ElementAt(i)] > 0 && regularsPower[targetSpace.adjacent.ElementAt(i)] == 4)
+            else if (spacesGM.ElementAt(targetSpace.adjacent.ElementAt(i) - 1).regularPower == 4 && regularsPower[targetSpace.adjacent.ElementAt(i)] == 4)
             {
                 papalDice++;
             }
@@ -835,89 +841,130 @@ public class GM2 : MonoBehaviour
 
     void phase2()
     {
-
-        DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
-        //add reformers
-        if (turn >= 2&&GameObject.Find("Zwingli")==null)
-        {
-            activeReformers.Add(reformers.ElementAt(1));
-            GameObject tempObject = UnityEngine.Object.Instantiate((GameObject)Resources.Load("Objects/Reformer4/Zwingli"), new Vector3(spaces.ElementAt(25).posX + 965, spaces.ElementAt(25).posY + 545, 0), Quaternion.identity);
-            tempObject.transform.SetParent(GameObject.Find("Reformers").transform);
-            tempObject.name = "Zwingli";
-            tempObject.SetActive(true);
-            highlightSelected = 25;
-            changeReligion();
-        }
-        else if (turn == 4 || debaters.ElementAt(25).status == (DebaterStatus)6)
-        {
-            debaters.ElementAt(25).status = (DebaterStatus)1;
-            debatersScript.updateDebater();
-            activeReformers.Add(reformers.ElementAt(2));
-            GameObject tempObject = UnityEngine.Object.Instantiate((GameObject)Resources.Load("Objects/Reformer4/Calvin"), new Vector3(spaces.ElementAt(63).posX + 965, spaces.ElementAt(63).posY + 545, 0), Quaternion.identity);
-            tempObject.transform.SetParent(GameObject.Find("Reformers").transform);
-            tempObject.name = "Calvin";
-            tempObject.SetActive(true);
-            highlightSelected = 63;
-            changeReligion();
-        }
-        highlightSelected = -1;
         HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
-        instanceDeck.addActive(turn);
-        debatersScript.updateDebater();
-        activeCards.AddRange(discardCards);
-        discardCards.Clear();
-        instanceDeck.Shuffle();
-        for (int i = 0; i < 6; i++)
+        switch (segment)
         {
-            List<CardObject> tempHand = new List<CardObject>();
-            int temp = drawNumber(i);
-            //reset negative1Card
-            if (intStates[11] == i)
-            {
-                temp--;
-                intStates[11] = -1;
-            }
-            switch (i)
-            {
-                case 0:
-                    hand0.Add(cardsLib.ElementAt(0));
-                    hand0.AddRange(activeCards.GetRange(0, temp));
-                    handMarkerScript.bonus0.Remove("Sprites/jpg/negative1Card");
-                    break;
-                case 1:
-                    hand1.Add(cardsLib.ElementAt(1));
-                    hand1.AddRange(activeCards.GetRange(0, temp));
-                    handMarkerScript.bonus1.Remove("Sprites/jpg/negative1Card");
-                    break;
-                case 2:
-                    hand2.Add(cardsLib.ElementAt(2));
-                    hand2.AddRange(activeCards.GetRange(0, temp));
-                    handMarkerScript.bonus2.Remove("Sprites/jpg/negative1Card");
-                    break;
-                case 3:
-                    hand3.Add(cardsLib.ElementAt(3));
-                    hand3.AddRange(activeCards.GetRange(0, temp));
-                    handMarkerScript.bonus3.Remove("Sprites/jpg/negative1Card");
-                    break;
-                case 4:
-                    hand4.Add(cardsLib.ElementAt(4));
-                    hand4.Add(cardsLib.ElementAt(5));
-                    hand4.AddRange(activeCards.GetRange(0, temp));
-                    handMarkerScript.bonus4.Remove("Sprites/jpg/negative1Card");
-                    break;
-                case 5:
-                    hand5.Add(cardsLib.ElementAt(6));
-                    hand5.AddRange(activeCards.GetRange(0, temp));
-                    handMarkerScript.bonus5.Remove("Sprites/jpg/negative1Card");
-                    break;
-            }
-            //for(int j=0; j<temp; j++)
-            //{
-            //    UnityEngine.Debug.Log(activeCards[j].id);
-            //}
-            //UnityEngine.Debug.Log("power"+i.ToString());
-            activeCards.RemoveRange(0, temp);
+            case 1:
+                //add debaters, reformers, leaders, new cards to the deck and shuffle
+                DebatersScript debatersScript = GameObject.Find("DebaterDisplay").GetComponent("DebatersScript") as DebatersScript;
+                //add reformers
+                if (turn >= 2 && GameObject.Find("Zwingli") == null)
+                {
+                    activeReformers.Add(reformers.ElementAt(1));
+                    GameObject tempObject = UnityEngine.Object.Instantiate((GameObject)Resources.Load("Objects/Reformer4/Zwingli"), new Vector3(spaces.ElementAt(25).posX + 965, spaces.ElementAt(25).posY + 545, 0), Quaternion.identity);
+                    tempObject.transform.SetParent(GameObject.Find("Reformers").transform);
+                    tempObject.name = "Zwingli";
+                    tempObject.SetActive(true);
+                    highlightSelected = 25;
+                    changeReligion();
+                }
+                else if (turn == 4 || debaters.ElementAt(25).status == (DebaterStatus)6)
+                {
+                    debaters.ElementAt(25).status = (DebaterStatus)1;
+                    debatersScript.updateDebater();
+                    activeReformers.Add(reformers.ElementAt(2));
+                    GameObject tempObject = UnityEngine.Object.Instantiate((GameObject)Resources.Load("Objects/Reformer4/Calvin"), new Vector3(spaces.ElementAt(63).posX + 965, spaces.ElementAt(63).posY + 545, 0), Quaternion.identity);
+                    tempObject.transform.SetParent(GameObject.Find("Reformers").transform);
+                    tempObject.name = "Calvin";
+                    tempObject.SetActive(true);
+                    highlightSelected = 63;
+                    changeReligion();
+                }
+                highlightSelected = -1;
+                
+                instanceDeck.addActive(turn);
+                debatersScript.updateDebater();
+                activeCards.AddRange(discardCards);
+                discardCards.Clear();
+                instanceDeck.Shuffle();
+                for(int i=0; i<6; i++)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            hand0.Insert(0, cardsLib.ElementAt(0));
+                            break;
+                        case 1:
+                            hand1.Insert(0, cardsLib.ElementAt(1));
+                            break;
+                        case 2:
+                            hand2.Insert(0, cardsLib.ElementAt(2));
+                            break;
+                        case 3:
+                            hand3.Insert(0, cardsLib.ElementAt(3));
+                            break;
+                        case 4:
+                            hand4.Insert(0, cardsLib.ElementAt(5));
+                            hand4.Insert(0, cardsLib.ElementAt(4));
+                            break;
+                        case 5:
+                            hand5.Insert(0, cardsLib.ElementAt(6));
+                            break;
+                    }
+                }
+                
+                segment++;
+                phase2();
+
+                resetMap();
+                break;
+            case 2:
+                //new world riches
+                StartCoroutine(resolveRiches());                
+                
+                break;
+            case 3:
+                //deal cards
+                for (int i = 0; i < 6; i++)
+                {
+                    List<CardObject> tempHand = new List<CardObject>();
+                    int temp = drawNumber(i);
+                    //reset negative1Card
+                    if (intStates[11] == i)
+                    {
+                        temp--;
+                        intStates[11] = -1;
+                    }
+                    switch (i)
+                    {
+                        case 0:
+                            hand0.AddRange(activeCards.GetRange(0, temp));
+                            handMarkerScript.bonus0.Remove("Sprites/jpg/negative1Card");
+                            break;
+                        case 1:
+                            hand1.AddRange(activeCards.GetRange(0, temp));
+                            handMarkerScript.bonus1.Remove("Sprites/jpg/negative1Card");
+                            break;
+                        case 2:
+                            hand2.AddRange(activeCards.GetRange(0, temp));
+                            handMarkerScript.bonus2.Remove("Sprites/jpg/negative1Card");
+                            break;
+                        case 3:
+                            hand3.AddRange(activeCards.GetRange(0, temp));
+                            handMarkerScript.bonus3.Remove("Sprites/jpg/negative1Card");
+                            break;
+                        case 4:
+                            hand4.AddRange(activeCards.GetRange(0, temp));
+                            handMarkerScript.bonus4.Remove("Sprites/jpg/negative1Card");
+                            break;
+                        case 5:
+                            hand5.AddRange(activeCards.GetRange(0, temp));
+                            handMarkerScript.bonus5.Remove("Sprites/jpg/negative1Card");
+                            break;
+                    }
+                   
+                    activeCards.RemoveRange(0, temp);
+                }
+                onPhaseEnd();
+                return;
+                break;
+            default:
+                segment = 1;
+                onPhaseEnd();
+                break;
         }
+
+        
         onPhaseEnd();
     }
 
@@ -965,6 +1012,251 @@ public class GM2 : MonoBehaviour
                 return 1;
             }
 
+        }
+    }
+
+    IEnumerator resolveRiches()
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        HighlightScript highlightScript = GameObject.Find("HighlightDisplay").GetComponent("HighlightScript") as HighlightScript;
+        List<int> indices = new List<int>();
+        List<float> x = new List<float>();
+        List<float> y = new List<float>();
+        List<int> powers = new List<int>();
+        string[] potentials = new string[13] { "Jamestown", "Roanoke", "Charlesbourg", "Montreal", "Cuba", "Hispaniola", "PuertoRico", "Inca", "Aztecs", "Maya", "Potosi_1", "Potosi_2", "Potosi_3" };
+        for(int i=9; i<16; i++)
+        {
+            if (boolStates[i])
+            {
+                indices.Add(i);
+                x.Add(GameObject.Find(potentials[i - 9]).transform.position.x);
+                y.Add(GameObject.Find(potentials[i - 9]).transform.position.y);
+                if (i < 11)
+                {
+                    powers.Add(2);
+                }else if (i > 12)
+                {
+                    powers.Add(1);
+                }
+                else
+                {
+                    powers.Add(3);
+                }
+            }
+        }
+        //conquests
+        for(int i=5; i<8; i++)
+        {
+            if (intStates[i]>0)
+            {
+                indices.Add(i);
+                x.Add(GameObject.Find(potentials[i +2]).transform.position.x);
+                y.Add(GameObject.Find(potentials[i +2]).transform.position.y);
+                powers.Add(intStates[i]);
+            }
+        }
+        //potosi
+        if (intStates[14] > 0)
+        {
+            indices.Add(24);
+            x.Add(GameObject.Find(potentials[intStates[14]+9]).transform.position.x);
+            y.Add(GameObject.Find(potentials[intStates[14] + 9]).transform.position.y);
+            powers.Add(intStates[14]);
+        }
+        for(int i=0; i<x.Count; i++)
+        {
+            GM1.player = powers[i];
+            onPlayerChange();
+            highlightSelected = -1;
+            highlightScript.highlightCoordinate(x[i], y[i], powers[i]);
+            onNoLayer();
+            while (highlightSelected == -1)
+            {
+                yield return null;
+            }
+            resolveRichesDices(indices[i], powers[i]);
+            yield return new WaitForSeconds(3);
+        }
+        currentTextObject.reset();
+        segment++;
+        phase2();
+
+        resetMap();
+    }
+
+    void resolveRichesDices(int index, int power)
+    {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+        int dice = UnityEngine.Random.Range(1, 7)+ UnityEngine.Random.Range(1, 7);
+        //plantation
+        if (boolStates[power+62])
+        {
+            dice++;
+        }
+        HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+        if ((index > 8 && index < 16 && dice > 8) || (index == 24 && dice > 7) ||(index<9&&dice>7)||(index==5&&dice==6)) {
+            //card
+            if (power == 1)
+            {
+                hand1.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+            }
+            else if (power == 2)
+            {
+                hand2.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+            }
+            else if (power == 3)
+            {
+                hand3.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+            }
+            currentTextObject.post("Dice total: " + dice.ToString() + ". Draw 1 card.");
+            return;
+        }
+        if (index > 8 && index < 16)
+        {
+            //colonies
+            if (dice < 5)
+            {
+                //elim
+                switch (index)
+                {
+                    case 9:
+                        GameObject.Find("Jamestown").GetComponent<CanvasGroup>().alpha = 0;
+                        break;
+                    case 10:
+                        GameObject.Find("Roanoke").GetComponent<CanvasGroup>().alpha = 0;
+                        break;
+                    case 11:
+                        GameObject.Find("Charlesbourg").GetComponent<CanvasGroup>().alpha = 0;
+                        break;
+                    case 12:
+                        GameObject.Find("Montreal").GetComponent<CanvasGroup>().alpha = 0;
+                        break;
+                    case 13:
+                        GameObject.Find("Cuba").GetComponent<CanvasGroup>().alpha = 0;
+                        break;
+                    case 14:
+                        GameObject.Find("Hispaniola").GetComponent<CanvasGroup>().alpha = 0;
+                        break;
+                    case 15:
+                        GameObject.Find("PuertoRico").GetComponent<CanvasGroup>().alpha = 0;
+                        break;
+                }
+                boolStates[index] = false;
+                currentTextObject.post("Dice total: " + dice.ToString() + ". Colony is eliminated.");
+            }
+            else if (dice == 8)
+            {
+                //galleon
+                if (power==1 && boolStates[60])
+                {
+                    hand1.AddRange(activeCards.GetRange(0, 1));
+                    activeCards.RemoveRange(0, 1);
+                }
+                else if (power==2 && boolStates[61])
+                {
+                    hand2.AddRange(activeCards.GetRange(0, 1));
+                    activeCards.RemoveRange(0, 1);
+                }
+                else if (power==3 && boolStates[62])
+                {
+                    hand3.AddRange(activeCards.GetRange(0, 1));
+                    activeCards.RemoveRange(0, 1);
+                }
+                currentTextObject.post("Dice total: " + dice.ToString() + ". Draw 1 card.");
+            }
+            else
+            {
+                currentTextObject.post("Dice total: " + dice.ToString() + ". No effect.");
+            }
+        }else if (index == 24)
+        {
+            if (dice < 4)
+            {
+                //elim
+                GameObject.Find("Potosi_" + power.ToString()).GetComponent<CanvasGroup>().alpha = 0;
+                intStates[14] = -1;
+                currentTextObject.post("Dice total: " + dice.ToString() + ". Potosi colony is eliminated.");
+            }
+            else if (dice == 7)
+            {
+                //galleon
+                if (power == 1 && boolStates[60])
+                {
+                    hand1.AddRange(activeCards.GetRange(0, 1));
+                    activeCards.RemoveRange(0, 1);
+                }
+                else if (power == 2 && boolStates[61])
+                {
+                    hand2.AddRange(activeCards.GetRange(0, 1));
+                    activeCards.RemoveRange(0, 1);
+                }
+                else if (power == 3 && boolStates[62])
+                {
+                    hand3.AddRange(activeCards.GetRange(0, 1));
+                    activeCards.RemoveRange(0, 1);
+                }
+                currentTextObject.post("Dice total: " + dice.ToString() + ". Draw 1 card.");
+            }
+        }else if ((index != 7 && dice < 6) || (index == 7 && dice < 7))
+        {
+            //depleted 1
+            string[] names = new string[3]{"Inca2VP", "Aztecs2VP", "Maya1VP"};
+            if (power == 1 && boolStates[60])
+            {
+                hand1.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+                handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/" + names[index-5]);
+            }
+            else if (power == 2 && boolStates[61])
+            {
+                hand2.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+                handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/" + names[index - 5]);
+            }
+            else if (power == 3 && boolStates[62])
+            {
+                hand3.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+                handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/" + names[index - 5]);
+            }
+            if (index == 7)
+            {
+                GM1.bonusVPs[power]++;
+            }
+            else
+            {
+                GM1.bonusVPs[power]+=2;
+            }
+            GM1.updateVP();
+            onVP();
+            currentTextObject.post("Dice total: " + dice.ToString() + ". Conquest is depleted.");
+        }
+        else if (dice == 7)
+        {
+            //galleon
+            if (power == 1 && boolStates[60])
+            {
+                hand1.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+            }
+            else if (power == 2 && boolStates[61])
+            {
+                hand2.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+            }
+            else if (power == 3 && boolStates[62])
+            {
+                hand3.AddRange(activeCards.GetRange(0, 1));
+                activeCards.RemoveRange(0, 1);
+            }
+            currentTextObject.post("Dice total: " + dice.ToString() + ". Draw 1 card.");
+        }
+        else
+        {
+            currentTextObject.post("Dice total: " + dice.ToString() + ". No effect.");
         }
     }
 
@@ -1765,8 +2057,9 @@ public class GM2 : MonoBehaviour
             if (spacesGM.ElementAt(i).leader1 == 14 || spacesGM.ElementAt(i).leader2 == 14)
             {
                 spacesGM.ElementAt(i).removeLeader(14);
+                onChangeLeader(-1, 14);
+                break;
             }
-            onChangeLeader(-1, 14);
         }
         //return naval units
 
@@ -1920,7 +2213,7 @@ public class GM2 : MonoBehaviour
                     pos = GameObject.Find("uncharted_" + i.ToString()).transform.position.x - 960;
                 }
 
-                GameObject newObject = new GameObject("explorer_" + i.ToString(), typeof(RectTransform), typeof(Image));
+                GameObject newObject = new GameObject("explorer_"+GM1.turn.ToString() + i.ToString(), typeof(RectTransform), typeof(Image));
                 switch (i)
                 {
                     case 1:
@@ -2068,40 +2361,41 @@ public class GM2 : MonoBehaviour
             yield return new WaitForSeconds(3);
 
             HandMarkerScript handMarkerScript = GameObject.Find("HandMarkerDisplay").GetComponent("HandMarkerScript") as HandMarkerScript;
+            
             switch (i)
             {
                 case 1:
                     if (randomIndex < 5)
                     {
-                        GameObject.Destroy(GameObject.Find("explorer_1"));
+                        GameObject.Destroy(GameObject.Find("explorer_"+GM1.turn.ToString()+"1"));
                         explorers1.RemoveAt(intStates[1]);
                     }
                     else if (randomIndex < 7)
                     {
-                        GameObject.Destroy(GameObject.Find("explorer_1"));
+                        GameObject.Destroy(GameObject.Find("explorer_" + GM1.turn.ToString() + "1"));
                     }
                     else if (randomIndex < 10)
                     {
                         if (GameObject.Find("MississippiRiver") != null && GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("MississippiRiver"));
-                            GameObject.Find("explorer_1").transform.SetParent(GameObject.Find("NewWorld").transform);
-                            GameObject.Find("explorer_1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "1").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
                             handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/MississippiRiver1VP");
 
                         }
                         else if (GameObject.Find("GreatLakes") != null && GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("GreatLakes"));
-                            GameObject.Find("explorer_1").transform.SetParent(GameObject.Find("NewWorld").transform);
-                            GameObject.Find("explorer_1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-847, -164);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "1").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-847, -164);
                             handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/GreatLakes1VP");
                         }
                         else
                         {
                             GameObject.Destroy(GameObject.Find("StLawrenceRiver"));
-                            GameObject.Find("explorer_1").transform.SetParent(GameObject.Find("NewWorld").transform);
-                            GameObject.Find("explorer_1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "1").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "1").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
                             handMarkerScript.bonus1.Add("Sprites/jpg/NewWorld/StLawrenceRiver1VP");
 
                         }
@@ -2117,35 +2411,35 @@ public class GM2 : MonoBehaviour
                 case 2:
                     if (randomIndex < 5)
                     {
-                        GameObject.Destroy(GameObject.Find("explorer_2"));
+                        GameObject.Destroy(GameObject.Find("explorer_" + GM1.turn.ToString() + "2"));
                         explorers2.RemoveAt(intStates[2]);
                     }
                     else if (randomIndex < 7)
                     {
-                        GameObject.Destroy(GameObject.Find("explorer_2"));
+                        GameObject.Destroy(GameObject.Find("explorer_" + GM1.turn.ToString() + "2"));
                     }
                     else if (randomIndex < 10)
                     {
                         if (GameObject.Find("MississippiRiver") != null && GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("MississippiRiver"));
-                            GameObject.Find("explorer_2").transform.SetParent(GameObject.Find("NewWorld").transform);
-                            GameObject.Find("explorer_2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "2").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
                             handMarkerScript.bonus2.Add("Sprites/jpg/NewWorld/MississippiRiver1VP");
 
                         }
                         else if (GameObject.Find("GreatLakes") != null && GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("GreatLakes"));
-                            GameObject.Find("explorer_2").transform.SetParent(GameObject.Find("NewWorld").transform);
-                            GameObject.Find("explorer_2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-847, -164);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "2").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-847, -164);
                             handMarkerScript.bonus2.Add("Sprites/jpg/NewWorld/GreatLakes1VP");
                         }
                         else
                         {
                             GameObject.Destroy(GameObject.Find("StLawrenceRiver"));
-                            GameObject.Find("explorer_2").transform.SetParent(GameObject.Find("NewWorld").transform);
-                            GameObject.Find("explorer_2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "2").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "2").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
                             handMarkerScript.bonus2.Add("Sprites/jpg/NewWorld/StLawrenceRiver1VP");
 
                         }
@@ -2161,35 +2455,35 @@ public class GM2 : MonoBehaviour
                 case 3:
                     if (randomIndex < 5)
                     {
-                        GameObject.Destroy(GameObject.Find("explorer_3"));
+                        GameObject.Destroy(GameObject.Find("explorer_" + GM1.turn.ToString() + "3"));
                         explorers3.RemoveAt(intStates[3]);
                     }
                     else if (randomIndex < 7)
                     {
-                        GameObject.Destroy(GameObject.Find("explorer_3"));
+                        GameObject.Destroy(GameObject.Find("explorer_" + GM1.turn.ToString() + "3"));
                     }
                     else if (randomIndex < 10)
                     {
                         if (GameObject.Find("MississippiRiver") != null && GameObject.Find("MississippiRiver").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("MississippiRiver"));
-                            GameObject.Find("explorer_3").transform.SetParent(GameObject.Find("NewWorld").transform);
-                            GameObject.Find("explorer_3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "3").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
                             handMarkerScript.bonus3.Add("Sprites/jpg/NewWorld/MississippiRiver1VP");
 
                         }
                         else if (GameObject.Find("GreatLakes") != null && GameObject.Find("GreatLakes").transform.IsChildOf(GameObject.Find("NewWorld").transform))
                         {
                             GameObject.Destroy(GameObject.Find("GreatLakes"));
-                            GameObject.Find("explorer_3").transform.SetParent(GameObject.Find("NewWorld").transform);
-                            GameObject.Find("explorer_3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-847, -164);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "3").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-847, -164);
                             handMarkerScript.bonus3.Add("Sprites/jpg/NewWorld/GreatLakes1VP");
                         }
                         else
                         {
                             GameObject.Destroy(GameObject.Find("StLawrenceRiver"));
-                            GameObject.Find("explorer_3").transform.SetParent(GameObject.Find("NewWorld").transform);
-                            GameObject.Find("explorer_3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "3").transform.SetParent(GameObject.Find("NewWorld").transform);
+                            GameObject.Find("explorer_" + GM1.turn.ToString() + "3").GetComponent<RectTransform>().anchoredPosition = new Vector2(-848, -215);
                             handMarkerScript.bonus3.Add("Sprites/jpg/NewWorld/StLawrenceRiver1VP");
 
                         }
@@ -2250,8 +2544,8 @@ public class GM2 : MonoBehaviour
         if (highlightSelected != 0 || (highlightSelected == 0 && GameObject.Find("PacificStrait") != null))
         {
 
-            GameObject.Find("explorer_" + power.ToString()).transform.SetParent(GameObject.Find("NewWorld").transform);
-            GameObject.Find("explorer_" + power.ToString()).GetComponent<RectTransform>().anchoredPosition = new Vector2(GameObject.Find(names[highlightSelected]).transform.position.x - 990, GameObject.Find(names[highlightSelected]).transform.position.y - 223);
+            GameObject.Find("explorer_" + GM1.turn.ToString()+power.ToString()).transform.SetParent(GameObject.Find("NewWorld").transform);
+            GameObject.Find("explorer_" + GM1.turn.ToString() + power.ToString()).GetComponent<RectTransform>().anchoredPosition = new Vector2(GameObject.Find(names[highlightSelected]).transform.position.x - 990, GameObject.Find(names[highlightSelected]).transform.position.y - 223);
             GameObject.Destroy(GameObject.Find(names[highlightSelected]));
             switch (highlightSelected)
             {
@@ -2287,15 +2581,15 @@ public class GM2 : MonoBehaviour
                 switch (power)
                 {
                     case 1:
-                        GameObject.Destroy(GameObject.Find("explorer_1"));
+                        GameObject.Destroy(GameObject.Find("explorer_" + GM1.turn.ToString() + "1"));
                         explorers1.RemoveAt(intStates[1]);
                         break;
                     case 2:
-                        GameObject.Destroy(GameObject.Find("explorer_2"));
+                        GameObject.Destroy(GameObject.Find("explorer_" + GM1.turn.ToString() + "2"));
                         explorers2.RemoveAt(intStates[2]);
                         break;
                     case 3:
-                        GameObject.Destroy(GameObject.Find("explorer_3"));
+                        GameObject.Destroy(GameObject.Find("explorer_" + GM1.turn.ToString() + "3"));
                         explorers3.RemoveAt(intStates[3]);
                         break;
                 }
@@ -2305,8 +2599,8 @@ public class GM2 : MonoBehaviour
             {
                 currentTextObject.post("Circumnavigation success. ");
                 GameObject.Destroy(GameObject.Find("Circumnavigation"));
-                GameObject.Find("explorer_" + power.ToString()).transform.SetParent(GameObject.Find("NewWorld").transform);
-                GameObject.Find("explorer_" + power.ToString()).GetComponent<RectTransform>().anchoredPosition = new Vector2(-893, -402);
+                GameObject.Find("explorer_" + GM1.turn.ToString()+power.ToString()).transform.SetParent(GameObject.Find("NewWorld").transform);
+                GameObject.Find("explorer_" + GM1.turn.ToString()+power.ToString()).GetComponent<RectTransform>().anchoredPosition = new Vector2(-893, -402);
                 handMarkerScript.bonus3.Add("Sprites/jpg/NewWorld/Circumnavigation3VP");
                 GM1.bonusVPs[power]++;
                 GM1.updateVP();

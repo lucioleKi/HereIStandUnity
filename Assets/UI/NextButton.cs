@@ -35,6 +35,7 @@ public class NextButton : MonoBehaviour
 
     public void buttonCallBack()
     {
+        CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         GM3 gm3 = new GM3();
         SaveSystem.SaveState();
         buttonSwitch();
@@ -43,6 +44,7 @@ public class NextButton : MonoBehaviour
         {
             phase++;
             GM2.onChangePhase();
+            GM1.segment = 1;
             GM2.onPhase2();
             GM1.enq1("Draw cards - (Automatic)");
             GM1.deq1(1);
@@ -53,6 +55,7 @@ public class NextButton : MonoBehaviour
         {
             phase++;
             GM2.onChangePhase();
+            GM1.segment = 1;
             GM2.onPhase3();
             TodoScript todoObject = GameObject.Find("TodoBox").GetComponent("TodoScript") as TodoScript;
             todoObject.put2();
@@ -70,7 +73,7 @@ public class NextButton : MonoBehaviour
         }
         else if (phase == 4)
         {
-            CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
+            
             currentTextObject.reset();
             phase++;
             GM2.onChangePhase();
@@ -89,6 +92,7 @@ public class NextButton : MonoBehaviour
             GM2.onPhase7();
         }else if (phase == 7)
         {
+            currentTextObject.reset();
             switch (turn)
             {
                 case 2:

@@ -14,6 +14,7 @@ public class LeaderObject
     public int type;//0=land, 1=naval
     public string matching;
     public int power;
+    public int status;
 
     public LeaderObject leader;
 

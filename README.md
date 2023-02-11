@@ -175,21 +175,25 @@ Finished reformers. Coded more cards in the 40 range.
 
 Finished coding cards for now. Debugged debaters.
 
-### Coding plan and progress for cards
+2/11/2023
+
+Debugged impulse, CP, and various crashes.
+
+### Coding status for cards
 
 #### All play conditions and options coded:
 
-Home cards: 1, 2, 4, 5, 6
+Home cards: 1, 2, 3, 4, 5, 6
 
-Mandatory cards: 8-14, 16, 18-23
+Mandatory cards: 8-16, 18-23
 
 Combat cards: 24-30
 
 Response cards: 31-36
 
-Event cards: 39-46, 48, 50-55, 65, 67, 70, 72, 74-83, 85-90, 94, 96, 98-109, 112-114
+Event cards: 39-46, 48, 50-55, 61, 63-65, 67, 70, 72, 74-83, 85-90, 94, 96, 98-109, 112-114
 
 #### Due to limited time, I don't plan to code all conditions or options in these cards: 
 
-Event cards: 17, 37, 38, 56-60, 84, 91-93, 95, 110
+Event cards: 7, 17, 37, 38, 47, 49, 56-60, 62, 66, 68, 69, 71, 73, 84, 91-93, 95, 97, 110, 111, 115, 116
 

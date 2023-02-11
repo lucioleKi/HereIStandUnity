@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -50,6 +51,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
         }
         else if ((landMvmt.status == 11 || landMvmt.status == 10 || siegeScript.status == 4) && playAsEvent(index + 1))
         {
+            ConfirmScript.cardSelected = eventData.pointerCurrentRaycast.gameObject.name;
             ConfirmScript.btn.interactable = true;
         }
         else if ((GM1.segment == 6 && GM1.phase == 3)|| otherButtonScript.btnStatus!=-1)
@@ -75,6 +77,7 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             CPButtonScript.cardSelected = eventData.pointerCurrentRaycast.gameObject.name;
             CPButtonScript.cardTag = eventData.pointerCurrentRaycast.gameObject.tag;
             CPButtonScript.btn.interactable = true;
+            UnityEngine.Debug.Log("can play for CP");
         }
         else
         {
@@ -98,9 +101,10 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             case 1:
                 if (GM2.chosenCard == "HIS-004" && GM1.player == 3 && GM2.boolStates[0])
                 {
+
                     CPButtonScript.btn.interactable = false;
                     ConfirmScript.btn.interactable = false;
-
+                    UnityEngine.Debug.Log("HIS004, can't play for CP");
                     otherButtonScript.cardTag = eventData.pointerCurrentRaycast.gameObject.tag;
                     otherButtonScript.btn.interactable = true;
                 }
@@ -115,7 +119,24 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 {
                     CPButtonScript.btn.interactable = false;
                     ConfirmScript.btn.interactable = false;
+                    UnityEngine.Debug.Log("HIS112, can't play for CP");
+                    otherButtonScript.cardTag = eventData.pointerCurrentRaycast.gameObject.tag;
+                    otherButtonScript.btn.interactable = true;
+                }
+                else
+                {
 
+                    otherButtonScript.btn.interactable = false;
+                }
+                break;
+            case 3:
+                //HIS-087
+                int[] capitals = new int[6] { 97, 83, 27, 41, 65, 0 };
+                if (GM2.chosenCard == "HIS-087" && GM1.player == Array.IndexOf(capitals, GM2.highlightSelected))
+                {
+                    CPButtonScript.btn.interactable = false;
+                    ConfirmScript.btn.interactable = false;
+                    UnityEngine.Debug.Log("HIS087, can't play for CP");
                     otherButtonScript.cardTag = eventData.pointerCurrentRaycast.gameObject.tag;
                     otherButtonScript.btn.interactable = true;
                 }
@@ -251,6 +272,25 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             if (GM1.player == 5 && !GM2.boolStates[6])
             {
                 return false;
+            }
+            else if (GM1.player == 0)
+            {
+                List<int> pickSpaces1 = new List<int>();
+                for (int j = 0; j < 134; j++)
+                {
+                    if (spacesGM.ElementAt(j).merc > 0)
+                    {
+                        pickSpaces1.Add(j);
+                    }
+                }
+                if(pickSpaces1.Count > 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
@@ -518,10 +558,32 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                 return false;
             }
         }
+        if (index == 70)
+        {
+            if(GM1.player==5 && !GM2.boolStates[6])
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         if (index == 73)
         {
             //not playable by 0 or 5
             if (GM1.player == 0 || GM1.player == 5)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        if (index == 76)
+        {
+            if (GM1.player == 5 && !GM2.boolStates[6])
             {
                 return false;
             }
@@ -577,6 +639,14 @@ public class EmptyCard : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
                     return true;
                 }
             }
+        }
+        if (index == 80)
+        {
+            if (DeckScript.hand5.Count == 0 || DeckScript.hand5.Count == 1 && DeckScript.hand5.ElementAt(0).id == 7)
+            {
+                return false;
+            }
+            return true;
         }
         if (index == 83)
         {

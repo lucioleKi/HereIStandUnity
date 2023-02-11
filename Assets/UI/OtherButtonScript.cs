@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using System.Linq;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -43,6 +44,7 @@ public class OtherButtonScript : MonoBehaviour
 
     void buttonCallback()
     {
+        int[] capitals = new int[6] { 97, 83, 27, 41, 65, 0 };
         switch (btnStatus)
         {
             case 1:
@@ -58,7 +60,8 @@ public class OtherButtonScript : MonoBehaviour
             case 3:
                 //HIS-087
                 List<CardObject> hand = new List<CardObject>();
-                switch (GM1.player)
+                GM2.highlightSelected = Array.IndexOf(capitals, GM2.highlightSelected);
+                switch (GM2.highlightSelected)
                 {
                     case 0:
                         hand = hand0;
@@ -85,7 +88,7 @@ public class OtherButtonScript : MonoBehaviour
                 int count = 0;
                 for (int i = 0; i<134; i++)
                 {
-                    if (spacesGM.ElementAt(i).controlPower == GM1.player && spacesGM.ElementAt(i).merc > 0)
+                    if (spacesGM.ElementAt(i).controlPower == GM2.highlightSelected && spacesGM.ElementAt(i).merc > 0)
                     {
                         count += spacesGM.ElementAt(i).merc;
                         if (keep[CP] < count)
@@ -95,7 +98,7 @@ public class OtherButtonScript : MonoBehaviour
                             {
                                 DeckScript.spacesGM.ElementAt(i).regularPower = -1;
                             }
-                            GM2.onChangeMerc(i, GM1.player);
+                            GM2.onChangeMerc(i, GM2.highlightSelected);
                         }
                     }
                 }
@@ -135,6 +138,8 @@ public class OtherButtonScript : MonoBehaviour
                         break;
                 }
                 UnityEngine.Debug.Log(GM2.highlightSelected);
+                
+                GM2.highlightSelected = Array.IndexOf(capitals, GM2.highlightSelected);
                 switch (GM2.highlightSelected)
                 {
                     case 0:
@@ -156,6 +161,7 @@ public class OtherButtonScript : MonoBehaviour
                         hand5.Add(temp);
                         break;
                 }
+                GM2.highlightSelected = -1;
                 GM2.boolStates[51] = false;
                 break;
         }

@@ -417,6 +417,7 @@ public class StartButton : MonoBehaviour
         GM2.onVP();
         from.RemoveAt(randomIndex);
         yield return new WaitForSeconds(3);
+        GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
         GM2.chosenCard = "";
         GM2.onChosenCard();
         handMarkerScript.excom.RemoveAt(0);
@@ -621,6 +622,7 @@ public class StartButton : MonoBehaviour
         LandMvmt landMvmt = GameObject.Find("ProcedureButton").GetComponent("LandMvmt") as LandMvmt;
         spacesGM.ElementAt(landMvmt.destination).sieged = true;
         status = -1;
+        GameObject.Find("StartText (TMP)").GetComponent<TextMeshProUGUI>().text = "Start";
         UnityEngine.Debug.Log("withdraw success");
         GM1.player = landMvmt.mvmtPlayer;
         GM2.onPlayerChange();

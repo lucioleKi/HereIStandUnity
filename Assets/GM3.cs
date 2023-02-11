@@ -256,12 +256,12 @@ public class GM3
             GM1.maritalStatus[index] = true;
 
             int randomIndex = UnityEngine.Random.Range(1, 7);
-            while (GM1.maritalChart[randomIndex])
+            while (GM1.maritalChart[randomIndex-1])
             {
                 randomIndex++;
             }
             UnityEngine.Debug.Log(randomIndex);
-            GM1.maritalChart[randomIndex] = true;
+            GM1.maritalChart[randomIndex-1] = true;
             GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").transform.SetParent(GameObject.Find("Marriage").transform);
             GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").GetComponent<RectTransform>().anchoredPosition = new Vector2(295, 30 + 27 * (randomIndex - 1));
             GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").GetComponent<RectTransform>().sizeDelta = new Vector2(28, 28);
@@ -271,11 +271,11 @@ public class GM3
                 index++;
                 GM1.maritalStatus[index] = true;
                 randomIndex = UnityEngine.Random.Range(1, 7);
-                while (GM1.maritalChart[randomIndex])
+                while (GM1.maritalChart[randomIndex-1])
                 {
                     randomIndex++;
                 }
-                GM1.maritalChart[randomIndex] = true;
+                GM1.maritalChart[randomIndex-1] = true;
                 GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").transform.SetParent(GameObject.Find("Marriage").transform);
                 GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").GetComponent<RectTransform>().anchoredPosition = new Vector2(295, 30 + 27 * (randomIndex - 1));
                 GameObject.Find("Hand_" + (index + 8).ToString() + "(Clone)").GetComponent<RectTransform>().sizeDelta = new Vector2(28, 28);
@@ -301,11 +301,7 @@ public class GM3
         //GM1.nextImpulse();
     }
 
-    public IEnumerator HIS003B()
-    {
-
-        yield break;
-    }
+    
 
     public IEnumerator HIS004()
     {
@@ -683,7 +679,7 @@ public class GM3
 
         GM1.player = 4;
         GM2.onPlayerChange();
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
         {
 
 
@@ -699,8 +695,7 @@ public class GM3
                 //UnityEngine.Debug.Log("here");
                 yield return null;
             }
-
-            UnityEngine.Debug.Log("end");
+            
             //onRemoveHighlight(converted);
         }
 
@@ -1282,7 +1277,6 @@ public class GM3
     public IEnumerator HIS033()
     {
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
-        currentTextObject.pauseColor();
         SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
         if (GM1.player == 1)
         {
@@ -1312,10 +1306,11 @@ public class GM3
         else if (GM1.player == 0)
         {
             currentTextObject.post("Remove 2 mercenaries");
+            UnityEngine.Debug.Log("else if 33");
             for (int i = 0; i < 2; i++)
             {
                 List<int> pickSpaces1 = new List<int>();
-                for (int j = 0; j < 134; i++)
+                for (int j = 0; j < 134; j++)
                 {
                     if (spacesGM.ElementAt(j).merc > 0)
                     {
@@ -1347,7 +1342,7 @@ public class GM3
                     }
                 }
             }
-
+            UnityEngine.Debug.Log("out of loop 33");
             highlightSelected = -1;
         }
         else
@@ -1375,7 +1370,6 @@ public class GM3
             highlightSelected = -1;
         }
         currentTextObject.reset();
-        currentTextObject.restartColor();
         DeckScript.discardById(GM1.player, 33);
         chosenCard = "";
         onChosenCard();
@@ -2403,7 +2397,15 @@ public class GM3
         currentTextObject.post("Pick 5 spaces to add unrest");
         for (int i = 0; i < 5; i++)
         {
-            List<int> pickSpaces = findUnoccupied(findTrace(2));
+            List<int> pickSpaces = new List<int>();
+            for (int j = 0; j < 134; j++)
+            {
+                if (spacesGM.ElementAt(j).controlPower == 2)
+                {
+                    pickSpaces.Add(j);
+                }
+            }
+            pickSpaces = findUnoccupied(pickSpaces);
             highlightSelected = -1;
             if (pickSpaces.Count > 0)
             {
@@ -2823,7 +2825,6 @@ public class GM3
         {
             yield return null;
         }
-        highlightSelected = -1;
         DeckScript.discardById(GM1.player, 74);
         chosenCard = "";
         onChosenCard();
@@ -2920,7 +2921,15 @@ public class GM3
             yield return null;
         }
 
-        GameObject.Destroy(GameObject.Find("exploration_" + highlightSelected.ToString()).gameObject);
+        
+        if (GM2.boolStates[24 + highlightSelected])
+        {
+            GameObject.Destroy(GameObject.Find("charted_" + highlightSelected.ToString()).gameObject);
+        }
+        else
+        {
+            GameObject.Destroy(GameObject.Find("uncharted_" + highlightSelected.ToString()).gameObject);
+        }
         GM2.boolStates[highlightSelected + 18] = false;
         GM2.intStates[9] = highlightSelected;
 
@@ -3069,7 +3078,15 @@ public class GM3
         currentTextObject.post("Pick 2 spaces to add unrest");
         for (int i = 0; i < 2; i++)
         {
-            List<int> pickSpaces = findUnoccupied(findTrace(3));
+            List<int> pickSpaces = new List<int>();
+            for (int j = 0; j < 134; j++)
+            {
+                if (spacesGM.ElementAt(j).controlPower == 3)
+                {
+                    pickSpaces.Add(j);
+                }
+            }
+            pickSpaces = findUnoccupied(pickSpaces);
             highlightSelected = -1;
             if (pickSpaces.Count > 0)
             {
@@ -3157,7 +3174,15 @@ public class GM3
         {
 
 
-            List<int> pickSpaces = findUnoccupied(findTrace(0));
+            List<int> pickSpaces = new List<int>();
+            for (int j = 0; j < 134; j++)
+            {
+                if (spacesGM.ElementAt(j).controlPower == 0)
+                {
+                    pickSpaces.Add(j);
+                }
+            }
+            pickSpaces = findUnoccupied(pickSpaces);
             highlightSelected = -1;
             if (pickSpaces.Count > 0)
             {
@@ -3264,7 +3289,7 @@ public class GM3
 
     public IEnumerator HIS086()
     {
-        if (GM2.boolStates[51])
+        if (GM2.boolStates[66])
         {
             //Knights of St. John on map
             if (DeckScript.hand0.Count > 0)
@@ -3284,7 +3309,7 @@ public class GM3
         else
         {
             //Knights of St. John not on map
-            GM2.boolStates[51] = true;
+            GM2.boolStates[66] = true;
             List<int> pickSpaces = findPorts(1);
             highlightSelected = -1;
             GM2.onNavalLayer();
@@ -3801,7 +3826,7 @@ public class GM3
         SiegeScript siegeScript = GameObject.Find("ProcedureButton").GetComponent("SiegeScript") as SiegeScript;
         siegeScript.post();
         DeckScript.discardById(GM1.player, 105);
-
+        
     }
 
     public IEnumerator HIS106()

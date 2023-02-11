@@ -465,7 +465,7 @@ public class SiegeScript : MonoBehaviour
             if (!string.IsNullOrEmpty(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text))
             {
 
-                attackerDice = int.Parse(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text);
+                attackerDice += int.Parse(GameObject.Find("InputNumber").GetComponent<TMP_InputField>().text);
                 if (attackerDice > permitted)
                 {
                     attackerDice = permitted;
@@ -725,7 +725,7 @@ public class SiegeScript : MonoBehaviour
                 defenderHit++;
             }
         }
-        attackerDice -= defenderHit;
+        //attackerDice -= defenderHit;
 
         for (int i = 0; i < attackerDice; i++)
         {

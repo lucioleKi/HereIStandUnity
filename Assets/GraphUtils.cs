@@ -236,18 +236,18 @@ public class GraphUtils
         for (int i = 0; i < 134; i++)
         {
             //removing unrest
-            if (spacesGM.ElementAt(i).unrest && spacesGM.ElementAt(i).regular > 0 && spacesGM.ElementAt(i).controlPower == playerIndex)
+            if (spacesGM.ElementAt(i).unrest && spacesGM.ElementAt(i).controlPower == playerIndex)
             {
                 bool friendUnits = false;
                 bool enemyUnits = false;
                 for (int j = 0; j < spaces.ElementAt(i).adjacent.Count(); j++)
                 {
-                    if (spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).regular > 0 && spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).controlPower == playerIndex)
+                    if (spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]-1).regularPower==playerIndex && spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]-1).controlPower == playerIndex)
                     {
                         friendUnits = true;
                         break;
                     }
-                    if (spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).regular > 0 && spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]).controlPower != playerIndex)
+                    if (spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]-1).regularPower != playerIndex && spacesGM.ElementAt(spaces.ElementAt(i).adjacent[j]-1).regularPower != -1)
                     {
                         enemyUnits = true;
                         break;
@@ -258,6 +258,13 @@ public class GraphUtils
                     searchIndex.Add(i);
                 }
                 continue;
+            }else if (spacesGM.ElementAt(i).unrest && spacesGM.ElementAt(i).controlPower == playerIndex && spacesGM.ElementAt(i).regularPower == playerIndex)
+            {
+                searchIndex.Add(i);
+            }
+            else if (playerIndex == 5 && !GM2.boolStates[6] && spaces.ElementAt(i).homePower == (PowerType2)5 && spacesGM.ElementAt(i).unrest)
+            {
+                searchIndex.Add(i);
             }
             //not under unrest
             if (spacesGM.ElementAt(i).controlPower == playerIndex)
@@ -555,7 +562,7 @@ public class GraphUtils
         List<int> trace = new List<int>();
         for (int i = 0; i < input.Count; i++)
         {
-            if (regulars[input.ElementAt(i)] == 0 && !spacesGM.ElementAt(input.ElementAt(i)).unrest)
+            if (spacesGM.ElementAt(input.ElementAt(i)).regular == 0 && spacesGM.ElementAt(input.ElementAt(i)).merc == 0 && spacesGM.ElementAt(input.ElementAt(i)).cavalry == 0 && spacesGM.ElementAt(input.ElementAt(i)).squadron == 0 && spacesGM.ElementAt(input.ElementAt(i)).corsair == 0 && !spacesGM.ElementAt(input.ElementAt(i)).unrest)
             {
 
                 trace.Add(input.ElementAt(i));

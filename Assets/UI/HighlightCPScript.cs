@@ -460,7 +460,8 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
     {
         CPTextScript textScript = GameObject.Find("CPText").GetComponent("CPTextScript") as CPTextScript;
         List<int> trace = findUnfortified(GM1.player);
-        //todo: removing unrest
+
+        
         if (trace.Count() == 0)
         {
             GM2.onCPChange(textScript.displayCP);
@@ -477,6 +478,11 @@ public class HighlightCPScript : MonoBehaviour, IPointerClickHandler
             yield return null;
         }
 
+        if (spacesGM.ElementAt(GM2.highlightSelected).unrest)
+        {
+            spacesGM.ElementAt(GM2.highlightSelected).unrest = false;
+            GM2.onChangeUnrest(highlightSelected);
+        }
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).controlPower = GM1.player;
         DeckScript.spacesGM.ElementAt(GM2.highlightSelected).controlMarker = 1;
         GM2.onAddSpace(GM2.highlightSelected, GM1.player, 1);

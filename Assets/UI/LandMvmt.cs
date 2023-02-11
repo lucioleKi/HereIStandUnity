@@ -406,14 +406,23 @@ public class LandMvmt : MonoBehaviour
 
         GM2.highlightSelected = -1;
         //leaderSelected = -1;
-        GM2.onRegLayer();
-        GM2.onHighlight(trace);
-        while (GM2.highlightSelected == -1)
+        if (trace.Count > 0)
         {
-            yield return null;
+            GM2.onRegLayer();
+            GM2.onHighlight(trace);
+            while (GM2.highlightSelected == -1)
+            {
+                yield return null;
+            }
+            currentTextObject.reset();
+            destination = GM2.highlightSelected;
         }
-        currentTextObject.reset();
-        destination = GM2.highlightSelected;
+        else
+        {
+            destination = initial;
+        }
+        
+        
         GM2.highlightSelected = -1;
 
         status = 2;
@@ -1202,7 +1211,7 @@ public class LandMvmt : MonoBehaviour
                 required2();
             }
         }
-        else if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0) && spaces.ElementAt(destination).spaceType != 0)
+        else if (spacesGM.ElementAt(destination).regularPower != mvmtPlayer && spacesGM.ElementAt(destination).regularPower != -1 && (spacesGM.ElementAt(destination).regular > 0 || spacesGM.ElementAt(destination).merc > 0) && spaces.ElementAt(destination).spaceType == 0)
         {
             //cannot withdraw because not fortified, go to field battle
             fieldPlayer = spacesGM.ElementAt(destination).regularPower;

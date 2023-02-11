@@ -210,8 +210,38 @@ public class GM1 : MonoBehaviour
 
     public static void nextImpulse()
     {
-        checkPass(player);
-        GM2.onDeactivateSkip();
+        
+        if (!skipped[0]&&hand0.Count == 0)
+        {
+            UnityEngine.Debug.Log("0 no cards left");
+            skipped[0] = true;
+        }
+        if (!skipped[1] && hand1.Count == 0)
+        {
+            UnityEngine.Debug.Log("1 no cards left");
+            skipped[1] = true;
+        }
+        if (!skipped[2] && hand2.Count == 0)
+        {
+            UnityEngine.Debug.Log("2 no cards left");
+            skipped[2] = true;
+        }
+        if (!skipped[3] && hand3.Count == 0)
+        {
+            UnityEngine.Debug.Log("3 no cards left");
+            skipped[3] = true;
+        }
+        if (!skipped[4] && hand4.Count == 0)
+        {
+            UnityEngine.Debug.Log("4 no cards left");
+            skipped[4] = true;
+        }
+        if (!skipped[5] && hand5.Count == 0)
+        {
+            UnityEngine.Debug.Log("5 no cards left");
+            skipped[5] = true;
+        }
+
         bool allSkipped = skipped.Any(x => x == false);
         if (!allSkipped)
         {
@@ -220,8 +250,18 @@ public class GM1 : MonoBehaviour
             impulse = -1;
             return;
         }
-        while (!skipped[impulse])
+        if (impulse == 5)
         {
+            impulse = 0;
+        }
+        else
+        {
+            impulse++;
+
+        }
+        while (skipped[impulse])
+        {
+            UnityEngine.Debug.Log(impulse.ToString() + "has skipped");
             if (impulse == 5)
             {
                 impulse = 0;
@@ -229,8 +269,10 @@ public class GM1 : MonoBehaviour
             else
             {
                 impulse++;
+                
             }
-            
+            player = impulse;
+            GM2.onPlayerChange();
         }
         CurrentTextScript currentTextObject = GameObject.Find("CurrentText").GetComponent("CurrentTextScript") as CurrentTextScript;
         UnityEngine.Debug.Log("Active power: " + impulse.ToString());
@@ -255,8 +297,10 @@ public class GM1 : MonoBehaviour
                 currentTextObject.post("Active power: Protestant");
                 break;
         }
-        if (checkPass(impulse)&& !skipped[impulse])
+        if (!skipped[impulse]&&checkPass(impulse))
         {
+            player = impulse;
+            GM2.onPlayerChange();
             GM2.onSkipCard(6);
         }
 
@@ -294,7 +338,7 @@ public class GM1 : MonoBehaviour
             return true;
         }
         //unplayed home card
-        if (temp.ElementAt(0).id > 8)
+        if (temp.ElementAt(0).id < 8)
         {
             return false;
         }

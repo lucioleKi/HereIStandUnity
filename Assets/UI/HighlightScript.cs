@@ -242,12 +242,12 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                             continue;
                         }
                         //check if can explore
-                        if (GM2.boolStates[19] && i == 8 && GM2.intStates[9]!=1)
+                        if ((GM2.boolStates[19]|| GM2.intStates[9] == 1) && i == 8)
                         {
                             continue;
                         }
                         //check if can conquer
-                        if (GM2.boolStates[22] && i == 10 && GM2.intStates[10] != 1)
+                        if ((GM2.boolStates[22] || GM2.intStates[10] == 1)&& i == 10)
                         {
                             continue;
                         }
@@ -310,12 +310,12 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                             continue;
                         }
                         //check if can explore
-                        if (GM2.boolStates[20] && i == 8 && GM2.intStates[9] != 2)
+                        if ((GM2.boolStates[20] || GM2.intStates[9] == 2) && i == 8 )
                         {
                             continue;
                         }
                         //check if can conquer
-                        if (GM2.boolStates[23] && i == 10 && GM2.intStates[10] != 2)
+                        if ((GM2.boolStates[23]|| GM2.intStates[10] == 2)&& i == 10)
                         {
                             continue;
                         }
@@ -373,12 +373,12 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                             continue;
                         }
                         //check if can explore
-                        if (GM2.boolStates[21]&&i== 8 && GM2.intStates[9] != 3)
+                        if ((GM2.boolStates[21]|| GM2.intStates[9] == 3)&&i== 8)
                         {
                             continue;
                         }
                         //check if can conquer
-                        if (GM2.boolStates[24]&&i== 10 && GM2.intStates[10] != 3)
+                        if ((GM2.boolStates[24]|| GM2.intStates[10] == 3) &&i== 10)
                         {
                             continue;
                         }
@@ -482,7 +482,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                             continue;
                         }
                         //check if can raise army
-                        if (!GM2.boolStates[6] && i < 6)
+                        if (!GM2.boolStates[6] && i < 5)
                         {
                             continue;
                         }
@@ -494,6 +494,7 @@ public class HighlightScript : MonoBehaviour, IPointerClickHandler
                         //check if there are unfortified space
                         if (findUnfortified(5).Count() == 0 && i == 5)
                         {
+
                             continue;
                         }
                         //check if HIS031 has effect
